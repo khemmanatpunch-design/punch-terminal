@@ -311,25 +311,52 @@
 
   <!-- TAB: RESULTS -->
   <div id="tab-results" class="tab-content glass">
-    <div class="panel-title">Round 1 — All 100 Strategies</div>
-    <div style="margin-bottom:12px;">
+    <div class="panel-title">Round 1 — All 100 Strategies · Click any row for deep dive</div>
+    <!-- Summary stats bar -->
+    <div id="tblSummary" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-bottom:14px;padding:11px 14px;background:rgba(0,0,0,.3);border-radius:10px;border:1px solid var(--border)"></div>
+    <!-- Filter bar -->
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center">
       <input type="text" id="tableSearch" placeholder="Search strategy..."
-        style="background:rgba(0,0,0,.4);border:1px solid var(--border);color:var(--text);
-               border-radius:8px;padding:6px 14px;font-size:.82rem;width:220px;"
+        style="background:rgba(0,0,0,.4);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:6px 12px;font-size:.8rem;width:170px;"
         oninput="filterTable()">
-      <select id="sortBy" onchange="sortTable()" style="margin-left:10px;">
-        <option value="pf">Sort: Profit Factor ↓</option>
+      <select id="techFilter" onchange="filterTable()" style="background:rgba(0,0,0,.4);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:6px 9px;font-size:.78rem">
+        <option value="">All Techniques</option>
+        <option value="SMC">SMC</option><option value="Session">Session</option>
+        <option value="Composite">Composite</option><option value="Inside Bar">Inside Bar</option>
+        <option value="Ichimoku">Ichimoku</option><option value="Bollinger">Bollinger</option>
+        <option value="CCI">CCI</option><option value="ATR">ATR</option>
+        <option value="Pivot">Pivot</option><option value="Pin Bar">Pin Bar</option>
+        <option value="Engulf">Engulfing</option>
+      </select>
+      <label style="font-size:.78rem;display:flex;align-items:center;gap:5px;cursor:pointer;color:var(--text)">
+        <input type="checkbox" id="profitableOnly" onchange="filterTable()"> Profitable only
+      </label>
+      <select id="sortBy" onchange="sortTable()" style="background:rgba(0,0,0,.4);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:6px 9px;font-size:.78rem">
         <option value="pnl">Sort: PnL ↓</option>
+        <option value="pf">Sort: PF ↓</option>
         <option value="trades">Sort: Trades ↓</option>
         <option value="name">Sort: Name A→Z</option>
       </select>
+      <button class="btn" onclick="exportTableCSV()" style="padding:5px 13px;font-size:.76rem">⬇ CSV</button>
+    </div>
+    <!-- Color legend -->
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:10px;font-size:.67rem;color:var(--dim)">
+      <span style="border-left:3px solid var(--green);padding-left:5px">PF≥1.5 Excellent</span>
+      <span style="border-left:3px solid rgba(0,255,157,.4);padding-left:5px">PF 1.2-1.5 Good</span>
+      <span style="border-left:3px solid rgba(255,215,0,.4);padding-left:5px">PF 1.0-1.2 Marginal</span>
+      <span style="border-left:3px solid rgba(255,68,102,.4);padding-left:5px">PF &lt;1.0 Losing</span>
     </div>
     <div class="results-table-wrap">
-      <table id="resultsTable">
+      <table id="resultsTable" style="width:100%;border-collapse:collapse;font-size:.82rem">
         <thead>
           <tr>
-            <th>#</th><th>Strategy</th><th>Technique</th>
-            <th>Profit Factor</th><th>3Y PnL</th><th>Trades</th><th>Grade</th>
+            <th onclick="sortByCol('rank')" style="cursor:pointer"># ↕</th>
+            <th onclick="sortByCol('ea')" style="cursor:pointer">Strategy ↕</th>
+            <th>Technique</th>
+            <th onclick="sortByCol('pf')" style="cursor:pointer">PF ↕</th>
+            <th onclick="sortByCol('pnl')" style="cursor:pointer">3Y PnL ↕</th>
+            <th onclick="sortByCol('trades')" style="cursor:pointer">Trades ↕</th>
+            <th>Grade</th>
           </tr>
         </thead>
         <tbody id="tableBody"></tbody>
