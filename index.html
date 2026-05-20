@@ -2540,9 +2540,16 @@ async function callClaude(history) {
 
 <div id="aiPanel">
   <div class="ai-panel-header">
-    <span class="ai-logo">🤖</span>
+    <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#D97706,#F59E0B);
+      display:flex;align-items:center;justify-content:center;flex-shrink:0;
+      box-shadow:0 0 12px rgba(217,119,6,.4)">
+      <svg viewBox="0 0 36 36" width="22" height="22" fill="none">
+        <text x="18" y="25" font-family="Georgia,serif" font-size="19" font-weight="700"
+          text-anchor="middle" fill="white">C</text>
+      </svg>
+    </div>
     <div style="flex:1">
-      <h3>Claude AI Analyst</h3>
+      <h3 style="color:#F59E0B">Claude — Strategy Advisor</h3>
       <small id="aiStatusLabel">APEX GREATEST • Expert Mode</small>
     </div>
     <button class="ai-close-btn" onclick="toggleAIPanel()">✕</button>
