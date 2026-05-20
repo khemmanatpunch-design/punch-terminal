@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX GREATEST — Tournament Dashboard</title>
+<style>
+  :root {
+    --bg:     #050510;
+    --panel:  rgba(10,10,40,0.85);
+    --border: rgba(100,120,255,0.25);
+    --accent: #6c8fff;
+    --gold:   #ffd700;
+    --green:  #00ff9d;
+    --red:    #ff4466;
+    --text:   #c8d0ff;
+    --dim:    #5a6080;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Particle canvas ── */
+  #particles {
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ── Layout ── */
+  .content { position: relative; z-index: 1; padding: 20px; max-width: 1400px; margin: 0 auto; }
+
+  /* ── Header ── */
+  .header {
+    text-align: center; padding: 40px 20px 30px;
+    background: linear-gradient(180deg, rgba(30,30,100,0.6) 0%, transparent 100%);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 30px;
+  }
+  .header h1 {
+    font-size: 3rem; font-weight: 800; letter-spacing: .1em;
+    background: linear-gradient(135deg, var(--gold), var(--accent));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    text-shadow: none;
+  }
+  .header .subtitle { color: var(--dim); margin-top: 8px; font-size: .95rem; }
+  .live-badge {
+    display: inline-block; background: rgba(0,255,100,0.15);
+    border: 1px solid var(--green); color: var(--green);
+    padding: 3px 12px; border-radius: 20px; font-size: .75rem;
+    margin-top: 12px; animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+
+  /* ── Glass panel ── */
+  .glass {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    backdrop-filter: blur(12px);
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .panel-title {
+    font-size: .7rem; font-weight: 700; letter-spacing: .15em;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 18px;
+  }
+
+  /* ── KPI strip ── */
+  .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 16px; margin-bottom: 24px; }
+  .kpi {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+    padding: 18px 16px; text-align: center;
+    transition: border-color .3s;
+  }
+  .kpi:hover { border-color: var(--accent); }
+  .kpi .val { font-size: 2rem; font-weight: 800; color: var(--gold); }
+  .kpi .lbl { font-size: .7rem; color: var(--dim); text-transform: uppercase; letter-spacing:.1em; margin-top:4px; }
+
+  /* ── Tournament bracket ── */
+  .bracket { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 10px; }
+  .round-col { min-width: 140px; }
+  .round-label {
+    text-align: center; font-size: .65rem; letter-spacing: .12em;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 10px; padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .slot {
+    background: rgba(108,143,255,0.08);
+    border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px 10px;
+    margin-bottom: 6px; font-size: .72rem;
+    cursor: pointer; transition: all .2s;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .slot:hover { background: rgba(108,143,255,0.2); border-color: var(--accent); }
+  .slot.winner { border-color: var(--gold); color: var(--gold); background: rgba(255,215,0,0.1); }
+  .slot.active { border-color: var(--green); color: var(--green); background: rgba(0,255,157,0.08); }
+  .slot.eliminated { opacity: .35; text-decoration: line-through; }
+  .slot.pending { opacity: .5; font-style: italic; color: var(--dim); }
+
+  /* ── Results table ── */
+  .results-table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+  th {
+    text-align: left; padding: 10px 14px;
+    color: var(--accent); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase;
+    border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.3);
+  }
+  td { padding: 9px 14px; border-bottom: 1px solid rgba(100,120,255,0.1); }
+  tr:hover td { background: rgba(108,143,255,0.07); }
+  .pos { color: var(--green); font-weight: 700; }
+  .neg { color: var(--red); }
+  .rank-1 td { color: var(--gold); }
+  .badge {
+    display: inline-block; padding: 2px 8px; border-radius: 10px;
+    font-size: .65rem; font-weight: 700;
+  }
+  .badge.A { background: rgba(255,215,0,.15); color: var(--gold); border: 1px solid rgba(255,215,0,.4); }
+  .badge.B { background: rgba(108,143,255,.15); color: var(--accent); border: 1px solid rgba(108,143,255,.4); }
+  .badge.C { background: rgba(255,68,102,.1); color: var(--red); border: 1px solid rgba(255,68,102,.4); }
+
+  /* ── Compounding calculator ── */
+  .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+  @media(max-width:700px){ .calc-grid{grid-template-columns:1fr;} }
+  .input-row { display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+  label { font-size: .75rem; color: var(--dim); }
+  input[type=number], select {
+    background: rgba(0,0,0,0.4); border: 1px solid var(--border);
+    color: var(--text); border-radius: 8px; padding: 6px 12px;
+    font-size: .85rem; width: 110px;
+  }
+  input[type=range] { width: 100%; accent-color: var(--accent); }
+  .btn {
+    background: linear-gradient(135deg, #3344aa, var(--accent));
+    border: none; color: #fff; border-radius: 8px;
+    padding: 8px 20px; cursor: pointer; font-size: .85rem; font-weight: 600;
+    transition: opacity .2s;
+  }
+  .btn:hover { opacity: .85; }
+  #compoundResult { margin-top: 16px; }
+  .comp-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: .82rem; }
+
+  /* ── Strategy DNA ── */
+  .dna-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 16px; }
+  .dna-card {
+    background: rgba(0,0,20,0.5); border: 1px solid var(--border); border-radius: 12px;
+    padding: 18px; transition: all .3s;
+  }
+  .dna-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .dna-name { font-size: .9rem; font-weight: 700; color: var(--gold); margin-bottom: 8px; }
+  .dna-bar-wrap { margin: 6px 0; }
+  .dna-label { font-size: .68rem; color: var(--dim); margin-bottom: 3px; }
+  .dna-bar { height: 6px; border-radius: 3px; background: rgba(255,255,255,0.08); }
+  .dna-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--accent), var(--gold)); }
+
+  /* ── Progress bar ── */
+  .progress-wrap { background: rgba(0,0,0,0.4); border-radius: 20px; height: 10px; margin: 8px 0; }
+  .progress-fill { height: 100%; border-radius: 20px; background: linear-gradient(90deg, var(--accent), var(--gold)); transition: width .5s; }
+
+  /* ── Max return finder ── */
+  .scenario-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 16px; }
+  .scenario-card {
+    background: rgba(0,0,0,0.4); border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px; text-align: center;
+  }
+  .scenario-card .val { font-size: 1.6rem; font-weight: 800; }
+  .scenario-card .sub { font-size: .72rem; color: var(--dim); margin-top: 4px; }
+
+  /* ── Tab nav ── */
+  .tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+  .tab {
+    padding: 7px 18px; border-radius: 8px; cursor: pointer; font-size: .8rem;
+    border: 1px solid var(--border); background: transparent; color: var(--dim);
+    transition: all .2s;
+  }
+  .tab.active { background: rgba(108,143,255,.2); color: var(--accent); border-color: var(--accent); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<div class="content">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>APEX GREATEST</h1>
+    <div class="subtitle">8-Round World Tournament · 100+ Strategies · 25 Markets · 20 Techniques</div>
+    <div class="live-badge" style="background:rgba(255,215,0,0.15);border-color:var(--gold);color:var(--gold)">★ TOURNAMENT COMPLETE — CHAMPION DECLARED</div>
+  </div>
+
+  <!-- CHAMPION BANNER -->
+  <div id="championBanner" class="glass" style="display:none;background:linear-gradient(135deg,rgba(255,215,0,0.12),rgba(108,143,255,0.1));border-color:rgba(255,215,0,0.4);text-align:center;padding:32px 24px;margin-bottom:24px;">
+    <div style="font-size:.7rem;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;margin-bottom:10px">APEX GREATEST CHAMPION</div>
+    <div style="font-size:2.4rem;font-weight:800;background:linear-gradient(135deg,var(--gold),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;" id="champName">F01_SMC_Session_v2</div>
+    <div style="color:var(--dim);margin-top:6px;font-size:.9rem" id="champSub">XAUUSDm · H1 · PF 1.0263 · 8 Rounds Survived</div>
+    <div style="display:flex;justify-content:center;gap:32px;margin-top:20px;flex-wrap:wrap">
+      <div><div style="font-size:1.5rem;font-weight:700;color:var(--green)" id="champFwdPnl">+$1,516</div><div style="font-size:.72rem;color:var(--dim)">2026 Forward PnL</div></div>
+      <div><div style="font-size:1.5rem;font-weight:700;color:var(--gold)" id="champ5yr">$4,219</div><div style="font-size:.72rem;color:var(--dim)">5-Year Projection</div></div>
+      <div><div style="font-size:1.5rem;font-weight:700;color:var(--accent)" id="champMonthly">0.57%/mo</div><div style="font-size:.72rem;color:var(--dim)">Est. Monthly Return</div></div>
+      <div><div style="font-size:1.5rem;font-weight:700;color:var(--text)" id="champCovidPnl">+$1,017</div><div style="font-size:.72rem;color:var(--dim)">COVID Crash PnL</div></div>
+    </div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="kpi-row">
+    <div class="kpi"><div class="val" id="kpiStrategies">100</div><div class="lbl">Strategies Tested</div></div>
+    <div class="kpi"><div class="val" id="kpiSurvivors">—</div><div class="lbl">Survivors</div></div>
+    <div class="kpi"><div class="val" id="kpiBestPF">—</div><div class="lbl">Best Profit Factor</div></div>
+    <div class="kpi"><div class="val" id="kpiBestPnL">—</div><div class="lbl">Best PnL</div></div>
+    <div class="kpi"><div class="val" id="kpiRound">8/8</div><div class="lbl">Round Complete</div></div>
+    <div class="kpi"><div class="val" id="kpiChampion">—</div><div class="lbl">Champion</div></div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('bracket')">Tournament Bracket</button>
+    <button class="tab" onclick="showTab('results')">Results Table</button>
+    <button class="tab" onclick="showTab('stress')">Stress Tests</button>
+    <button class="tab" onclick="showTab('dna')">Strategy DNA</button>
+    <button class="tab" onclick="showTab('maxreturn')">Max Return Finder</button>
+    <button class="tab" onclick="showTab('compound')">Compounding</button>
+    <button class="tab" onclick="showTab('phase3')" style="border-color:var(--gold);color:var(--gold)">🚀 Phase 3</button>
+  </div>
+
+  <!-- TAB: BRACKET -->
+  <div id="tab-bracket" class="tab-content active glass">
+    <div class="panel-title">8-Round Elimination Bracket</div>
+    <div class="bracket" id="bracketViz"></div>
+  </div>
+
+  <!-- TAB: RESULTS -->
+  <div id="tab-results" class="tab-content glass">
+    <div class="panel-title">Round 1 — All 100 Strategies</div>
+    <div style="margin-bottom:12px;">
+      <input type="text" id="tableSearch" placeholder="Search strategy..."
+        style="background:rgba(0,0,0,.4);border:1px solid var(--border);color:var(--text);
+               border-radius:8px;padding:6px 14px;font-size:.82rem;width:220px;"
+        oninput="filterTable()">
+      <select id="sortBy" onchange="sortTable()" style="margin-left:10px;">
+        <option value="pf">Sort: Profit Factor ↓</option>
+        <option value="pnl">Sort: PnL ↓</option>
+        <option value="trades">Sort: Trades ↓</option>
+        <option value="name">Sort: Name A→Z</option>
+      </select>
+    </div>
+    <div class="results-table-wrap">
+      <table id="resultsTable">
+        <thead>
+          <tr>
+            <th>#</th><th>Strategy</th><th>Technique</th>
+            <th>Profit Factor</th><th>3Y PnL</th><th>Trades</th><th>Grade</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB: STRESS TESTS -->
+  <div id="tab-stress" class="tab-content glass">
+    <div class="panel-title">Round 6 — Stress Tests (Top 3 across 3 Crisis Periods)</div>
+    <div id="stressGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:20px"></div>
+    <div class="panel-title" style="margin-top:24px">Round 7 — 2026 Forward Test (Unseen Data)</div>
+    <div id="fwdGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px"></div>
+  </div>
+
+  <!-- TAB: DNA -->
+  <div id="tab-dna" class="tab-content glass">
+    <div class="panel-title">Strategy DNA — Top Survivors</div>
+    <div class="dna-grid" id="dnaGrid"></div>
+  </div>
+
+  <!-- TAB: MAX RETURN -->
+  <div id="tab-maxreturn" class="tab-content glass">
+    <div class="panel-title">Max Return Finder — Portfolio Scenarios</div>
+    <div class="scenario-grid" id="scenarioGrid"></div>
+    <div style="margin-top:20px;">
+      <div class="panel-title">Risk vs Return (drag slider)</div>
+      <label>Risk per trade: <span id="riskLabel">1.0</span>%</label><br>
+      <input type="range" min="0.5" max="5" step="0.5" value="1"
+        oninput="updateRiskReturn(this.value)" style="margin:10px 0;">
+      <div id="riskReturnResult"></div>
+    </div>
+  </div>
+
+  <!-- TAB: COMPOUND -->
+  <div id="tab-compound" class="tab-content glass">
+    <div class="panel-title">Champion Compounding Projection — F01_SMC_Session_v2</div>
+    <div id="champCompTable" style="margin-bottom:28px"></div>
+    <div class="panel-title">Custom Calculator</div>
+    <div class="calc-grid">
+      <div>
+        <div class="input-row">
+          <div>
+            <label>Starting Balance ($)</label><br>
+            <input type="number" id="startBal" value="3000" min="100">
+          </div>
+          <div>
+            <label>Annual Return (%)</label><br>
+            <input type="number" id="annualReturn" value="6.84" min="1" max="500">
+          </div>
+        </div>
+        <div class="input-row">
+          <div>
+            <label>Years</label><br>
+            <input type="number" id="years" value="10" min="1" max="30">
+          </div>
+          <div>
+            <label>Monthly Addition ($)</label><br>
+            <input type="number" id="monthlyAdd" value="0" min="0">
+          </div>
+        </div>
+        <button class="btn" onclick="calcCompound()">Calculate</button>
+      </div>
+      <div id="compoundResult">
+        <div style="color:var(--dim);font-size:.85rem;margin-top:20px;">Enter values and click Calculate.</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- TAB: PHASE 3 -->
+  <div id="tab-phase3" class="tab-content glass" style="padding:20px">
+    <div class="panel-title" style="font-size:.9rem;color:var(--gold)">PHASE 3 — MAXIMUM POTENTIAL FINDER</div>
+
+    <!-- Sub-tabs -->
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
+      <button class="tab active" style="font-size:.72rem;padding:5px 12px" onclick="showP3Tab('p3-markets',this)">🌍 Market Heatmap</button>
+      <button class="tab" style="font-size:.72rem;padding:5px 12px" onclick="showP3Tab('p3-variants',this)">🧬 Variants</button>
+      <button class="tab" style="font-size:.72rem;padding:5px 12px" onclick="showP3Tab('p3-portfolio',this)">📈 Portfolio</button>
+      <button class="tab" style="font-size:.72rem;padding:5px 12px" onclick="showP3Tab('p3-calc',this)">🧮 Calculators</button>
+      <button class="tab" style="font-size:.72rem;padding:5px 12px" onclick="showP3Tab('p3-code',this)">💻 EA Code</button>
+      <button class="tab" style="font-size:.72rem;padding:5px 12px" onclick="showP3Tab('p3-tick',this)">🎯 Tick Test</button>
+    </div>
+
+    <!-- A: Market Heatmap -->
+    <div id="p3-markets" class="p3-sub active">
+      <div class="panel-title">All Markets Heatmap — F01_SMC_Session_v2</div>
+      <div id="p3MarketGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:16px"></div>
+      <div id="p3MarketDetail" style="display:none;padding:14px;background:rgba(0,0,0,.4);border-radius:10px;border:1px solid var(--border)"></div>
+    </div>
+
+    <!-- B: Variants -->
+    <div id="p3-variants" class="p3-sub" style="display:none">
+      <div class="panel-title">20 Champion Variants vs Baseline</div>
+      <div style="margin-bottom:10px;font-size:.8rem;color:var(--dim)">Champion baseline shown as reference line</div>
+      <div id="p3VarBars" style="max-height:500px;overflow-y:auto"></div>
+    </div>
+
+    <!-- C: Portfolio -->
+    <div id="p3-portfolio" class="p3-sub" style="display:none">
+      <div class="panel-title">3-Strategy Portfolio</div>
+      <div id="p3PortCards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:20px"></div>
+      <div class="panel-title">Compounding Projection (12 months)</div>
+      <div id="p3CompChart" style="height:220px;position:relative;margin-bottom:16px"></div>
+      <div id="p3ProbCards" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px"></div>
+    </div>
+
+    <!-- D: Calculators -->
+    <div id="p3-calc" class="p3-sub" style="display:none">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;flex-wrap:wrap">
+        <div class="glass" style="padding:16px">
+          <div class="panel-title">Risk Calculator</div>
+          <label>Risk per trade: <span id="p3RiskLbl">1.0</span>%</label><br>
+          <input type="range" min="0.1" max="5" step="0.1" value="1" style="width:100%;margin:8px 0"
+            oninput="p3CalcRisk(this.value)">
+          <div id="p3RiskOut" style="font-size:.82rem;margin-top:8px"></div>
+        </div>
+        <div class="glass" style="padding:16px">
+          <div class="panel-title">Growth Probability</div>
+          <div id="p3ProbOut">
+            <div style="margin:6px 0;font-size:.85rem">Reach <strong>$5,000</strong>: <span style="color:var(--green)">0.0%</span></div>
+            <div style="margin:6px 0;font-size:.85rem">Reach <strong>$10,000</strong>: <span style="color:var(--accent)">0.0%</span></div>
+            <div style="margin:6px 0;font-size:.85rem">Reach <strong>$30,000</strong>: <span style="color:var(--gold)">0.0%</span></div>
+            <div style="margin-top:8px;font-size:.7rem;color:var(--dim)">Based on 10,000-path Monte Carlo from $3,000 over 12 months</div>
+          </div>
+        </div>
+      </div>
+      <div class="glass" style="padding:16px;margin-top:16px">
+        <div class="panel-title">Anti-Martingale Compounding — 12 Month Scenarios</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:10px">
+          <div style="text-align:center;padding:12px;background:rgba(255,68,102,.1);border-radius:8px">
+            <div style="font-size:.7rem;color:var(--red)">WORST CASE (10th pct)</div>
+            <div style="font-size:1.6rem;font-weight:700;color:var(--red)">$0</div>
+            <div style="font-size:.7rem;color:var(--dim)">+0.0%</div>
+          </div>
+          <div style="text-align:center;padding:12px;background:rgba(108,143,255,.1);border-radius:8px">
+            <div style="font-size:.7rem;color:var(--accent)">BASE CASE (50th pct)</div>
+            <div style="font-size:1.6rem;font-weight:700;color:var(--accent)">$0</div>
+            <div style="font-size:.7rem;color:var(--dim)">+0.0%</div>
+          </div>
+          <div style="text-align:center;padding:12px;background:rgba(0,255,157,.1);border-radius:8px">
+            <div style="font-size:.7rem;color:var(--green)">BEST CASE (90th pct)</div>
+            <div style="font-size:1.6rem;font-weight:700;color:var(--green)">$0</div>
+            <div style="font-size:.7rem;color:var(--dim)">+0.0%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- E: EA Code -->
+    <div id="p3-code" class="p3-sub" style="display:none">
+      <div class="panel-title">Champion EA Source — F01_SMC_Session_v2</div>
+      <div id="p3CodeViewer" style="background:#0a0a1a;border:1px solid var(--border);border-radius:8px;padding:16px;font-family:monospace;font-size:.75rem;white-space:pre-wrap;max-height:500px;overflow-y:auto;color:#c8ffd0"></div>
+      <button class="btn" style="margin-top:10px" onclick="p3DownloadCode()">⬇ Download EA</button>
+    </div>
+
+    <!-- F: Tick Test -->
+    <div id="p3-tick" class="p3-sub" style="display:none">
+      <div class="panel-title">Real Tick vs OHLC M1 Validation</div>
+      <div id="p3TickTable" style="margin-top:10px"></div>
+    </div>
+  </div>
+
+</div><!-- /content -->
+
+<script>
+// ── PARTICLE SYSTEM ────────────────────────────────────────────────────────
+(function(){
+  const c = document.getElementById('particles');
+  const ctx = c.getContext('2d');
+  let W, H, pts = [];
+  function resize(){ W=c.width=window.innerWidth; H=c.height=window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+  for(let i=0;i<120;i++){
+    pts.push({
+      x:Math.random()*W, y:Math.random()*H,
+      vx:(Math.random()-.5)*.3, vy:(Math.random()-.5)*.3,
+      r:Math.random()*1.5+.5,
+      a:Math.random()
+    });
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    pts.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0)p.x=W; if(p.x>W)p.x=0;
+      if(p.y<0)p.y=H; if(p.y>H)p.y=0;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(108,143,255,${p.a*0.6})`;
+      ctx.fill();
+    });
+    // Connect nearby
+    for(let i=0;i<pts.length;i++){
+      for(let j=i+1;j<pts.length;j++){
+        const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y;
+        const d=Math.sqrt(dx*dx+dy*dy);
+        if(d<80){
+          ctx.beginPath();
+          ctx.strokeStyle=`rgba(108,143,255,${0.15*(1-d/80)})`;
+          ctx.lineWidth=.5;
+          ctx.moveTo(pts[i].x,pts[i].y);
+          ctx.lineTo(pts[j].x,pts[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ── DATA ──────────────────────────────────────────────────────────────────
+const ROUND_NAMES = [
+  'Round 1\n100 → 30','Round 2\n30 → 15','Round 3\n15 → 10',
+  'Round 4\n10 → 7','Round 5\n7 → 5','Round 6\n5 → 3',
+  'Round 7\n3 ranked','Round 8\nChampion'
+];
+const ROUND_COUNTS = [30, 15, 10, 7, 5, 3, 3, 1];
+
+// ── ROUND 1 RESULTS (embedded) ────────────────────────────────────────────
+const R1_TOP30 = [{"rank":1,"ea":"G06_Session_Asian_v4","tf":"H1","pf":1.1024,"pnl":83.32,"trades":1393},{"rank":2,"ea":"G06_Session_London2_v2","tf":"H1","pf":1.1022,"pnl":-24.6,"trades":1396},{"rank":3,"ea":"G06_Session_LondonWide_v5","tf":"H1","pf":1.102,"pnl":-11.77,"trades":1399},{"rank":4,"ea":"G06_Session_London_v1","tf":"H1","pf":1.1018,"pnl":-31.86,"trades":1402},{"rank":5,"ea":"G06_Session_NY_v3","tf":"H1","pf":1.1015,"pnl":-40.47,"trades":1405},{"rank":6,"ea":"G05_ZScore_Rev_v5","tf":"H1","pf":1.0958,"pnl":-183.72,"trades":1390},{"rank":7,"ea":"G20_Composite_v5","tf":"H1","pf":1.0342,"pnl":1907.38,"trades":25094},{"rank":8,"ea":"G16_Pivot_v2","tf":"H1","pf":1.0272,"pnl":-563.36,"trades":18437},{"rank":9,"ea":"G05_ZScore_Rev_v4","tf":"H1","pf":1.0268,"pnl":196.43,"trades":1073},{"rank":10,"ea":"G20_Composite_v4","tf":"H1","pf":1.0267,"pnl":238.5,"trades":24177},{"rank":11,"ea":"G20_Composite_v2","tf":"H1","pf":1.0263,"pnl":1915.99,"trades":22926},{"rank":12,"ea":"G18_PinBar_v3","tf":"H4","pf":1.0262,"pnl":42.87,"trades":20714},{"rank":13,"ea":"G20_Composite_v3","tf":"H1","pf":1.0249,"pnl":2000.55,"trades":23481},{"rank":14,"ea":"G17_InsideBar_v5","tf":"H4","pf":1.0249,"pnl":461.93,"trades":20282},{"rank":15,"ea":"G18_PinBar_v1","tf":"H4","pf":1.0249,"pnl":-123.37,"trades":20430},{"rank":16,"ea":"G18_PinBar_v2","tf":"H4","pf":1.0248,"pnl":-64.38,"trades":20511},{"rank":17,"ea":"G16_Pivot_v4","tf":"H1","pf":1.0248,"pnl":-1112.34,"trades":19363},{"rank":18,"ea":"G18_PinBar_v5","tf":"H4","pf":1.024,"pnl":-123.37,"trades":20979},{"rank":19,"ea":"G18_PinBar_v4","tf":"H4","pf":1.024,"pnl":-525.32,"trades":20831},{"rank":20,"ea":"G17_InsideBar_v3","tf":"H4","pf":1.0236,"pnl":165.14,"trades":20142},{"rank":21,"ea":"G17_InsideBar_v4","tf":"H4","pf":1.0235,"pnl":-83.04,"trades":20159},{"rank":22,"ea":"G17_InsideBar_v2","tf":"H4","pf":1.0232,"pnl":732.96,"trades":20035},{"rank":23,"ea":"G16_Pivot_v3","tf":"H1","pf":1.0229,"pnl":-1366.23,"trades":18976},{"rank":24,"ea":"G17_InsideBar_v1","tf":"H4","pf":1.0227,"pnl":155.45,"trades":19998},{"rank":25,"ea":"G19_Engulf_v1","tf":"H4","pf":1.0227,"pnl":-852.44,"trades":21071},{"rank":26,"ea":"G20_Composite_v1","tf":"H1","pf":1.0218,"pnl":668.53,"trades":22212},{"rank":27,"ea":"G16_Pivot_v5","tf":"H1","pf":1.0218,"pnl":-1668.28,"trades":19852},{"rank":28,"ea":"G19_Engulf_v2","tf":"H4","pf":1.0215,"pnl":-470.6,"trades":21253},{"rank":29,"ea":"G16_Pivot_v1","tf":"H1","pf":1.0215,"pnl":-1386.47,"trades":17972},{"rank":30,"ea":"G19_Engulf_v3","tf":"H4","pf":1.0198,"pnl":-576.97,"trades":21335}];
+
+const R1_ALL100 = [{"ea":"G15_CCI_v5","tf":"H1","pf":1.0186,"pnl":2210.63,"trades":17473,"rank":1},{"ea":"G20_Composite_v3","tf":"H1","pf":1.0249,"pnl":2000.55,"trades":23481,"rank":2},{"ea":"G15_CCI_v4","tf":"H1","pf":1.0173,"pnl":1965.52,"trades":17191,"rank":3},{"ea":"G20_Composite_v2","tf":"H1","pf":1.0263,"pnl":1915.99,"trades":22926,"rank":4},{"ea":"G20_Composite_v5","tf":"H1","pf":1.0342,"pnl":1907.38,"trades":25094,"rank":5},{"ea":"G07_EMA_Cross_v4","tf":"H1","pf":0.9751,"pnl":986.25,"trades":5684,"rank":6},{"ea":"G13_BBand_v5","tf":"H1","pf":1.0109,"pnl":775.81,"trades":13287,"rank":7},{"ea":"G13_BBand_v4","tf":"H1","pf":1.0111,"pnl":754.32,"trades":13062,"rank":8},{"ea":"G17_InsideBar_v2","tf":"H4","pf":1.0232,"pnl":732.96,"trades":20035,"rank":9},{"ea":"G10_Ichimoku_v3","tf":"H4","pf":0.988,"pnl":688.7,"trades":7730,"rank":10},{"ea":"G20_Composite_v1","tf":"H1","pf":1.0218,"pnl":668.53,"trades":22212,"rank":11},{"ea":"G15_CCI_v2","tf":"H1","pf":1.0083,"pnl":640.01,"trades":16532,"rank":12},{"ea":"G13_BBand_v3","tf":"H1","pf":1.0075,"pnl":634.62,"trades":12636,"rank":13},{"ea":"G04_RSI_Momentum_v2","tf":"H1","pf":0.888,"pnl":632.96,"trades":722,"rank":14},{"ea":"G10_Ichimoku_v4","tf":"H4","pf":0.9902,"pnl":489.45,"trades":7746,"rank":15},{"ea":"G08_ATR_Expand_v3","tf":"H1","pf":0.978,"pnl":474.79,"trades":7189,"rank":16},{"ea":"G17_InsideBar_v5","tf":"H4","pf":1.0249,"pnl":461.93,"trades":20282,"rank":17},{"ea":"G10_Ichimoku_v1","tf":"H4","pf":0.9873,"pnl":404.12,"trades":7670,"rank":18},{"ea":"G13_BBand_v2","tf":"H1","pf":1.001,"pnl":370.46,"trades":12409,"rank":19},{"ea":"G09_Fibonacci_v5","tf":"H4","pf":0.9861,"pnl":340.81,"trades":7643,"rank":20},{"ea":"G01_SMC_OB_v2","tf":"H1","pf":0.9474,"pnl":315.8,"trades":196,"rank":21},{"ea":"G01_SMC_OB_v3","tf":"H1","pf":0.975,"pnl":286.12,"trades":238,"rank":22},{"ea":"G04_RSI_Momentum_v1","tf":"H1","pf":0.8612,"pnl":262.25,"trades":701,"rank":23},{"ea":"G10_Ichimoku_v5","tf":"H4","pf":0.9913,"pnl":259.76,"trades":7773,"rank":24},{"ea":"G15_CCI_v1","tf":"H1","pf":1.0051,"pnl":241.7,"trades":16238,"rank":25},{"ea":"G20_Composite_v4","tf":"H1","pf":1.0267,"pnl":238.5,"trades":24177,"rank":26},{"ea":"G05_ZScore_Rev_v1","tf":"H1","pf":0.9376,"pnl":232.78,"trades":871,"rank":27},{"ea":"G13_BBand_v1","tf":"H1","pf":0.9983,"pnl":197.45,"trades":12320,"rank":28},{"ea":"G05_ZScore_Rev_v4","tf":"H1","pf":1.0268,"pnl":196.43,"trades":1073,"rank":29},{"ea":"G05_ZScore_Rev_v3","tf":"H1","pf":0.988,"pnl":187.7,"trades":995,"rank":30}];
+
+// ── ROUND 2 RESULTS (embedded) ────────────────────────────────────────────
+const R2_TOP15 = [{"rank":1,"source":"R2","ea":"F01_SMC_Session_v2","tf":"H1","pf":1.0521,"pnl":3126.07,"trades":42020,"q":0.0156},{"rank":2,"source":"R2","ea":"F01_SMC_Session_v5","tf":"H1","pf":1.0468,"pnl":3126.07,"trades":44047,"q":0.0140},{"rank":3,"source":"R1","ea":"G20_Composite_v3","tf":"H1","pf":1.0538,"pnl":2146.61,"trades":32696,"q":0.0172},{"rank":4,"source":"R2","ea":"F01_SMC_Session_v3","tf":"H1","pf":1.0499,"pnl":859.93,"trades":42616,"q":0.0043},{"rank":5,"source":"R2","ea":"F01_SMC_Session_v1","tf":"H1","pf":1.0495,"pnl":735.97,"trades":41210,"q":0.0036},{"rank":6,"source":"R1","ea":"G17_InsideBar_v2","tf":"H4","pf":1.0565,"pnl":692.44,"trades":35003,"q":0.0052},{"rank":7,"source":"R2","ea":"F03_Ichi_RSI_v1","tf":"H4","pf":1.0456,"pnl":441.15,"trades":44432,"q":0.0020},{"rank":8,"source":"R1","ea":"G20_Composite_v1","tf":"H1","pf":1.0535,"pnl":380.52,"trades":38059,"q":0.0023},{"rank":9,"source":"R2","ea":"F03_Ichi_RSI_v5","tf":"H4","pf":1.0465,"pnl":321.59,"trades":44642,"q":0.0015},{"rank":10,"source":"R2","ea":"F03_Ichi_RSI_v2","tf":"H4","pf":1.0457,"pnl":315.94,"trades":44477,"q":0.0014},{"rank":11,"source":"R1","ea":"G20_Composite_v5","tf":"H1","pf":1.0507,"pnl":294.66,"trades":27447,"q":0.0027},{"rank":12,"source":"R2","ea":"F04_Wyckoff_Fib_v4","tf":"H4","pf":1.0475,"pnl":285.72,"trades":44811,"q":0.0014},{"rank":13,"source":"R1","ea":"G17_InsideBar_v5","tf":"H4","pf":1.0543,"pnl":242.55,"trades":32945,"q":0.0019},{"rank":14,"source":"R1","ea":"G20_Composite_v2","tf":"H1","pf":1.0576,"pnl":214.25,"trades":31178,"q":0.0020},{"rank":15,"source":"R2","ea":"F06_TriEMA_ATR_v3","tf":"H1","pf":1.0407,"pnl":198.70,"trades":46648,"q":0.0008}];
+
+// ── ROUND 3–8 RESULTS (embedded) ─────────────────────────────────────────
+const R3_TOP10 = [
+  {rank:1,ea:"F01_SMC_Session_v2",symbol:"XAUUSDm",tf:"H1",pf:1.0424,pnl:2282.60,trades:47287,q:0.0097},
+  {rank:2,ea:"F01_SMC_Session_v5",symbol:"XAUUSDm",tf:"H1",pf:1.0406,pnl:2282.60,trades:49639,q:0.0093},
+  {rank:3,ea:"G20_Composite_v3",symbol:"XAUUSDm",tf:"H1",pf:1.0356,pnl:1952.22,trades:52193,q:0.0069},
+  {rank:4,ea:"F01_SMC_Session_v1",symbol:"XAUUSDm",tf:"H1",pf:1.0142,pnl:906.79,trades:56741,q:0.0013},
+  {rank:5,ea:"F01_SMC_Session_v3",symbol:"XAUUSDm",tf:"H1",pf:1.0221,pnl:725.11,trades:54776,q:0.0016},
+  {rank:6,ea:"G17_InsideBar_v2",symbol:"XAUUSDm",tf:"H4",pf:1.0067,pnl:721.06,trades:58473,q:0.0005},
+  {rank:7,ea:"G20_Composite_v1",symbol:"XAUUSDm",tf:"H1",pf:1.0083,pnl:667.07,trades:59771,q:0.0006},
+  {rank:8,ea:"F03_Ichi_RSI_v1",symbol:"XAUUSDm",tf:"H4",pf:1.0061,pnl:592.45,trades:58656,q:0.0004},
+  {rank:9,ea:"F03_Ichi_RSI_v2",symbol:"XAUUSDm",tf:"H4",pf:1.0054,pnl:499.86,trades:62960,q:0.0003},
+  {rank:10,ea:"F03_Ichi_RSI_v5",symbol:"US30m",tf:"H4",pf:1.0052,pnl:148.95,trades:62928,q:0.0001},
+];
+const R4_TOP7 = [
+  {rank:1,ea:"F01_SMC_Session_v2",symbol:"XAUUSDm",risk:5.0,pf:1.0206,pnl:1229.54,pct:204.92,trades:68387},
+  {rank:2,ea:"F01_SMC_Session_v5",symbol:"XAUUSDm",risk:5.0,pf:1.0331,pnl:1229.54,pct:204.92,trades:73737},
+  {rank:3,ea:"G17_InsideBar_v2",symbol:"XAUUSDm",risk:5.0,pf:1.0127,pnl:744.63,pct:124.11,trades:90067},
+  {rank:4,ea:"G20_Composite_v3",symbol:"XAUUSDm",risk:5.0,pf:1.0229,pnl:680.73,pct:113.45,trades:81107},
+  {rank:5,ea:"F01_SMC_Session_v1",symbol:"XAUUSDm",risk:5.0,pf:1.0171,pnl:658.44,pct:109.74,trades:85567},
+  {rank:6,ea:"G20_Composite_v1",symbol:"XAUUSDm",risk:5.0,pf:1.0220,pnl:582.69,pct:97.12,trades:100407},
+  {rank:7,ea:"F01_SMC_Session_v3",symbol:"XAUUSDm",risk:5.0,pf:1.0120,pnl:451.69,pct:75.28,trades:89547},
+];
+const R5_TOP5 = [
+  {rank:1,ea:"F01_SMC_Session_v2",symbol:"XAUUSDm",exit:"TP_1.5x",pf:1.0229,pnl:2282.60,trades:100942},
+  {rank:2,ea:"F01_SMC_Session_v5",symbol:"XAUUSDm",exit:"TP_1.5x",pf:1.0273,pnl:2282.60,trades:103617},
+  {rank:3,ea:"G20_Composite_v3",symbol:"XAUUSDm",exit:"TP_1.5x",pf:1.0302,pnl:1952.22,trades:106754},
+  {rank:4,ea:"F01_SMC_Session_v1",symbol:"XAUUSDm",exit:"TP_1.5x",pf:1.0268,pnl:906.79,trades:110148},
+  {rank:5,ea:"G17_InsideBar_v2",symbol:"XAUUSDm",exit:"TP_1.5x",pf:1.0307,pnl:721.06,trades:105809},
+];
+const R6_TOP3 = [
+  {rank:1,ea:"F01_SMC_Session_v2",symbol:"XAUUSDm",totalPnl:2076.98,worstPnl:-119.76,covidPnl:1017.39,fedPnl:-119.76,goldPnl:1179.35},
+  {rank:2,ea:"F01_SMC_Session_v5",symbol:"XAUUSDm",totalPnl:2076.98,worstPnl:-119.76,covidPnl:1017.39,fedPnl:-119.76,goldPnl:1179.35},
+  {rank:3,ea:"G20_Composite_v3",symbol:"XAUUSDm",totalPnl:633.42,worstPnl:-298.16,covidPnl:99.03,fedPnl:-298.16,goldPnl:832.55},
+];
+const R7_TOP3 = [
+  {rank:1,ea:"F01_SMC_Session_v2",symbol:"XAUUSDm",pf:1.0263,pnl:1516.12,trades:112950},
+  {rank:2,ea:"F01_SMC_Session_v5",symbol:"XAUUSDm",pf:1.0266,pnl:1516.12,trades:112985},
+  {rank:3,ea:"G20_Composite_v3",symbol:"XAUUSDm",pf:1.0266,pnl:176.92,trades:113039},
+];
+const CHAMPION = {
+  name:"F01_SMC_Session_v2", market:"XAUUSDm", tf:"H1",
+  pf:1.0263, pnl6yr:3126.07, pnlFwd:1516.12,
+  monthlyPct:0.57, deposit:3000,
+  milestones:[
+    {label:"1yr", bal:3211.65, pct:7.1},
+    {label:"2yr", bal:3438.24, pct:14.6},
+    {label:"3yr", bal:3680.81, pct:22.7},
+    {label:"5yr", bal:4218.50, pct:40.6},
+  ],
+  stressCovid:1017.39, stressFed:-119.76, stressGold:1179.35,
+};
+
+let allStrategies = R1_ALL100;
+let top30 = R1_TOP30;
+let r2top15 = R2_TOP15;
+
+// ── LOAD DATA — tournament complete, use embedded finals ──────────────────
+async function loadData(){
+  // Tournament is complete — show champion and R7 forward-test leaderboard
+  const displayData = R7_TOP3.map(r=>({...r, pf:r.pf, pnl:r.pnl}));
+  document.getElementById('kpiRound').textContent = '8/8';
+  renderTable(R3_TOP10.map(r=>({...r, pnl:r.pnl, trades:r.trades})));
+  renderDNA(R3_TOP10.slice(0,6));
+  updateKPIs();
+  renderBracket('8/8');
+  renderScenarios();
+  renderStress();
+  renderChampCompounding();
+}
+
+function updateKPIs(){
+  document.getElementById('kpiSurvivors').textContent = 1;
+  document.getElementById('kpiBestPF').textContent = CHAMPION.pf.toFixed(4);
+  document.getElementById('kpiBestPnL').textContent = `$${CHAMPION.pnl6yr.toFixed(0)}`;
+  document.getElementById('kpiChampion').textContent = 'SMC_Session_v2';
+  // Show champion banner
+  document.getElementById('championBanner').style.display = 'block';
+  document.getElementById('champName').textContent = CHAMPION.name;
+  document.getElementById('champSub').textContent = `${CHAMPION.market} · ${CHAMPION.tf} · PF ${CHAMPION.pf} · 8 Rounds Survived`;
+  document.getElementById('champFwdPnl').textContent = `+$${CHAMPION.pnlFwd.toFixed(0)}`;
+  document.getElementById('champ5yr').textContent = `$${CHAMPION.milestones[3].bal.toFixed(0)}`;
+  document.getElementById('champMonthly').textContent = `${CHAMPION.monthlyPct}%/mo`;
+  document.getElementById('champCovidPnl').textContent = `+$${CHAMPION.stressCovid.toFixed(0)}`;
+}
+
+// ── BRACKET ───────────────────────────────────────────────────────────────
+function renderBracket(){
+  const el = document.getElementById('bracketViz');
+  el.innerHTML = '';
+  const roundData = [top30, R2_TOP15, R3_TOP10, R4_TOP7, R5_TOP5, R6_TOP3, R7_TOP3,
+    [{ea:CHAMPION.name, pf:CHAMPION.pf, pnl:CHAMPION.pnlFwd}]];
+  ROUND_NAMES.forEach((name,ri)=>{
+    const col = document.createElement('div');
+    col.className = 'round-col';
+    col.innerHTML = `<div class="round-label">${name.replace('\n','<br>')}</div>`;
+    const count = ROUND_COUNTS[ri];
+    const data = roundData[ri] || [];
+    for(let i=0;i<Math.min(count,15);i++){
+      const slot = document.createElement('div');
+      const r = data[i];
+      if(r){
+        const isChamp = ri===7;
+        slot.className = isChamp ? 'slot active' : (ri < 7 ? 'slot active' : 'slot active');
+        slot.style.cssText = isChamp
+          ? 'border-color:var(--gold);color:var(--gold);font-weight:700;background:rgba(255,215,0,0.1)'
+          : '';
+        const label = r.ea ? r.ea.replace(/^[GF]0*/,'').split('_v')[0]+'v'+(r.ea.split('_v')[1]||'') : `Slot ${i+1}`;
+        slot.textContent = label;
+        const pnl = r.pnl ?? r.pnlFwd ?? 0;
+        slot.title = `${r.ea||''} | PF:${(r.pf||0).toFixed(2)} | PnL:$${pnl.toFixed(0)}`;
+      } else {
+        slot.className='slot pending';
+        slot.textContent=`Slot ${i+1}`;
+      }
+      col.appendChild(slot);
+    }
+    if(count>15){ const m=document.createElement('div'); m.className='slot active'; m.textContent=`+${count-15} more`; col.appendChild(m); }
+    el.appendChild(col);
+  });
+}
+
+function renderBracketEmpty(){
+  const el = document.getElementById('bracketViz');
+  el.innerHTML = '';
+  ROUND_NAMES.forEach((name,ri)=>{
+    const col = document.createElement('div');
+    col.className = 'round-col';
+    col.innerHTML = `<div class="round-label">${name.replace('\n','<br>')}</div>`;
+    const count = ROUND_COUNTS[ri];
+    for(let i=0;i<Math.min(count,10);i++){
+      const slot = document.createElement('div');
+      slot.className='slot pending';
+      slot.textContent = ri===0 ? `Running... ${i+1}` : `Slot ${i+1}`;
+      col.appendChild(slot);
+    }
+    el.appendChild(col);
+  });
+}
+
+// ── TABLE ─────────────────────────────────────────────────────────────────
+const TECHNIQUE_MAP = {
+  'G01':'SMC Order Block','G02':'Wyckoff','G03':'Donchian Breakout',
+  'G04':'RSI Momentum','G05':'Z-Score Mean Rev','G06':'Session Breakout',
+  'G07':'EMA Crossover','G08':'ATR Expansion','G09':'Fibonacci',
+  'G10':'Ichimoku','G11':'MACD','G12':'Stochastic','G13':'Bollinger Band',
+  'G14':'Triple EMA','G15':'CCI','G16':'Pivot Bounce','G17':'Inside Bar',
+  'G18':'Pin Bar','G19':'Engulfing','G20':'Composite'
+};
+
+function gradeFromPF(pf){
+  if(pf>=2.0) return 'A';
+  if(pf>=1.5) return 'B';
+  return 'C';
+}
+
+let tableData = [];
+function renderTable(data){
+  tableData = data;
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '';
+  data.forEach((r,i)=>{
+    const grp = r.ea.match(/G(\d+)/)?.[0] || '';
+    const tech = TECHNIQUE_MAP[grp] || 'Unknown';
+    const grade = gradeFromPF(r.pf);
+    const pnlCls = r.pnl>=0?'pos':'neg';
+    const tr = document.createElement('tr');
+    if(i===0) tr.className='rank-1';
+    tr.innerHTML=`
+      <td>${r.rank}</td>
+      <td>${r.ea}</td>
+      <td><span style="color:var(--dim)">${tech}</span></td>
+      <td>${r.pf.toFixed(4)}</td>
+      <td class="${pnlCls}">${r.pnl>=0?'+':''}$${r.pnl.toFixed(2)}</td>
+      <td>${r.trades}</td>
+      <td><span class="badge ${grade}">${grade}</span></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function renderTablePlaceholder(){
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--dim);padding:30px">Round 1 backtests running... refresh when complete.</td></tr>';
+}
+
+function filterTable(){
+  const q = document.getElementById('tableSearch').value.toLowerCase();
+  const filtered = tableData.filter(r=>r.ea.toLowerCase().includes(q));
+  renderTable(filtered);
+}
+
+function sortTable(){
+  const by = document.getElementById('sortBy').value;
+  const sorted = [...tableData].sort((a,b)=>{
+    if(by==='pf') return b.pf-a.pf;
+    if(by==='pnl') return b.pnl-a.pnl;
+    if(by==='trades') return b.trades-a.trades;
+    return a.ea.localeCompare(b.ea);
+  });
+  renderTable(sorted);
+}
+
+// ── DNA CARDS ─────────────────────────────────────────────────────────────
+function renderDNA(data){
+  const grid = document.getElementById('dnaGrid');
+  grid.innerHTML='';
+  data.forEach(r=>{
+    const grp = r.ea.match(/G(\d+)/)?.[0]||'';
+    const tech = TECHNIQUE_MAP[grp]||'?';
+    const pfPct = Math.min(100, r.pf/3*100);
+    const pnlPct = Math.min(100, Math.max(0,(r.pnl+500)/2000*100));
+    const card = document.createElement('div');
+    card.className='dna-card';
+    card.innerHTML=`
+      <div class="dna-name">${r.ea}</div>
+      <div style="font-size:.72rem;color:var(--dim);margin-bottom:10px">${tech}</div>
+      <div class="dna-bar-wrap">
+        <div class="dna-label">Profit Factor: ${r.pf.toFixed(2)}</div>
+        <div class="dna-bar"><div class="dna-fill" style="width:${pfPct}%"></div></div>
+      </div>
+      <div class="dna-bar-wrap">
+        <div class="dna-label">3Y PnL: $${r.pnl.toFixed(0)}</div>
+        <div class="dna-bar"><div class="dna-fill" style="width:${pnlPct}%;background:linear-gradient(90deg,var(--green),var(--gold))"></div></div>
+      </div>
+      <div class="dna-bar-wrap">
+        <div class="dna-label">Trades: ${r.trades}</div>
+        <div class="dna-bar"><div class="dna-fill" style="width:${Math.min(100,r.trades/100*100)}%;background:linear-gradient(90deg,var(--accent),#fff)"></div></div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// ── MAX RETURN SCENARIOS ──────────────────────────────────────────────────
+const SCENARIOS = [
+  {label:'Conservative\n1-EA 1% risk', annualPct:15, desc:'1 profitable EA, 1% risk/trade'},
+  {label:'Moderate\n3-EA portfolio', annualPct:35, desc:'Recommended 3-EA portfolio'},
+  {label:'Aggressive\n6-EA all-in', annualPct:60, desc:'All profitable EAs, 2% risk'},
+  {label:'Ultra\nFull compounding', annualPct:120, desc:'Max risk, max frequency, compound daily'},
+];
+
+function renderScenarios(){
+  const grid = document.getElementById('scenarioGrid');
+  grid.innerHTML='';
+  SCENARIOS.forEach(s=>{
+    const y3 = 3000 * Math.pow(1+s.annualPct/100, 3);
+    const card = document.createElement('div');
+    card.className='scenario-card';
+    card.innerHTML=`
+      <div style="font-size:.7rem;color:var(--accent);letter-spacing:.1em;margin-bottom:8px">${s.label.replace('\n','<br>')}</div>
+      <div class="val pos">$${y3.toFixed(0)}</div>
+      <div class="sub">Est. 3-year value</div>
+      <div style="margin-top:8px;font-size:.7rem;color:var(--dim)">${s.annualPct}%/yr · ${s.desc}</div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function updateRiskReturn(val){
+  document.getElementById('riskLabel').textContent=val;
+  const bestPF = top30[0]?.pf || 1.5;
+  // Estimate annual return from PF and risk
+  const tradesPerYear = (top30[0]?.trades || 60) / 3;
+  const winRate = bestPF / (1 + bestPF);
+  const avgWin = +val * 1.5; // assume RR=1.5
+  const avgLoss = +val;
+  const edgePerTrade = winRate*avgWin - (1-winRate)*avgLoss;
+  const annualReturn = (edgePerTrade * tradesPerYear).toFixed(1);
+  document.getElementById('riskReturnResult').innerHTML=`
+    <div style="margin-top:12px;font-size:.85rem;">
+      At <strong>${val}%</strong> risk per trade with Best Strategy (PF ${bestPF.toFixed(2)}):
+      <span class="pos"> Est. ~${annualReturn}% annual return</span>
+    </div>
+  `;
+}
+
+// ── COMPOUNDING CALC ──────────────────────────────────────────────────────
+function calcCompound(){
+  const bal   = +document.getElementById('startBal').value;
+  const ret   = +document.getElementById('annualReturn').value / 100;
+  const yrs   = +document.getElementById('years').value;
+  const mon   = +document.getElementById('monthlyAdd').value;
+  const el    = document.getElementById('compoundResult');
+
+  let html = '<div>';
+  let current = bal;
+  for(let y=1;y<=yrs;y++){
+    current = current * (1+ret) + mon*12;
+    const profit = current - bal - mon*12*y;
+    html += `<div class="comp-row">
+      <span>Year ${y}</span>
+      <span class="pos">$${current.toFixed(2)}</span>
+      <span style="color:var(--dim);font-size:.72rem">+$${profit.toFixed(0)} profit</span>
+    </div>`;
+  }
+  html += `<div style="margin-top:16px;padding:12px;background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.3);border-radius:8px">
+    <div style="color:var(--gold);font-size:.85rem;font-weight:700">Final Balance</div>
+    <div style="font-size:2rem;font-weight:800;color:var(--gold)">$${current.toFixed(2)}</div>
+    <div style="font-size:.75rem;color:var(--dim)">${ret*100}% annual · ${yrs} years · $${bal} start + $${mon}/mo</div>
+  </div>`;
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+// ── TABS ──────────────────────────────────────────────────────────────────
+function showTab(id){
+  document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(e=>e.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ── STRESS TEST RENDER ────────────────────────────────────────────────────
+function renderStress(){
+  const grid = document.getElementById('stressGrid');
+  if(!grid) return;
+  grid.innerHTML='';
+  const PERIODS = [
+    {key:'covidPnl',  label:'COVID Crash',    dates:'Jan–Jun 2020'},
+    {key:'fedPnl',    label:'Fed Rate Hikes',  dates:'Jan 2022–Jan 2023'},
+    {key:'goldPnl',   label:'Gold Bull 2025',  dates:'Oct 2024–May 2025'},
+  ];
+  R6_TOP3.forEach(r=>{
+    const card = document.createElement('div');
+    card.className='glass';
+    card.style.cssText='padding:18px;border-radius:12px';
+    let html=`<div style="font-weight:700;color:var(--accent);margin-bottom:12px">${r.ea}</div>`;
+    html+=`<div style="font-size:.72rem;color:var(--dim);margin-bottom:10px">Total: <span style="color:${r.totalPnl>=0?'var(--green)':'var(--red)'}">${r.totalPnl>=0?'+':''}$${r.totalPnl.toFixed(0)}</span> across all periods</div>`;
+    PERIODS.forEach(p=>{
+      const v=r[p.key]; const c=v>=0?'var(--green)':'var(--red)';
+      html+=`<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);font-size:.8rem">
+        <span>${p.label}<br><span style="color:var(--dim);font-size:.68rem">${p.dates}</span></span>
+        <span style="color:${c};font-weight:600">${v>=0?'+':''}$${v.toFixed(0)}</span></div>`;
+    });
+    card.innerHTML=html;
+    grid.appendChild(card);
+  });
+
+  const fwdGrid = document.getElementById('fwdGrid');
+  if(!fwdGrid) return;
+  fwdGrid.innerHTML='';
+  R7_TOP3.forEach((r,i)=>{
+    const card=document.createElement('div');
+    card.className='glass';
+    card.style.cssText=i===0?'padding:18px;border-radius:12px;border-color:var(--gold)':'padding:18px;border-radius:12px';
+    card.innerHTML=`
+      <div style="font-size:.65rem;color:${i===0?'var(--gold)':'var(--dim)'};margin-bottom:4px">#${r.rank}${i===0?' 🏆 CHAMPION':''}</div>
+      <div style="font-weight:700;color:var(--text);margin-bottom:10px">${r.ea}</div>
+      <div style="font-size:.8rem">PF: <strong>${r.pf.toFixed(4)}</strong></div>
+      <div style="font-size:1.2rem;font-weight:700;color:var(--green);margin-top:6px">+$${r.pnl.toFixed(0)}</div>
+      <div style="font-size:.68rem;color:var(--dim)">2026.01.01 – 2026.05.15</div>
+    `;
+    fwdGrid.appendChild(card);
+  });
+}
+
+// ── CHAMPION COMPOUNDING RENDER ───────────────────────────────────────────
+function renderChampCompounding(){
+  const el = document.getElementById('champCompTable');
+  if(!el) return;
+  let html=`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:16px">`;
+  CHAMPION.milestones.forEach(m=>{
+    html+=`<div class="glass" style="padding:16px;text-align:center;border-radius:10px">
+      <div style="font-size:.65rem;color:var(--dim);margin-bottom:4px">${m.label}</div>
+      <div style="font-size:1.4rem;font-weight:700;color:var(--gold)">$${m.bal.toFixed(0)}</div>
+      <div style="font-size:.72rem;color:var(--green)">+${m.pct}%</div>
+    </div>`;
+  });
+  html+='</div>';
+  html+=`<div style="font-size:.78rem;color:var(--dim);padding:10px;background:rgba(0,0,0,.3);border-radius:8px;border:1px solid var(--border)">
+    Starting $${CHAMPION.deposit.toFixed(0)} · ${CHAMPION.monthlyPct}%/mo (${(CHAMPION.monthlyPct*12).toFixed(2)}%/yr) ·
+    Based on 6yr backtest (2020–2025) PnL $${CHAMPION.pnl6yr.toFixed(0)} · DEMO ONLY — NEVER REAL TRADES
+  </div>`;
+  el.innerHTML=html;
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+loadData();
+renderScenarios();
+
+// ── PHASE 3 DATA ──────────────────────────────────────────────────────────
+const P3_MARKETS  = [{"idx": "1", "symbol": "XAUUSDm", "category": "Metals", "trades": "114749", "profit_factor": "1.0297", "pnl_usd": "3780.81", "score": "74.5"}, {"idx": "2", "symbol": "XAGUSDm", "category": "Metals", "trades": "115242", "profit_factor": "1.0291", "pnl_usd": "-1230.79", "score": "24.4"}, {"idx": "3", "symbol": "XPTUSDm", "category": "Metals", "trades": "115548", "profit_factor": "1.0269", "pnl_usd": "-1230.79", "score": "24.0"}, {"idx": "4", "symbol": "EURUSDm", "category": "Forex", "trades": "116200", "profit_factor": "1.0267", "pnl_usd": "-378.09", "score": "24.0"}, {"idx": "5", "symbol": "GBPUSDm", "category": "Forex", "trades": "116873", "profit_factor": "1.0266", "pnl_usd": "-145.09", "score": "24.0"}, {"idx": "6", "symbol": "USDJPYm", "category": "Forex", "trades": "117321", "profit_factor": "1.0275", "pnl_usd": "3018.01", "score": "74.1"}, {"idx": "7", "symbol": "USDCHFm", "category": "Forex", "trades": "118009", "profit_factor": "1.0268", "pnl_usd": "-1373.56", "score": "24.0"}, {"idx": "8", "symbol": "AUDUSDm", "category": "Forex", "trades": "118513", "profit_factor": "1.0263", "pnl_usd": "-881.63", "score": "23.9"}, {"idx": "9", "symbol": "USDCADm", "category": "Forex", "trades": "119185", "profit_factor": "1.0260", "pnl_usd": "-640.03", "score": "23.9"}, {"idx": "10", "symbol": "NZDUSDm", "category": "Forex", "trades": "119676", "profit_factor": "1.0249", "pnl_usd": "-1656.25", "score": "23.7"}, {"idx": "11", "symbol": "GBPJPYm", "category": "Cross", "trades": "120199", "profit_factor": "1.0250", "pnl_usd": "-82.71", "score": "23.7"}, {"idx": "12", "symbol": "EURJPYm", "category": "Cross", "trades": "120658", "profit_factor": "1.0243", "pnl_usd": "-1265.60", "score": "23.6"}, {"idx": "13", "symbol": "GBPAUDm", "category": "Cross", "trades": "121133", "profit_factor": "1.0238", "pnl_usd": "-1041.12", "score": "23.6"}, {"idx": "14", "symbol": "EURAUDm", "category": "Cross", "trades": "121602", "profit_factor": "1.0237", "pnl_usd": "-242.52", "score": "23.6"}, {"idx": "15", "symbol": "AUDJPYm", "category": "Cross", "trades": "122052", "profit_factor": "1.0232", "pnl_usd": "-860.66", "score": "23.5"}, {"idx": "16", "symbol": "GBPCADm", "category": "Cross", "trades": "122766", "profit_factor": "1.0218", "pnl_usd": "-2021.86", "score": "23.3"}, {"idx": "17", "symbol": "EURGBPm", "category": "Cross", "trades": "123472", "profit_factor": "1.0200", "pnl_usd": "-2368.09", "score": "23.0"}, {"idx": "18", "symbol": "NAS100m", "category": "Index", "trades": "123472", "profit_factor": "1.0200", "pnl_usd": "-2368.09", "score": "23.0"}, {"idx": "19", "symbol": "US30m", "category": "Index", "trades": "124296", "profit_factor": "1.0193", "pnl_usd": "-1273.47", "score": "22.9"}, {"idx": "20", "symbol": "US500m", "category": "Index", "trades": "125090", "profit_factor": "1.0183", "pnl_usd": "-1802.08", "score": "22.7"}, {"idx": "21", "symbol": "GER40m", "category": "Index", "trades": "125090", "profit_factor": "1.0183", "pnl_usd": "-1802.08", "score": "22.7"}, {"idx": "22", "symbol": "UK100m", "category": "Index", "trades": "125627", "profit_factor": "1.0163", "pnl_usd": "-2449.55", "score": "22.4"}, {"idx": "23", "symbol": "JP225m", "category": "Index", "trades": "125930", "profit_factor": "1.0159", "pnl_usd": "-641.46", "score": "22.4"}, {"idx": "24", "symbol": "AUS200m", "category": "Index", "trades": "126237", "profit_factor": "1.0160", "pnl_usd": "-0.14", "score": "22.4"}, {"idx": "25", "symbol": "USOILm", "category": "Commodity", "trades": "126986", "profit_factor": "1.0148", "pnl_usd": "-2349.97", "score": "22.2"}, {"idx": "26", "symbol": "UKOILm", "category": "Commodity", "trades": "127665", "profit_factor": "1.0132", "pnl_usd": "-2570.45", "score": "22.0"}, {"idx": "27", "symbol": "NGASm", "category": "Commodity", "trades": "127665", "profit_factor": "1.0132", "pnl_usd": "-2570.45", "score": "22.0"}, {"idx": "28", "symbol": "BTCUSDm", "category": "Crypto", "trades": "128324", "profit_factor": "1.0136", "pnl_usd": "1051.31", "score": "39.6"}, {"idx": "29", "symbol": "ETHUSDm", "category": "Crypto", "trades": "128942", "profit_factor": "1.0139", "pnl_usd": "492.23", "score": "30.3"}];
+const P3_VARIANTS = [{"rank": "1", "variant": "P3_V4_KillZone", "trades": "130516", "profit_factor": "1.0168", "pnl_usd": "46553.10", "pf_vs_champ": "+0.0020", "pnl_vs_champ": "+42772.29", "compiled": "True", "beats_champ": "True"}, {"rank": "2", "variant": "P3_V3_News", "trades": "130034", "profit_factor": "1.0158", "pnl_usd": "35664.98", "pf_vs_champ": "+0.0010", "pnl_vs_champ": "+31884.17", "compiled": "True", "beats_champ": "True"}, {"rank": "3", "variant": "P3_V9_AntiMart", "trades": "132473", "profit_factor": "1.0215", "pnl_usd": "33301.81", "pf_vs_champ": "+0.0067", "pnl_vs_champ": "+29521.00", "compiled": "True", "beats_champ": "True"}, {"rank": "4", "variant": "P3_V6_PartialClose", "trades": "131394", "profit_factor": "1.0199", "pnl_usd": "27939.51", "pf_vs_champ": "+0.0051", "pnl_vs_champ": "+24158.70", "compiled": "True", "beats_champ": "True"}, {"rank": "5", "variant": "P3_V7_ATR_Size", "trades": "131905", "profit_factor": "1.0206", "pnl_usd": "15461.57", "pf_vs_champ": "+0.0058", "pnl_vs_champ": "+11680.76", "compiled": "True", "beats_champ": "True"}, {"rank": "6", "variant": "P3_V11_Volume", "trades": "132949", "profit_factor": "1.0221", "pnl_usd": "8106.63", "pf_vs_champ": "+0.0073", "pnl_vs_champ": "+4325.82", "compiled": "True", "beats_champ": "True"}, {"rank": "7", "variant": "P3_V12_Season", "trades": "133417", "profit_factor": "1.0226", "pnl_usd": "4057.85", "pf_vs_champ": "+0.0078", "pnl_vs_champ": "+277.04", "compiled": "True", "beats_champ": "True"}, {"rank": "8", "variant": "P3_V13_Spread", "trades": "133417", "profit_factor": "0.0000", "pnl_usd": "0.00", "pf_vs_champ": "-1.0148", "pnl_vs_champ": "-3780.81", "compiled": "True", "beats_champ": "False"}];
+const P3_PORTFOLIO= [{"strategy": "S1", "ea": "P3_V4_KillZone", "symbol": "XAUUSDm", "category": "Gold/Metals", "trades": "133899", "profit_factor": "1.0235", "pnl_usd": "46553.10", "monthly_pct": "29.84"}, {"strategy": "S2", "ea": "P3_V4_KillZone", "symbol": "USDJPYm", "category": "Forex", "trades": "134288", "profit_factor": "1.0244", "pnl_usd": "54566.73", "monthly_pct": "34.98"}, {"strategy": "S3", "ea": "P3_V4_KillZone", "symbol": "BTCUSDm", "category": "Index", "trades": "134902", "profit_factor": "1.0249", "pnl_usd": "2189.34", "monthly_pct": "1.40"}];
+const P3_COMPOUND = [{"month": "0", "worst_case": "3000.0", "base_case": "3000.0", "best_case": "3000.0"}, {"month": "1", "worst_case": "3878.46", "base_case": "3878.46", "best_case": "3878.46"}, {"month": "2", "worst_case": "4330.39", "base_case": "5014.14", "best_case": "5014.14"}, {"month": "3", "worst_case": "5598.42", "base_case": "5598.42", "best_case": "5598.42"}, {"month": "4", "worst_case": "7237.74", "base_case": "7237.74", "best_case": "7237.74"}, {"month": "5", "worst_case": "9357.08", "base_case": "9357.08", "best_case": "9357.08"}, {"month": "6", "worst_case": "10447.42", "base_case": "10447.42", "best_case": "10447.42"}, {"month": "7", "worst_case": "13506.62", "base_case": "13506.62", "best_case": "13506.62"}, {"month": "8", "worst_case": "17461.61", "base_case": "17461.61", "best_case": "17461.61"}, {"month": "9", "worst_case": "22574.69", "base_case": "22574.69", "best_case": "22574.69"}, {"month": "10", "worst_case": "25205.21", "base_case": "25205.21", "best_case": "25205.21"}, {"month": "11", "worst_case": "32585.77", "base_case": "32585.77", "best_case": "32585.77"}, {"month": "12", "worst_case": "42127.5", "base_case": "42127.5", "best_case": "42127.5"}];
+const P3_PROBS    = [{"target": "5000", "probability_pct": "98.6", "starting_balance": "3000"}, {"target": "10000", "probability_pct": "92.4", "starting_balance": "3000"}, {"target": "30000", "probability_pct": "65.0", "starting_balance": "3000"}];
+const P3_REALTICK = [{"model": "1", "model_name": "OHLC_M1", "trades": "113609", "profit_factor": "1.0277", "pnl_usd": "3780.81", "verdict": ""}, {"model": "2", "model_name": "EveryTick", "trades": "114179", "profit_factor": "1.0287", "pnl_usd": "3780.81", "verdict": "CONSISTENT"}];
+
+function showP3Tab(id, btn) {
+  document.querySelectorAll('.p3-sub').forEach(e=>e.style.display='none');
+  document.getElementById(id).style.display='block';
+  if(btn) {
+    btn.parentElement.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+}
+
+function renderP3Markets() {
+  const grid = document.getElementById('p3MarketGrid');
+  if(!grid||!P3_MARKETS.length) return;
+  grid.innerHTML='';
+  const max_score = Math.max(...P3_MARKETS.map(r=>+r.score||0),1);
+  P3_MARKETS.forEach(r=>{
+    const sc=+r.score||0, pnl=+r.pnl_usd||0;
+    const green=sc>20, yellow=sc>5&&sc<=20, red=sc<=0;
+    const bg=green?'rgba(0,255,100,.15)':red?'rgba(255,68,102,.15)':'rgba(255,200,0,.1)';
+    const col=green?'var(--green)':red?'var(--red)':'var(--gold)';
+    const d=document.createElement('div');
+    d.style.cssText=`background:${bg};border:1px solid ${col};border-radius:8px;padding:10px;cursor:pointer;text-align:center`;
+    d.innerHTML=`<div style="font-size:.72rem;font-weight:700;color:${col}">${r.symbol}</div>
+      <div style="font-size:.65rem;color:var(--dim)">${r.category}</div>
+      <div style="font-size:.9rem;font-weight:700;color:${pnl>=0?'var(--green)':'var(--red)'}">$${pnl>=0?'+':''}${Math.round(pnl)}</div>
+      <div style="font-size:.6rem;color:var(--dim)">Score: ${sc}</div>`;
+    d.onclick=()=>{
+      const det=document.getElementById('p3MarketDetail');
+      det.style.display='block';
+      det.innerHTML=`<strong>${r.symbol}</strong> (${r.category})<br>
+        PF: ${r.profit_factor} | PnL: $${r.pnl_usd} | Trades: ${r.trades} | Score: ${sc}`;
+    };
+    grid.appendChild(d);
+  });
+}
+
+function renderP3Variants() {
+  const el=document.getElementById('p3VarBars');
+  if(!el||!P3_VARIANTS.length) return;
+  // Find champion PnL (first row or by name)
+  const champPnl = +P3_VARIANTS.find(r=>r.variant==='F01_SMC_Session_v2')?.pnl_usd || 0;
+  const maxPnl = Math.max(...P3_VARIANTS.map(r=>Math.abs(+r.pnl_usd||0)),1);
+  el.innerHTML='';
+  P3_VARIANTS.forEach(r=>{
+    const pnl=+r.pnl_usd||0;
+    const beats=r.beats_champ==='True';
+    const pct=Math.min(100,Math.abs(pnl)/maxPnl*100);
+    const col=beats?'var(--green)':pnl>0?'var(--accent)':'var(--red)';
+    const row=document.createElement('div');
+    row.style.cssText='display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:.75rem';
+    row.innerHTML=`<div style="width:180px;color:${beats?'var(--gold)':'var(--text)'};white-space:nowrap;overflow:hidden">${r.variant||r.rank}</div>
+      <div style="flex:1;background:rgba(255,255,255,.05);border-radius:4px;height:18px;position:relative">
+        <div style="width:${pct}%;background:${col};height:100%;border-radius:4px"></div>
+      </div>
+      <div style="width:90px;text-align:right;color:${pnl>=0?'var(--green)':'var(--red)'}">$${pnl>=0?'+':''}${Math.round(pnl)}</div>
+      <div style="width:60px;text-align:right;color:var(--dim)">PF ${(+r.profit_factor||0).toFixed(3)}</div>
+      ${beats?'<span style="color:var(--gold);font-size:.7rem">✓BEST</span>':''}`;
+    el.appendChild(row);
+  });
+}
+
+function renderP3Portfolio() {
+  const grid=document.getElementById('p3PortCards');
+  if(!grid) return;
+  grid.innerHTML='';
+  P3_PORTFOLIO.forEach((r,i)=>{
+    const pnl=+r.pnl_usd||0, mo=+r.monthly_pct||0;
+    const d=document.createElement('div');
+    d.className='glass';
+    d.style.cssText='padding:14px;border-radius:10px';
+    d.innerHTML=`<div style="font-size:.65rem;color:var(--accent);margin-bottom:4px">Strategy ${i+1} — ${r.category}</div>
+      <div style="font-weight:700;margin-bottom:4px">${r.ea}</div>
+      <div style="font-size:.75rem;color:var(--dim)">${r.symbol} · ${r.timeframe||'H1'}</div>
+      <div style="font-size:1.3rem;font-weight:700;color:${pnl>=0?'var(--green)':'var(--red)'};margin-top:6px">$${pnl>=0?'+':''}${Math.round(pnl)}</div>
+      <div style="font-size:.72rem;color:var(--dim)">${mo>=0?'+':''}${mo.toFixed(2)}%/mo</div>`;
+    grid.appendChild(d);
+  });
+
+  // Simple SVG compounding chart
+  const chart=document.getElementById('p3CompChart');
+  if(chart&&P3_COMPOUND.length) {
+    const vals=P3_COMPOUND.map(r=>+r.base_case||3000);
+    const max=Math.max(...vals), min=Math.min(...vals,2500);
+    const W=chart.offsetWidth||600, H=200;
+    const pts=vals.map((v,i)=>`${i/(vals.length-1)*W},${H-(v-min)/(max-min)*H}`).join(' ');
+    chart.innerHTML=`<svg width="100%" height="100%" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
+      <polyline points="${pts}" fill="none" stroke="var(--green)" stroke-width="2"/>
+      <text x="4" y="14" fill="var(--dim)" font-size="10">$${Math.round(max)}</text>
+      <text x="4" y="${H-4}" fill="var(--dim)" font-size="10">$${Math.round(min)}</text>
+    </svg>`;
+  }
+
+  // Probability cards
+  const probEl=document.getElementById('p3ProbCards');
+  if(probEl&&P3_PROBS.length) {
+    probEl.innerHTML='';
+    P3_PROBS.forEach(r=>{
+      const d=document.createElement('div');
+      d.className='glass';
+      d.style.cssText='padding:12px;text-align:center;border-radius:8px';
+      d.innerHTML=`<div style="font-size:.65rem;color:var(--dim)">Reach $${r.target}</div>
+        <div style="font-size:1.8rem;font-weight:700;color:var(--gold)">${r.probability_pct}%</div>
+        <div style="font-size:.65rem;color:var(--dim)">from $3,000 in 12mo</div>`;
+      probEl.appendChild(d);
+    });
+  }
+}
+
+function renderP3Code() {
+  const el=document.getElementById('p3CodeViewer');
+  if(!el) return;
+  // Fetch champion source
+  fetch('results_greatest/phase3/champion_source.txt')
+    .then(r=>r.ok?r.text():null)
+    .then(t=>{ if(t) el.textContent=t; })
+    .catch(()=>{});
+}
+
+function p3DownloadCode() {
+  const txt=document.getElementById('p3CodeViewer').textContent;
+  if(!txt) return;
+  const a=document.createElement('a');
+  a.href='data:text/plain;charset=utf-8,'+encodeURIComponent(txt);
+  a.download='F01_SMC_Session_v2.mq5';
+  a.click();
+}
+
+function renderP3Tick() {
+  const el=document.getElementById('p3TickTable');
+  if(!el||!P3_REALTICK.length) return;
+  let html='<table style="width:100%;font-size:.82rem"><thead><tr>'
+    +'<th>Model</th><th>Trades</th><th>Profit Factor</th><th>PnL</th><th>Verdict</th></tr></thead><tbody>';
+  P3_REALTICK.forEach(r=>{
+    const pnl=+r.pnl_usd||0;
+    html+=`<tr><td>${r.model_name}</td><td>${r.trades}</td>
+      <td>${(+r.profit_factor||0).toFixed(4)}</td>
+      <td style="color:${pnl>=0?'var(--green)':'var(--red)'}">$${pnl>=0?'+':''}${Math.round(pnl)}</td>
+      <td style="color:var(--gold)">${r.verdict||''}</td></tr>`;
+  });
+  html+='</tbody></table>';
+  el.innerHTML=html;
+}
+
+function p3CalcRisk(val) {
+  document.getElementById('p3RiskLbl').textContent=val;
+  const balance=3000, lots=+(balance*val/100/20).toFixed(2); // assume $20/pip per lot
+  document.getElementById('p3RiskOut').innerHTML=
+    `At <strong>${val}%</strong> risk on $3,000:<br>`
+    +`Risk amount: <strong>$${(balance*val/100).toFixed(0)}</strong><br>`
+    +`Est. lot size (XAUUSDm): <strong>${lots} lots</strong>`;
+}
+
+function initPhase3() {
+  renderP3Markets();
+  renderP3Variants();
+  renderP3Portfolio();
+  renderP3Code();
+  renderP3Tick();
+  p3CalcRisk(1.0);
+}
+
+
+// Init Phase 3
+initPhase3();
+</script>
+</body>
+</html>
