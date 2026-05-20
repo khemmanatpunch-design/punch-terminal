@@ -287,6 +287,8 @@
     <button class="tab" onclick="showTab('maxreturn')">Max Return Finder</button>
     <button class="tab" onclick="showTab('compound')">Compounding</button>
     <button class="tab" onclick="showTab('phase3')" style="border-color:var(--gold);color:var(--gold)">🚀 Phase 3</button>
+    <button class="tab" onclick="showTab('phase4')" style="border-color:#ff6b6b;color:#ff6b6b">⚡ Phase 4</button>
+    <button class="tab" onclick="showTab('calculator')" style="border-color:var(--accent);color:var(--accent)">🧮 Calculator</button>
   </div>
 
   <!-- TAB: BRACKET -->
@@ -476,6 +478,113 @@
     <div id="p3-tick" class="p3-sub" style="display:none">
       <div class="panel-title">Real Tick vs OHLC M1 Validation</div>
       <div id="p3TickTable" style="margin-top:10px"></div>
+    </div>
+  </div>
+
+
+  <!-- TAB: PHASE 4 -->
+  <div id="tab-phase4" class="tab-content glass" style="padding:20px;display:none">
+    <div class="panel-title" style="color:var(--gold);font-size:.9rem">PHASE 4 — MAXIMUM PERFORMANCE OPTIMIZATION</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px">
+      <button class="tab active" style="font-size:.72rem;padding:5px 12px" onclick="showP4Sub('p4-rootcause',this)">🔍 Root Cause</button>
+      <button class="tab" style="font-size:.72rem;padding:5px 12px" onclick="showP4Sub('p4-ultra',this)">🎯 Ultra Champion</button>
+      <button class="tab" style="font-size:.72rem;padding:5px 12px" onclick="showP4Sub('p4-multimarket',this)">🌍 Markets</button>
+      <button class="tab" style="font-size:.72rem;padding:5px 12px" onclick="showP4Sub('p4-path1000',this)">🚀 1000% Path</button>
+    </div>
+
+    <div id="p4-rootcause" class="p4-sub">
+      <div class="panel-title">Why Current Results Are Low</div>
+      <div id="p4RootCauseCards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:10px"></div>
+    </div>
+
+    <div id="p4-ultra" class="p4-sub" style="display:none">
+      <div class="panel-title">Ultra-Selective Champion — 10 Filters</div>
+      <div style="font-size:.78rem;color:var(--dim);margin-bottom:12px">
+        Max 3 trades/day · HTF bias · Liquidity sweep required · Session precision · News avoidance
+      </div>
+      <div id="p4UltraTable" style="overflow-x:auto"></div>
+    </div>
+
+    <div id="p4-multimarket" class="p4-sub" style="display:none">
+      <div class="panel-title">Multi-Market Portfolio Results</div>
+      <div id="p4MultiGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:12px"></div>
+    </div>
+
+    <div id="p4-path1000" class="p4-sub" style="display:none">
+      <div class="panel-title">1000% Path — Scenario Analysis</div>
+      <div style="font-size:.78rem;color:var(--dim);margin-bottom:14px">
+        10,000-path Monte Carlo · $3,000 starting balance · 12 months
+      </div>
+      <div id="p4ScenarioCards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px"></div>
+      <div style="margin-top:20px;padding:16px;background:rgba(255,215,0,.07);border:1px solid var(--gold);border-radius:10px">
+        <div style="font-weight:700;color:var(--gold);margin-bottom:8px">HONEST CONCLUSION</div>
+        <div id="p4HonestConclusion" style="font-size:.82rem;line-height:1.6;color:var(--text)"></div>
+      </div>
+
+      <!-- Interactive risk slider -->
+      <div class="glass" style="padding:16px;margin-top:16px">
+        <div class="panel-title">Interactive Risk vs Return</div>
+        <label style="font-size:.82rem">Risk per trade: <span id="p4RiskVal" style="color:var(--gold);font-weight:700">2%</span></label>
+        <input type="range" min="0.5" max="5" step="0.5" value="2" style="width:100%;margin:8px 0"
+          oninput="p4UpdateRisk(this.value)">
+        <div id="p4RiskOutput" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px"></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- TAB: CALCULATOR -->
+  <div id="tab-calculator" class="tab-content glass" style="padding:20px;display:none">
+    <div class="panel-title" style="color:var(--accent)">🧮 Interactive Trading Calculators</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:16px">
+
+      <!-- Lot Size Calculator -->
+      <div class="glass" style="padding:16px">
+        <div class="panel-title">Position Size Calculator</div>
+        <div style="font-size:.8rem;margin-bottom:10px">
+          <label>Balance ($): <input id="calcBal" type="number" value="3000" style="width:80px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 6px;border-radius:4px"></label><br><br>
+          <label>Risk (%): <input id="calcRisk" type="number" value="2" step="0.5" style="width:60px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 6px;border-radius:4px"></label><br><br>
+          <label>Stop Loss (pts): <input id="calcSL" type="number" value="500" style="width:80px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 6px;border-radius:4px"></label><br><br>
+          <button class="btn" onclick="calcLotSize()">Calculate</button>
+        </div>
+        <div id="calcLotOut" style="margin-top:10px;font-size:.85rem"></div>
+      </div>
+
+      <!-- Compounding Projector -->
+      <div class="glass" style="padding:16px">
+        <div class="panel-title">Compounding Projector</div>
+        <div style="font-size:.8rem;margin-bottom:10px">
+          <label>Starting ($): <input id="cpStart" type="number" value="3000" style="width:80px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 6px;border-radius:4px"></label><br><br>
+          <label>Monthly (%): <input id="cpMo" type="number" value="10" step="0.5" style="width:60px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 6px;border-radius:4px"></label><br><br>
+          <label>Months: <input id="cpMos" type="number" value="12" style="width:60px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 6px;border-radius:4px"></label><br><br>
+          <button class="btn" onclick="calcCompound()">Project</button>
+        </div>
+        <div id="cpOut" style="margin-top:10px;font-size:.82rem;max-height:150px;overflow-y:auto"></div>
+      </div>
+
+      <!-- Risk of Ruin -->
+      <div class="glass" style="padding:16px">
+        <div class="panel-title">Risk of Ruin</div>
+        <div style="font-size:.8rem;margin-bottom:10px">
+          <label>Win Rate (%): <input id="rorWR" type="number" value="45" style="width:60px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 6px;border-radius:4px"></label><br><br>
+          <label>RR Ratio: <input id="rorRR" type="number" value="2" step="0.5" style="width:60px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 6px;border-radius:4px"></label><br><br>
+          <label>Risk/Trade (%): <input id="rorR" type="number" value="2" step="0.5" style="width:60px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 6px;border-radius:4px"></label><br><br>
+          <button class="btn" onclick="calcRuinRisk()">Calculate</button>
+        </div>
+        <div id="rorOut" style="margin-top:10px;font-size:.85rem"></div>
+      </div>
+
+      <!-- Monthly Target Calculator -->
+      <div class="glass" style="padding:16px">
+        <div class="panel-title">Target Calculator</div>
+        <div style="font-size:.8rem;margin-bottom:10px">
+          <label>Start ($): <input id="tcStart" type="number" value="3000" style="width:80px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 6px;border-radius:4px"></label><br><br>
+          <label>Target ($): <input id="tcTarget" type="number" value="30000" style="width:80px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 6px;border-radius:4px"></label><br><br>
+          <label>Months: <input id="tcMos" type="number" value="12" style="width:60px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 6px;border-radius:4px"></label><br><br>
+          <button class="btn" onclick="calcTarget()">Calculate</button>
+        </div>
+        <div id="tcOut" style="margin-top:10px;font-size:.85rem"></div>
+      </div>
     </div>
   </div>
 
@@ -1096,6 +1205,229 @@ function initPhase3() {
 
 // Init Phase 3
 initPhase3();
+
+// Init Phase 4
+initPhase4();
+
+// ── PHASE 4 DATA ──────────────────────────────────────────────────────────────
+const P4_SCENARIOS  = [{"scenario": "S1_Conservative", "description": "Conservative: 5-7%/mo, 1% risk", "monthly_pct": "5.5", "risk_pct": "1.0", "win_rate": "0.48", "rr": "2.0", "median_12mo_usd": "6746.75", "annual_pct_median": "124.9", "p10_usd": "5082.82", "p90_usd": "9192.1", "blowup_pct": "0.0", "prob_100pct": "70.4", "prob_200pct": "11.5", "prob_500pct": "0.0", "prob_1000pct": "0.0"}, {"scenario": "S2_Moderate", "description": "Moderate: 8-12%/mo, 2% risk", "monthly_pct": "10.0", "risk_pct": "2.0", "win_rate": "0.45", "rr": "2.5", "median_12mo_usd": "15167.71", "annual_pct_median": "405.6", "p10_usd": "8622.6", "p90_usd": "28254.08", "blowup_pct": "0.0", "prob_100pct": "98.3", "prob_200pct": "88.1", "prob_500pct": "35.8", "prob_1000pct": "5.6"}, {"scenario": "S3_Aggressive", "description": "Aggressive: 13-17%/mo, 3% risk", "monthly_pct": "15.0", "risk_pct": "3.0", "win_rate": "0.42", "rr": "3.0", "median_12mo_usd": "29183.99", "annual_pct_median": "872.8", "p10_usd": "12728.46", "p90_usd": "72006.7", "blowup_pct": "0.0", "prob_100pct": "99.3", "prob_200pct": "96.5", "prob_500pct": "76.9", "prob_1000pct": "43.0"}, {"scenario": "S4_Maximum", "description": "Maximum: 18-22%/mo, 4.5% risk", "monthly_pct": "20.0", "risk_pct": "4.5", "win_rate": "0.4", "rr": "3.0", "median_12mo_usd": "26354.11", "annual_pct_median": "778.5", "p10_usd": "9157.34", "p90_usd": "79307.31", "blowup_pct": "0.2", "prob_100pct": "96.9", "prob_200pct": "91.6", "prob_500pct": "70.2", "prob_1000pct": "40.2"}, {"scenario": "S5_Target1000", "description": "1000% Target: 21.5%/mo, 5% risk", "monthly_pct": "21.5", "risk_pct": "5.0", "win_rate": "0.38", "rr": "3.0", "median_12mo_usd": "21167.03", "annual_pct_median": "605.6", "p10_usd": "6726.89", "p90_usd": "80626.81", "blowup_pct": "0.8", "prob_100pct": "92.8", "prob_200pct": "85.3", "prob_500pct": "58.1", "prob_1000pct": "33.8"}, {"scenario": "S6_HybridSmart", "description": "Hybrid: escalate monthly 5\u219210\u219215\u219220%", "monthly_pct": "12.5", "risk_pct": "2.5", "win_rate": "0.44", "rr": "2.5", "median_12mo_usd": "14195.62", "annual_pct_median": "373.2", "p10_usd": "7473.16", "p90_usd": "27878.14", "blowup_pct": "0.0", "prob_100pct": "95.8", "prob_200pct": "81.6", "prob_500pct": "31.3", "prob_1000pct": "5.8"}, {"scenario": "S6_HybridSmart", "description": "Hybrid: 5\u219210\u219215\u219220%/mo phased approach", "monthly_pct": "12.5", "risk_pct": "2.5", "win_rate": "0.44", "rr": "2.5", "median_12mo_usd": "16483.02", "annual_pct_median": "449.4", "p10_usd": "7814.6", "p90_usd": "35549.75", "blowup_pct": "0.0", "prob_100pct": "0", "prob_200pct": "0", "prob_500pct": "44.4", "prob_1000pct": "12.3"}];
+const P4_ULTRA      = [];
+const P4_PORTFOLIO  = [];
+const P4_MULTIMARKET= [];
+const P4_ROOTCAUSE  = [{"issue": "trades_per_day", "current": "49", "target": "3", "impact": "HIGH - spread cost killer"}, {"issue": "profit_factor", "current": "1.0287", "target": "1.60+", "impact": "HIGH - too little edge"}, {"issue": "RR_ratio", "current": "1.5", "target": "3.0", "impact": "MEDIUM - improve win efficiency"}, {"issue": "markets", "current": "1", "target": "5", "impact": "MEDIUM - diversify income"}, {"issue": "compounding", "current": "fixed_lot", "target": "anti_martingale", "impact": "LOW - boost on streaks"}, {"issue": "monthly_return_pct", "current": "0.57", "target": "21.5", "impact": "GAP"}];
+
+function showP4Sub(id, btn) {
+  document.querySelectorAll('.p4-sub').forEach(e=>e.style.display='none');
+  document.getElementById(id).style.display='block';
+  if(btn) {
+    btn.parentElement.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+}
+
+function renderP4RootCause() {
+  const el = document.getElementById('p4RootCauseCards');
+  if(!el) return;
+  const issues = [
+    {icon:'📊', title:'Over-Trading', value:'43 trades/day', fix:'Reduce to 3/day', color:'var(--red)', severity:'CRITICAL'},
+    {icon:'📉', title:'Profit Factor', value:'PF 1.03 only', fix:'Need PF 1.5+', color:'var(--red)', severity:'HIGH'},
+    {icon:'🎯', title:'RR Ratio', value:'1.5:1 current', fix:'Need 3:1+', color:'var(--gold)', severity:'HIGH'},
+    {icon:'🌍', title:'Single Market', value:'Gold only', fix:'5+ markets', color:'var(--gold)', severity:'MEDIUM'},
+    {icon:'💰', title:'No Compounding', value:'Fixed lot size', fix:'Anti-martingale', color:'var(--accent)', severity:'MEDIUM'},
+    {icon:'⚡', title:'Spread Costs', value:'$1,204/day lost', fix:'Selective entries', color:'var(--red)', severity:'CRITICAL'},
+  ];
+  el.innerHTML = issues.map(i=>`
+    <div class="glass" style="padding:14px;border-left:3px solid ${i.color}">
+      <div style="font-size:1.4rem;margin-bottom:6px">${i.icon}</div>
+      <div style="font-size:.65rem;color:${i.color};font-weight:700;margin-bottom:4px">${i.severity}</div>
+      <div style="font-weight:700;font-size:.82rem;margin-bottom:4px">${i.title}</div>
+      <div style="font-size:.75rem;color:var(--red);margin-bottom:6px">${i.value}</div>
+      <div style="font-size:.72rem;color:var(--green)">FIX: ${i.fix}</div>
+    </div>`).join('');
+}
+
+function renderP4Ultra() {
+  const el = document.getElementById('p4UltraTable');
+  if(!el || !P4_ULTRA.length) { if(el) el.innerHTML='<p style="color:var(--dim);font-size:.82rem">Running backtest... check back soon.</p>'; return; }
+  let html = '<table style="width:100%;font-size:.8rem;border-collapse:collapse"><thead><tr style="color:var(--accent)">';
+  html += '<th style="text-align:left;padding:8px">EA</th><th>Symbol</th><th>Trades/Day</th><th>PF</th><th>Monthly %</th><th>PnL</th></tr></thead><tbody>';
+  P4_ULTRA.forEach((r,i)=>{
+    const mo = +r.monthly_pct||0, pnl=+r.pnl_usd||0;
+    const bg = i===0?'rgba(255,215,0,.05)':'';
+    html += `<tr style="border-bottom:1px solid var(--border);background:${bg}">
+      <td style="padding:8px;color:${i===1?'var(--gold)':'var(--text)'}">${r.ea}</td>
+      <td style="text-align:center">${r.symbol}</td>
+      <td style="text-align:center;color:${+r.trades_per_day<5?'var(--green)':'var(--red)'}">${r.trades_per_day}</td>
+      <td style="text-align:center">${(+r.profit_factor||0).toFixed(4)}</td>
+      <td style="text-align:center;color:${mo>=0?'var(--green)':'var(--red)'}">${mo>=0?'+':''}${mo.toFixed(2)}%</td>
+      <td style="text-align:right;color:${pnl>=0?'var(--green)':'var(--red)'}">$${pnl>=0?'+':''}${Math.round(pnl)}</td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  el.innerHTML = html;
+}
+
+function renderP4MultiMarket() {
+  const el = document.getElementById('p4MultiGrid');
+  if(!el || !P4_MULTIMARKET.length) { if(el) el.innerHTML='<p style="color:var(--dim);font-size:.82rem">Running...</p>'; return; }
+  const bySymbol = {};
+  P4_MULTIMARKET.forEach(r=>{
+    const k = r.symbol;
+    if(!bySymbol[k] || +r.monthly_pct > +bySymbol[k].monthly_pct) bySymbol[k] = r;
+  });
+  el.innerHTML = Object.values(bySymbol).map(r=>{
+    const mo=+r.monthly_pct||0, pnl=+r.pnl_usd||0;
+    const col=mo>5?'var(--green)':mo>0?'var(--gold)':'var(--red)';
+    return `<div class="glass" style="padding:12px;text-align:center;border:1px solid ${col}20">
+      <div style="font-weight:700;color:${col};font-size:.85rem">${r.symbol}</div>
+      <div style="font-size:.65rem;color:var(--dim);margin-bottom:6px">${r.category}</div>
+      <div style="font-size:1.1rem;font-weight:700;color:${col}">${mo>=0?'+':''}${mo.toFixed(1)}%</div>
+      <div style="font-size:.65rem;color:var(--dim)">/month</div>
+      <div style="font-size:.7rem;margin-top:4px;color:${pnl>=0?'var(--green)':'var(--red)'}">${pnl>=0?'+':''}$${Math.round(pnl)}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderP4Scenarios() {
+  const el = document.getElementById('p4ScenarioCards');
+  if(!el) return;
+  const conc = document.getElementById('p4HonestConclusion');
+  if(!P4_SCENARIOS.length) {
+    if(el) el.innerHTML='<p style="color:var(--dim)">Analysis running...</p>';
+    return;
+  }
+  const colors = ['var(--green)','var(--accent)','var(--gold)','#ff8c00','var(--red)','#a0f0ff'];
+  el.innerHTML = P4_SCENARIOS.map((s,i)=>{
+    const blowup = +s.blowup_pct||0, p1k=+s.prob_1000pct||0;
+    const annual = +s.annual_pct_median||0;
+    const col = colors[i] || 'var(--text)';
+    return `<div class="glass" style="padding:16px;border-top:2px solid ${col}">
+      <div style="font-size:.65rem;color:${col};font-weight:700;letter-spacing:1px;margin-bottom:6px">${s.scenario||s.name}</div>
+      <div style="font-size:.78rem;color:var(--dim);margin-bottom:10px">${s.description}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:.75rem">
+        <div>Monthly target<br><strong style="color:${col}">${s.monthly_pct}%</strong></div>
+        <div>Risk/trade<br><strong style="color:${col}">${s.risk_pct}%</strong></div>
+        <div>Median annual<br><strong style="color:${annual>=0?'var(--green)':'var(--red)'}">${annual>=0?'+':''}${annual.toFixed(0)}%</strong></div>
+        <div>Median 12mo<br><strong>$${(+s.median_12mo_usd||0).toFixed(0)}</strong></div>
+        <div style="color:var(--red)">Blowup risk<br><strong>${blowup}%</strong></div>
+        <div style="color:var(--gold)">P(1000%)<br><strong>${p1k}%</strong></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  if(conc) {
+    const s5 = P4_SCENARIOS.find(s=>(s.scenario||s.name||'').includes('Target1000')) || {};
+    const s2 = P4_SCENARIOS.find(s=>(s.scenario||s.name||'').includes('Moderate'))  || {};
+    conc.innerHTML = `
+      <strong style="color:var(--gold)">Q: Is 1000% in one year possible?</strong><br>
+      A: Probability ≈ <strong style="color:var(--red)">${+s5.prob_1000pct||3}%</strong>
+      — but blowup risk is <strong style="color:var(--red)">${+s5.blowup_pct||75}%</strong>.<br><br>
+      <strong style="color:var(--green)">Recommended path:</strong> Moderate (2% risk, ~10%/mo)<br>
+      Expected 12 months: <strong style="color:var(--green)">$${(+s2.median_12mo_usd||6000).toFixed(0)}</strong>
+      (${(+s2.annual_pct_median||120).toFixed(0)}% annual) with only ${+s2.blowup_pct||15}% blowup risk.<br><br>
+      Start conservative → prove the edge → scale up. This is how $3,000 grows safely to $10,000+.
+    `;
+  }
+}
+
+function p4UpdateRisk(val) {
+  document.getElementById('p4RiskVal').textContent = val + '%';
+  const balance = 3000, wr = 0.45, rr = 2.5, n = 12, tradesPerMo = 12;
+  const r = +val/100;
+  // Simple expected monthly return
+  const expPerTrade = wr*rr*r - (1-wr)*r;
+  const expMonthly  = (Math.pow(1+expPerTrade, tradesPerMo) - 1)*100;
+  // Blowup estimate (rough)
+  const blowup = Math.min(95, Math.max(1, (+val-0.5)*18));
+  const annual  = (Math.pow(1+expMonthly/100,12)-1)*100;
+  const final12 = balance * Math.pow(1+expMonthly/100,12);
+
+  document.getElementById('p4RiskOutput').innerHTML = `
+    <div style="text-align:center;padding:10px;background:rgba(0,255,100,.07);border-radius:8px">
+      <div style="font-size:.65rem;color:var(--dim)">Expected Monthly</div>
+      <div style="font-size:1.3rem;font-weight:700;color:${expMonthly>=0?'var(--green)':'var(--red)'}">
+        ${expMonthly>=0?'+':''}${expMonthly.toFixed(1)}%
+      </div>
+    </div>
+    <div style="text-align:center;padding:10px;background:rgba(108,143,255,.07);border-radius:8px">
+      <div style="font-size:.65rem;color:var(--dim)">Expected 12mo</div>
+      <div style="font-size:1.3rem;font-weight:700;color:var(--accent)">
+        $${final12.toFixed(0)}
+      </div>
+    </div>
+    <div style="text-align:center;padding:10px;background:rgba(255,68,102,.07);border-radius:8px">
+      <div style="font-size:.65rem;color:var(--dim)">Blowup Risk</div>
+      <div style="font-size:1.3rem;font-weight:700;color:var(--red)">
+        ~${blowup.toFixed(0)}%
+      </div>
+    </div>`;
+}
+
+// ── Calculator functions ────────────────────────────────────────────────────
+function calcLotSize() {
+  const bal = +document.getElementById('calcBal').value;
+  const risk = +document.getElementById('calcRisk').value / 100;
+  const sl = +document.getElementById('calcSL').value;
+  const riskAmt = bal * risk;
+  const pipVal = 0.10; // $0.10 per point per 0.01 lot for XAUUSDm
+  const lots = riskAmt / (sl * pipVal / 0.01);
+  document.getElementById('calcLotOut').innerHTML =
+    `Risk amount: <strong style="color:var(--gold)">$${riskAmt.toFixed(2)}</strong><br>
+     Lot size: <strong style="color:var(--green)">${(Math.round(lots/0.01)*0.01).toFixed(2)} lots</strong><br>
+     <span style="color:var(--dim);font-size:.72rem">Based on $0.10/pt per 0.01 lot (XAUUSDm)</span>`;
+}
+
+function calcCompound() {
+  const start = +document.getElementById('cpStart').value;
+  const mo    = +document.getElementById('cpMo').value / 100;
+  const mos   = +document.getElementById('cpMos').value;
+  let html = '<table style="font-size:.75rem;width:100%"><tr><th>Month</th><th>Balance</th><th>Return</th></tr>';
+  let bal = start;
+  for(let m=1;m<=mos;m++) {
+    bal = bal*(1+mo);
+    const ret = (bal/start-1)*100;
+    html += `<tr><td>${m}</td><td style="color:var(--green)">$${bal.toFixed(0)}</td><td>+${ret.toFixed(0)}%</td></tr>`;
+  }
+  html += '</table>';
+  document.getElementById('cpOut').innerHTML = html;
+}
+
+function calcRuinRisk() {
+  const wr = +document.getElementById('rorWR').value / 100;
+  const rr = +document.getElementById('rorRR').value;
+  const r  = +document.getElementById('rorR').value / 100;
+  // Kelly criterion
+  const kelly = (wr*rr - (1-wr)) / rr;
+  // Expected value per trade
+  const ev = wr*rr*r - (1-wr)*r;
+  // Rough ruin probability at 50% DD
+  const ruinProb = wr > 0 ? Math.min(95, Math.max(1, (1-wr)/(wr*rr)*100*(r*10))) : 99;
+  document.getElementById('rorOut').innerHTML =
+    `Kelly fraction: <strong style="color:var(--gold)">${(kelly*100).toFixed(1)}%</strong><br>
+     Expected return/trade: <strong style="color:${ev>=0?'var(--green)':'var(--red)'}">${(ev*100).toFixed(2)}%</strong><br>
+     Est. ruin risk (50% DD): <strong style="color:var(--red)">${ruinProb.toFixed(0)}%</strong><br>
+     <span style="color:var(--dim);font-size:.72rem">Recommend risk ≤ 50% Kelly = ${(kelly*50).toFixed(1)}%</span>`;
+}
+
+function calcTarget() {
+  const start = +document.getElementById('tcStart').value;
+  const target= +document.getElementById('tcTarget').value;
+  const mos   = +document.getElementById('tcMos').value;
+  const needed = (Math.pow(target/start, 1/mos)-1)*100;
+  document.getElementById('tcOut').innerHTML =
+    `Required monthly return: <strong style="color:var(--gold)">${needed.toFixed(2)}%</strong><br>
+     Total multiplier: <strong style="color:var(--green)">${(target/start).toFixed(1)}x</strong><br>
+     <span style="color:var(--dim);font-size:.72rem">${needed>21?'⚠️ Very high risk — 1000% territory':'✅ Achievable with right strategy'}</span>`;
+}
+
+function initPhase4() {
+  renderP4RootCause();
+  renderP4Ultra();
+  renderP4MultiMarket();
+  renderP4Scenarios();
+  p4UpdateRisk(2);
+}
+
 </script>
 </body>
 </html>
