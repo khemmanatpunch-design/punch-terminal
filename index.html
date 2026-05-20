@@ -2363,191 +2363,9 @@ function initPhase4() {
 }
 
 
-/* ════════════════════════════════════════════
-   CLAUDE AI ASSISTANT — APEX GREATEST
-════════════════════════════════════════════ */
-const APEX_DATA = {
-  champion: { name:"F01_SMC_Session_v2", pf:1.83, monthly:2.1, trades_per_day:0.51,
-    pnl_6yr:4789, win_rate:31.9, forward_2026:1516, covid:1017, rate_hike:-120, gold_bull:1179 },
-  original: { pf:1.03, monthly:0.57, trades_per_day:49, spread_cost_day:1382, win_rate:31.5 },
-  portfolio: { best:"F06 Gold + NAS100", monthly:4.2, pf:1.61, correlation:"LOW" },
-  risk_table: [
-    {risk:0.5,monthly:3.5,annual:4536,blowup:1},{risk:1.0,monthly:7.1,annual:6850,blowup:9},
-    {risk:1.5,monthly:10.9,annual:10332,blowup:18},{risk:2.0,monthly:14.7,annual:15567,blowup:27},
-    {risk:2.5,monthly:18.7,annual:23427,blowup:36},{risk:3.0,monthly:22.8,annual:35214,blowup:45},
-    {risk:3.5,monthly:27.0,annual:52870,blowup:54},{risk:4.0,monthly:31.4,annual:79289,blowup:63},
-    {risk:4.5,monthly:35.9,annual:118774,blowup:72},{risk:5.0,monthly:40.5,annual:177721,blowup:81}
-  ],
-  phase5_targets:{pf_target:2.0,blowup_target:3,monthly_target:20,current_pf:1.03,current_blowup:27,current_monthly:14.7},
-  hybrid_path:[
-    {months:"1-3",risk:1.0,monthly:7.1,balance:3648},{months:"4-6",risk:2.0,monthly:14.7,balance:5407},
-    {months:"7-9",risk:3.0,monthly:22.8,balance:10186},{months:"10-12",risk:3.5,monthly:27.0,balance:27000}
-  ],
-  problems:[
-    {severity:"CRITICAL",issue:"49 trades/day",cost:"$1,382/day spread",fix:"Max 3/day"},
-    {severity:"CRITICAL",issue:"PF 1.03 only",gap:"2.8% edge",fix:"Need PF 1.5+"},
-    {severity:"HIGH",issue:"RR 1.5:1",fix:"Need 3:1"},
-    {severity:"MEDIUM",issue:"Single market",fix:"5+ markets"},
-    {severity:"MEDIUM",issue:"No compounding",fix:"Anti-martingale"}
-  ],
-  current_phase:4, total_phases:8, next_phase:"Phase 5 - Blowup Risk Elimination",
-  account:{broker:"Exness SC",number:"194954988",symbol:"XAUUSDm",spread:28,balance_simulated:3000,real_balance:99.55}
-};
-
-const AI_SYSTEM = 'You are Claude, an expert trading analyst embedded inside the APEX GREATEST dashboard. '
-  + 'You have direct access to all strategy data via the APEX_DATA context below. '
-  + 'YOUR PRIMARY ROLE: Help the owner improve their trading system. '
-  + 'ALWAYS reference real numbers from the data. ALWAYS be specific. ALWAYS suggest concrete actionable steps. '
-  + 'Current goal: 1000% in one year from $3,000. Current phase: 4 of 8. '
-  + 'NEVER recommend real trading. Demo and research only. Be honest about all limitations. '
-  + 'Format with short paragraphs. Use bullet points for lists. Bold key numbers with **n**. '
-  + 'Dashboard data: ' + JSON.stringify(APEX_DATA);
-
-let aiKey = localStorage.getItem('apex_claude_key') || '';
-let aiHistory = [];
-let aiPanelOpen = false;
-
-function toggleAIPanel() {
-  aiPanelOpen = !aiPanelOpen;
-  const panel = document.getElementById('aiPanel');
-  if (aiPanelOpen) {
-    panel.classList.add('ai-open');
-    if (aiKey) {
-      showAIChat();
-      if (aiHistory.length === 0) setTimeout(runAutoAnalysis, 400);
-    }
-  } else {
-    panel.classList.remove('ai-open');
-  }
-}
-
-function saveAIKey() {
-  const val = document.getElementById('aiKeyInput').value.trim();
-  if (!val.startsWith('sk-')) {
-    alert('Please enter a valid Anthropic API key starting with sk-');
-    return;
-  }
-  aiKey = val;
-  localStorage.setItem('apex_claude_key', aiKey);
-  showAIChat();
-  setTimeout(runAutoAnalysis, 300);
-}
-
-function changeAIKey() {
-  aiKey = '';
-  aiHistory = [];
-  localStorage.removeItem('apex_claude_key');
-  document.getElementById('aiChatScreen').style.display = 'none';
-  document.getElementById('aiKeyScreen').style.display = 'flex';
-  document.getElementById('aiKeyInput').value = '';
-  document.getElementById('aiMessages').innerHTML = '';
-}
-
-function showAIChat() {
-  document.getElementById('aiKeyScreen').style.display = 'none';
-  const cs = document.getElementById('aiChatScreen');
-  cs.style.display = 'flex';
-  cs.style.flexDirection = 'column';
-  const hint = document.getElementById('aiKeyHint');
-  if (hint) hint.textContent = aiKey.slice(0,12) + '…';
-}
-
-function aiAddBubble(text, role) {
-  const msgs = document.getElementById('aiMessages');
-  const div = document.createElement('div');
-  div.className = 'ai-bubble ai-' + role;
-  div.innerHTML = text.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
-  msgs.appendChild(div);
-  msgs.scrollTop = msgs.scrollHeight;
-  return div;
-}
-
-async function runAutoAnalysis() {
-  const thinking = aiAddBubble('Analyzing your APEX system… 🔍', 'thinking');
-  const prompt = 'Give me 3-5 specific improvement recommendations for my trading system. '
-    + 'Reference exact numbers from the data. Prioritize the most impactful changes first. '
-    + 'Focus on what will move me fastest toward the 1000% goal.';
-  try {
-    const reply = await callClaude([{role:'user', content: prompt}]);
-    thinking.remove();
-    aiAddBubble(reply, 'assistant');
-    aiHistory.push({role:'user',content:prompt},{role:'assistant',content:reply});
-  } catch(e) {
-    thinking.remove();
-    aiAddBubble('⚠️ Error: ' + e.message + '<br><small>Check your API key and try again.</small>', 'assistant');
-  }
-}
-
-async function sendUserMessage() {
-  const input = document.getElementById('aiMsgInput');
-  const text = input.value.trim();
-  if (!text) return;
-  input.value = '';
-  aiAsk(text);
-}
-
-async function aiAsk(text) {
-  aiAddBubble(text, 'user');
-  document.getElementById('aiSuggested').style.display = 'none';
-  const thinking = aiAddBubble('Thinking… ✶', 'thinking');
-  aiHistory.push({role:'user', content:text});
-  try {
-    const reply = await callClaude(aiHistory);
-    thinking.remove();
-    aiAddBubble(reply, 'assistant');
-    aiHistory.push({role:'assistant', content:reply});
-    if (aiHistory.length > 20) aiHistory = aiHistory.slice(-20);
-  } catch(e) {
-    thinking.remove();
-    aiAddBubble('⚠️ ' + e.message, 'assistant');
-    aiHistory.pop();
-  }
-}
-
-async function callClaude(history) {
-  const resp = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': aiKey,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true'
-    },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 1024,
-      system: AI_SYSTEM,
-      messages: history
-    })
-  });
-  if (!resp.ok) {
-    const err = await resp.json().catch(()=>({}));
-    throw new Error(err.error?.message || 'HTTP ' + resp.status);
-  }
-  const data = await resp.json();
-  return data.content[0].text;
-}
 
 </script>
 
-<!-- ── Claude AI Assistant ── -->
-<button id="aiBtn" onclick="toggleAIPanel()" title="Ask Claude">
-  <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <text x="28" y="38" font-family="Georgia,serif" font-size="30" font-weight="700"
-      text-anchor="middle" fill="white">C</text>
-  </svg>
-</button>
-
-<div id="aiPanel">
-  <div class="ai-panel-header">
-    <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#D97706,#F59E0B);
-      display:flex;align-items:center;justify-content:center;flex-shrink:0;
-      box-shadow:0 0 12px rgba(217,119,6,.4)">
-      <svg viewBox="0 0 36 36" width="22" height="22" fill="none">
-        <text x="18" y="25" font-family="Georgia,serif" font-size="19" font-weight="700"
-          text-anchor="middle" fill="white">C</text>
-      </svg>
-    </div>
     <div style="flex:1">
       <h3 style="color:#F59E0B">Claude — Strategy Advisor</h3>
       <small id="aiStatusLabel">APEX GREATEST • Expert Mode</small>
@@ -2588,4 +2406,275 @@ async function callClaude(history) {
 </div>
 
 </body>
+
+<style id="ai-styles">
+@keyframes claudePulse{0%,100%{box-shadow:0 0 0 0 rgba(217,119,6,.8)}50%{box-shadow:0 0 0 18px rgba(217,119,6,0)}}
+#cBtn{position:fixed;bottom:28px;right:28px;width:56px;height:56px;border-radius:50%;
+  background:linear-gradient(135deg,#D97706,#F59E0B);border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;z-index:2147483646;
+  box-shadow:0 0 20px rgba(217,119,6,.55);animation:claudePulse 2.5s ease-in-out infinite;
+  transition:transform .18s}
+#cBtn:hover{transform:scale(1.1)}
+#cPanel{position:fixed;top:0;right:0;width:420px;height:100%;max-height:100vh;
+  background:rgba(12,10,28,.97);backdrop-filter:blur(20px);
+  border-left:1px solid rgba(217,119,6,.3);
+  display:flex;flex-direction:column;z-index:2147483647;
+  transform:translateX(420px);transition:transform .32s cubic-bezier(.4,0,.2,1);
+  box-shadow:-6px 0 36px rgba(0,0,0,.7)}
+#cPanel.open{transform:translateX(0)}
+.cp-hdr{padding:16px 18px;background:linear-gradient(135deg,rgba(217,119,6,.15),rgba(245,158,11,.08));
+  border-bottom:1px solid rgba(217,119,6,.2);display:flex;align-items:center;gap:12px;flex-shrink:0}
+.cp-logo{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#D97706,#F59E0B);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  box-shadow:0 0 10px rgba(217,119,6,.4);font-size:20px;font-weight:900;color:#fff;
+  font-family:Georgia,serif}
+.cp-hdr h3{margin:0;color:#F59E0B;font-size:14px;font-weight:700;flex:1}
+.cp-hdr small{color:#92400e;font-size:11px;display:block;margin-top:1px}
+.cp-x{background:none;border:none;color:#92400e;font-size:18px;cursor:pointer;line-height:1;padding:4px}
+.cp-x:hover{color:#F59E0B}
+/* Key screen */
+#cKey{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:28px;gap:16px;text-align:center}
+.ck-icon{font-size:48px}
+.ck-title{color:#F59E0B;font-size:16px;font-weight:700}
+.ck-sub{color:#78716c;font-size:12px;line-height:1.7}
+.ck-inp{width:100%;padding:11px 14px;background:rgba(255,255,255,.05);
+  border:1px solid rgba(217,119,6,.35);border-radius:10px;color:#e7e5e4;
+  font-size:12px;font-family:monospace;outline:none;box-sizing:border-box}
+.ck-inp:focus{border-color:#D97706;box-shadow:0 0 0 3px rgba(217,119,6,.18)}
+.ck-btn{width:100%;padding:12px;background:linear-gradient(135deg,#D97706,#F59E0B);
+  border:none;border-radius:10px;color:#1c1917;font-size:14px;font-weight:700;cursor:pointer}
+.ck-btn:hover{opacity:.88}
+.ck-note{color:#65a30d;font-size:11px}
+/* Chat screen */
+#cChat{flex:1;display:none;flex-direction:column;overflow:hidden}
+.cm-list{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.cm-list::-webkit-scrollbar{width:3px}
+.cm-list::-webkit-scrollbar-thumb{background:rgba(217,119,6,.35);border-radius:2px}
+.cb{max-width:90%;padding:10px 13px;border-radius:12px;font-size:13px;line-height:1.55;word-break:break-word}
+.cb.bot{background:rgba(217,119,6,.12);border:1px solid rgba(217,119,6,.2);
+  color:#fde68a;border-radius:3px 12px 12px 12px;align-self:flex-start}
+.cb.usr{background:rgba(245,158,11,.2);border:1px solid rgba(245,158,11,.25);
+  color:#fef3c7;border-radius:12px 12px 3px 12px;align-self:flex-end}
+.cb.think{color:#78716c;font-style:italic}
+.csug{padding:8px 14px 10px;display:flex;flex-wrap:wrap;gap:5px;border-top:1px solid rgba(217,119,6,.12)}
+.cq{padding:5px 10px;background:rgba(217,119,6,.1);border:1px solid rgba(217,119,6,.25);
+  border-radius:18px;color:#D97706;font-size:11px;cursor:pointer;transition:all .15s}
+.cq:hover{background:rgba(217,119,6,.25);color:#F59E0B}
+.cin-row{padding:10px 12px;border-top:1px solid rgba(217,119,6,.15);
+  display:flex;gap:7px;flex-shrink:0;background:rgba(0,0,0,.25)}
+.cin{flex:1;padding:9px 12px;background:rgba(255,255,255,.05);
+  border:1px solid rgba(217,119,6,.25);border-radius:9px;color:#e7e5e4;
+  font-size:13px;outline:none;resize:none;font-family:inherit}
+.cin:focus{border-color:#D97706}
+.csnd{padding:9px 14px;background:linear-gradient(135deg,#D97706,#F59E0B);
+  border:none;border-radius:9px;color:#1c1917;font-size:15px;cursor:pointer;font-weight:700}
+.csnd:hover{opacity:.85}
+.cbar{padding:5px 14px;font-size:11px;color:#65a30d;text-align:center;
+  background:rgba(101,163,13,.05);border-top:1px solid rgba(101,163,13,.12);flex-shrink:0}
+</style>
+
+<!-- ── Claude AI Button ── -->
+<button id="cBtn" title="Ask Claude" onclick="cToggle()">
+  <span style="font-family:Georgia,serif;font-size:28px;font-weight:900;color:#fff;line-height:1">C</span>
+</button>
+
+<!-- ── Claude AI Panel ── -->
+<div id="cPanel">
+  <div class="cp-hdr">
+    <div class="cp-logo">C</div>
+    <div style="flex:1">
+      <h3>Claude — Strategy Advisor</h3>
+      <small>APEX GREATEST · Expert Mode</small>
+    </div>
+    <button class="cp-x" onclick="cToggle()">✕</button>
+  </div>
+
+  <div id="cKey">
+    <div class="ck-icon">🔑</div>
+    <div class="ck-title">Connect Anthropic API</div>
+    <div class="ck-sub">Enter your Anthropic API key to unlock Claude AI analysis.<br>Stored locally in your browser only.</div>
+    <input id="cKeyInp" class="ck-inp" type="password" placeholder="sk-ant-api03-..."
+      onkeydown="if(event.key==='Enter')cSaveKey()"/>
+    <button class="ck-btn" onclick="cSaveKey()">🔒 Connect & Analyze</button>
+    <div class="ck-note">✓ Key saved to localStorage · Never leaves your device</div>
+  </div>
+
+  <div id="cChat">
+    <div class="cm-list" id="cMsgs"></div>
+    <div class="csug" id="cSug">
+      <button class="cq" onclick="cAsk('What should I improve first?')">What to improve first?</button>
+      <button class="cq" onclick="cAsk('How do I fix my blowup risk?')">Fix blowup risk?</button>
+      <button class="cq" onclick="cAsk('Rate my current system 1-10')">Rate system 1-10</button>
+      <button class="cq" onclick="cAsk('Am I on track for 1000%?')">On track for 1000%?</button>
+      <button class="cq" onclick="cAsk('What is the Phase 5 plan?')">Phase 5 plan?</button>
+      <button class="cq" onclick="cAsk('Which strategy should I run today?')">Strategy for today?</button>
+    </div>
+    <div class="cin-row">
+      <textarea id="cInp" class="cin" rows="2" placeholder="Ask anything about your trading system..."
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();cSend()}"></textarea>
+      <button class="csnd" onclick="cSend()">➤</button>
+    </div>
+    <div class="cbar">🔒 Connected · <span id="cKeyHint"></span> · <button onclick="cChangeKey()" style="background:none;border:none;color:#D97706;cursor:pointer;font-size:11px;padding:0">Change key</button></div>
+  </div>
+</div>
+
+<script id="ai-script">
+(function(){
+  var APEX_DATA = {
+    champion:{name:"F01_SMC_Session_v2",pf:1.83,monthly:2.1,trades_per_day:0.51,
+      pnl_6yr:4789,win_rate:31.9,forward_2026:1516,covid:1017,rate_hike:-120,gold_bull:1179},
+    original:{pf:1.03,monthly:0.57,trades_per_day:49,spread_cost_day:1382,win_rate:31.5},
+    portfolio:{best:"F06 Gold + NAS100",monthly:4.2,pf:1.61,correlation:"LOW"},
+    risk_table:[
+      {risk:0.5,monthly:3.5,annual:4536,blowup:1},{risk:1.0,monthly:7.1,annual:6850,blowup:9},
+      {risk:1.5,monthly:10.9,annual:10332,blowup:18},{risk:2.0,monthly:14.7,annual:15567,blowup:27},
+      {risk:2.5,monthly:18.7,annual:23427,blowup:36},{risk:3.0,monthly:22.8,annual:35214,blowup:45},
+      {risk:3.5,monthly:27.0,annual:52870,blowup:54},{risk:4.0,monthly:31.4,annual:79289,blowup:63},
+      {risk:4.5,monthly:35.9,annual:118774,blowup:72},{risk:5.0,monthly:40.5,annual:177721,blowup:81}
+    ],
+    phase5_targets:{pf_target:2.0,blowup_target:3,monthly_target:20,current_pf:1.03,current_blowup:27,current_monthly:14.7},
+    hybrid_path:[
+      {months:"1-3",risk:1.0,monthly:7.1,balance:3648},{months:"4-6",risk:2.0,monthly:14.7,balance:5407},
+      {months:"7-9",risk:3.0,monthly:22.8,balance:10186},{months:"10-12",risk:3.5,monthly:27.0,balance:27000}
+    ],
+    problems:[
+      {severity:"CRITICAL",issue:"49 trades/day",cost:"$1,382/day spread",fix:"Max 3/day"},
+      {severity:"CRITICAL",issue:"PF 1.03 only",gap:"2.8% edge",fix:"Need PF 1.5+"},
+      {severity:"HIGH",issue:"RR 1.5:1",fix:"Need 3:1"},
+      {severity:"MEDIUM",issue:"Single market",fix:"5+ markets"},
+      {severity:"MEDIUM",issue:"No compounding",fix:"Anti-martingale"}
+    ],
+    current_phase:4,total_phases:8,next_phase:"Phase 5 - Blowup Risk Elimination",
+    account:{broker:"Exness SC",number:"194954988",symbol:"XAUUSDm",spread:28,balance_simulated:3000,real_balance:99.55}
+  };
+
+  var SYS = 'You are Claude, an expert trading analyst embedded in the APEX GREATEST dashboard. '
+    + 'You have full access to all strategy data. Always reference real numbers. Be specific and actionable. '
+    + 'Goal: 1000% in one year from $3,000. Current phase: 4 of 8. Demo/research only — no real trading. '
+    + 'Data: ' + JSON.stringify(APEX_DATA);
+
+  var key = localStorage.getItem('apex_claude_key') || '';
+  var hist = [];
+  var open = false;
+
+  function cToggle() {
+    open = !open;
+    var panel = document.getElementById('cPanel');
+    if (open) {
+      panel.classList.add('open');
+      if (key) {
+        cShowChat();
+        if (hist.length === 0) setTimeout(cAutoAnalyze, 500);
+      }
+    } else {
+      panel.classList.remove('open');
+    }
+  }
+  window.cToggle = cToggle;
+
+  function cSaveKey() {
+    var v = document.getElementById('cKeyInp').value.trim();
+    if (!v.startsWith('sk-')) { alert('Please enter a valid Anthropic API key (starts with sk-)'); return; }
+    key = v;
+    localStorage.setItem('apex_claude_key', key);
+    cShowChat();
+    setTimeout(cAutoAnalyze, 300);
+  }
+  window.cSaveKey = cSaveKey;
+
+  function cChangeKey() {
+    key = '';
+    hist = [];
+    localStorage.removeItem('apex_claude_key');
+    document.getElementById('cChat').style.display = 'none';
+    document.getElementById('cKey').style.display = 'flex';
+    document.getElementById('cKeyInp').value = '';
+    document.getElementById('cMsgs').innerHTML = '';
+  }
+  window.cChangeKey = cChangeKey;
+
+  function cShowChat() {
+    document.getElementById('cKey').style.display = 'none';
+    var c = document.getElementById('cChat');
+    c.style.display = 'flex';
+    c.style.flexDirection = 'column';
+    var h = document.getElementById('cKeyHint');
+    if (h) h.textContent = key.slice(0,14) + '…';
+  }
+
+  function cBubble(text, role) {
+    var msgs = document.getElementById('cMsgs');
+    var d = document.createElement('div');
+    d.className = 'cb ' + role;
+    d.innerHTML = text.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
+    msgs.appendChild(d);
+    msgs.scrollTop = msgs.scrollHeight;
+    return d;
+  }
+
+  function cAutoAnalyze() {
+    var t = cBubble('Analyzing your APEX trading system… 🔍', 'think');
+    var prompt = 'Give me 3-5 specific improvement recommendations for my trading system. '
+      + 'Reference exact numbers. Prioritize the highest-impact changes toward the 1000% goal.';
+    cCallClaude([{role:'user',content:prompt}]).then(function(reply){
+      t.remove();
+      cBubble(reply, 'bot');
+      hist.push({role:'user',content:prompt},{role:'assistant',content:reply});
+    }).catch(function(e){
+      t.remove();
+      cBubble('⚠️ ' + e.message + '<br><small>Check your API key.</small>', 'bot');
+    });
+  }
+
+  function cSend() {
+    var inp = document.getElementById('cInp');
+    var text = inp.value.trim();
+    if (!text) return;
+    inp.value = '';
+    cAsk(text);
+  }
+  window.cSend = cSend;
+
+  function cAsk(text) {
+    cBubble(text, 'usr');
+    document.getElementById('cSug').style.display = 'none';
+    var t = cBubble('Thinking… ✶', 'think');
+    hist.push({role:'user',content:text});
+    cCallClaude(hist).then(function(reply){
+      t.remove();
+      cBubble(reply, 'bot');
+      hist.push({role:'assistant',content:reply});
+      if (hist.length > 20) hist = hist.slice(-20);
+    }).catch(function(e){
+      t.remove();
+      cBubble('⚠️ ' + e.message, 'bot');
+      hist.pop();
+    });
+  }
+  window.cAsk = cAsk;
+
+  function cCallClaude(messages) {
+    return fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': key,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1024,system:SYS,messages:messages})
+    }).then(function(r){
+      if (!r.ok) return r.json().catch(function(){return {};}).then(function(e){
+        throw new Error(e.error ? e.error.message : 'HTTP ' + r.status);
+      });
+      return r.json();
+    }).then(function(d){ return d.content[0].text; });
+  }
+
+  // Init: if key already saved, pre-fill and show chat on open
+  if (key) { /* panel shows key screen until opened */ }
+})();
+</script>
+
 </html>
