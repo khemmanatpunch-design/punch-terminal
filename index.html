@@ -2361,6 +2361,172 @@ function initPhase4() {
   p4UpdateRisk(2);
 }
 
+
+/* ════════════════════════════════════════════
+   CLAUDE AI ASSISTANT — APEX GREATEST
+════════════════════════════════════════════ */
+const APEX_DATA = {
+  champion: { name:"F01_SMC_Session_v2", pf:1.83, monthly:2.1, trades_per_day:0.51,
+    pnl_6yr:4789, win_rate:31.9, forward_2026:1516, covid:1017, rate_hike:-120, gold_bull:1179 },
+  original: { pf:1.03, monthly:0.57, trades_per_day:49, spread_cost_day:1382, win_rate:31.5 },
+  portfolio: { best:"F06 Gold + NAS100", monthly:4.2, pf:1.61, correlation:"LOW" },
+  risk_table: [
+    {risk:0.5,monthly:3.5,annual:4536,blowup:1},{risk:1.0,monthly:7.1,annual:6850,blowup:9},
+    {risk:1.5,monthly:10.9,annual:10332,blowup:18},{risk:2.0,monthly:14.7,annual:15567,blowup:27},
+    {risk:2.5,monthly:18.7,annual:23427,blowup:36},{risk:3.0,monthly:22.8,annual:35214,blowup:45},
+    {risk:3.5,monthly:27.0,annual:52870,blowup:54},{risk:4.0,monthly:31.4,annual:79289,blowup:63},
+    {risk:4.5,monthly:35.9,annual:118774,blowup:72},{risk:5.0,monthly:40.5,annual:177721,blowup:81}
+  ],
+  phase5_targets:{pf_target:2.0,blowup_target:3,monthly_target:20,current_pf:1.03,current_blowup:27,current_monthly:14.7},
+  hybrid_path:[
+    {months:"1-3",risk:1.0,monthly:7.1,balance:3648},{months:"4-6",risk:2.0,monthly:14.7,balance:5407},
+    {months:"7-9",risk:3.0,monthly:22.8,balance:10186},{months:"10-12",risk:3.5,monthly:27.0,balance:27000}
+  ],
+  problems:[
+    {severity:"CRITICAL",issue:"49 trades/day",cost:"$1,382/day spread",fix:"Max 3/day"},
+    {severity:"CRITICAL",issue:"PF 1.03 only",gap:"2.8% edge",fix:"Need PF 1.5+"},
+    {severity:"HIGH",issue:"RR 1.5:1",fix:"Need 3:1"},
+    {severity:"MEDIUM",issue:"Single market",fix:"5+ markets"},
+    {severity:"MEDIUM",issue:"No compounding",fix:"Anti-martingale"}
+  ],
+  current_phase:4, total_phases:8, next_phase:"Phase 5 - Blowup Risk Elimination",
+  account:{broker:"Exness SC",number:"194954988",symbol:"XAUUSDm",spread:28,balance_simulated:3000,real_balance:99.55}
+};
+
+const AI_SYSTEM = 'You are Claude, an expert trading analyst embedded inside the APEX GREATEST dashboard. '
+  + 'You have direct access to all strategy data via the APEX_DATA context below. '
+  + 'YOUR PRIMARY ROLE: Help the owner improve their trading system. '
+  + 'ALWAYS reference real numbers from the data. ALWAYS be specific. ALWAYS suggest concrete actionable steps. '
+  + 'Current goal: 1000% in one year from $3,000. Current phase: 4 of 8. '
+  + 'NEVER recommend real trading. Demo and research only. Be honest about all limitations. '
+  + 'Format with short paragraphs. Use bullet points for lists. Bold key numbers with **n**. '
+  + 'Dashboard data: ' + JSON.stringify(APEX_DATA);
+
+let aiKey = localStorage.getItem('apex_claude_key') || '';
+let aiHistory = [];
+let aiPanelOpen = false;
+
+function toggleAIPanel() {
+  aiPanelOpen = !aiPanelOpen;
+  const panel = document.getElementById('aiPanel');
+  if (aiPanelOpen) {
+    panel.classList.add('ai-open');
+    if (aiKey) {
+      showAIChat();
+      if (aiHistory.length === 0) setTimeout(runAutoAnalysis, 400);
+    }
+  } else {
+    panel.classList.remove('ai-open');
+  }
+}
+
+function saveAIKey() {
+  const val = document.getElementById('aiKeyInput').value.trim();
+  if (!val.startsWith('sk-')) {
+    alert('Please enter a valid Anthropic API key starting with sk-');
+    return;
+  }
+  aiKey = val;
+  localStorage.setItem('apex_claude_key', aiKey);
+  showAIChat();
+  setTimeout(runAutoAnalysis, 300);
+}
+
+function changeAIKey() {
+  aiKey = '';
+  aiHistory = [];
+  localStorage.removeItem('apex_claude_key');
+  document.getElementById('aiChatScreen').style.display = 'none';
+  document.getElementById('aiKeyScreen').style.display = 'flex';
+  document.getElementById('aiKeyInput').value = '';
+  document.getElementById('aiMessages').innerHTML = '';
+}
+
+function showAIChat() {
+  document.getElementById('aiKeyScreen').style.display = 'none';
+  const cs = document.getElementById('aiChatScreen');
+  cs.style.display = 'flex';
+  cs.style.flexDirection = 'column';
+  const hint = document.getElementById('aiKeyHint');
+  if (hint) hint.textContent = aiKey.slice(0,12) + '…';
+}
+
+function aiAddBubble(text, role) {
+  const msgs = document.getElementById('aiMessages');
+  const div = document.createElement('div');
+  div.className = 'ai-bubble ai-' + role;
+  div.innerHTML = text.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  return div;
+}
+
+async function runAutoAnalysis() {
+  const thinking = aiAddBubble('Analyzing your APEX system… 🔍', 'thinking');
+  const prompt = 'Give me 3-5 specific improvement recommendations for my trading system. '
+    + 'Reference exact numbers from the data. Prioritize the most impactful changes first. '
+    + 'Focus on what will move me fastest toward the 1000% goal.';
+  try {
+    const reply = await callClaude([{role:'user', content: prompt}]);
+    thinking.remove();
+    aiAddBubble(reply, 'assistant');
+    aiHistory.push({role:'user',content:prompt},{role:'assistant',content:reply});
+  } catch(e) {
+    thinking.remove();
+    aiAddBubble('⚠️ Error: ' + e.message + '<br><small>Check your API key and try again.</small>', 'assistant');
+  }
+}
+
+async function sendUserMessage() {
+  const input = document.getElementById('aiMsgInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  aiAsk(text);
+}
+
+async function aiAsk(text) {
+  aiAddBubble(text, 'user');
+  document.getElementById('aiSuggested').style.display = 'none';
+  const thinking = aiAddBubble('Thinking… ✶', 'thinking');
+  aiHistory.push({role:'user', content:text});
+  try {
+    const reply = await callClaude(aiHistory);
+    thinking.remove();
+    aiAddBubble(reply, 'assistant');
+    aiHistory.push({role:'assistant', content:reply});
+    if (aiHistory.length > 20) aiHistory = aiHistory.slice(-20);
+  } catch(e) {
+    thinking.remove();
+    aiAddBubble('⚠️ ' + e.message, 'assistant');
+    aiHistory.pop();
+  }
+}
+
+async function callClaude(history) {
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': aiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 1024,
+      system: AI_SYSTEM,
+      messages: history
+    })
+  });
+  if (!resp.ok) {
+    const err = await resp.json().catch(()=>({}));
+    throw new Error(err.error?.message || 'HTTP ' + resp.status);
+  }
+  const data = await resp.json();
+  return data.content[0].text;
+}
+
 </script>
 
 <!-- ── Claude AI Assistant ── -->
