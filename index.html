@@ -783,41 +783,10 @@ function updateKPIs(){
 }
 
 // ── BRACKET ───────────────────────────────────────────────────────────────
-function renderBracket(){
-  const el = document.getElementById('bracketViz');
-  el.innerHTML = '';
-  const roundData = [top30, R2_TOP15, R3_TOP10, R4_TOP7, R5_TOP5, R6_TOP3, R7_TOP3,
-    [{ea:CHAMPION.name, pf:CHAMPION.pf, pnl:CHAMPION.pnlFwd}]];
-  ROUND_NAMES.forEach((name,ri)=>{
-    const col = document.createElement('div');
-    col.className = 'round-col';
-    col.innerHTML = `<div class="round-label">${name.replace('\n','<br>')}</div>`;
-    const count = ROUND_COUNTS[ri];
-    const data = roundData[ri] || [];
-    for(let i=0;i<Math.min(count,15);i++){
-      const slot = document.createElement('div');
-      const r = data[i];
-      if(r){
-        const isChamp = ri===7;
-        slot.className = isChamp ? 'slot active' : (ri < 7 ? 'slot active' : 'slot active');
-        slot.style.cssText = isChamp
-          ? 'border-color:var(--gold);color:var(--gold);font-weight:700;background:rgba(255,215,0,0.1)'
-          : '';
-        const label = r.ea ? r.ea.replace(/^[GF]0*/,'').split('_v')[0]+'v'+(r.ea.split('_v')[1]||'') : `Slot ${i+1}`;
-        slot.textContent = label;
-        const pnl = r.pnl ?? r.pnlFwd ?? 0;
-        slot.title = `${r.ea||''} | PF:${(r.pf||0).toFixed(2)} | PnL:$${pnl.toFixed(0)}`;
-      } else {
-        slot.className='slot pending';
-        slot.textContent=`Slot ${i+1}`;
-      }
-      col.appendChild(slot);
-    }
-    if(count>15){ const m=document.createElement('div'); m.className='slot active'; m.textContent=`+${count-15} more`; col.appendChild(m); }
-    el.appendChild(col);
-  });
-}
-
+function renderBracket(){  const el = document.getElementById('bracketViz');  el.innerHTML = '';  const roundData = [top30, R2_TOP15, R3_TOP10, R4_TOP7, R5_TOP5, R6_TOP3, R7_TOP3,    [{ea:CHAMPION.name, pf:CHAMPION.pf, pnl:CHAMPION.pnlFwd}]];  ROUND_NAMES.forEach((name,ri)=>{    const col = document.createElement('div');    col.className = 'round-col';    col.innerHTML = `<div class="round-label">${name.replace('\n','<br>')}</div>`;    const count = ROUND_COUNTS[ri];    const data = roundData[ri] || [];    for(let i=0;i<Math.min(count,15);i++){      const slot = document.createElement('div');      const r = data[i];      if(r){        const isChamp = ri===7;        slot.className = isChamp ? 'slot active' : (ri < 7 ? 'slot active' : 'slot active');        slot.style.cssText = isChamp          ? 'border-color:var(--gold);color:var(--gold);font-weight:700;background:rgba(255,215,0,0.1)'          : '';        const label = r.ea ? r.ea.replace(/^[GF]0*/,'').split('_v')[0]+'v'+(r.ea.split('_v')[1]||'') : `Slot ${i+1}`;        slot.textContent = label;        const pnl = r.pnl ?? r.pnlFwd ?? 0;        slot.title = `${r.ea||''} | PF:${(r.pf||0).toFixed(2)} | PnL:$${pnl.toFixed(0)}`;
+        slot.style.cursor = 'pointer';
+        slot.onclick = (function(ea,pf,p,ri){return function(){showBracketPopup(ea,pf,p,ri);};})(r.ea||'',r.pf||0,pnl,ri);
+        if(isChamp) slot.style.animation='champPulse 2s ease-in-out infinite';      } else {        slot.className='slot pending';        slot.textContent=`Slot ${i+1}`;      }      col.appendChild(slot);    }    if(count>15){ const m=document.createElement('div'); m.className='slot active'; m.textContent=`+${count-15} more`; col.appendChild(m); }    el.appendChild(col);  });}
 function renderBracketEmpty(){
   const el = document.getElementById('bracketViz');
   el.innerHTML = '';
@@ -2051,61 +2020,137 @@ function p4UpdateRisk(val) {
 }
 
 // ── Calculator functions ────────────────────────────────────────────────────
+let cpChartInst = null;
+
 function calcLotSize() {
   const bal = +document.getElementById('calcBal').value;
   const risk = +document.getElementById('calcRisk').value / 100;
   const sl = +document.getElementById('calcSL').value;
+  if(!bal||!sl) return;
   const riskAmt = bal * risk;
-  const pipVal = 0.10; // $0.10 per point per 0.01 lot for XAUUSDm
-  const lots = riskAmt / (sl * pipVal / 0.01);
-  document.getElementById('calcLotOut').innerHTML =
-    `Risk amount: <strong style="color:var(--gold)">$${riskAmt.toFixed(2)}</strong><br>
-     Lot size: <strong style="color:var(--green)">${(Math.round(lots/0.01)*0.01).toFixed(2)} lots</strong><br>
-     <span style="color:var(--dim);font-size:.72rem">Based on $0.10/pt per 0.01 lot (XAUUSDm)</span>`;
+  const lots = riskAmt / (sl * 0.10 / 0.01);
+  const rr = 2, tpPts = sl * rr, reward = riskAmt * rr;
+  // SVG trade diagram
+  const svg = document.getElementById('tradeDiagram');
+  if(svg) {
+    const W=220,H=110,tpY=14,entY=62,slY=98;
+    svg.innerHTML=
+      '<rect x="0" y="0" width="'+W+'" height="'+tpY+'" fill="rgba(0,255,157,.07)"/>'
+      +'<rect x="0" y="'+tpY+'" width="'+W+'" height="'+(entY-tpY)+'" fill="rgba(0,255,157,.03)"/>'
+      +'<rect x="0" y="'+entY+'" width="'+W+'" height="'+(slY-entY)+'" fill="rgba(255,68,102,.06)"/>'
+      +'<line x1="0" y1="'+tpY+'" x2="'+W+'" y2="'+tpY+'" stroke="#00ff9d" stroke-width="1.5" stroke-dasharray="5,3"/>'
+      +'<text x="6" y="'+(tpY-2)+'" fill="#00ff9d" font-size="9">TP +'+tpPts+'pts  +$'+reward.toFixed(0)+'</text>'
+      +'<line x1="0" y1="'+entY+'" x2="'+W+'" y2="'+entY+'" stroke="white" stroke-width="2"/>'
+      +'<text x="6" y="'+(entY-3)+'" fill="white" font-size="9">ENTRY</text>'
+      +'<polygon points="210,'+(tpY+2)+' 205,'+(tpY+10)+' 215,'+(tpY+10)+'" fill="#00ff9d"/>'
+      +'<line x1="0" y1="'+slY+'" x2="'+W+'" y2="'+slY+'" stroke="#ff4466" stroke-width="1.5" stroke-dasharray="5,3"/>'
+      +'<text x="6" y="'+(slY+11)+'" fill="#ff4466" font-size="9">SL -'+sl+'pts  -$'+riskAmt.toFixed(0)+'</text>';
+  }
+  document.getElementById('calcLotOut').innerHTML=
+    '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:8px">'
+    +'<div style="padding:9px;background:rgba(0,0,0,.3);border-radius:6px;text-align:center"><div style="font-size:.6rem;color:var(--dim)">Lot Size</div><div style="font-size:1.3rem;font-weight:700;color:var(--gold)">'+(Math.round(lots/0.01)*0.01).toFixed(2)+'</div></div>'
+    +'<div style="padding:9px;background:rgba(0,0,0,.3);border-radius:6px;text-align:center"><div style="font-size:.6rem;color:var(--dim)">Dollar Risk</div><div style="font-size:1.3rem;font-weight:700;color:var(--red)">-$'+riskAmt.toFixed(0)+'</div></div>'
+    +'<div style="padding:9px;background:rgba(0,0,0,.3);border-radius:6px;text-align:center"><div style="font-size:.6rem;color:var(--dim)">Dollar Reward</div><div style="font-size:1.3rem;font-weight:700;color:var(--green)">+$'+reward.toFixed(0)+'</div></div>'
+    +'<div style="padding:9px;background:rgba(0,0,0,.3);border-radius:6px;text-align:center"><div style="font-size:.6rem;color:var(--dim)">RR Ratio</div><div style="font-size:1.3rem;font-weight:700;color:var(--accent)">'+rr+':1</div></div>'
+    +'</div>';
 }
 
 function calcCompound() {
   const start = +document.getElementById('cpStart').value;
   const mo    = +document.getElementById('cpMo').value / 100;
   const mos   = +document.getElementById('cpMos').value;
-  let html = '<table style="font-size:.75rem;width:100%"><tr><th>Month</th><th>Balance</th><th>Return</th></tr>';
-  let bal = start;
-  for(let m=1;m<=mos;m++) {
-    bal = bal*(1+mo);
-    const ret = (bal/start-1)*100;
-    html += `<tr><td>${m}</td><td style="color:var(--green)">$${bal.toFixed(0)}</td><td>+${ret.toFixed(0)}%</td></tr>`;
+  if(!start||!mos) return;
+  const labels=[]; const compound=[start]; const linear=[start];
+  let c=start, l=start; const moGain=start*mo;
+  for(let m=1;m<=mos;m++){
+    labels.push('Mo '+m);
+    c=c*(1+mo); compound.push(Math.round(c));
+    l=l+moGain; linear.push(Math.round(l));
   }
-  html += '</table>';
-  document.getElementById('cpOut').innerHTML = html;
+  labels.unshift('Start');
+  // Milestones
+  const ms=[5000,10000,30000,100000];
+  const mEl=document.getElementById('cpMilestones');
+  if(mEl) mEl.innerHTML=ms.map(function(t){
+    const idx=compound.findIndex(function(v){return v>=t;});
+    const col=idx>=0?'var(--green)':'var(--dim)';
+    return '<span style="font-size:.68rem;padding:3px 7px;background:rgba(0,0,0,.3);border-radius:10px;color:'+col+'">$'+t.toLocaleString()+': '+(idx>=0?'Mo '+(idx):'—')+'</span>';
+  }).join(' ');
+  // Chart
+  const ctx=document.getElementById('cpChart');
+  if(!ctx||typeof Chart==='undefined') return;
+  if(cpChartInst){try{cpChartInst.destroy();}catch(e){}}
+  cpChartInst=new Chart(ctx,{
+    type:'line',
+    data:{labels:labels,datasets:[
+      {label:'Compound',data:compound,borderColor:'#00ff9d',backgroundColor:'rgba(0,255,157,.07)',fill:true,tension:0.3,borderWidth:2,pointRadius:0},
+      {label:'Linear',data:linear,borderColor:'rgba(255,255,255,.3)',fill:false,tension:0,borderWidth:1,pointRadius:0,borderDash:[4,3]}
+    ]},
+    options:{responsive:true,plugins:{legend:{labels:{color:'#c8d0ff',font:{size:10}}},
+      tooltip:{callbacks:{label:function(c){return '$'+c.raw.toLocaleString();}}}},
+      scales:{x:{ticks:{color:'#5a6080',font:{size:9},maxTicksLimit:8},grid:{color:'rgba(255,255,255,.04)'}},
+              y:{ticks:{color:'#5a6080',font:{size:9},callback:function(v){return '$'+v.toLocaleString();}},grid:{color:'rgba(255,255,255,.04)'}}}}
+  });
 }
 
 function calcRuinRisk() {
-  const wr = +document.getElementById('rorWR').value / 100;
-  const rr = +document.getElementById('rorRR').value;
-  const r  = +document.getElementById('rorR').value / 100;
-  // Kelly criterion
-  const kelly = (wr*rr - (1-wr)) / rr;
-  // Expected value per trade
-  const ev = wr*rr*r - (1-wr)*r;
-  // Rough ruin probability at 50% DD
-  const ruinProb = wr > 0 ? Math.min(95, Math.max(1, (1-wr)/(wr*rr)*100*(r*10))) : 99;
-  document.getElementById('rorOut').innerHTML =
-    `Kelly fraction: <strong style="color:var(--gold)">${(kelly*100).toFixed(1)}%</strong><br>
-     Expected return/trade: <strong style="color:${ev>=0?'var(--green)':'var(--red)'}">${(ev*100).toFixed(2)}%</strong><br>
-     Est. ruin risk (50% DD): <strong style="color:var(--red)">${ruinProb.toFixed(0)}%</strong><br>
-     <span style="color:var(--dim);font-size:.72rem">Recommend risk ≤ 50% Kelly = ${(kelly*50).toFixed(1)}%</span>`;
+  const wr=+document.getElementById('rorWR').value/100;
+  const rr=+document.getElementById('rorRR').value;
+  const r=+document.getElementById('rorR').value/100;
+  const kelly=(wr*rr-(1-wr))/rr;
+  const ev=wr*rr*r-(1-wr)*r;
+  const ruinProb=wr>0?Math.min(95,Math.max(1,(1-wr)/(wr*rr)*100*(r*10))):99;
+  const consLoss=Math.ceil(Math.log(0.5)/Math.log(1-r));
+  const p10=(Math.pow(1-wr,10)*100).toFixed(2);
+  // SVG gauge
+  const g=document.getElementById('rorGauge');
+  if(g){
+    const cx=100,cy=90,gr=70;
+    const ang=(180-ruinProb*1.8)*Math.PI/180;
+    const nx=(cx+gr*0.82*Math.cos(ang)).toFixed(1);
+    const ny=(cy-gr*0.82*Math.sin(ang)).toFixed(1);
+    const col=ruinProb<15?'#00ff9d':ruinProb<35?'#ffd700':'#ff4466';
+    g.innerHTML=
+      '<path d="M 30,90 A 70,70 0 0,1 170,90" fill="none" stroke="rgba(255,68,102,.25)" stroke-width="14" stroke-linecap="round"/>'
+      +'<path d="M 30,90 A 70,70 0 0,1 107,21" fill="none" stroke="rgba(255,215,0,.25)" stroke-width="14" stroke-linecap="round"/>'
+      +'<path d="M 30,90 A 70,70 0 0,1 68,25" fill="none" stroke="rgba(0,255,157,.25)" stroke-width="14" stroke-linecap="round"/>'
+      +'<line x1="'+cx+'" y1="'+cy+'" x2="'+nx+'" y2="'+ny+'" stroke="'+col+'" stroke-width="3" stroke-linecap="round"/>'
+      +'<circle cx="'+cx+'" cy="'+cy+'" r="5" fill="'+col+'"/>'
+      +'<text x="100" y="115" text-anchor="middle" fill="'+col+'" font-size="16" font-weight="bold">'+ruinProb.toFixed(0)+'%</text>'
+      +'<text x="100" y="130" text-anchor="middle" fill="rgba(255,255,255,.35)" font-size="9">Ruin Risk</text>'
+      +'<text x="28" y="105" text-anchor="middle" fill="rgba(0,255,157,.6)" font-size="8">SAFE</text>'
+      +'<text x="172" y="105" text-anchor="middle" fill="rgba(255,68,102,.6)" font-size="8">RISK</text>';
+  }
+  document.getElementById('rorOut').innerHTML=
+    '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:6px">'
+    +'<div style="padding:8px;background:rgba(0,0,0,.3);border-radius:6px"><div style="font-size:.6rem;color:var(--dim)">Kelly Fraction</div><div style="font-size:.95rem;font-weight:700;color:var(--gold)">'+(kelly*100).toFixed(1)+'%</div></div>'
+    +'<div style="padding:8px;background:rgba(0,0,0,.3);border-radius:6px"><div style="font-size:.6rem;color:var(--dim)">Edge/Trade</div><div style="font-size:.95rem;font-weight:700;color:'+(ev>=0?'var(--green)':'var(--red)')+'">'+((ev*100).toFixed(2))+'%</div></div>'
+    +'<div style="padding:8px;background:rgba(0,0,0,.3);border-radius:6px"><div style="font-size:.6rem;color:var(--dim)">Losses → 50% DD</div><div style="font-size:.95rem;font-weight:700;color:var(--red)">'+consLoss+' trades</div></div>'
+    +'<div style="padding:8px;background:rgba(0,0,0,.3);border-radius:6px"><div style="font-size:.6rem;color:var(--dim)">P(10 losses row)</div><div style="font-size:.95rem;font-weight:700;color:var(--red)">'+p10+'%</div></div>'
+    +'</div>';
 }
 
 function calcTarget() {
-  const start = +document.getElementById('tcStart').value;
-  const target= +document.getElementById('tcTarget').value;
-  const mos   = +document.getElementById('tcMos').value;
-  const needed = (Math.pow(target/start, 1/mos)-1)*100;
-  document.getElementById('tcOut').innerHTML =
-    `Required monthly return: <strong style="color:var(--gold)">${needed.toFixed(2)}%</strong><br>
-     Total multiplier: <strong style="color:var(--green)">${(target/start).toFixed(1)}x</strong><br>
-     <span style="color:var(--dim);font-size:.72rem">${needed>21?'⚠️ Very high risk — 1000% territory':'✅ Achievable with right strategy'}</span>`;
+  const start=+document.getElementById('tcStart').value;
+  const target=+document.getElementById('tcTarget').value;
+  const mos=+document.getElementById('tcMos').value;
+  if(!start||!target||!mos) return;
+  const needed=(Math.pow(target/start,1/mos)-1)*100;
+  const mult=(target/start).toFixed(1);
+  const col=needed<5?'var(--green)':needed<15?'var(--gold)':'var(--red)';
+  const verdict=needed<5?'✅ Achievable — within our range':needed<10?'⚠️ Challenging — needs PF 1.5+':needed<20?'🔴 Aggressive — 1000% territory':'🔴 Extreme — near-impossible edge';
+  const atBest=(start*Math.pow(1.021,mos)).toFixed(0);
+  document.getElementById('tcOut').innerHTML=
+    '<div style="text-align:center;padding:12px;background:rgba(0,0,0,.3);border-radius:8px;margin-bottom:8px">'
+    +'<div style="font-size:.65rem;color:var(--dim);margin-bottom:4px">Required Monthly Return</div>'
+    +'<div style="font-size:2rem;font-weight:800;color:'+col+'">'+needed.toFixed(2)+'%</div>'
+    +'<div style="font-size:.72rem;color:var(--dim)">×'+mult+' growth over '+mos+' months</div></div>'
+    +'<div style="font-size:.76rem;color:'+col+';margin-bottom:7px">'+verdict+'</div>'
+    +'<div style="font-size:.72rem;color:var(--dim);padding:8px;background:rgba(0,0,0,.2);border-radius:6px">'
+    +'Our best result: <strong style="color:var(--green)">+2.1%/mo</strong> (F06 on Gold+NAS100)<br>'
+    +'At 2.1%/mo for '+mos+'mo: <strong style="color:var(--gold)">$'+atBest+'</strong></div>';
 }
+
 
 function initPhase4() {
   renderP4RootCause();
