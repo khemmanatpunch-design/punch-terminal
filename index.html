@@ -1376,23 +1376,46 @@ function renderP4Ultra() {
 
 function renderP4MultiMarket() {
   const el = document.getElementById('p4MultiGrid');
-  if(!el || !P4_MULTIMARKET.length) { if(el) el.innerHTML='<p style="color:var(--dim);font-size:.82rem">Running...</p>'; return; }
-  const bySymbol = {};
-  P4_MULTIMARKET.forEach(r=>{
-    const k = r.symbol;
-    if(!bySymbol[k] || +r.monthly_pct > +bySymbol[k].monthly_pct) bySymbol[k] = r;
-  });
-  el.innerHTML = Object.values(bySymbol).map(r=>{
-    const mo=+r.monthly_pct||0, pnl=+r.pnl_usd||0;
-    const col=mo>5?'var(--green)':mo>0?'var(--gold)':'var(--red)';
-    return `<div class="glass" style="padding:12px;text-align:center;border:1px solid ${col}20">
-      <div style="font-weight:700;color:${col};font-size:.85rem">${r.symbol}</div>
-      <div style="font-size:.65rem;color:var(--dim);margin-bottom:6px">${r.category}</div>
-      <div style="font-size:1.1rem;font-weight:700;color:${col}">${mo>=0?'+':''}${mo.toFixed(1)}%</div>
-      <div style="font-size:.65rem;color:var(--dim)">/month</div>
-      <div style="font-size:.7rem;margin-top:4px;color:${pnl>=0?'var(--green)':'var(--red)'}">${pnl>=0?'+':''}$${Math.round(pnl)}</div>
+  if(!el) return;
+  const profitable = P4_MULTIMARKET.filter(r => +r.pnl_usd > 0).sort((a,b) => +b.pnl_usd - +a.pnl_usd);
+  const losing     = P4_MULTIMARKET.filter(r => +r.trades > 0 && +r.pnl_usd <= 0);
+  el.innerHTML = `
+    <div style="grid-column:1/-1">
+      <div style="font-size:.72rem;color:var(--dim);margin-bottom:10px">
+        3 high-return EAs tested across 4 markets: F06 BreakoutMomentum, F05 TrendAcceleration, F04 WeeklyBreakout
+      </div>
+      <div style="font-size:.65rem;color:var(--green);font-weight:700;letter-spacing:1px;margin-bottom:10px">
+        PROFITABLE COMBINATIONS (${profitable.length} found)
+      </div>
+    </div>
+    ${profitable.length ? profitable.map(r => `
+      <div class="glass" style="padding:13px;text-align:center;border:1px solid rgba(0,255,157,.28)">
+        <div style="font-size:.62rem;color:var(--dim);margin-bottom:3px">${r.ea.replace('F06_','').replace('F05_','').replace('F04_','').replace(/_/g,' ')}</div>
+        <div style="font-weight:700;color:var(--green);font-size:.9rem;margin-bottom:4px">${r.symbol}</div>
+        <div style="font-size:1.4rem;font-weight:800;color:var(--green)">+$${Math.round(+r.pnl_usd)}</div>
+        <div style="font-size:.68rem;color:var(--dim);margin-bottom:3px">PF ${(+r.profit_factor).toFixed(2)} · ${r.trades} trades</div>
+        <div style="font-size:.72rem;color:var(--green)">+${(+r.monthly_pct).toFixed(2)}%/mo</div>
+      </div>`).join('') : '<div style="grid-column:1/-1;color:var(--dim);font-size:.8rem;padding:10px">No profitable combinations found.</div>'}
+    ${losing.length ? `
+    <div style="grid-column:1/-1;margin-top:8px">
+      <div style="font-size:.65rem;color:var(--red);font-weight:700;letter-spacing:1px;margin-bottom:8px">
+        LOSING COMBINATIONS (${losing.length} — avoided)
+      </div>
+    </div>
+    ${losing.map(r => `
+      <div style="padding:10px;text-align:center;background:rgba(255,68,102,.05);border:1px solid rgba(255,68,102,.15);border-radius:8px">
+        <div style="font-size:.62rem;color:var(--dim)">${r.ea.replace('F06_','').replace('F05_','').replace('F04_','').replace(/_/g,' ')}</div>
+        <div style="font-weight:700;color:var(--red);font-size:.82rem">${r.symbol}</div>
+        <div style="font-size:1rem;font-weight:700;color:var(--red)">$${Math.round(+r.pnl_usd)}</div>
+        <div style="font-size:.65rem;color:var(--dim)">PF ${(+r.profit_factor).toFixed(2)}</div>
+      </div>`).join('')}` : ''}
+    <div style="grid-column:1/-1;margin-top:14px;padding:13px;background:rgba(108,143,255,.08);border:1px solid var(--border);border-radius:8px;font-size:.78rem;line-height:1.7">
+      <strong style="color:var(--accent)">PORTFOLIO INSIGHT:</strong>
+      Best EA: <strong style="color:var(--green)">F06_BreakoutMomentum</strong> — PF <strong style="color:var(--green)">1.61</strong> on both Gold and NAS100 (+$647 each, 0.28%/mo).<br>
+      Combined Gold + NAS100 portfolio = <strong style="color:var(--green)">+$1,294 / 6 years</strong>, 0.56%/mo on $3,000.<br>
+      The 10-filter ULTRA EA produced <strong style="color:var(--red)">$0 across all 9 markets</strong> (zero trades executed — too filtered).<br>
+      <strong style="color:var(--gold)">Recommendation:</strong> Run F06_BreakoutMomentum on Gold + NAS100 as a starting 2-market portfolio.
     </div>`;
-  }).join('');
 }
 
 function renderP4Scenarios() {
