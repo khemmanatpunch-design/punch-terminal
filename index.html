@@ -257,6 +257,80 @@
   ::-webkit-scrollbar { width: 6px; height: 6px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* ── AI Assistant ───────────────────────────────────────────────────── */
+@keyframes aiPulse {
+  0%,100%{box-shadow:0 0 0 0 rgba(139,92,246,.7)}
+  50%{box-shadow:0 0 0 14px rgba(139,92,246,0)}
+}
+#aiBtn {
+  position:fixed;bottom:28px;right:28px;width:60px;height:60px;border-radius:50%;
+  background:linear-gradient(135deg,#7c3aed,#4f46e5);border:none;cursor:pointer;
+  font-size:26px;color:#fff;display:flex;align-items:center;justify-content:center;
+  z-index:9998;animation:aiPulse 2.4s ease-in-out infinite;
+  box-shadow:0 4px 20px rgba(124,58,237,.5);transition:transform .2s;
+}
+#aiBtn:hover{transform:scale(1.12)}
+#aiPanel {
+  position:fixed;top:0;right:-420px;width:420px;height:100vh;
+  background:rgba(15,12,30,.97);backdrop-filter:blur(24px);
+  border-left:1px solid rgba(139,92,246,.35);
+  display:flex;flex-direction:column;z-index:9999;
+  transition:right .35s cubic-bezier(.4,0,.2,1);
+  box-shadow:-8px 0 40px rgba(0,0,0,.6);
+}
+#aiPanel.ai-open{right:0}
+.ai-panel-header {
+  padding:18px 20px;border-bottom:1px solid rgba(139,92,246,.25);
+  background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(79,70,229,.1));
+  display:flex;align-items:center;gap:12px;flex-shrink:0;
+}
+.ai-panel-header .ai-logo{font-size:28px}
+.ai-panel-header h3{margin:0;color:#c4b5fd;font-size:15px;font-weight:700;flex:1}
+.ai-panel-header small{color:#7c6fad;font-size:11px;display:block;margin-top:2px}
+.ai-close-btn{background:none;border:none;color:#7c6fad;font-size:20px;cursor:pointer;padding:4px;line-height:1}
+.ai-close-btn:hover{color:#c4b5fd}
+/* Key screen */
+#aiKeyScreen{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;gap:20px}
+.ai-key-icon{font-size:52px;margin-bottom:8px}
+.ai-key-title{color:#c4b5fd;font-size:17px;font-weight:700;text-align:center}
+.ai-key-sub{color:#7c6fad;font-size:12px;text-align:center;line-height:1.6}
+.ai-key-input{width:100%;padding:12px 16px;background:rgba(255,255,255,.06);
+  border:1px solid rgba(139,92,246,.4);border-radius:10px;color:#e2d9f3;
+  font-size:13px;font-family:monospace;outline:none;box-sizing:border-box}
+.ai-key-input:focus{border-color:#7c3aed;box-shadow:0 0 0 3px rgba(124,58,237,.2)}
+.ai-key-btn{width:100%;padding:13px;background:linear-gradient(135deg,#7c3aed,#4f46e5);
+  border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;
+  transition:opacity .2s}
+.ai-key-btn:hover{opacity:.88}
+.ai-key-note{color:#4ade80;font-size:11px;text-align:center}
+/* Chat screen */
+#aiChatScreen{flex:1;display:none;flex-direction:column;overflow:hidden}
+.ai-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.ai-messages::-webkit-scrollbar{width:4px}
+.ai-messages::-webkit-scrollbar-thumb{background:rgba(124,58,237,.4);border-radius:2px}
+.ai-bubble{max-width:88%;padding:11px 15px;border-radius:14px;font-size:13px;line-height:1.55;word-break:break-word}
+.ai-bubble.ai-assistant{background:rgba(124,58,237,.18);border:1px solid rgba(139,92,246,.25);
+  color:#ddd6fe;border-radius:4px 14px 14px 14px;align-self:flex-start}
+.ai-bubble.ai-user{background:rgba(79,70,229,.3);border:1px solid rgba(99,102,241,.3);
+  color:#e0e7ff;border-radius:14px 14px 4px 14px;align-self:flex-end}
+.ai-bubble.ai-thinking{color:#7c6fad;font-style:italic}
+.ai-suggested{padding:8px 16px 12px;display:flex;flex-wrap:wrap;gap:6px;border-top:1px solid rgba(139,92,246,.15)}
+.ai-q{padding:6px 11px;background:rgba(124,58,237,.15);border:1px solid rgba(139,92,246,.3);
+  border-radius:20px;color:#a78bfa;font-size:11px;cursor:pointer;white-space:nowrap;transition:all .18s}
+.ai-q:hover{background:rgba(124,58,237,.35);color:#c4b5fd}
+.ai-input-row{padding:12px 14px;border-top:1px solid rgba(139,92,246,.2);
+  display:flex;gap:8px;flex-shrink:0;background:rgba(0,0,0,.2)}
+.ai-text-input{flex:1;padding:10px 13px;background:rgba(255,255,255,.06);
+  border:1px solid rgba(139,92,246,.3);border-radius:10px;color:#e2d9f3;
+  font-size:13px;outline:none;resize:none;font-family:inherit}
+.ai-text-input:focus{border-color:#7c3aed}
+.ai-send-btn{padding:10px 16px;background:linear-gradient(135deg,#7c3aed,#4f46e5);
+  border:none;border-radius:10px;color:#fff;font-size:16px;cursor:pointer;flex-shrink:0}
+.ai-send-btn:hover{opacity:.85}
+.ai-status-bar{padding:6px 16px;font-size:11px;color:#4ade80;text-align:center;
+  background:rgba(74,222,128,.06);border-top:1px solid rgba(74,222,128,.15);flex-shrink:0}
+
 </style>
 </head>
 <body>
@@ -2288,5 +2362,51 @@ function initPhase4() {
 }
 
 </script>
+
+<!-- ── Claude AI Assistant ── -->
+<button id="aiBtn" onclick="toggleAIPanel()" title="Claude AI Analyst">🤖</button>
+
+<div id="aiPanel">
+  <div class="ai-panel-header">
+    <span class="ai-logo">🤖</span>
+    <div style="flex:1">
+      <h3>Claude AI Analyst</h3>
+      <small id="aiStatusLabel">APEX GREATEST • Expert Mode</small>
+    </div>
+    <button class="ai-close-btn" onclick="toggleAIPanel()">✕</button>
+  </div>
+
+  <!-- Key Setup Screen -->
+  <div id="aiKeyScreen">
+    <div class="ai-key-icon">🔑</div>
+    <div class="ai-key-title">Connect Anthropic API</div>
+    <div class="ai-key-sub">Enter your API key to unlock Claude AI analysis.<br>Stored locally in your browser — never sent anywhere else.</div>
+    <input type="password" id="aiKeyInput" class="ai-key-input" placeholder="sk-ant-api03-..." />
+    <button class="ai-key-btn" onclick="saveAIKey()">🔒 Connect & Analyze</button>
+    <div class="ai-key-note">✓ Key stored in localStorage · Never leaves your browser</div>
+  </div>
+
+  <!-- Chat Screen -->
+  <div id="aiChatScreen">
+    <div class="ai-messages" id="aiMessages"></div>
+    <div class="ai-suggested" id="aiSuggested">
+      <button class="ai-q" onclick="aiAsk('What should I improve first?')">What should I improve first?</button>
+      <button class="ai-q" onclick="aiAsk('How do I fix my blowup risk?')">How do I fix my blowup risk?</button>
+      <button class="ai-q" onclick="aiAsk('Rate my current system 1-10')">Rate my system 1-10</button>
+      <button class="ai-q" onclick="aiAsk('Am I on track for 1000%?')">Am I on track for 1000%?</button>
+      <button class="ai-q" onclick="aiAsk('What is the Phase 5 plan?')">What is Phase 5 plan?</button>
+      <button class="ai-q" onclick="aiAsk('Which strategy should I run today?')">Which strategy for today?</button>
+    </div>
+    <div class="ai-input-row">
+      <textarea id="aiMsgInput" class="ai-text-input" rows="2" placeholder="Ask anything about your trading system..."
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendUserMessage()}"></textarea>
+      <button class="ai-send-btn" onclick="sendUserMessage()">➤</button>
+    </div>
+    <div class="ai-status-bar" id="aiStatusBar">
+      🔒 Connected · <span id="aiKeyHint"></span> · <button onclick="changeAIKey()" style="background:none;border:none;color:#a78bfa;cursor:pointer;font-size:11px;padding:0">Change key</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
