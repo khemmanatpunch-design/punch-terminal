@@ -1229,42 +1229,149 @@ function renderP4RootCause() {
   const el = document.getElementById('p4RootCauseCards');
   if(!el) return;
   const issues = [
-    {icon:'📊', title:'Over-Trading', value:'43 trades/day', fix:'Reduce to 3/day', color:'var(--red)', severity:'CRITICAL'},
-    {icon:'📉', title:'Profit Factor', value:'PF 1.03 only', fix:'Need PF 1.5+', color:'var(--red)', severity:'HIGH'},
-    {icon:'🎯', title:'RR Ratio', value:'1.5:1 current', fix:'Need 3:1+', color:'var(--gold)', severity:'HIGH'},
-    {icon:'🌍', title:'Single Market', value:'Gold only', fix:'5+ markets', color:'var(--gold)', severity:'MEDIUM'},
-    {icon:'💰', title:'No Compounding', value:'Fixed lot size', fix:'Anti-martingale', color:'var(--accent)', severity:'MEDIUM'},
-    {icon:'⚡', title:'Spread Costs', value:'$1,204/day lost', fix:'Selective entries', color:'var(--red)', severity:'CRITICAL'},
+    {icon:'⚡', title:'SPREAD COST KILLER', severity:'CRITICAL', color:'var(--red)',
+     current:'49 trades/day · $1,382 lost/day', target:'Max 3/day',
+     detail:'Daily spread loss: <strong style="color:var(--red)">$1,382</strong> on 0.01 lots (280pt spread × 49 trades)<br>Monthly spread bleed: <strong style="color:var(--red)">$30,402</strong> · Annual: <strong style="color:var(--red)">$348,244</strong><br><em>Fix:</em> Add session + OB confluence filters → max 3 quality trades/day'},
+    {icon:'📉', title:'PROFIT FACTOR TOO LOW', severity:'CRITICAL', color:'var(--red)',
+     current:'PF 1.03 → 2.8% edge only', target:'PF 1.50+ minimum',
+     detail:'PF 1.03 means: earn $103 for every $100 lost. Almost nothing.<br>Need PF 1.15 for 5%/mo · PF 1.30 for 10%/mo · PF 1.60 for 21.5%/mo<br><em>Fix:</em> Better entry confluence (OB + sweep + FVG) = fewer but higher-quality trades'},
+    {icon:'🎯', title:'RR RATIO TOO LOW', severity:'HIGH', color:'var(--gold)',
+     current:'1.5:1 RR achieved', target:'3.0:1 target',
+     detail:'Break-even win rate at RR 1.5 = 40% · At RR 3.0 = only 25%<br>Higher RR means profitable even with 30% win rate<br><em>Fix:</em> Partial close at 1:1 R, let remainder run to 3:1 target'},
+    {icon:'🌍', title:'SINGLE MARKET RISK', severity:'MEDIUM', color:'var(--gold)',
+     current:'Gold only — 3-6 quality trades/month', target:'5+ markets',
+     detail:'With Gold only: max ~6 quality setups/month<br>Adding 4 more markets: 15-30 setups/month<br>Uncorrelated markets = smoother equity curve<br><em>Best additions:</em> USDJPY, BTC, GBPJPY, NAS100'},
+    {icon:'💰', title:'FIXED LOT — NO GROWTH', severity:'LOW', color:'var(--accent)',
+     current:'Fixed 0.01 lot forever', target:'Anti-martingale (2% risk)',
+     detail:'Fixed lot never captures account growth<br>At 2% risk: $3k = 0.12 lots (12x more than fixed 0.01)<br>Anti-martingale: increase after wins, reduce after losses<br><em>Potential boost:</em> 2-3x returns on winning streaks'},
   ];
-  el.innerHTML = issues.map(i=>`
-    <div class="glass" style="padding:14px;border-left:3px solid ${i.color}">
-      <div style="font-size:1.4rem;margin-bottom:6px">${i.icon}</div>
-      <div style="font-size:.65rem;color:${i.color};font-weight:700;margin-bottom:4px">${i.severity}</div>
-      <div style="font-weight:700;font-size:.82rem;margin-bottom:4px">${i.title}</div>
-      <div style="font-size:.75rem;color:var(--red);margin-bottom:6px">${i.value}</div>
-      <div style="font-size:.72rem;color:var(--green)">FIX: ${i.fix}</div>
+  el.innerHTML = issues.map((iss,idx) => `
+    <div class="glass" style="padding:14px;border-left:3px solid ${iss.color};cursor:pointer" onclick="toggleP4Card(${idx})">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:1.1rem">${iss.icon}
+          <span style="font-size:.6rem;color:${iss.color};font-weight:700;vertical-align:middle;margin-left:4px">${iss.severity}</span>
+        </span>
+        <span id="p4arr${idx}" style="color:var(--dim);font-size:.8rem">▼ click</span>
+      </div>
+      <div style="font-weight:700;font-size:.8rem;margin:6px 0">${iss.title}</div>
+      <div style="font-size:.7rem;color:var(--red);margin-bottom:2px">NOW: ${iss.current}</div>
+      <div style="font-size:.7rem;color:var(--green)">TARGET: ${iss.target}</div>
+      <div id="p4det${idx}" style="display:none;margin-top:9px;padding-top:9px;border-top:1px solid var(--border);font-size:.73rem;line-height:1.65;color:var(--text)">${iss.detail}</div>
     </div>`).join('');
+
+  if(!document.getElementById('p4GapAnalysis')) {
+    el.insertAdjacentHTML('afterend', `
+      <div id="p4GapAnalysis" class="glass" style="margin-top:14px;padding:14px">
+        <div class="panel-title">GAP ANALYSIS — What It Takes for Each Target</div>
+        <div style="overflow-x:auto">
+        <table style="width:100%;font-size:.76rem;border-collapse:collapse;min-width:380px">
+          <thead><tr style="color:var(--accent);border-bottom:1px solid var(--border)">
+            <th style="text-align:left;padding:7px">Metric</th>
+            <th style="text-align:center;padding:7px">Current</th>
+            <th style="text-align:center;padding:7px">5%/mo</th>
+            <th style="text-align:center;padding:7px">10%/mo</th>
+            <th style="text-align:center;padding:7px">21.5%/mo</th>
+          </tr></thead>
+          <tbody>
+            <tr style="border-bottom:1px solid rgba(255,255,255,.04)">
+              <td style="padding:7px">Trades/day</td>
+              <td style="text-align:center;color:var(--red);font-weight:700">49</td>
+              <td style="text-align:center;color:var(--gold)">≤5</td>
+              <td style="text-align:center;color:var(--gold)">≤3</td>
+              <td style="text-align:center;color:var(--gold)">≤2</td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,.04)">
+              <td style="padding:7px">Profit Factor</td>
+              <td style="text-align:center;color:var(--red);font-weight:700">1.03</td>
+              <td style="text-align:center;color:var(--gold)">1.15+</td>
+              <td style="text-align:center;color:var(--gold)">1.30+</td>
+              <td style="text-align:center;color:var(--gold)">1.60+</td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,.04)">
+              <td style="padding:7px">RR Ratio</td>
+              <td style="text-align:center;color:var(--red);font-weight:700">1.5:1</td>
+              <td style="text-align:center;color:var(--gold)">2.0:1</td>
+              <td style="text-align:center;color:var(--gold)">2.5:1</td>
+              <td style="text-align:center;color:var(--gold)">3.0:1</td>
+            </tr>
+            <tr>
+              <td style="padding:7px">Markets</td>
+              <td style="text-align:center;color:var(--red);font-weight:700">1</td>
+              <td style="text-align:center;color:var(--gold)">2-3</td>
+              <td style="text-align:center;color:var(--gold)">3-4</td>
+              <td style="text-align:center;color:var(--gold)">5+</td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+        <div style="margin-top:10px;padding:9px;background:rgba(255,68,102,.08);border-radius:6px;font-size:.76rem">
+          Gap to bridge: <strong style="color:var(--gold)">0.57%/mo → 21.5%/mo = 37.7× improvement needed</strong><br>
+          <span style="color:var(--dim)">Primary fix: Cut trades from 49 to 3/day. This alone stops $30,402/month in spread bleed and could 5-10× monthly returns.</span>
+        </div>
+      </div>`);
+  }
 }
+
+window.toggleP4Card = function(idx) {
+  const d = document.getElementById('p4det'+idx), a = document.getElementById('p4arr'+idx);
+  if(!d) return;
+  const show = d.style.display==='none';
+  d.style.display = show ? 'block' : 'none';
+  if(a) a.textContent = show ? '▲ collapse' : '▼ click';
+};
 
 function renderP4Ultra() {
   const el = document.getElementById('p4UltraTable');
-  if(!el || !P4_ULTRA.length) { if(el) el.innerHTML='<p style="color:var(--dim);font-size:.82rem">Running backtest... check back soon.</p>'; return; }
-  let html = '<table style="width:100%;font-size:.8rem;border-collapse:collapse"><thead><tr style="color:var(--accent)">';
-  html += '<th style="text-align:left;padding:8px">EA</th><th>Symbol</th><th>Trades/Day</th><th>PF</th><th>Monthly %</th><th>PnL</th></tr></thead><tbody>';
-  P4_ULTRA.forEach((r,i)=>{
-    const mo = +r.monthly_pct||0, pnl=+r.pnl_usd||0;
-    const bg = i===0?'rgba(255,215,0,.05)':'';
-    html += `<tr style="border-bottom:1px solid var(--border);background:${bg}">
-      <td style="padding:8px;color:${i===1?'var(--gold)':'var(--text)'}">${r.ea}</td>
-      <td style="text-align:center">${r.symbol}</td>
-      <td style="text-align:center;color:${+r.trades_per_day<5?'var(--green)':'var(--red)'}">${r.trades_per_day}</td>
-      <td style="text-align:center">${(+r.profit_factor||0).toFixed(4)}</td>
-      <td style="text-align:center;color:${mo>=0?'var(--green)':'var(--red)'}">${mo>=0?'+':''}${mo.toFixed(2)}%</td>
-      <td style="text-align:right;color:${pnl>=0?'var(--green)':'var(--red)'}">$${pnl>=0?'+':''}${Math.round(pnl)}</td>
-    </tr>`;
-  });
-  html += '</tbody></table>';
-  el.innerHTML = html;
+  if(!el) return;
+  const filters = [
+    ['HTF Trend Bias','H4 + D1 EMA 200 must align with trade direction'],
+    ['Market Structure','Higher Highs + Higher Lows (or LL+LH for shorts)'],
+    ['Order Block','Valid H1 OB zone identified before entry'],
+    ['Liquidity Sweep','Recent high or low must be swept first'],
+    ['Fair Value Gap','FVG present and unfilled on H1'],
+    ['RSI Momentum','RSI direction confirms trade side'],
+    ['Candlestick Pattern','Specific reversal candle required at OB'],
+    ['Session Filter','London or NY session only (08:00-17:00 UTC)'],
+    ['Spread Filter','Max spread 30 pips — skip wider'],
+    ['News Filter','No major news release within 30 minutes'],
+  ];
+  el.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+      <div style="padding:14px;background:rgba(0,255,157,.07);border:1px solid rgba(0,255,157,.35);border-radius:10px;text-align:center">
+        <div style="font-size:.6rem;color:var(--green);font-weight:700;letter-spacing:1px;margin-bottom:6px">CHAMPION — 3 FILTERS</div>
+        <div style="font-size:2.2rem;font-weight:800;color:var(--green)">845</div>
+        <div style="font-size:.7rem;color:var(--dim);margin-bottom:8px">trades in 6 years · <strong>0.51/day</strong></div>
+        <div style="font-size:.82rem;line-height:1.6">
+          PF <strong style="color:var(--green)">1.83</strong> &nbsp;·&nbsp;
+          PnL <strong style="color:var(--green)">+$4,789</strong><br>
+          Monthly <strong style="color:var(--green)">+2.10%</strong>
+        </div>
+      </div>
+      <div style="padding:14px;background:rgba(255,68,102,.07);border:1px solid rgba(255,68,102,.35);border-radius:10px;text-align:center">
+        <div style="font-size:.6rem;color:var(--red);font-weight:700;letter-spacing:1px;margin-bottom:6px">ULTRA — 10 FILTERS</div>
+        <div style="font-size:2.2rem;font-weight:800;color:var(--red)">0</div>
+        <div style="font-size:.7rem;color:var(--dim);margin-bottom:8px">trades in 6 years · <strong>never fired</strong></div>
+        <div style="font-size:.82rem;line-height:1.6">
+          PF <strong style="color:var(--red)">0.00</strong> &nbsp;·&nbsp;
+          PnL <strong style="color:var(--red)">$0</strong><br>
+          Monthly <strong style="color:var(--red)">0.00%</strong>
+        </div>
+      </div>
+    </div>
+    <div class="panel-title" style="margin-bottom:10px">10 FILTER GATES — All Must Pass Simultaneously</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;margin-bottom:14px">
+      ${filters.map(([name,desc],i) => `
+        <div style="padding:10px;background:rgba(255,68,102,.06);border:1px solid rgba(255,68,102,.22);border-radius:8px">
+          <div style="font-size:.68rem;font-weight:700;color:var(--red);margin-bottom:3px">Gate ${i+1}: ${name}</div>
+          <div style="font-size:.66rem;color:var(--dim)">${desc}</div>
+        </div>`).join('')}
+    </div>
+    <div style="padding:13px;background:rgba(255,215,0,.07);border:1px solid rgba(255,215,0,.3);border-radius:8px;font-size:.78rem;line-height:1.7">
+      <strong style="color:var(--gold)">KEY LESSON:</strong> All 10 conditions aligning at the same moment is statistically near-impossible.
+      In 6 years of Gold H1 data, this combination never fired even once.<br>
+      <strong style="color:var(--green)">Better approach:</strong> Use 3-5 strong filters that eliminate 85-90% of bad trades while keeping 3-6 quality setups per month.
+      The champion with only 3 filters achieved PF 1.83 and +$4,789 — more than enough.
+    </div>`;
 }
 
 function renderP4MultiMarket() {
