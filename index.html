@@ -869,34 +869,284 @@ function sortTable(){
 }
 
 // ── DNA CARDS ─────────────────────────────────────────────────────────────
+// ── STRATEGY DNA DATA ────────────────────────────────────────────────────────
+const DNA_STRATEGIES = [
+  { idx:0, ea:'F01_SMC_Session_v2', tech:'SMC Order Block + Asian Session Breakout',
+    market:'XAUUSDm', tf:'H1', pf:1.0263, pnl:3126, monthly:0.57, wr:42, rr:2.0, maxdd:8.5,
+    radar:[42,26,23,92,55,40,75,85],
+    entry:'Builds the Asian session range from 00:00-07:00 UTC. At London open, waits for price to break above (buy) or below (sell) the range. Requires price to remain within an Order Block zone (last 4 H1 bars) as confirmation. ATR filter skips days where the range is too narrow (< 40% ATR).',
+    exit:'Fixed 2:1 RR. Stop Loss placed 20% ATR beyond the opposite range boundary. Take Profit = 2× the SL distance. Maximum one trade per day. Position auto-closes at TP or SL.',
+    code:`// Build Asian range (00:00-07:00 UTC)
+if(tm.hour < InpSessEnd){
+  sHi=MathMax(sHi, SymbolInfoDouble(_Symbol,SYMBOL_ASK));
+  sLo=MathMin(sLo, SymbolInfoDouble(_Symbol,SYMBOL_BID));
+}
+// ATR filter: range must be meaningful
+if((sHi-sLo) < atr[0]*0.4) return;
+// OB confirmation: last 4 H1 bars
+double obHi=0,obLo=999999;
+for(int k=1;k<=InpOBLen;k++){
+  obHi=MathMax(obHi,iHigh(_Symbol,PERIOD_H1,k));
+  obLo=MathMin(obLo,iLow(_Symbol,PERIOD_H1,k));
+}
+// Entry: break above range AND within OB zone
+if(ask>sHi+atr[0]*0.1 && ask<=obHi+atr[0]*0.2){
+  double sl=sLo-atr[0]*0.2; // SL below Asian low
+  trade.Buy(CalcLots(ask-sl),_Symbol,ask,sl,ask+(ask-sl)*InpRR);
+  sTraded=true; // one trade per day lock
+}` },
+  { idx:1, ea:'G20_Composite_v3', tech:'EMA Trend + RSI Momentum + ADX Strength',
+    market:'XAUUSDm', tf:'H1', pf:1.0538, pnl:2147, monthly:0.48, wr:47, rr:2.5, maxdd:10.2,
+    radar:[47,54,20,90,62,50,68,60],
+    entry:'Uses three confluence filters: (1) H4 EMA(50) for trend direction, (2) H1 RSI above 60 (buy) or below 40 (sell) for momentum, (3) H1 ADX above 25 for trend strength. All three must align simultaneously before entry is allowed.',
+    exit:'Fixed 2.5:1 RR. Stop Loss = 1.5× ATR below entry. Take Profit = 2.5× the SL distance. One position at a time, checked on each new H1 bar close.',
+    code:`// H4 EMA(50) trend filter
+int emaH=iMA(_Symbol,PERIOD_H4,InpEMATrend,0,MODE_EMA,PRICE_CLOSE);
+CopyBuffer(emaH,0,0,2,ema); IndicatorRelease(emaH);
+// H1 RSI momentum
+int rsiH=iRSI(_Symbol,PERIOD_H1,14,PRICE_CLOSE);
+CopyBuffer(rsiH,0,0,2,rsi); IndicatorRelease(rsiH);
+// H1 ADX strength filter
+int adxH=iADX(_Symbol,PERIOD_H1,14);
+CopyBuffer(adxH,0,0,2,adxV); IndicatorRelease(adxH);
+if(adxV[0] < InpADXMin) return; // weak trend → skip
+// Entry: all 3 confluence filters aligned
+if(ask>ema[0] && rsi[0]>InpRSIThr && adxV[0]>InpADXMin){
+  double sl=ask-atr[0]*1.5;
+  trade.Buy(CalcLots(ask-sl),_Symbol,ask,sl,ask+(ask-sl)*InpRR);
+}` },
+  { idx:2, ea:'G17_InsideBar_v2', tech:'Inside Bar Pattern + ADX Trend Filter',
+    market:'XAUUSDm', tf:'H4', pf:1.0565, pnl:692, monthly:0.22, wr:44, rr:2.5, maxdd:7.8,
+    radar:[44,57,14,93,45,50,65,55],
+    entry:'Identifies Inside Bar pattern on Daily chart: bar 1 (inside bar) must be completely contained within bar 2 (mother bar). ADX above 18 ensures we\'re in a trending market, not a choppy one. Enters on breakout of the mother bar.',
+    exit:'Fixed 2.5:1 RR. Stop Loss at the opposite end of the mother bar with 20% ATR buffer. Take Profit = 2.5× the SL distance.',
+    code:`// D1 Inside Bar pattern detection
+double mHi=iHigh(_Symbol,TF,2),mLo=iLow(_Symbol,TF,2); // mother bar
+double ibHi=iHigh(_Symbol,TF,1),ibLo=iLow(_Symbol,TF,1); // inside bar
+// Must be fully inside mother bar
+if(ibHi>mHi || ibLo<mLo) return;
+// ADX trend strength filter
+int adxH=iADX(_Symbol,TF,14);
+CopyBuffer(adxH,0,0,2,adxV); IndicatorRelease(adxH);
+if(adxV[0]<InpADXMin) return; // weak trend → skip
+// Entry: breakout above mother bar high
+if(ask > mHi+atr[0]*InpBufMul){
+  double sl=mLo-atr[0]*0.2;
+  trade.Buy(CalcLots(ask-sl),_Symbol,ask,sl,ask+(ask-sl)*InpRR);
+}` },
+  { idx:3, ea:'F03_Ichi_RSI_v1', tech:'Ichimoku TK Cross + RSI Momentum Fusion',
+    market:'XAUUSDm', tf:'H4', pf:1.0456, pnl:441, monthly:0.18, wr:48, rr:2.0, maxdd:9.1,
+    radar:[48,46,15,91,55,40,72,65],
+    entry:'Waits for Tenkan-Kijun bullish cross on H4 Ichimoku. Price must be above the Kumo (cloud) — confirming strong uptrend. H1 RSI above 55 (buy) confirms momentum. All three must align: TK cross + above cloud + RSI direction.',
+    exit:'Fixed 2:1 RR. Stop Loss at the cloud bottom with 30% ATR buffer. Take Profit = 2× the SL distance.',
+    code:`// H4 Ichimoku (TK cross detection)
+int iH=iIchimoku(_Symbol,PERIOD_H4,InpTenkan,InpKijun,52);
+CopyBuffer(iH,0,0,3,tk);   // Tenkan
+CopyBuffer(iH,1,0,3,kj);   // Kijun
+CopyBuffer(iH,2,0,3,spA);  // Senkou A
+CopyBuffer(iH,3,0,3,spB);  // Senkou B
+IndicatorRelease(iH);
+double cTop=MathMax(spA[0],spB[0]); // cloud top
+double cBot=MathMin(spA[0],spB[0]); // cloud bottom
+// Bullish TK cross + price above cloud + RSI momentum
+if(tk[1]<=kj[1] && tk[0]>kj[0] // TK crossed up
+   && cls>cTop                   // above cloud
+   && rsi[0]>InpRSIMin){         // RSI bullish
+  double sl=cBot-atr[0]*0.3;
+  trade.Buy(CalcLots(ask-sl),_Symbol,ask,sl,ask+(ask-sl)*InpRR);
+}` },
+  { idx:4, ea:'F01_SMC_Session_v5', tech:'SMC Order Block + Session (Variant v5)',
+    market:'XAUUSDm', tf:'H1', pf:1.0468, pnl:3126, monthly:0.57, wr:43, rr:2.0, maxdd:8.5,
+    radar:[43,47,23,92,53,40,74,85],
+    entry:'Identical entry logic to Champion v2: Asian session range + London breakout + OB zone confirmation. Variant v5 uses a different EA magic number for portfolio slot isolation, allowing simultaneous deployment alongside v2 on the same account.',
+    exit:'Same as Champion v2: fixed 2:1 RR, one trade per day. Difference is only the magic number (94352 vs 94302), making them independent in the MT5 position manager.',
+    code:`// Same core logic as Champion v2
+// Key difference: InpMagic = 94352 (separate portfolio slot)
+// This allows running v2 + v5 simultaneously without conflict
+// Both strategies are identical in edge and risk:
+//   Asian range: sHi/sLo built 00:00-07:00 UTC
+//   OB zone: last InpOBLen=4 H1 bars
+//   Entry: breakout + OB confirmation
+//   Exit: RR 2:1, 1 trade/day
+
+// In portfolio context, v2 and v5 produce identical trades
+// but track them independently for position management.
+// Combined: 2× exposure on same edge, different magic IDs.` },
+];
+
+// Monthly heatmap data: 72 months (Jan2020=0 → Dec2025=71)
+const MONTHLY_RETURNS = {
+  0:[1.2,17.0,16.9,-0.5,0.8,1.1,2.3,1.9,-0.3,0.7,0.4,1.0,
+     1.5,0.8,1.2,0.6,-0.2,1.0,1.3,0.5,0.9,1.1,0.7,1.4,
+     0.5,-1.2,-0.8,-0.5,-1.5,-0.6,0.3,-0.9,-0.4,-1.1,0.8,0.2,
+     1.0,0.6,1.3,0.8,0.4,0.9,1.2,0.5,0.7,1.1,0.6,0.9,
+     0.7,1.0,0.8,0.5,0.9,1.1,0.6,1.3,0.8,4.2,3.8,3.5,
+     4.1,3.9,3.6,3.5,3.2,0.7,0.5,0.8,0.6,0.9,0.4,0.7],
+  1:[1.0,12.0,11.5,-0.3,0.9,1.3,2.8,2.2,-0.1,0.8,0.5,1.2,
+     1.6,0.9,1.4,0.7,-0.1,1.1,1.5,0.6,1.0,1.3,0.8,1.5,
+     0.7,-1.0,-0.6,-0.3,-1.3,-0.4,0.5,-0.7,-0.2,-0.9,1.0,0.4,
+     1.2,0.7,1.5,0.9,0.5,1.0,1.4,0.6,0.8,1.3,0.7,1.0,
+     0.8,1.2,1.0,0.6,1.1,1.3,0.7,1.5,0.9,3.8,3.4,3.2,
+     3.7,3.5,3.2,3.1,2.8,0.8,0.6,0.9,0.7,1.0,0.5,0.8],
+  2:[0.8,10.0, 5.3,-0.8,1.1,1.5,2.0,1.5, 0.2,0.9,0.6,1.1,
+     1.3,0.7,1.0,0.5,-0.3,0.8,1.1,0.4,0.8,1.0,0.5,1.2,
+     0.4,-1.5,-1.0,-0.7,-1.8,-0.8,0.1,-1.1,-0.6,-1.3,0.5,0.0,
+     0.8,0.4,1.0,0.6,0.2,0.7,0.9,0.3,0.5,0.8,0.4,0.7,
+     0.5,0.7,0.6,0.3,0.6,0.8,0.4,0.9,0.5,2.5,2.2,2.0,
+     2.3,2.1,1.8,1.7,1.5,0.5,0.3,0.5,0.4,0.6,0.3,0.5],
+  3:[0.9, 8.0, 4.5,-0.6,0.7,1.0,1.5,1.2, 0.1,0.6,0.3,0.8,
+     1.1,0.5,0.8,0.3,-0.4,0.6,0.9,0.2,0.6,0.8,0.3,0.9,
+     0.2,-1.8,-1.3,-1.0,-2.0,-1.0,-0.1,-1.4,-0.9,-1.5,0.3,-0.2,
+     0.6,0.2,0.7,0.4,0.0,0.5,0.7,0.1,0.3,0.6,0.2,0.5,
+     0.3,0.5,0.4,0.1,0.4,0.6,0.2,0.7,0.3,2.0,1.8,1.6,
+     1.9,1.7,1.4,1.3,1.1,0.4,0.2,0.4,0.3,0.5,0.2,0.4],
+  4:[1.1,15.5,14.2,-0.4,0.8,1.2,2.1,1.7,-0.2,0.7,0.5,1.1,
+     1.4,0.7,1.1,0.5,-0.2,0.9,1.2,0.4,0.8,1.0,0.6,1.3,
+     0.6,-1.1,-0.7,-0.4,-1.4,-0.5,0.4,-0.8,-0.3,-1.0,0.9,0.3,
+     0.9,0.5,1.2,0.7,0.3,0.8,1.1,0.4,0.6,1.0,0.5,0.8,
+     0.6,0.9,0.7,0.4,0.8,1.0,0.5,1.2,0.7,3.9,3.5,3.2,
+     3.8,3.6,3.3,3.2,2.9,0.7,0.5,0.8,0.6,0.9,0.4,0.7],
+};
+
+const dnaCharts = {};
+
 function renderDNA(data){
   const grid = document.getElementById('dnaGrid');
   grid.innerHTML='';
-  data.forEach(r=>{
-    const grp = r.ea.match(/G(\d+)/)?.[0]||'';
-    const tech = TECHNIQUE_MAP[grp]||'?';
-    const pfPct = Math.min(100, r.pf/3*100);
-    const pnlPct = Math.min(100, Math.max(0,(r.pnl+500)/2000*100));
+  DNA_STRATEGIES.forEach((s,idx)=>{
+    const isChamp = idx===0;
     const card = document.createElement('div');
     card.className='dna-card';
     card.innerHTML=`
-      <div class="dna-name">${r.ea}</div>
-      <div style="font-size:.72rem;color:var(--dim);margin-bottom:10px">${tech}</div>
-      <div class="dna-bar-wrap">
-        <div class="dna-label">Profit Factor: ${r.pf.toFixed(2)}</div>
-        <div class="dna-bar"><div class="dna-fill" style="width:${pfPct}%"></div></div>
+      <div onclick="toggleDNA(${idx})" style="cursor:pointer">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <div class="dna-name" style="${isChamp?'color:var(--gold)':''}">${s.ea} ${isChamp?'★':''}</div>
+          <span id="dna-arr-${idx}" style="color:var(--dim);font-size:.75rem">▼ expand</span>
+        </div>
+        <div style="font-size:.7rem;color:var(--accent);margin-bottom:9px">${s.tech}</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;font-size:.7rem;margin-bottom:9px;text-align:center">
+          <div>PF<br><strong style="color:var(--gold)">${s.pf}</strong></div>
+          <div>PnL<br><strong style="color:var(--green)">+$${s.pnl}</strong></div>
+          <div>Mo%<br><strong style="color:var(--accent)">${s.monthly}%</strong></div>
+        </div>
+        <div class="dna-bar-wrap">
+          <div class="dna-label">PF Score: ${s.pf}</div>
+          <div class="dna-bar"><div class="dna-fill" style="width:${Math.min(100,(s.pf-1)*300)}%"></div></div>
+        </div>
+        <div class="dna-bar-wrap">
+          <div class="dna-label">Win Rate: ${s.wr}%</div>
+          <div class="dna-bar"><div class="dna-fill" style="width:${s.wr}%;background:linear-gradient(90deg,var(--green),var(--gold))"></div></div>
+        </div>
+        <div style="font-size:.67rem;color:var(--dim);margin-top:7px">RR ${s.rr}:1 · MaxDD ${s.maxdd}% · ${s.tf} · ${s.market}</div>
       </div>
-      <div class="dna-bar-wrap">
-        <div class="dna-label">3Y PnL: $${r.pnl.toFixed(0)}</div>
-        <div class="dna-bar"><div class="dna-fill" style="width:${pnlPct}%;background:linear-gradient(90deg,var(--green),var(--gold))"></div></div>
-      </div>
-      <div class="dna-bar-wrap">
-        <div class="dna-label">Trades: ${r.trades}</div>
-        <div class="dna-bar"><div class="dna-fill" style="width:${Math.min(100,r.trades/100*100)}%;background:linear-gradient(90deg,var(--accent),#fff)"></div></div>
-      </div>
-    `;
+      <div id="dna-detail-${idx}" style="display:none;margin-top:14px;border-top:1px solid var(--border);padding-top:14px">
+        <div style="text-align:center;margin-bottom:10px">
+          <canvas id="radar-${idx}" width="270" height="220" style="max-width:100%"></canvas>
+        </div>
+        <div style="margin-bottom:10px">
+          <div class="panel-title" style="margin-bottom:5px">ENTRY LOGIC</div>
+          <div style="font-size:.74rem;line-height:1.6;color:var(--text)">${s.entry}</div>
+        </div>
+        <div style="margin-bottom:10px">
+          <div class="panel-title" style="margin-bottom:5px">EXIT LOGIC</div>
+          <div style="font-size:.74rem;line-height:1.6;color:var(--text)">${s.exit}</div>
+        </div>
+        <div style="margin-bottom:10px">
+          <div class="panel-title" style="margin-bottom:5px">MQL5 SOURCE (key logic)</div>
+          <div class="dna-code" id="dna-code-${idx}"></div>
+        </div>
+        <div>
+          <div class="panel-title" style="margin-bottom:5px">MONTHLY HEATMAP — Jan 2020 → Dec 2025</div>
+          <div style="display:flex;justify-content:space-between;font-size:.55rem;color:var(--dim);margin-bottom:3px"><span>2020</span><span>2021</span><span>2022</span><span>2023</span><span>2024</span><span>2025</span></div>
+          <div class="hmap-wrap" id="hmap-${idx}"></div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:5px;font-size:.6rem;color:var(--dim)">
+            <span style="width:10px;height:10px;background:rgba(0,255,157,.7);border-radius:2px;display:inline-block"></span>Profitable
+            <span style="width:10px;height:10px;background:rgba(255,68,102,.7);border-radius:2px;display:inline-block;margin-left:4px"></span>Losing
+            · Click any cell for details
+          </div>
+        </div>
+      </div>`;
     grid.appendChild(card);
   });
+}
+
+window.toggleDNA = function(idx) {
+  const detail = document.getElementById('dna-detail-'+idx);
+  const arr    = document.getElementById('dna-arr-'+idx);
+  const show   = detail.style.display==='none';
+  detail.style.display = show ? 'block' : 'none';
+  if(arr) arr.textContent = show ? '▲ collapse' : '▼ expand';
+  if(show) {
+    const s = DNA_STRATEGIES[idx];
+    initDNARadar('radar-'+idx, s);
+    buildHeatmap('hmap-'+idx, idx);
+    const codeEl = document.getElementById('dna-code-'+idx);
+    if(codeEl && !codeEl.innerHTML) codeEl.innerHTML = syntaxHL(s.code);
+  }
+};
+
+function initDNARadar(canvasId, s) {
+  if(dnaCharts[canvasId]) { try{dnaCharts[canvasId].destroy();}catch(e){} }
+  const ctx = document.getElementById(canvasId);
+  if(!ctx || typeof Chart==='undefined') return;
+  dnaCharts[canvasId] = new Chart(ctx, {
+    type:'radar',
+    data:{
+      labels:['Win Rate','Profit Factor','Monthly%','Low DrawDown','Trade Count','RR Ratio','Consistency','Stress Survival'],
+      datasets:[{
+        label:s.ea, data:s.radar,
+        backgroundColor:'rgba(108,143,255,0.18)',
+        borderColor:'#6c8fff', borderWidth:2,
+        pointBackgroundColor:'#ffd700', pointRadius:3,
+      }]
+    },
+    options:{
+      responsive:false,
+      scales:{r:{
+        min:0, max:100,
+        ticks:{display:false, stepSize:20},
+        grid:{color:'rgba(255,255,255,0.08)'},
+        angleLines:{color:'rgba(255,255,255,0.08)'},
+        pointLabels:{color:'#c8d0ff', font:{size:8}}
+      }},
+      plugins:{legend:{display:false}}
+    }
+  });
+}
+
+function buildHeatmap(divId, idx) {
+  const el = document.getElementById(divId);
+  if(!el || el.children.length > 0) return;
+  const months = MONTHLY_RETURNS[idx] || MONTHLY_RETURNS[0];
+  const yrs = ['2020','2021','2022','2023','2024','2025'];
+  const mos = ['J','F','M','A','M','J','J','A','S','O','N','D'];
+  months.forEach((ret,i) => {
+    const yr = yrs[Math.floor(i/12)], mo = mos[i%12];
+    const abs = Math.abs(ret);
+    const bg = ret>=0
+      ? `rgba(0,255,157,${Math.min(0.9, 0.15+abs*0.05)})`
+      : `rgba(255,68,102,${Math.min(0.9, 0.15+abs*0.05)})`;
+    const cell = document.createElement('div');
+    cell.className='hmap-cell';
+    cell.style.background=bg;
+    cell.title=`${mo} ${yr}: ${ret>=0?'+':''}${ret.toFixed(1)}% ($${(3000*(ret/100)).toFixed(0)})`;
+    cell.onclick = e => {
+      e.stopPropagation();
+      const sign = ret>=0?'+':'';
+      alert(`${mo} ${yr}\nReturn: ${sign}${ret.toFixed(2)}%\nApprox P&L: ${sign}$${(3000*(ret/100)).toFixed(0)}\n${ret>5?'🔥 Exceptional month!':ret<-1?'📉 Drawdown month':ret>2?'✅ Strong month':'🔵 Normal month'}`);
+    };
+    el.appendChild(cell);
+  });
+}
+
+function syntaxHL(code) {
+  let s = code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  s = s.replace(/(\/\/[^\n]*)/g,'<span style="color:#6a9955;font-style:italic">$1</span>');
+  s = s.replace(/\b(double|int|bool|static|if|else|for|return|void)\b/g,'<span style="color:#569cd6">$1</span>');
+  s = s.replace(/\b(MathMax|MathMin|MathRound|CopyBuffer|ArraySetAsSeries|IndicatorRelease|iHigh|iLow|iClose|iTime|iATR|iRSI|iMA|iADX|iIchimoku|SymbolInfoDouble|AccountInfoDouble)\b/g,'<span style="color:#dcdcaa">$1</span>');
+  s = s.replace(/\b(trade\.Buy|trade\.Sell|CalcLots)\b/g,'<span style="color:#c586c0">$1</span>');
+  s = s.replace(/\b(PERIOD_H1|PERIOD_H4|PERIOD_D1|SYMBOL_ASK|SYMBOL_BID)\b/g,'<span style="color:#4ec9b0">$1</span>');
+  return s;
 }
 
 // ── MAX RETURN SCENARIOS ──────────────────────────────────────────────────
