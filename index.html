@@ -237,6 +237,17 @@
   .tab-content { display: none; }
   .tab-content.active { display: block; }
 
+  /* ── DNA expanded ── */
+  .dna-card { transition: all .25s; }
+  .dna-code { background:#0a0a1a; border:1px solid var(--border); border-radius:8px;
+    padding:12px; font-family:'Cascadia Code',monospace; font-size:.68rem;
+    line-height:1.55; overflow-x:auto; max-height:200px; overflow-y:auto;
+    white-space:pre; color:#c8ffd0; }
+  .hmap-wrap { display:grid; grid-template-columns:repeat(12,1fr); gap:2px; }
+  .hmap-cell { border-radius:2px; min-height:14px; cursor:pointer; transition:opacity .15s; }
+  .hmap-cell:hover { opacity:.7; }
+  .hmap-header { font-size:.48rem; color:var(--dim); text-align:center; padding:1px 0; }
+
   /* ── Scrollbar ── */
   ::-webkit-scrollbar { width: 6px; height: 6px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
