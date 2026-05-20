@@ -577,54 +577,57 @@
   <!-- TAB: CALCULATOR -->
   <div id="tab-calculator" class="tab-content glass" style="padding:20px">
     <div class="panel-title" style="color:var(--accent)">🧮 Interactive Trading Calculators</div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:16px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px;margin-top:16px">
 
       <!-- Lot Size Calculator -->
       <div class="glass" style="padding:16px">
         <div class="panel-title">Position Size Calculator</div>
-        <div style="font-size:.8rem;margin-bottom:10px">
-          <label>Balance ($): <input id="calcBal" type="number" value="3000" style="width:80px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 6px;border-radius:4px"></label><br><br>
-          <label>Risk (%): <input id="calcRisk" type="number" value="2" step="0.5" style="width:60px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 6px;border-radius:4px"></label><br><br>
-          <label>Stop Loss (pts): <input id="calcSL" type="number" value="500" style="width:80px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 6px;border-radius:4px"></label><br><br>
-          <button class="btn" onclick="calcLotSize()">Calculate</button>
+        <div style="display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;margin-bottom:6px">
+          <div style="font-size:.8rem;line-height:2.2">
+            Balance ($): <input id="calcBal" type="number" value="3000" oninput="calcLotSize()" style="width:80px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 6px;border-radius:4px"><br>
+            Risk (%): <input id="calcRisk" type="number" value="2" step="0.5" oninput="calcLotSize()" style="width:60px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 6px;border-radius:4px"><br>
+            SL (pts): <input id="calcSL" type="number" value="500" oninput="calcLotSize()" style="width:70px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 6px;border-radius:4px">
+          </div>
+          <svg id="tradeDiagram" width="100%" viewBox="0 0 220 110" style="display:block;border-radius:6px;background:rgba(0,0,0,.3)"></svg>
         </div>
-        <div id="calcLotOut" style="margin-top:10px;font-size:.85rem"></div>
+        <div id="calcLotOut"></div>
       </div>
 
       <!-- Compounding Projector -->
       <div class="glass" style="padding:16px">
         <div class="panel-title">Compounding Projector</div>
-        <div style="font-size:.8rem;margin-bottom:10px">
-          <label>Starting ($): <input id="cpStart" type="number" value="3000" style="width:80px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 6px;border-radius:4px"></label><br><br>
-          <label>Monthly (%): <input id="cpMo" type="number" value="10" step="0.5" style="width:60px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 6px;border-radius:4px"></label><br><br>
-          <label>Months: <input id="cpMos" type="number" value="12" style="width:60px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 6px;border-radius:4px"></label><br><br>
-          <button class="btn" onclick="calcCompound()">Project</button>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:8px;font-size:.8rem">
+          Start: <input id="cpStart" type="number" value="3000" oninput="calcCompound()" style="width:72px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 5px;border-radius:4px">
+          Mo%: <input id="cpMo" type="number" value="10" step="0.5" oninput="calcCompound()" style="width:52px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 5px;border-radius:4px">
+          Months: <input id="cpMos" type="number" value="12" oninput="calcCompound()" style="width:48px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 5px;border-radius:4px">
         </div>
-        <div id="cpOut" style="margin-top:10px;font-size:.82rem;max-height:150px;overflow-y:auto"></div>
+        <div id="cpMilestones" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px"></div>
+        <canvas id="cpChart" height="160" style="display:block"></canvas>
       </div>
 
       <!-- Risk of Ruin -->
       <div class="glass" style="padding:16px">
         <div class="panel-title">Risk of Ruin</div>
-        <div style="font-size:.8rem;margin-bottom:10px">
-          <label>Win Rate (%): <input id="rorWR" type="number" value="45" style="width:60px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 6px;border-radius:4px"></label><br><br>
-          <label>RR Ratio: <input id="rorRR" type="number" value="2" step="0.5" style="width:60px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 6px;border-radius:4px"></label><br><br>
-          <label>Risk/Trade (%): <input id="rorR" type="number" value="2" step="0.5" style="width:60px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 6px;border-radius:4px"></label><br><br>
-          <button class="btn" onclick="calcRuinRisk()">Calculate</button>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <div style="font-size:.8rem;line-height:2.2;flex:0 0 auto">
+            Win Rate (%): <input id="rorWR" type="number" value="45" oninput="calcRuinRisk()" style="width:55px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 5px;border-radius:4px"><br>
+            RR Ratio: <input id="rorRR" type="number" value="2" step="0.5" oninput="calcRuinRisk()" style="width:48px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 5px;border-radius:4px"><br>
+            Risk/Trade (%): <input id="rorR" type="number" value="2" step="0.5" oninput="calcRuinRisk()" style="width:48px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 5px;border-radius:4px">
+          </div>
+          <svg id="rorGauge" viewBox="0 0 200 135" style="flex:1;display:block"></svg>
         </div>
-        <div id="rorOut" style="margin-top:10px;font-size:.85rem"></div>
+        <div id="rorOut"></div>
       </div>
 
       <!-- Monthly Target Calculator -->
       <div class="glass" style="padding:16px">
         <div class="panel-title">Target Calculator</div>
-        <div style="font-size:.8rem;margin-bottom:10px">
-          <label>Start ($): <input id="tcStart" type="number" value="3000" style="width:80px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 6px;border-radius:4px"></label><br><br>
-          <label>Target ($): <input id="tcTarget" type="number" value="30000" style="width:80px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 6px;border-radius:4px"></label><br><br>
-          <label>Months: <input id="tcMos" type="number" value="12" style="width:60px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 6px;border-radius:4px"></label><br><br>
-          <button class="btn" onclick="calcTarget()">Calculate</button>
+        <div style="font-size:.8rem;line-height:2.3;margin-bottom:8px">
+          Start ($): <input id="tcStart" type="number" value="3000" oninput="calcTarget()" style="width:78px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 6px;border-radius:4px"><br>
+          Target ($): <input id="tcTarget" type="number" value="30000" oninput="calcTarget()" style="width:78px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 6px;border-radius:4px"><br>
+          Months: <input id="tcMos" type="number" value="12" oninput="calcTarget()" style="width:55px;background:#0a0a2a;border:1px solid var(--border);color:var(--text);padding:3px 6px;border-radius:4px">
         </div>
-        <div id="tcOut" style="margin-top:10px;font-size:.85rem"></div>
+        <div id="tcOut"></div>
       </div>
     </div>
   </div>
