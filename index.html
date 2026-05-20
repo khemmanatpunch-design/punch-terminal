@@ -4,6 +4,58 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>APEX GREATEST — Tournament Dashboard</title>
+<script>
+(function(){
+  var PASS = 'P6665';
+  var KEY  = 'apex_auth';
+  if(sessionStorage.getItem(KEY) !== PASS){
+    document.addEventListener('DOMContentLoaded', function(){
+      document.body.style.display = 'none';
+      var overlay = document.createElement('div');
+      overlay.id = 'auth-overlay';
+      overlay.style.cssText = [
+        'position:fixed','inset:0','background:#050510',
+        'display:flex','flex-direction:column','align-items:center',
+        'justify-content:center','z-index:99999','font-family:monospace'
+      ].join(';');
+      overlay.innerHTML = [
+        '<div style="text-align:center;max-width:340px;padding:32px;',
+        'background:rgba(10,10,40,.9);border:1px solid rgba(100,120,255,.4);border-radius:16px">',
+        '<div style="font-size:2rem;font-weight:700;color:#ffd700;letter-spacing:3px;margin-bottom:6px">APEX GREATEST</div>',
+        '<div style="font-size:.75rem;color:#6c8fff;margin-bottom:28px">TRADING RESEARCH PLATFORM</div>',
+        '<input id="pw-input" type="password" placeholder="Enter password"',
+        ' style="width:100%;box-sizing:border-box;padding:11px 14px;font-size:1rem;',
+        'background:#0a0a2a;border:1px solid rgba(100,120,255,.5);border-radius:8px;',
+        'color:#fff;outline:none;margin-bottom:12px">',
+        '<button id="pw-btn" style="width:100%;padding:11px;font-size:1rem;font-weight:700;',
+        'background:linear-gradient(135deg,#6c8fff,#ffd700);border:none;border-radius:8px;',
+        'color:#050510;cursor:pointer">UNLOCK</button>',
+        '<div id="pw-err" style="color:#ff4466;font-size:.8rem;margin-top:10px;min-height:18px"></div>',
+        '<div style="margin-top:20px;font-size:.65rem;color:rgba(255,255,255,.3)">DEMO ONLY — NO REAL TRADES</div>',
+        '</div>'
+      ].join('');
+      document.body.appendChild(overlay);
+      document.body.style.display = '';
+      function attempt(){
+        var val = document.getElementById('pw-input').value;
+        if(val === PASS){
+          sessionStorage.setItem(KEY, PASS);
+          overlay.remove();
+        } else {
+          document.getElementById('pw-err').textContent = 'Incorrect password. Try again.';
+          document.getElementById('pw-input').value = '';
+          document.getElementById('pw-input').focus();
+        }
+      }
+      document.getElementById('pw-btn').addEventListener('click', attempt);
+      document.getElementById('pw-input').addEventListener('keydown', function(e){
+        if(e.key === 'Enter') attempt();
+      });
+      document.getElementById('pw-input').focus();
+    });
+  }
+})();
+</script>
 <style>
   :root {
     --bg:     #050510;
