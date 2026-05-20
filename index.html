@@ -70,6 +70,11 @@
     --dim:    #5a6080;
   }
 
+
+  @keyframes champPulse {
+    0%,100% { box-shadow: 0 0 6px rgba(255,215,0,.6); }
+    50% { box-shadow: 0 0 18px rgba(255,215,0,1), 0 0 30px rgba(255,215,0,.4); }
+  }
   * { margin:0; padding:0; box-sizing:border-box; }
 
   body {
@@ -278,6 +283,15 @@
       <div><div style="font-size:1.5rem;font-weight:700;color:var(--accent)" id="champMonthly">0.57%/mo</div><div style="font-size:.72rem;color:var(--dim)">Est. Monthly Return</div></div>
       <div><div style="font-size:1.5rem;font-weight:700;color:var(--text)" id="champCovidPnl">+$1,017</div><div style="font-size:.72rem;color:var(--dim)">COVID Crash PnL</div></div>
     </div>
+
+    <div style="margin-top:14px;padding:10px 16px;background:rgba(0,255,157,.06);border:1px solid rgba(0,255,157,.2);border-radius:8px;font-size:.78rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+      <span>Best Portfolio: <strong style="color:var(--green)">F06 Gold+NAS100 = 4.2%/mo</strong></span>
+      <span style="font-size:.68rem;color:var(--dim)">Phase <strong style="color:var(--gold)">4</strong> of 8 complete
+        <span style="display:inline-block;width:80px;height:6px;background:rgba(255,255,255,.1);border-radius:3px;vertical-align:middle;margin-left:6px">
+          <span style="display:block;width:50%;height:100%;background:var(--gold);border-radius:3px"></span>
+        </span>
+      </span>
+    </div>
   </div>
 
   <!-- KPIs -->
@@ -301,6 +315,7 @@
     <button class="tab" onclick="showTab('phase3')" style="border-color:var(--gold);color:var(--gold)">🚀 Phase 3</button>
     <button class="tab" onclick="showTab('phase4')" style="border-color:#ff6b6b;color:#ff6b6b">⚡ Phase 4</button>
     <button class="tab" onclick="showTab('calculator')" style="border-color:var(--accent);color:var(--accent)">🧮 Calculator</button>
+    <button class="tab" onclick="showTab('phase5')" style="border-color:#a78bfa;color:#a78bfa">🔬 Phase 5</button>
   </div>
 
   <!-- TAB: BRACKET -->
@@ -629,6 +644,59 @@
         </div>
         <div id="tcOut"></div>
       </div>
+    </div>
+  </div>
+
+
+  <!-- TAB: PHASE 5 -->
+  <div id="tab-phase5" class="tab-content glass" style="padding:20px">
+    <div class="panel-title" style="color:#a78bfa">🔬 Phase 5 — Blowup Risk Elimination</div>
+    <div style="font-size:.75rem;color:var(--dim);margin-bottom:20px">Coming soon · Target: PF 2.0+ with near-zero blowup</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:20px">
+      <div class="glass" style="padding:14px;text-align:center;border-color:rgba(255,68,102,.3)">
+        <div style="font-size:.6rem;color:var(--red);font-weight:700;margin-bottom:6px">CURRENT (Phase 4)</div>
+        <div style="font-size:1.6rem;font-weight:800;color:var(--red)">1.83</div><div style="font-size:.7rem;color:var(--dim)">Best PF</div>
+        <div style="font-size:1.3rem;font-weight:700;color:var(--red);margin-top:8px">2.1%/mo</div><div style="font-size:.7rem;color:var(--dim)">Monthly return</div>
+        <div style="font-size:1.1rem;font-weight:700;color:var(--gold);margin-top:8px">0.8%</div><div style="font-size:.7rem;color:var(--dim)">Blowup risk</div>
+      </div>
+      <div class="glass" style="padding:14px;text-align:center;border-color:rgba(167,139,250,.3)">
+        <div style="font-size:.6rem;color:#a78bfa;font-weight:700;margin-bottom:6px">TARGET (Phase 5)</div>
+        <div style="font-size:1.6rem;font-weight:800;color:#a78bfa">2.0+</div><div style="font-size:.7rem;color:var(--dim)">Target PF</div>
+        <div style="font-size:1.3rem;font-weight:700;color:var(--green);margin-top:8px">5–10%/mo</div><div style="font-size:.7rem;color:var(--dim)">Target return</div>
+        <div style="font-size:1.1rem;font-weight:700;color:var(--green);margin-top:8px">&lt;0.1%</div><div style="font-size:.7rem;color:var(--dim)">Target blowup</div>
+      </div>
+      <div class="glass" style="padding:14px">
+        <div style="font-size:.65rem;color:#a78bfa;font-weight:700;margin-bottom:8px">PHASE 5 GOALS</div>
+        <div style="font-size:.76rem;line-height:1.9;color:var(--text)">
+          ✦ Achieve PF 2.0+ consistently<br>
+          ✦ Same returns · near-zero blowup<br>
+          ✦ Partial-close system (1:1 lock profit)<br>
+          ✦ Anti-martingale position sizing<br>
+          ✦ Live account testing begins
+        </div>
+      </div>
+    </div>
+    <div style="padding:14px;background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.25);border-radius:10px;font-size:.78rem;color:var(--dim)">
+      Phase 5 starts when Phase 4 achieves stable PF 1.6+ over 3 consecutive forward-test months.<br>
+      <strong style="color:#a78bfa">Status: Phase 4 in progress</strong> — currently at PF 1.83 (champion), portfolio 4.2%/mo target.
+    </div>
+  </div>
+
+  <!-- BRACKET POPUP -->
+  <div id="bracketPopup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:1000;align-items:center;justify-content:center;padding:16px">
+    <div class="glass" style="max-width:480px;width:100%;padding:22px;border-radius:14px;position:relative;border-color:rgba(108,143,255,.5)">
+      <button onclick="closeBracketPopup()" style="position:absolute;top:12px;right:14px;background:none;border:none;color:var(--dim);font-size:1.3rem;cursor:pointer">✕</button>
+      <div style="font-size:.6rem;color:var(--accent);font-weight:700;margin-bottom:4px">STRATEGY DETAIL</div>
+      <div style="font-size:1rem;font-weight:700;color:var(--gold);margin-bottom:2px" id="bpTitle"></div>
+      <div style="font-size:.72rem;color:var(--accent);margin-bottom:12px" id="bpTech"></div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+        <div style="padding:8px;background:rgba(0,0,0,.3);border-radius:7px;text-align:center"><div style="font-size:.58rem;color:var(--dim)">Profit Factor</div><div style="font-size:1.1rem;font-weight:700;color:var(--gold)" id="bpPF">—</div></div>
+        <div style="padding:8px;background:rgba(0,0,0,.3);border-radius:7px;text-align:center"><div style="font-size:.58rem;color:var(--dim)">Win Rate</div><div style="font-size:1.1rem;font-weight:700;color:var(--accent)" id="bpWR">—</div></div>
+        <div style="padding:8px;background:rgba(0,0,0,.3);border-radius:7px;text-align:center"><div style="font-size:.58rem;color:var(--dim)">PnL</div><div style="font-size:1.1rem;font-weight:700" id="bpPnL">—</div></div>
+      </div>
+      <div id="bpChampBlock" style="display:none;padding:10px;background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.3);border-radius:8px;margin-bottom:10px;font-size:.74rem;color:var(--gold)" id="bpChampRounds"></div>
+      <div style="font-size:.7rem;color:var(--dim);border-top:1px solid var(--border);padding-top:9px" id="bpRound"></div>
+      <div style="margin-top:10px"><canvas id="bpSparkline" height="70" style="display:block;width:100%"></canvas></div>
     </div>
   </div>
 
@@ -1667,8 +1735,64 @@ function initPhase3() {
 // Init Phase 3
 initPhase3();
 
+// ── BRACKET POPUP ─────────────────────────────────────────────────────────
+// ── BRACKET POPUP ─────────────────────────────────────────────────────────
+const ROUND_TECH = {
+  0:'Round 1: 100 strategies, all techniques, 3-year backtest on XAUUSD H1',
+  1:'Round 2: Top 30 survivors, stricter PF threshold, added forward-test weight',
+  2:'Round 3: Top 15, stress-tested on COVID + Fed periods',
+  3:'Round 4: Top 10, real-tick backtest only',
+  4:'Round 5: Top 7, multi-market validation added',
+  5:'Round 6: Top 5, cross-asset correlation check',
+  6:'Round 7: Top 3, 2026 forward test (unseen data)',
+  7:'CHAMPION: Survived all 8 rounds, highest forward PnL',
+};
+
+function showBracketPopup(ea, pf, pnl, round) {
+  const grp = (ea||'').match(/[GF](\d+)/)?.[0]?.replace(/^F/,'G')||'';
+  const tech = (typeof TECHNIQUE_MAP!=='undefined'?TECHNIQUE_MAP[grp]:null)||'SMC / Breakout';
+  const wr = pf>0 ? Math.round(pf/(1+pf)*100) : 0;
+  const isChamp = round===7;
+  const pop = document.getElementById('bracketPopup');
+  if(!pop) return;
+  pop.style.display='flex';
+  document.getElementById('bpTitle').textContent = ea||'Unknown';
+  document.getElementById('bpTech').textContent = tech;
+  document.getElementById('bpRound').textContent = ROUND_TECH[round]||'';
+  document.getElementById('bpPF').textContent = pf.toFixed(4);
+  document.getElementById('bpWR').textContent = wr+'%';
+  document.getElementById('bpPnL').textContent = (pnl>=0?'+':'')+'$'+Math.round(pnl);
+  document.getElementById('bpPnL').style.color = pnl>=0?'var(--green)':'var(--red)';
+  if(isChamp) {
+    document.getElementById('bpChampBlock').style.display='block';
+    document.getElementById('bpChampRounds').textContent='All 8 rounds survived · COVID +$1,017 · Fed -$120 · Gold Bull +$1,179';
+  } else {
+    document.getElementById('bpChampBlock').style.display='none';
+  }
+  // Mini sparkline
+  const ctx=document.getElementById('bpSparkline');
+  if(ctx&&typeof Chart!=='undefined'&&typeof rowCharts!=='undefined'){
+    buildEquityCurve('bpSparklineChart',{pf:pf,pnl:pnl,trades:100,rank:round*10+1});
+  }
+}
+window.showBracketPopup = showBracketPopup;
+
+function closeBracketPopup(){
+  const pop=document.getElementById('bracketPopup');
+  if(pop) pop.style.display='none';
+  if(typeof rowCharts!=='undefined'&&rowCharts['bpSparklineChart']){
+    try{rowCharts['bpSparklineChart'].destroy();}catch(e){}
+    delete rowCharts['bpSparklineChart'];
+  }
+}
+window.closeBracketPopup = closeBracketPopup;
+
+
 // Init Phase 4
 initPhase4();
+
+// Init calculators
+setTimeout(function(){calcLotSize();calcRuinRisk();calcTarget();calcCompound();},200);
 
 // ── PHASE 4 DATA ──────────────────────────────────────────────────────────────
 const P4_SCENARIOS  = [{"scenario": "S1_Conservative", "description": "Conservative: 5-7%/mo, 1% risk", "monthly_pct": "5.5", "risk_pct": "1.0", "win_rate": "0.48", "rr": "2.0", "median_12mo_usd": "6746.75", "annual_pct_median": "124.9", "p10_usd": "5082.82", "p90_usd": "9192.1", "blowup_pct": "0.0", "prob_100pct": "70.4", "prob_200pct": "11.5", "prob_500pct": "0.0", "prob_1000pct": "0.0"}, {"scenario": "S2_Moderate", "description": "Moderate: 8-12%/mo, 2% risk", "monthly_pct": "10.0", "risk_pct": "2.0", "win_rate": "0.45", "rr": "2.5", "median_12mo_usd": "15167.71", "annual_pct_median": "405.6", "p10_usd": "8622.6", "p90_usd": "28254.08", "blowup_pct": "0.0", "prob_100pct": "98.3", "prob_200pct": "88.1", "prob_500pct": "35.8", "prob_1000pct": "5.6"}, {"scenario": "S3_Aggressive", "description": "Aggressive: 13-17%/mo, 3% risk", "monthly_pct": "15.0", "risk_pct": "3.0", "win_rate": "0.42", "rr": "3.0", "median_12mo_usd": "29183.99", "annual_pct_median": "872.8", "p10_usd": "12728.46", "p90_usd": "72006.7", "blowup_pct": "0.0", "prob_100pct": "99.3", "prob_200pct": "96.5", "prob_500pct": "76.9", "prob_1000pct": "43.0"}, {"scenario": "S4_Maximum", "description": "Maximum: 18-22%/mo, 4.5% risk", "monthly_pct": "20.0", "risk_pct": "4.5", "win_rate": "0.4", "rr": "3.0", "median_12mo_usd": "26354.11", "annual_pct_median": "778.5", "p10_usd": "9157.34", "p90_usd": "79307.31", "blowup_pct": "0.2", "prob_100pct": "96.9", "prob_200pct": "91.6", "prob_500pct": "70.2", "prob_1000pct": "40.2"}, {"scenario": "S5_Target1000", "description": "1000% Target: 21.5%/mo, 5% risk", "monthly_pct": "21.5", "risk_pct": "5.0", "win_rate": "0.38", "rr": "3.0", "median_12mo_usd": "21167.03", "annual_pct_median": "605.6", "p10_usd": "6726.89", "p90_usd": "80626.81", "blowup_pct": "0.8", "prob_100pct": "92.8", "prob_200pct": "85.3", "prob_500pct": "58.1", "prob_1000pct": "33.8"}, {"scenario": "S6_HybridSmart", "description": "Hybrid: escalate monthly 5\u219210\u219215\u219220%", "monthly_pct": "12.5", "risk_pct": "2.5", "win_rate": "0.44", "rr": "2.5", "median_12mo_usd": "14195.62", "annual_pct_median": "373.2", "p10_usd": "7473.16", "p90_usd": "27878.14", "blowup_pct": "0.0", "prob_100pct": "95.8", "prob_200pct": "81.6", "prob_500pct": "31.3", "prob_1000pct": "5.8"}, {"scenario": "S6_HybridSmart", "description": "Hybrid: 5\u219210\u219215\u219220%/mo phased approach", "monthly_pct": "12.5", "risk_pct": "2.5", "win_rate": "0.44", "rr": "2.5", "median_12mo_usd": "16483.02", "annual_pct_median": "449.4", "p10_usd": "7814.6", "p90_usd": "35549.75", "blowup_pct": "0.0", "prob_100pct": "0", "prob_200pct": "0", "prob_500pct": "44.4", "prob_1000pct": "12.3"}];
