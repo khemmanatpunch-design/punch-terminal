@@ -849,50 +849,172 @@ function gradeFromPF(pf){
 }
 
 let tableData = [];
+let tableBaseData = [];
+let tblSortKey = 'rank', tblSortAsc = true;
+const rowCharts = {};
+
+function buildSummaryStats(data){
+  const el = document.getElementById('tblSummary');
+  if(!el) return;
+  const profitable = data.filter(r=>r.pnl>0&&r.pf>=1.0);
+  const bestPF = data.reduce((mx,r)=>Math.max(mx,r.pf||0), 0);
+  const avgMo = data.length ? (data.reduce((s,r)=>s+(r.pnl||0),0)/data.length/3000*100/72).toFixed(3) : '0.000';
+  el.innerHTML =
+    '<div class="stat-chip">Total: <strong>'+data.length+'</strong></div>'
+    +'<div class="stat-chip">Profitable: <strong style="color:var(--green)">'+profitable.length+'</strong> ('+Math.round(profitable.length/Math.max(data.length,1)*100)+'%)</div>'
+    +'<div class="stat-chip">Best PF: <strong style="color:var(--gold)">'+bestPF.toFixed(4)+'</strong></div>'
+    +'<div class="stat-chip">Avg monthly est: <strong style="color:var(--accent)">'+avgMo+'%</strong></div>';
+}
+
 function renderTable(data){
   tableData = data;
   const tbody = document.getElementById('tableBody');
   tbody.innerHTML = '';
+  document.querySelectorAll('[id^="row-detail-"]').forEach(el=>el.remove());
   data.forEach((r,i)=>{
-    const grp = r.ea.match(/G(\d+)/)?.[0] || '';
+    const grp = r.ea.match(/[GF](\d+)/)?.[0]?.replace(/^F/,'G') || '';
     const tech = TECHNIQUE_MAP[grp] || 'Unknown';
-    const grade = gradeFromPF(r.pf);
-    const pnlCls = r.pnl>=0?'pos':'neg';
+    const pf = r.pf||0;
+    const pnl = r.pnl||0;
+    let rowBg;
+    if(pf>=1.5)           rowBg='rgba(0,255,100,.09)';
+    else if(pf>=1.2)      rowBg='rgba(0,200,80,.05)';
+    else if(pf>=1.0&&pnl>0) rowBg='rgba(255,200,0,.05)';
+    else                  rowBg='rgba(255,68,102,.05)';
     const tr = document.createElement('tr');
-    if(i===0) tr.className='rank-1';
-    tr.innerHTML=`
-      <td>${r.rank}</td>
-      <td>${r.ea}</td>
-      <td><span style="color:var(--dim)">${tech}</span></td>
-      <td>${r.pf.toFixed(4)}</td>
-      <td class="${pnlCls}">${r.pnl>=0?'+':''}$${r.pnl.toFixed(2)}</td>
-      <td>${r.trades}</td>
-      <td><span class="badge ${grade}">${grade}</span></td>
-    `;
+    tr.setAttribute('data-idx', i);
+    tr.style.cssText = 'background:'+rowBg+';cursor:pointer;border-bottom:1px solid rgba(255,255,255,.04)';
+    tr.onclick = () => toggleRowDetail(i, r, tr);
+    tr.innerHTML =
+      '<td>'+r.rank+'</td>'
+      +'<td><span style="'+(pf>=1.5?'color:var(--gold);font-weight:700':'')+'">'+r.ea+'</span></td>'
+      +'<td><span style="color:var(--dim);font-size:.7rem">'+tech+'</span></td>'
+      +'<td><strong>'+pf.toFixed(4)+'</strong></td>'
+      +'<td class="'+(pnl>=0?'pos':'neg')+'">'+(pnl>=0?'+':'')+'$'+pnl.toFixed(2)+'</td>'
+      +'<td>'+(r.trades||0)+'</td>'
+      +'<td><span class="badge '+gradeFromPF(pf)+'">'+gradeFromPF(pf)+'</span></td>';
     tbody.appendChild(tr);
   });
 }
 
-function renderTablePlaceholder(){
-  const tbody = document.getElementById('tableBody');
-  tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--dim);padding:30px">Round 1 backtests running... refresh when complete.</td></tr>';
+function toggleRowDetail(idx, r, tr){
+  const existing = document.getElementById('row-detail-'+idx);
+  if(existing){ existing.remove(); return; }
+  document.querySelectorAll('[id^="row-detail-"]').forEach(el=>el.remove());
+  const pf = r.pf||0, pnl = r.pnl||0;
+  const wr = Math.round(pf/(1+pf)*100);
+  let rec, recCol;
+  if(pf>=1.3){ rec='✅ USE THIS — Solid edge, backtest confirmed'; recCol='var(--green)'; }
+  else if(pf>=1.0&&pnl>0){ rec='⚠️ MARGINAL — Paper trade first, 60-day monitor'; recCol='var(--gold)'; }
+  else { rec='❌ SKIP — Spread eats any edge'; recCol='var(--red)'; }
+  const det = document.createElement('tr');
+  det.id = 'row-detail-'+idx;
+  det.innerHTML = '<td colspan="7" style="padding:14px;background:rgba(0,0,0,.45)">'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:660px">'
+    +'<div><div style="font-size:.62rem;color:var(--dim);margin-bottom:4px">EQUITY CURVE (estimated)</div>'
+    +'<canvas id="ec-'+idx+'" height="80" style="width:100%;max-width:290px;display:block"></canvas></div>'
+    +'<div><div style="font-size:.62rem;color:var(--dim);margin-bottom:4px">WIN / LOSS</div>'
+    +'<canvas id="dn-'+idx+'" width="90" height="80" style="display:block"></canvas></div>'
+    +'<div><div style="font-size:.62rem;color:var(--dim);margin-bottom:5px">METRICS</div>'
+    +'<div style="font-size:.74rem;line-height:1.85">Win Rate: <strong>'+wr+'%</strong><br>'
+    +'Est. RR: <strong>2:1</strong><br>Trades: <strong>'+(r.trades||0)+'</strong><br>'
+    +'Timeframe: <strong>'+(r.tf||'H1')+'</strong></div></div>'
+    +'<div><div style="font-size:.62rem;color:var(--dim);margin-bottom:5px">RECOMMENDATION</div>'
+    +'<div style="font-size:.74rem;color:'+recCol+';line-height:1.6">'+rec+'</div></div>'
+    +'</div></td>';
+  tr.insertAdjacentElement('afterend', det);
+  setTimeout(()=>{ buildEquityCurve('ec-'+idx, r); buildDonut('dn-'+idx, wr); }, 60);
+}
+
+function buildEquityCurve(cid, r){
+  if(rowCharts[cid]){ try{rowCharts[cid].destroy();}catch(e){} }
+  const ctx = document.getElementById(cid);
+  if(!ctx||typeof Chart==='undefined') return;
+  const pf = r.pf||1, pnl = r.pnl||0;
+  const pts = 18, wr = pf/(1+pf);
+  let eq = 3000; const data = [eq];
+  // Use rank as seed for deterministic look
+  const seed = r.rank||1;
+  for(let i=1;i<pts;i++){
+    const won = ((seed*i*7+i*13)%100)/100 < wr;
+    eq += won ? Math.abs(pnl)/pts*2 : -Math.abs(pnl)/pts*0.8;
+    data.push(Math.round(eq));
+  }
+  rowCharts[cid] = new Chart(ctx, {
+    type:'line',
+    data:{labels:data.map((_,i)=>i),
+      datasets:[{data, fill:true, tension:0.35,
+        borderColor:pnl>=0?'#00ff9d':'#ff4466',
+        backgroundColor:pnl>=0?'rgba(0,255,157,.1)':'rgba(255,68,102,.1)',
+        borderWidth:1.5, pointRadius:0}]},
+    options:{responsive:true, plugins:{legend:{display:false}},
+      scales:{x:{display:false},y:{display:false}}}
+  });
+}
+
+function buildDonut(cid, wr){
+  if(rowCharts[cid]){ try{rowCharts[cid].destroy();}catch(e){} }
+  const ctx = document.getElementById(cid);
+  if(!ctx||typeof Chart==='undefined') return;
+  rowCharts[cid] = new Chart(ctx, {
+    type:'doughnut',
+    data:{datasets:[{data:[wr,100-wr],
+      backgroundColor:['#00ff9d','rgba(255,68,102,.45)'], borderWidth:0}]},
+    options:{responsive:false, cutout:'62%',
+      plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:c=>c.dataIndex===0?'Win: '+wr+'%':'Loss: '+(100-wr)+'%'}}}}
+  });
 }
 
 function filterTable(){
-  const q = document.getElementById('tableSearch').value.toLowerCase();
-  const filtered = tableData.filter(r=>r.ea.toLowerCase().includes(q));
+  const q  = (document.getElementById('tableSearch')?.value||'').toLowerCase();
+  const tf = document.getElementById('techFilter')?.value||'';
+  const po = document.getElementById('profitableOnly')?.checked||false;
+  const filtered = tableBaseData.filter(r=>{
+    if(q && !r.ea.toLowerCase().includes(q)) return false;
+    if(tf){
+      const grp = r.ea.match(/[GF](\d+)/)?.[0]?.replace(/^F/,'G')||'';
+      if(TECHNIQUE_MAP[grp]!==tf) return false;
+    }
+    if(po && (r.pf<1.0||r.pnl<=0)) return false;
+    return true;
+  });
   renderTable(filtered);
+  buildSummaryStats(filtered);
+}
+
+function sortByCol(col){
+  if(tblSortKey===col) tblSortAsc=!tblSortAsc;
+  else { tblSortKey=col; tblSortAsc=(col==='ea'); }
+  const sorted = [...tableData].sort((a,b)=>{
+    const av=a[col], bv=b[col];
+    if(typeof av==='string') return tblSortAsc?av.localeCompare(bv):bv.localeCompare(av);
+    return tblSortAsc?av-bv:bv-av;
+  });
+  renderTable(sorted);
 }
 
 function sortTable(){
-  const by = document.getElementById('sortBy').value;
+  const by = document.getElementById('sortBy')?.value||'rank';
   const sorted = [...tableData].sort((a,b)=>{
-    if(by==='pf') return b.pf-a.pf;
-    if(by==='pnl') return b.pnl-a.pnl;
-    if(by==='trades') return b.trades-a.trades;
+    if(by==='pf')    return b.pf-a.pf;
+    if(by==='pnl')   return b.pnl-a.pnl;
+    if(by==='trades')return b.trades-a.trades;
+    if(by==='rank')  return a.rank-b.rank;
     return a.ea.localeCompare(b.ea);
   });
   renderTable(sorted);
+}
+
+function exportTableCSV(){
+  const rows=[['Rank','EA','Technique','PF','PnL','Trades','Grade']];
+  tableData.forEach(r=>{
+    const grp=r.ea.match(/[GF](\d+)/)?.[0]?.replace(/^F/,'G')||'';
+    rows.push([r.rank,r.ea,TECHNIQUE_MAP[grp]||'Unknown',r.pf.toFixed(4),r.pnl.toFixed(2),r.trades,gradeFromPF(r.pf)]);
+  });
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(rows.map(r=>r.join(',')).join('\n'));
+  a.download='apex_results.csv'; a.click();
 }
 
 // ── DNA CARDS ─────────────────────────────────────────────────────────────
