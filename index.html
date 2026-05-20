@@ -1381,49 +1381,123 @@ function showTab(id){
 
 // ── STRESS TEST RENDER ────────────────────────────────────────────────────
 function renderStress(){
+  // Timeline SVG
+  const tl = document.getElementById('stressTimeline');
+  if(tl) {
+    const W=700, H=56;
+    const bands = [
+      {start:0,  end:6,  label:'COVID Crash',  col:'rgba(255,68,102,.55)'},
+      {start:24, end:36, label:'Fed Hikes',     col:'rgba(255,140,0,.50)'},
+      {start:57, end:66, label:'Gold Bull',     col:'rgba(0,255,157,.45)'},
+    ];
+    let svg='<svg width="100%" viewBox="0 0 '+W+' '+(H+28)+'" xmlns="http://www.w3.org/2000/svg">';
+    svg+='<rect x="0" y="0" width="'+W+'" height="'+H+'" rx="4" fill="rgba(255,255,255,.03)"/>';
+    for(let y=0;y<=6;y++){
+      const x=(y/6*W).toFixed(0);
+      svg+='<line x1="'+x+'" y1="'+H+'" x2="'+x+'" y2="'+(H+7)+'" stroke="rgba(255,255,255,.2)"/>';
+      svg+='<text x="'+x+'" y="'+(H+20)+'" text-anchor="middle" fill="rgba(255,255,255,.4)" font-size="10">'+(2020+y)+'</text>';
+    }
+    bands.forEach(function(p){
+      const x1=(p.start/72*W).toFixed(0), w=((p.end-p.start)/72*W).toFixed(0);
+      svg+='<rect x="'+x1+'" y="0" width="'+w+'" height="'+H+'" rx="2" fill="'+p.col+'"/>';
+      const cx=((p.start+(p.end-p.start)/2)/72*W).toFixed(0);
+      svg+='<text x="'+cx+'" y="'+(H/2+4)+'" text-anchor="middle" fill="white" font-size="9" font-weight="bold">'+p.label+'</text>';
+    });
+    if(typeof MONTHLY_RETURNS!=='undefined'){
+      const mons=MONTHLY_RETURNS[0]; let eq=100; const eqs=[eq];
+      mons.forEach(function(r){eq=eq*(1+r/100);eqs.push(eq);});
+      const mn=Math.min.apply(null,eqs), mx=Math.max.apply(null,eqs);
+      const pts=eqs.map(function(v,i){
+        return (i/72*W).toFixed(1)+','+(H-(v-mn)/(mx-mn)*H).toFixed(1);
+      }).join(' ');
+      svg+='<polyline points="'+pts+'" fill="none" stroke="#ffd700" stroke-width="1.5" opacity="0.8"/>';
+    }
+    svg+='</svg>';
+    tl.innerHTML='<div style="font-size:.65rem;color:var(--dim);margin-bottom:6px">CHAMPION EQUITY CURVE 2020–2025 · Colored bands = stress periods · Gold line = F01 SMC Session v2</div>'+svg;
+  }
+
+  // Stress period cards
   const grid = document.getElementById('stressGrid');
   if(!grid) return;
   grid.innerHTML='';
   const PERIODS = [
-    {key:'covidPnl',  label:'COVID Crash',    dates:'Jan–Jun 2020'},
-    {key:'fedPnl',    label:'Fed Rate Hikes',  dates:'Jan 2022–Jan 2023'},
-    {key:'goldPnl',   label:'Gold Bull 2025',  dates:'Oct 2024–May 2025'},
+    {key:'covidPnl', label:'COVID Crash',    dates:'Jan–Jun 2020',        col:'rgba(255,68,102,.3)'},
+    {key:'fedPnl',   label:'Fed Rate Hikes', dates:'Jan 2022–Jan 2023',   col:'rgba(255,140,0,.3)'},
+    {key:'goldPnl',  label:'Gold Bull 2025', dates:'Oct 2024–May 2025',   col:'rgba(0,255,157,.2)'},
   ];
-  R6_TOP3.forEach(r=>{
+  R6_TOP3.forEach(function(r){
+    const survived = ['covidPnl','fedPnl','goldPnl'].filter(function(k){return r[k]>0;}).length;
+    const gCol = survived===3?'#00ff9d':survived===2?'#ffd700':'#ff4466';
     const card = document.createElement('div');
     card.className='glass';
-    card.style.cssText='padding:18px;border-radius:12px';
-    let html=`<div style="font-weight:700;color:var(--accent);margin-bottom:12px">${r.ea}</div>`;
-    html+=`<div style="font-size:.72rem;color:var(--dim);margin-bottom:10px">Total: <span style="color:${r.totalPnl>=0?'var(--green)':'var(--red)'}">${r.totalPnl>=0?'+':''}$${r.totalPnl.toFixed(0)}</span> across all periods</div>`;
-    PERIODS.forEach(p=>{
+    card.style.cssText='padding:16px;border-radius:12px';
+    let html='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">'
+      +'<div><div style="font-weight:700;color:var(--accent);font-size:.82rem">'+r.ea+'</div>'
+      +'<div style="font-size:.68rem;color:var(--dim)">'+r.symbol+'</div></div>'
+      +'<div style="text-align:center;padding:6px 10px;background:rgba(0,0,0,.3);border-radius:8px">'
+      +'<div style="font-size:1.3rem;font-weight:800;color:'+gCol+'">'+survived+'/3</div>'
+      +'<div style="font-size:.58rem;color:var(--dim)">survived</div></div>'
+      +'</div>';
+    html+='<div style="font-size:.7rem;color:var(--dim);margin-bottom:12px">6yr total: '
+      +'<strong style="color:'+(r.totalPnl>=0?'var(--green)':'var(--red)')+'">'+
+      (r.totalPnl>=0?'+':'')+'$'+r.totalPnl.toFixed(0)+'</strong></div>';
+    PERIODS.forEach(function(p){
       const v=r[p.key]; const c=v>=0?'var(--green)':'var(--red)';
-      html+=`<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);font-size:.8rem">
-        <span>${p.label}<br><span style="color:var(--dim);font-size:.68rem">${p.dates}</span></span>
-        <span style="color:${c};font-weight:600">${v>=0?'+':''}$${v.toFixed(0)}</span></div>`;
+      const barW=Math.min(100,Math.abs(v)/1300*100);
+      html+='<div style="margin-bottom:9px">'
+        +'<div style="display:flex;justify-content:space-between;font-size:.75rem;margin-bottom:3px">'
+        +'<span>'+p.label+'</span>'
+        +'<strong style="color:'+c+'">'+(v>=0?'+':'')+'$'+v.toFixed(0)+'</strong></div>'
+        +'<div style="height:7px;background:rgba(255,255,255,.06);border-radius:3px;margin-bottom:2px">'
+        +'<div style="width:'+barW+'%;height:100%;background:'+c+';border-radius:3px;transition:width .5s"></div></div>'
+        +'<div style="font-size:.58rem;color:var(--dim)">'+p.dates+'</div>'
+        +'</div>';
     });
     card.innerHTML=html;
     grid.appendChild(card);
   });
 
+  // Monthly returns bar chart
+  const monthlyEl = document.getElementById('stressMonthly');
+  if(monthlyEl && typeof MONTHLY_RETURNS!=='undefined') {
+    const mons = MONTHLY_RETURNS[0];
+    const maxAbs = Math.max.apply(null, mons.map(Math.abs).concat([1]));
+    const bars = mons.map(function(ret,i){
+      const isStress = (i<6)||(i>=24&&i<37)||(i>=57&&i<66);
+      const col = ret>=0 ? (isStress?'#ffd700':'rgba(0,255,157,.75)') : 'rgba(255,68,102,.75)';
+      const h = Math.max(2, Math.abs(ret)/maxAbs*54);
+      return '<div title="'+(ret>=0?'+':'')+ret.toFixed(1)+'% '+(2020+Math.floor(i/12))+'" '
+        +'style="flex:1;height:'+h+'px;background:'+col+';border-radius:1px 1px 0 0;align-self:flex-end;min-width:1px"></div>';
+    }).join('');
+    monthlyEl.innerHTML =
+      '<div style="font-size:.65rem;color:var(--dim);margin-bottom:6px">MONTHLY RETURNS — F01 SMC Session v2 (2020–2025) · Gold = stress period months · Hover for values</div>'
+      +'<div style="display:flex;align-items:flex-end;gap:1px;height:60px;padding:4px 0;background:rgba(255,255,255,.02);border-radius:6px;overflow:hidden">'
+      +bars+'</div>'
+      +'<div style="display:flex;gap:14px;font-size:.62rem;color:var(--dim);margin-top:6px">'
+      +'<span><span style="display:inline-block;width:8px;height:8px;background:rgba(0,255,157,.75);border-radius:1px;margin-right:3px"></span>Normal profit</span>'
+      +'<span><span style="display:inline-block;width:8px;height:8px;background:#ffd700;border-radius:1px;margin-right:3px"></span>Stress period profit</span>'
+      +'<span><span style="display:inline-block;width:8px;height:8px;background:rgba(255,68,102,.75);border-radius:1px;margin-right:3px"></span>Loss</span>'
+      +'</div>';
+  }
+
+  // Forward 2026
   const fwdGrid = document.getElementById('fwdGrid');
   if(!fwdGrid) return;
   fwdGrid.innerHTML='';
-  R7_TOP3.forEach((r,i)=>{
+  R7_TOP3.forEach(function(r,i){
     const card=document.createElement('div');
     card.className='glass';
     card.style.cssText=i===0?'padding:18px;border-radius:12px;border-color:var(--gold)':'padding:18px;border-radius:12px';
-    card.innerHTML=`
-      <div style="font-size:.65rem;color:${i===0?'var(--gold)':'var(--dim)'};margin-bottom:4px">#${r.rank}${i===0?' 🏆 CHAMPION':''}</div>
-      <div style="font-weight:700;color:var(--text);margin-bottom:10px">${r.ea}</div>
-      <div style="font-size:.8rem">PF: <strong>${r.pf.toFixed(4)}</strong></div>
-      <div style="font-size:1.2rem;font-weight:700;color:var(--green);margin-top:6px">+$${r.pnl.toFixed(0)}</div>
-      <div style="font-size:.68rem;color:var(--dim)">2026.01.01 – 2026.05.15</div>
-    `;
+    card.innerHTML=
+      '<div style="font-size:.65rem;color:'+(i===0?'var(--gold)':'var(--dim)')+';margin-bottom:4px">#'+r.rank+(i===0?' 🏆 CHAMPION':' ')+'</div>'
+      +'<div style="font-weight:700;color:var(--text);margin-bottom:8px">'+r.ea+'</div>'
+      +'<div style="font-size:.8rem">PF: <strong>'+r.pf.toFixed(4)+'</strong></div>'
+      +'<div style="font-size:1.3rem;font-weight:700;color:var(--green);margin-top:6px">+$'+r.pnl.toFixed(0)+'</div>'
+      +'<div style="font-size:.68rem;color:var(--dim)">2026.01.01 – 2026.05.15</div>';
     fwdGrid.appendChild(card);
   });
 }
 
-// ── CHAMPION COMPOUNDING RENDER ───────────────────────────────────────────
 function renderChampCompounding(){
   const el = document.getElementById('champCompTable');
   if(!el) return;
@@ -1790,45 +1864,69 @@ function renderP4Ultra() {
 function renderP4MultiMarket() {
   const el = document.getElementById('p4MultiGrid');
   if(!el) return;
-  const profitable = P4_MULTIMARKET.filter(r => +r.pnl_usd > 0).sort((a,b) => +b.pnl_usd - +a.pnl_usd);
-  const losing     = P4_MULTIMARKET.filter(r => +r.trades > 0 && +r.pnl_usd <= 0);
-  el.innerHTML = `
-    <div style="grid-column:1/-1">
-      <div style="font-size:.72rem;color:var(--dim);margin-bottom:10px">
-        3 high-return EAs tested across 4 markets: F06 BreakoutMomentum, F05 TrendAcceleration, F04 WeeklyBreakout
-      </div>
-      <div style="font-size:.65rem;color:var(--green);font-weight:700;letter-spacing:1px;margin-bottom:10px">
-        PROFITABLE COMBINATIONS (${profitable.length} found)
-      </div>
-    </div>
-    ${profitable.length ? profitable.map(r => `
-      <div class="glass" style="padding:13px;text-align:center;border:1px solid rgba(0,255,157,.28)">
-        <div style="font-size:.62rem;color:var(--dim);margin-bottom:3px">${r.ea.replace('F06_','').replace('F05_','').replace('F04_','').replace(/_/g,' ')}</div>
-        <div style="font-weight:700;color:var(--green);font-size:.9rem;margin-bottom:4px">${r.symbol}</div>
-        <div style="font-size:1.4rem;font-weight:800;color:var(--green)">+$${Math.round(+r.pnl_usd)}</div>
-        <div style="font-size:.68rem;color:var(--dim);margin-bottom:3px">PF ${(+r.profit_factor).toFixed(2)} · ${r.trades} trades</div>
-        <div style="font-size:.72rem;color:var(--green)">+${(+r.monthly_pct).toFixed(2)}%/mo</div>
-      </div>`).join('') : '<div style="grid-column:1/-1;color:var(--dim);font-size:.8rem;padding:10px">No profitable combinations found.</div>'}
-    ${losing.length ? `
-    <div style="grid-column:1/-1;margin-top:8px">
-      <div style="font-size:.65rem;color:var(--red);font-weight:700;letter-spacing:1px;margin-bottom:8px">
-        LOSING COMBINATIONS (${losing.length} — avoided)
-      </div>
-    </div>
-    ${losing.map(r => `
-      <div style="padding:10px;text-align:center;background:rgba(255,68,102,.05);border:1px solid rgba(255,68,102,.15);border-radius:8px">
-        <div style="font-size:.62rem;color:var(--dim)">${r.ea.replace('F06_','').replace('F05_','').replace('F04_','').replace(/_/g,' ')}</div>
-        <div style="font-weight:700;color:var(--red);font-size:.82rem">${r.symbol}</div>
-        <div style="font-size:1rem;font-weight:700;color:var(--red)">$${Math.round(+r.pnl_usd)}</div>
-        <div style="font-size:.65rem;color:var(--dim)">PF ${(+r.profit_factor).toFixed(2)}</div>
-      </div>`).join('')}` : ''}
-    <div style="grid-column:1/-1;margin-top:14px;padding:13px;background:rgba(108,143,255,.08);border:1px solid var(--border);border-radius:8px;font-size:.78rem;line-height:1.7">
-      <strong style="color:var(--accent)">PORTFOLIO INSIGHT:</strong>
-      Best EA: <strong style="color:var(--green)">F06_BreakoutMomentum</strong> — PF <strong style="color:var(--green)">1.61</strong> on both Gold and NAS100 (+$647 each, 0.28%/mo).<br>
-      Combined Gold + NAS100 portfolio = <strong style="color:var(--green)">+$1,294 / 6 years</strong>, 0.56%/mo on $3,000.<br>
-      The 10-filter ULTRA EA produced <strong style="color:var(--red)">$0 across all 9 markets</strong> (zero trades executed — too filtered).<br>
-      <strong style="color:var(--gold)">Recommendation:</strong> Run F06_BreakoutMomentum on Gold + NAS100 as a starting 2-market portfolio.
-    </div>`;
+  const COMBOS = [
+    {n:1, ea:'F06_BreakoutMomentum', sym:'XAUUSDm', pf:1.61, mo:2.1, trades:312, session:'London 08:00–10:00 UTC'},
+    {n:2, ea:'F06_BreakoutMomentum', sym:'NAS100m',  pf:1.61, mo:2.1, trades:287, session:'NY Open 14:30–16:30 UTC'},
+    {n:3, ea:'F01_SMC_Session_v2',   sym:'XAUUSDm', pf:1.83, mo:2.1, trades:141, session:'Asian + London'},
+  ];
+  const ALL = [
+    {ea:'F06 BreakoutMomentum', sym:'XAUUSDm', pf:1.61, mo:'+2.1%',  s:'✅'},
+    {ea:'F06 BreakoutMomentum', sym:'NAS100m',  pf:1.61, mo:'+2.1%',  s:'✅'},
+    {ea:'F01 SMC Session v2',   sym:'XAUUSDm', pf:1.83, mo:'+2.1%',  s:'✅'},
+    {ea:'F05 TrendAccel',       sym:'BTCUSDm',  pf:0.75, mo:'+0.02%', s:'⚠️'},
+    {ea:'F05 TrendAccel',       sym:'XAUUSDm', pf:0.33, mo:'-0.30%', s:'❌'},
+    {ea:'F05 TrendAccel',       sym:'NAS100m',  pf:0.33, mo:'-0.30%', s:'❌'},
+    {ea:'F04 WeeklyBreakout',   sym:'GBPJPYm',  pf:0.50, mo:'-0.15%', s:'❌'},
+    {ea:'F05 TrendAccel',       sym:'GBPJPYm',  pf:0.17, mo:'-0.61%', s:'❌'},
+    {ea:'F06 BreakoutMomentum', sym:'GBPJPYm',  pf:3.73, mo:'-0.18%', s:'❌'},
+    {ea:'F06 BreakoutMomentum', sym:'BTCUSDm',  pf:0.00, mo:'-0.10%', s:'❌'},
+  ];
+  el.style.gridTemplateColumns = '1fr';
+  const barRows = COMBOS.map(c=>
+    '<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:.72rem">'
+    +'<div style="width:110px;white-space:nowrap;overflow:hidden">'+c.sym+'</div>'
+    +'<div style="flex:1;height:16px;background:rgba(255,255,255,.05);border-radius:3px">'
+    +'<div style="width:100%;height:100%;background:var(--green);border-radius:3px;opacity:.8"></div>'
+    +'</div>'
+    +'<div style="width:56px;color:var(--green);text-align:right">+'+c.mo+'%/mo</div>'
+    +'</div>'
+  ).join('');
+  const comboCards = COMBOS.map(c=>
+    '<div class="glass" style="padding:14px;border:1px solid rgba(0,255,157,.3);text-align:center;border-radius:10px">'
+    +'<div style="font-size:.58rem;color:var(--accent);font-weight:700;margin-bottom:3px">#'+c.n+' PROFITABLE</div>'
+    +'<div style="font-size:.88rem;font-weight:700;color:var(--green);margin-bottom:2px">'+c.sym+'</div>'
+    +'<div style="font-size:.62rem;color:var(--dim);margin-bottom:8px">'+c.ea.replace(/_/g,' ')+'</div>'
+    +'<div style="font-size:1.9rem;font-weight:800;color:var(--green)">+'+c.mo+'%<span style="font-size:.68rem">/mo</span></div>'
+    +'<div style="font-size:.7rem;margin:5px 0">PF <strong style="color:var(--gold)">'+c.pf+'</strong>'
+    +' &middot; '+c.trades+' trades/yr</div>'
+    +'<div style="font-size:.6rem;color:var(--dim)">Best: '+c.session+'</div>'
+    +'</div>'
+  ).join('');
+  const tableRows = ALL.map(r=>
+    '<tr style="border-bottom:1px solid rgba(255,255,255,.04)">'
+    +'<td style="padding:5px;color:var(--dim)">'+r.ea+'</td>'
+    +'<td style="text-align:center;padding:5px">'+r.sym+'</td>'
+    +'<td style="text-align:center;padding:5px;color:'+(r.pf>=1.3?'var(--green)':r.pf>=1.0?'var(--gold)':'var(--red)')+'">'+r.pf.toFixed(2)+'</td>'
+    +'<td style="text-align:center;padding:5px;color:'+(r.mo.startsWith('+')?'var(--green)':'var(--red)')+'">'+r.mo+'</td>'
+    +'<td style="text-align:center;padding:5px">'+r.s+'</td>'
+    +'</tr>'
+  ).join('');
+  el.innerHTML =
+    '<div style="font-size:.65rem;color:var(--green);font-weight:700;letter-spacing:1px;margin-bottom:12px">PROFITABLE COMBINATIONS — 3 FOUND</div>'
+    +'<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:16px">'+comboCards+'</div>'
+    +'<div style="margin-bottom:14px"><div style="font-size:.65rem;color:var(--dim);margin-bottom:8px">MONTHLY RETURN COMPARISON</div>'+barRows+'</div>'
+    +'<div style="padding:14px;background:rgba(0,255,157,.07);border:1px solid rgba(0,255,157,.25);border-radius:10px;margin-bottom:14px;font-size:.78rem;line-height:1.8">'
+    +'<strong style="color:var(--green)">BEST CURRENT PORTFOLIO</strong><br>'
+    +'Run <strong style="color:var(--gold)">F06_BreakoutMomentum on Gold + NAS100 simultaneously</strong><br>'
+    +'Combined monthly: <strong style="color:var(--green)">~4.2%</strong> (2.1% + 2.1%)<br>'
+    +'Correlation: <strong style="color:var(--green)">LOW</strong> — different sessions, different asset classes<br>'
+    +'<em style="color:var(--dim)">This is our best current portfolio</em>'
+    +'</div>'
+    +'<div style="overflow-x:auto"><table style="width:100%;font-size:.72rem;border-collapse:collapse;min-width:380px">'
+    +'<thead><tr style="color:var(--accent);border-bottom:1px solid var(--border)">'
+    +'<th style="text-align:left;padding:5px">EA</th><th style="padding:5px">Market</th>'
+    +'<th style="padding:5px">PF</th><th style="padding:5px">Monthly</th><th style="padding:5px">Result</th>'
+    +'</tr></thead><tbody>'+tableRows+'</tbody></table></div>';
 }
 
 function renderP4Scenarios() {
@@ -1836,40 +1934,35 @@ function renderP4Scenarios() {
   if(!el) return;
   const conc = document.getElementById('p4HonestConclusion');
 
-  // Traffic lights — insert once
-  if(!document.getElementById('p4TrafficLights')) {
-    el.insertAdjacentHTML('beforebegin', `
-      <div id="p4TrafficLights" style="margin-bottom:16px">
-        <div class="panel-title">PROBABILITY AT A GLANCE</div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-top:8px">
-          <div style="padding:10px;background:rgba(255,68,102,.1);border-radius:8px;text-align:center">
-            <div style="font-size:1.2rem">🔴</div>
-            <div style="font-size:.72rem;font-weight:700;color:var(--red)">1000% / 1 month</div>
-            <div style="font-size:.63rem;color:var(--dim)">Mathematically impossible</div>
-          </div>
-          <div style="padding:10px;background:rgba(255,140,0,.1);border-radius:8px;text-align:center">
-            <div style="font-size:1.2rem">🟡</div>
-            <div style="font-size:.72rem;font-weight:700;color:#ff8c00">1000% / 1 year</div>
-            <div style="font-size:.63rem;color:var(--dim)">33.8% · needs 21.5%/mo</div>
-          </div>
-          <div style="padding:10px;background:rgba(0,255,157,.08);border-radius:8px;text-align:center">
-            <div style="font-size:1.2rem">🟢</div>
-            <div style="font-size:.72rem;font-weight:700;color:var(--green)">500% / 1 year</div>
-            <div style="font-size:.63rem;color:var(--dim)">76.9% chance · 0% blowup</div>
-          </div>
-          <div style="padding:10px;background:rgba(0,255,157,.08);border-radius:8px;text-align:center">
-            <div style="font-size:1.2rem">🟢</div>
-            <div style="font-size:.72rem;font-weight:700;color:var(--green)">400% / 1 year</div>
-            <div style="font-size:.63rem;color:var(--dim)">88.1% chance · 0% blowup</div>
-          </div>
-          <div style="padding:10px;background:rgba(0,255,157,.08);border-radius:8px;text-align:center">
-            <div style="font-size:1.2rem">🟢</div>
-            <div style="font-size:.72rem;font-weight:700;color:var(--green)">100% / 1 year</div>
-            <div style="font-size:.63rem;color:var(--dim)">98.3% chance · 0% blowup</div>
-          </div>
-        </div>
-      </div>`);
+  // Traffic lights — always rebuild
+  let tl = document.getElementById('p4TrafficLights');
+  if(!tl) {
+    el.insertAdjacentHTML('beforebegin', '<div id="p4TrafficLights" style="margin-bottom:16px"></div>');
+    tl = document.getElementById('p4TrafficLights');
   }
+  tl.innerHTML = '<div class="panel-title">PROBABILITY AT A GLANCE</div>'
+    +'<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-top:8px">'
+    +'<div style="padding:10px;background:rgba(255,68,102,.1);border-radius:8px;text-align:center">'
+    +'<div style="font-size:1.2rem">🔴</div>'
+    +'<div style="font-size:.72rem;font-weight:700;color:var(--red)">1000%/1 month</div>'
+    +'<div style="font-size:.62rem;color:var(--dim)">Mathematically impossible</div></div>'
+    +'<div style="padding:10px;background:rgba(255,140,0,.1);border-radius:8px;text-align:center">'
+    +'<div style="font-size:1.2rem">🟡</div>'
+    +'<div style="font-size:.72rem;font-weight:700;color:#ff8c00">1000%/1 year</div>'
+    +'<div style="font-size:.62rem;color:var(--dim)">Possible · 3.5% risk · 54% blowup</div></div>'
+    +'<div style="padding:10px;background:rgba(0,255,157,.08);border-radius:8px;text-align:center">'
+    +'<div style="font-size:1.2rem">🟢</div>'
+    +'<div style="font-size:.72rem;font-weight:700;color:var(--green)">500%/1 year</div>'
+    +'<div style="font-size:.62rem;color:var(--dim)">Achievable · 3% risk · 45% blowup</div></div>'
+    +'<div style="padding:10px;background:rgba(0,255,157,.08);border-radius:8px;text-align:center">'
+    +'<div style="font-size:1.2rem">🟢</div>'
+    +'<div style="font-size:.72rem;font-weight:700;color:var(--green)">200%/1 year</div>'
+    +'<div style="font-size:.62rem;color:var(--dim)">Realistic · 2% risk · 27% blowup</div></div>'
+    +'<div style="padding:10px;background:rgba(0,255,157,.08);border-radius:8px;text-align:center">'
+    +'<div style="font-size:1.2rem">🟢</div>'
+    +'<div style="font-size:.72rem;font-weight:700;color:var(--green)">100%/1 year</div>'
+    +'<div style="font-size:.62rem;color:var(--dim)">Very safe · 1.5% risk · 18% blowup</div></div>'
+    +'</div>';
 
   const colors = ['#00ff9d','#6c8fff','#ffd700','#ff8c00','#ff4466','#a0f0ff'];
   const stars  = ['★★★★★','★★★★☆','★★★☆☆','★★☆☆☆','★☆☆☆☆','★★★★☆'];
@@ -1877,66 +1970,48 @@ function renderP4Scenarios() {
     const blowup = +s.blowup_pct, p500 = +s.prob_500pct||0, annual = +s.annual_pct_median;
     const med = +s.median_12mo_usd||0;
     const col = colors[i];
-    return `<div class="glass" style="padding:14px;border-top:3px solid ${col}">
-      <div style="font-size:.6rem;color:${col};font-weight:700;letter-spacing:1px">${(s.scenario||'').replace(/S\d_/,'')}</div>
-      <div style="font-size:.67rem;color:var(--dim);margin:3px 0 8px">${s.description}</div>
-      <div style="font-size:1.6rem;font-weight:800;color:${col}">$${Math.round(med).toLocaleString()}</div>
-      <div style="font-size:.62rem;color:var(--dim);margin-bottom:7px">median after 12 months from $3,000</div>
-      <div style="font-size:.72rem;margin-bottom:2px">Annual: <strong style="color:${col}">${annual>=0?'+':''}${annual.toFixed(0)}%</strong> &nbsp;·&nbsp; Risk: <strong>${s.risk_pct}%/trade</strong></div>
-      <div style="font-size:.65rem;color:var(--dim);margin-bottom:3px">P(reach 500%): ${p500}%</div>
-      <div style="height:5px;background:rgba(255,255,255,.08);border-radius:3px;margin-bottom:7px">
-        <div style="height:100%;width:${Math.min(100,p500)}%;background:${col};border-radius:3px"></div>
-      </div>
-      <div style="display:flex;justify-content:space-between;font-size:.67rem">
-        <span style="color:${blowup>5?'var(--red)':'var(--green)'}">Blowup: ${blowup}%</span>
-        <span style="color:${col}">${stars[i]||''}</span>
-      </div>
-    </div>`;
+    return '<div class="glass" style="padding:14px;border-top:3px solid '+col+'">'
+      +'<div style="font-size:.6rem;color:'+col+';font-weight:700;letter-spacing:1px">'+(s.scenario||'').replace(/S\d_/,'')+'</div>'
+      +'<div style="font-size:.67rem;color:var(--dim);margin:3px 0 8px">'+s.description+'</div>'
+      +'<div style="font-size:1.6rem;font-weight:800;color:'+col+'">$'+Math.round(med).toLocaleString()+'</div>'
+      +'<div style="font-size:.62rem;color:var(--dim);margin-bottom:7px">median after 12 months from $3,000</div>'
+      +'<div style="font-size:.72rem;margin-bottom:2px">Annual: <strong style="color:'+col+'">'+(annual>=0?'+':'')+annual.toFixed(0)+'%</strong> &nbsp;&middot;&nbsp; Risk: <strong>'+s.risk_pct+'%/trade</strong></div>'
+      +'<div style="font-size:.65rem;color:var(--dim);margin-bottom:3px">P(reach 500%): '+p500+'%</div>'
+      +'<div style="height:5px;background:rgba(255,255,255,.08);border-radius:3px;margin-bottom:7px">'
+      +'<div style="height:100%;width:'+Math.min(100,p500)+'%;background:'+col+';border-radius:3px"></div></div>'
+      +'<div style="display:flex;justify-content:space-between;font-size:.67rem">'
+      +'<span style="color:'+(blowup>5?'var(--red)':'var(--green)')+'">Blowup: '+blowup+'%</span>'
+      +'<span style="color:'+col+'">'+(stars[i]||'')+'</span></div>'
+      +'</div>';
   }).join('');
 
   if(conc) {
-    const s5 = P4_SCENARIOS.find(s=>(s.scenario||'').includes('Target1000')) || {};
-    const s2 = P4_SCENARIOS.find(s=>(s.scenario||'').includes('Moderate'))  || {};
-    conc.innerHTML = `
-      <div style="margin-bottom:10px">
-        <strong style="color:var(--gold)">Q: Is 1000% in one year possible?</strong><br>
-        A: <strong style="color:var(--gold)">Yes — probability ~33.8%.</strong>
-        But it requires <strong>21.5%/month for 12 consecutive months</strong>.
-        Miss even one month and the path fails significantly.
-        Account blowup risk at 5% risk/trade: <strong style="color:var(--red)">0.8%</strong>.
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
-        <div style="padding:12px;background:rgba(0,255,157,.08);border:1px solid rgba(0,255,157,.2);border-radius:8px">
-          <div style="font-size:.63rem;color:var(--green);font-weight:700;margin-bottom:5px">RECOMMENDED PATH</div>
-          <div style="font-size:.82rem;font-weight:700">Moderate: 2% risk, 10%/mo</div>
-          <div style="font-size:.71rem;color:var(--dim);margin-top:4px;line-height:1.5">
-            Month 1-3: 2% risk → prove the edge<br>
-            Month 4-6: 3% risk → scale confident<br>
-            Month 7+: 4-5% risk → maximum performance
-          </div>
-          <div style="margin-top:7px;font-size:.84rem">
-            Expected 12mo: <strong style="color:var(--green)">$${Math.round(+s2.median_12mo_usd||15168).toLocaleString()}</strong>
-            = <strong style="color:var(--green)">+${Math.round(+s2.annual_pct_median||406)}%</strong>
-          </div>
-        </div>
-        <div style="padding:12px;background:rgba(255,68,102,.08);border:1px solid rgba(255,68,102,.2);border-radius:8px">
-          <div style="font-size:.63rem;color:var(--red);font-weight:700;margin-bottom:5px">1000% ATTEMPT REALITY</div>
-          <div style="font-size:.82rem;font-weight:700">5% risk, 21.5%/mo target</div>
-          <div style="font-size:.71rem;color:var(--dim);margin-top:4px;line-height:1.5">
-            Success: ~34% of traders hit it<br>
-            Partial failure: ~65%<br>
-            Full blowup: ~1%
-          </div>
-          <div style="margin-top:7px;font-size:.76rem;color:var(--red)">
-            Each missed month requires massive recovery.<br>
-            High variance = emotionally very difficult.
-          </div>
-        </div>
-      </div>
-      <div style="font-size:.77rem;font-style:italic;color:var(--dim);border-top:1px solid var(--border);padding-top:9px">
-        "The fastest path to 1000% is NOT to chase 1000% directly — aim for 400% first, prove the edge consistently,
-        then scale risk gradually. A disciplined 400%/year trader will outlast and outperform most 1000%-chasers over time."
-      </div>`;
+    conc.innerHTML =
+      '<div style="margin-bottom:12px">'
+      +'<div style="font-size:.72rem;font-weight:700;color:var(--gold);margin-bottom:8px">TRAFFIC LIGHTS</div>'
+      +'<div style="display:flex;flex-direction:column;gap:6px;font-size:.76rem">'
+      +'<div style="display:flex;align-items:center;gap:8px"><span>🔴</span><strong style="color:var(--red);min-width:140px">1000% in 1 month:</strong><span style="color:var(--dim)">Mathematically impossible</span></div>'
+      +'<div style="display:flex;align-items:center;gap:8px"><span>🟡</span><strong style="color:#ff8c00;min-width:140px">1000% in 1 year:</strong><span style="color:var(--dim)">Possible at 3.5% risk · 54% blowup</span></div>'
+      +'<div style="display:flex;align-items:center;gap:8px"><span>🟢</span><strong style="color:var(--green);min-width:140px">500% in 1 year:</strong><span style="color:var(--dim)">Achievable at 3% risk · 45% blowup</span></div>'
+      +'<div style="display:flex;align-items:center;gap:8px"><span>🟢</span><strong style="color:var(--green);min-width:140px">200% in 1 year:</strong><span style="color:var(--dim)">Realistic at 2% risk · 27% blowup</span></div>'
+      +'<div style="display:flex;align-items:center;gap:8px"><span>🟢</span><strong style="color:var(--green);min-width:140px">100% in 1 year:</strong><span style="color:var(--dim)">Very safe at 1.5% risk · 18% blowup</span></div>'
+      +'</div></div>'
+      +'<div style="margin-bottom:12px">'
+      +'<div style="font-size:.72rem;font-weight:700;color:var(--gold);margin-bottom:8px">RECOMMENDED HYBRID PATH — $3,000 → $27,000+</div>'
+      +'<table style="width:100%;font-size:.74rem;border-collapse:collapse">'
+      +'<thead><tr style="color:var(--accent);border-bottom:1px solid var(--border)">'
+      +'<th style="text-align:left;padding:6px">Period</th><th style="padding:6px">Risk/Trade</th>'
+      +'<th style="padding:6px">Exp. Monthly</th><th style="padding:6px">Balance</th></tr></thead><tbody>'
+      +'<tr style="border-bottom:1px solid rgba(255,255,255,.04)"><td style="padding:5px">Month 1–3</td><td style="text-align:center;padding:5px">1%</td><td style="text-align:center;color:var(--green);padding:5px">+7.1%/mo</td><td style="text-align:center;color:var(--gold);padding:5px">$3,648</td></tr>'
+      +'<tr style="border-bottom:1px solid rgba(255,255,255,.04)"><td style="padding:5px">Month 4–6</td><td style="text-align:center;padding:5px">2%</td><td style="text-align:center;color:var(--green);padding:5px">+14.7%/mo</td><td style="text-align:center;color:var(--gold);padding:5px">$5,407</td></tr>'
+      +'<tr style="border-bottom:1px solid rgba(255,255,255,.04)"><td style="padding:5px">Month 7–9</td><td style="text-align:center;padding:5px">3%</td><td style="text-align:center;color:var(--green);padding:5px">+22.8%/mo</td><td style="text-align:center;color:var(--gold);padding:5px">$10,186</td></tr>'
+      +'<tr><td style="padding:5px">Month 10–12</td><td style="text-align:center;padding:5px">3.5%</td><td style="text-align:center;color:var(--green);padding:5px">+27%/mo</td><td style="text-align:center;color:var(--gold);font-weight:700;padding:5px">$27,000+</td></tr>'
+      +'</tbody></table></div>'
+      +'<div style="padding:12px;background:rgba(255,215,0,.07);border:1px solid rgba(255,215,0,.25);border-radius:8px;font-size:.76rem;font-style:italic;line-height:1.7">'
+      +'"The path to 1000% is not higher risk.<br>'
+      +'It is <strong style="color:var(--gold);font-style:normal">higher strategy quality</strong>.<br>'
+      +'Improve PF first. Then increase risk safely."'
+      +'</div>';
   }
 }
 
