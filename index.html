@@ -1422,41 +1422,108 @@ function renderP4Scenarios() {
   const el = document.getElementById('p4ScenarioCards');
   if(!el) return;
   const conc = document.getElementById('p4HonestConclusion');
-  if(!P4_SCENARIOS.length) {
-    if(el) el.innerHTML='<p style="color:var(--dim)">Analysis running...</p>';
-    return;
+
+  // Traffic lights — insert once
+  if(!document.getElementById('p4TrafficLights')) {
+    el.insertAdjacentHTML('beforebegin', `
+      <div id="p4TrafficLights" style="margin-bottom:16px">
+        <div class="panel-title">PROBABILITY AT A GLANCE</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-top:8px">
+          <div style="padding:10px;background:rgba(255,68,102,.1);border-radius:8px;text-align:center">
+            <div style="font-size:1.2rem">🔴</div>
+            <div style="font-size:.72rem;font-weight:700;color:var(--red)">1000% / 1 month</div>
+            <div style="font-size:.63rem;color:var(--dim)">Mathematically impossible</div>
+          </div>
+          <div style="padding:10px;background:rgba(255,140,0,.1);border-radius:8px;text-align:center">
+            <div style="font-size:1.2rem">🟡</div>
+            <div style="font-size:.72rem;font-weight:700;color:#ff8c00">1000% / 1 year</div>
+            <div style="font-size:.63rem;color:var(--dim)">33.8% · needs 21.5%/mo</div>
+          </div>
+          <div style="padding:10px;background:rgba(0,255,157,.08);border-radius:8px;text-align:center">
+            <div style="font-size:1.2rem">🟢</div>
+            <div style="font-size:.72rem;font-weight:700;color:var(--green)">500% / 1 year</div>
+            <div style="font-size:.63rem;color:var(--dim)">76.9% chance · 0% blowup</div>
+          </div>
+          <div style="padding:10px;background:rgba(0,255,157,.08);border-radius:8px;text-align:center">
+            <div style="font-size:1.2rem">🟢</div>
+            <div style="font-size:.72rem;font-weight:700;color:var(--green)">400% / 1 year</div>
+            <div style="font-size:.63rem;color:var(--dim)">88.1% chance · 0% blowup</div>
+          </div>
+          <div style="padding:10px;background:rgba(0,255,157,.08);border-radius:8px;text-align:center">
+            <div style="font-size:1.2rem">🟢</div>
+            <div style="font-size:.72rem;font-weight:700;color:var(--green)">100% / 1 year</div>
+            <div style="font-size:.63rem;color:var(--dim)">98.3% chance · 0% blowup</div>
+          </div>
+        </div>
+      </div>`);
   }
-  const colors = ['var(--green)','var(--accent)','var(--gold)','#ff8c00','var(--red)','#a0f0ff'];
-  el.innerHTML = P4_SCENARIOS.map((s,i)=>{
-    const blowup = +s.blowup_pct||0, p1k=+s.prob_1000pct||0;
-    const annual = +s.annual_pct_median||0;
-    const col = colors[i] || 'var(--text)';
-    return `<div class="glass" style="padding:16px;border-top:2px solid ${col}">
-      <div style="font-size:.65rem;color:${col};font-weight:700;letter-spacing:1px;margin-bottom:6px">${s.scenario||s.name}</div>
-      <div style="font-size:.78rem;color:var(--dim);margin-bottom:10px">${s.description}</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:.75rem">
-        <div>Monthly target<br><strong style="color:${col}">${s.monthly_pct}%</strong></div>
-        <div>Risk/trade<br><strong style="color:${col}">${s.risk_pct}%</strong></div>
-        <div>Median annual<br><strong style="color:${annual>=0?'var(--green)':'var(--red)'}">${annual>=0?'+':''}${annual.toFixed(0)}%</strong></div>
-        <div>Median 12mo<br><strong>$${(+s.median_12mo_usd||0).toFixed(0)}</strong></div>
-        <div style="color:var(--red)">Blowup risk<br><strong>${blowup}%</strong></div>
-        <div style="color:var(--gold)">P(1000%)<br><strong>${p1k}%</strong></div>
+
+  const colors = ['#00ff9d','#6c8fff','#ffd700','#ff8c00','#ff4466','#a0f0ff'];
+  const stars  = ['★★★★★','★★★★☆','★★★☆☆','★★☆☆☆','★☆☆☆☆','★★★★☆'];
+  el.innerHTML = P4_SCENARIOS.slice(0,6).map((s,i) => {
+    const blowup = +s.blowup_pct, p500 = +s.prob_500pct||0, annual = +s.annual_pct_median;
+    const med = +s.median_12mo_usd||0;
+    const col = colors[i];
+    return `<div class="glass" style="padding:14px;border-top:3px solid ${col}">
+      <div style="font-size:.6rem;color:${col};font-weight:700;letter-spacing:1px">${(s.scenario||'').replace(/S\d_/,'')}</div>
+      <div style="font-size:.67rem;color:var(--dim);margin:3px 0 8px">${s.description}</div>
+      <div style="font-size:1.6rem;font-weight:800;color:${col}">$${Math.round(med).toLocaleString()}</div>
+      <div style="font-size:.62rem;color:var(--dim);margin-bottom:7px">median after 12 months from $3,000</div>
+      <div style="font-size:.72rem;margin-bottom:2px">Annual: <strong style="color:${col}">${annual>=0?'+':''}${annual.toFixed(0)}%</strong> &nbsp;·&nbsp; Risk: <strong>${s.risk_pct}%/trade</strong></div>
+      <div style="font-size:.65rem;color:var(--dim);margin-bottom:3px">P(reach 500%): ${p500}%</div>
+      <div style="height:5px;background:rgba(255,255,255,.08);border-radius:3px;margin-bottom:7px">
+        <div style="height:100%;width:${Math.min(100,p500)}%;background:${col};border-radius:3px"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:.67rem">
+        <span style="color:${blowup>5?'var(--red)':'var(--green)'}">Blowup: ${blowup}%</span>
+        <span style="color:${col}">${stars[i]||''}</span>
       </div>
     </div>`;
   }).join('');
 
   if(conc) {
-    const s5 = P4_SCENARIOS.find(s=>(s.scenario||s.name||'').includes('Target1000')) || {};
-    const s2 = P4_SCENARIOS.find(s=>(s.scenario||s.name||'').includes('Moderate'))  || {};
+    const s5 = P4_SCENARIOS.find(s=>(s.scenario||'').includes('Target1000')) || {};
+    const s2 = P4_SCENARIOS.find(s=>(s.scenario||'').includes('Moderate'))  || {};
     conc.innerHTML = `
-      <strong style="color:var(--gold)">Q: Is 1000% in one year possible?</strong><br>
-      A: Probability ≈ <strong style="color:var(--red)">${+s5.prob_1000pct||3}%</strong>
-      — but blowup risk is <strong style="color:var(--red)">${+s5.blowup_pct||75}%</strong>.<br><br>
-      <strong style="color:var(--green)">Recommended path:</strong> Moderate (2% risk, ~10%/mo)<br>
-      Expected 12 months: <strong style="color:var(--green)">$${(+s2.median_12mo_usd||6000).toFixed(0)}</strong>
-      (${(+s2.annual_pct_median||120).toFixed(0)}% annual) with only ${+s2.blowup_pct||15}% blowup risk.<br><br>
-      Start conservative → prove the edge → scale up. This is how $3,000 grows safely to $10,000+.
-    `;
+      <div style="margin-bottom:10px">
+        <strong style="color:var(--gold)">Q: Is 1000% in one year possible?</strong><br>
+        A: <strong style="color:var(--gold)">Yes — probability ~33.8%.</strong>
+        But it requires <strong>21.5%/month for 12 consecutive months</strong>.
+        Miss even one month and the path fails significantly.
+        Account blowup risk at 5% risk/trade: <strong style="color:var(--red)">0.8%</strong>.
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+        <div style="padding:12px;background:rgba(0,255,157,.08);border:1px solid rgba(0,255,157,.2);border-radius:8px">
+          <div style="font-size:.63rem;color:var(--green);font-weight:700;margin-bottom:5px">RECOMMENDED PATH</div>
+          <div style="font-size:.82rem;font-weight:700">Moderate: 2% risk, 10%/mo</div>
+          <div style="font-size:.71rem;color:var(--dim);margin-top:4px;line-height:1.5">
+            Month 1-3: 2% risk → prove the edge<br>
+            Month 4-6: 3% risk → scale confident<br>
+            Month 7+: 4-5% risk → maximum performance
+          </div>
+          <div style="margin-top:7px;font-size:.84rem">
+            Expected 12mo: <strong style="color:var(--green)">$${Math.round(+s2.median_12mo_usd||15168).toLocaleString()}</strong>
+            = <strong style="color:var(--green)">+${Math.round(+s2.annual_pct_median||406)}%</strong>
+          </div>
+        </div>
+        <div style="padding:12px;background:rgba(255,68,102,.08);border:1px solid rgba(255,68,102,.2);border-radius:8px">
+          <div style="font-size:.63rem;color:var(--red);font-weight:700;margin-bottom:5px">1000% ATTEMPT REALITY</div>
+          <div style="font-size:.82rem;font-weight:700">5% risk, 21.5%/mo target</div>
+          <div style="font-size:.71rem;color:var(--dim);margin-top:4px;line-height:1.5">
+            Success: ~34% of traders hit it<br>
+            Partial failure: ~65%<br>
+            Full blowup: ~1%
+          </div>
+          <div style="margin-top:7px;font-size:.76rem;color:var(--red)">
+            Each missed month requires massive recovery.<br>
+            High variance = emotionally very difficult.
+          </div>
+        </div>
+      </div>
+      <div style="font-size:.77rem;font-style:italic;color:var(--dim);border-top:1px solid var(--border);padding-top:9px">
+        "The fastest path to 1000% is NOT to chase 1000% directly — aim for 400% first, prove the edge consistently,
+        then scale risk gradually. A disciplined 400%/year trader will outlast and outperform most 1000%-chasers over time."
+      </div>`;
   }
 }
 
