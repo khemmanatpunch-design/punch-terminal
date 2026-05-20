@@ -754,7 +754,9 @@ async function loadData(){
   // Tournament is complete — show champion and R7 forward-test leaderboard
   const displayData = R7_TOP3.map(r=>({...r, pf:r.pf, pnl:r.pnl}));
   document.getElementById('kpiRound').textContent = '8/8';
-  renderTable(R3_TOP10.map(r=>({...r, pnl:r.pnl, trades:r.trades})));
+  tableBaseData = R1_ALL100;
+  renderTable(R1_ALL100);
+  buildSummaryStats(R1_ALL100);
   renderDNA(R3_TOP10.slice(0,6));
   updateKPIs();
   renderBracket('8/8');
