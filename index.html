@@ -3119,8 +3119,24 @@ pageInitFns['roadmap']=function(){
     </div>
   </div>
 
+  <div class="section-heading" style="margin-bottom:12px"><span>Monthly Target Calculator</span><div class="section-heading-line"></div></div>
+  <div class="card card-sm" style="margin-bottom:18px">
+    <div style="font-size:.78rem;color:var(--gray-500);margin-bottom:12px">What monthly return do you need to reach a target balance?</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px">
+      <div><label style="font-size:.75rem;font-weight:600;color:var(--gray-500)">Start ($)</label><input id="tc-start" type="number" value="3000" min="100" step="100" oninput="tcCalc()" style="width:100%;margin-top:4px;padding:8px 10px;border:1.5px solid var(--gray-200);border-radius:8px;font-size:.875rem;font-family:inherit;box-sizing:border-box;outline:none"></div>
+      <div><label style="font-size:.75rem;font-weight:600;color:var(--gray-500)">Target ($)</label><input id="tc-target" type="number" value="30000" min="1000" step="1000" oninput="tcCalc()" style="width:100%;margin-top:4px;padding:8px 10px;border:1.5px solid var(--gray-200);border-radius:8px;font-size:.875rem;font-family:inherit;box-sizing:border-box;outline:none"></div>
+      <div><label style="font-size:.75rem;font-weight:600;color:var(--gray-500)">Months</label><input id="tc-months" type="number" value="12" min="1" max="60" step="1" oninput="tcCalc()" style="width:100%;margin-top:4px;padding:8px 10px;border:1.5px solid var(--gray-200);border-radius:8px;font-size:.875rem;font-family:inherit;box-sizing:border-box;outline:none"></div>
+    </div>
+    <div id="tc-result" style="background:linear-gradient(135deg,var(--blue-100),var(--pink-100));border-radius:var(--radius-lg);padding:14px;text-align:center">
+      <div style="font-size:.75rem;color:var(--gray-500);margin-bottom:4px">Required Monthly Return</div>
+      <div style="font-size:2.5rem;font-weight:800;color:var(--blue-500)">21.5%</div>
+      <div style="font-size:.78rem;color:var(--gray-500);margin-top:4px">Current system: 0.95%/mo · Gap: 22.6×</div>
+      <div id="tc-note" style="font-size:.75rem;font-weight:600;color:var(--orange-500);margin-top:6px">⚠️ Requires 5-8% risk per trade — 45-60% ruin probability at this rate</div>
+    </div>
+  </div>
+
   <div class="section-heading" style="margin-bottom:12px"><span>What Would Make 1000% Possible?</span><div class="section-heading-line"></div></div>
-  <div class="card card-sm">
+  <div class="card card-sm" style="margin-bottom:18px">
     <div style="font-size:.78rem;color:var(--gray-500);margin-bottom:12px">These are the honest levers. Each requires time to validate safely.</div>
     ${[
       ['📅','London-Only Filter','Immediate','Backtest shows +26% monthly improvement by trading only 15:00-17:00 BKK. Validate in Month 1 demo.'],
@@ -3136,6 +3152,26 @@ pageInitFns['roadmap']=function(){
         <span class="badge badge-blue" style="font-size:.75rem;padding:2px 7px">${timing}</span>
       </div><div style="font-size:.72rem;color:var(--gray-500)">${desc}</div></div>
     </div>`).join('')}
+  </div>
+
+  <div class="section-heading" style="margin-bottom:12px"><span>Decision Framework — Go Live / Extend / Stop</span><div class="section-heading-line"></div></div>
+  <div class="card card-sm">
+    ${[
+      {emoji:'🟢',scenario:'GO LIVE (Scenario A)',bg:'var(--green-100)',border:'var(--green-500)',c:'var(--green-500)',criteria:'Demo PF > 2.5 AND WR > 45% AND monthly > 0.8% after 50+ trades',action:'Deposit $3,000 real. Start 1% risk. Scale to $5k after 50 live trades with PF > 2.0.',timing:'Month 3 decision'},
+      {emoji:'🟡',scenario:'EXTEND DEMO (Scenario B)',bg:'var(--orange-100)',border:'var(--orange-500)',c:'var(--orange-500)',criteria:'Demo PF 1.5–2.5 (mixed results)',action:'One more month at 2% risk. Investigate: which sessions underperform? Review spread fills.',timing:'Month 3–4'},
+      {emoji:'🔴',scenario:'DO NOT GO LIVE (Scenario C)',bg:'var(--red-100)',border:'var(--red-500)',c:'var(--red-500)',criteria:'Demo PF < 1.5 consistently after 50+ trades',action:'Return to Phase 5–6 optimization. Consider different timeframe or symbol.',timing:'Month 3 hard stop'}
+    ].map(s=>`<div style="padding:14px;background:${s.bg};border:1.5px solid ${s.border};border-radius:var(--radius-lg);margin-bottom:10px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        <span style="font-size:1.1rem">${s.emoji}</span>
+        <span style="font-size:.875rem;font-weight:800;color:${s.c}">${s.scenario}</span>
+        <span style="font-size:.72rem;color:var(--gray-400);margin-left:auto">${s.timing}</span>
+      </div>
+      <div style="font-size:.78rem;color:var(--gray-700);margin-bottom:4px"><strong>Criteria:</strong> ${s.criteria}</div>
+      <div style="font-size:.78rem;color:var(--gray-600)"><strong>Action:</strong> ${s.action}</div>
+    </div>`).join('')}
+    <div style="padding:10px;background:var(--gray-50);border-radius:var(--radius-md);font-size:.75rem;color:var(--gray-500);text-align:center;border-top:1px solid var(--gray-200);margin-top:4px">
+      Honest motto: "Validate first. Scale after. Never skip steps." — DEMO ONLY until all criteria met.
+    </div>
   </div>`;
   setTimeout(()=>{
     if(roadmapChartInst){roadmapChartInst.destroy();roadmapChartInst=null;}
