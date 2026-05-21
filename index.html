@@ -1086,6 +1086,166 @@
     </div>
   </div>
 
+  <!-- TAB: PHASE 6 -->
+  <div id="tab-phase6" class="tab-content glass" style="padding:20px">
+    <div class="panel-title" style="color:#22d3ee">⚡ Phase 6 — TWO KEY PIVOTS · COMPLETE</div>
+    <div style="font-size:.72rem;color:var(--dim);margin-bottom:16px">Pivot 1: H4 Timeframe Switch · Pivot 2: Spread Impact Analysis · 2020–2026 backtest</div>
+
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px">
+      <button class="tab active" onclick="showP6Sub('p6pivot1',this)" style="font-size:.65rem;padding:5px 10px;border-color:#22d3ee;color:#22d3ee">Pivot 1 · H4 vs H1</button>
+      <button class="tab" onclick="showP6Sub('p6pivot2',this)" style="font-size:.65rem;padding:5px 10px;border-color:#22d3ee;color:#22d3ee">Pivot 2 · Spread</button>
+      <button class="tab" onclick="showP6Sub('p6combined',this)" style="font-size:.65rem;padding:5px 10px;border-color:var(--gold);color:var(--gold)">Combined · KPI</button>
+    </div>
+
+    <!-- PIVOT 1: H4 vs H1 -->
+    <div id="p6pivot1" class="p6-sub">
+      <div style="font-size:.72rem;color:#22d3ee;font-weight:700;margin-bottom:10px">PIVOT 1 — H4 TIMEFRAME SWITCH (W1 trend → D1 structure → H4 OB/FVG)</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:12px">
+        <div class="glass" style="padding:14px;border-color:rgba(0,255,136,.4);text-align:center">
+          <div style="font-size:.6rem;color:var(--green);font-weight:700">H1 BASELINE (APEX_MAXIMUM_v2)</div>
+          <div style="font-size:1.6rem;font-weight:800;color:var(--gold);margin-top:6px">2.33</div>
+          <div style="font-size:.7rem;color:var(--dim)">Profit Factor</div>
+          <div style="font-size:1.3rem;font-weight:700;color:var(--green);margin-top:6px">0.68%/mo</div>
+          <div style="font-size:.7rem;color:var(--dim)">Monthly return · 492 trades/6yr</div>
+          <div style="font-size:.75rem;color:var(--text);margin-top:6px">WR=43.7% · RR=1.5 · $1,477 PnL</div>
+        </div>
+        <div class="glass" style="padding:14px;border-color:rgba(255,68,102,.4);text-align:center">
+          <div style="font-size:.6rem;color:var(--red);font-weight:700">H4 NEW (APEX_H4_v1)</div>
+          <div style="font-size:1.6rem;font-weight:800;color:var(--gold);margin-top:6px">2.22</div>
+          <div style="font-size:.7rem;color:var(--dim)">Profit Factor</div>
+          <div style="font-size:1.3rem;font-weight:700;color:var(--red);margin-top:6px">-0.06%/mo</div>
+          <div style="font-size:.7rem;color:var(--dim)">Monthly return · 113 trades/6yr</div>
+          <div style="font-size:.75rem;color:var(--text);margin-top:6px">WR=42.5% · RR=1.5 · fewer signals</div>
+        </div>
+        <div class="glass" style="padding:14px;border-color:rgba(255,68,102,.3)">
+          <div style="font-size:.6rem;color:var(--red);font-weight:700;margin-bottom:8px">H4 VERDICT: WORSE THAN H1</div>
+          <div style="font-size:.74rem;line-height:1.9;color:var(--text)">
+            <span style="color:var(--red)">✗</span> 4.4× fewer trades (113 vs 492)<br>
+            <span style="color:var(--red)">✗</span> Swap costs erode small PnL<br>
+            <span style="color:var(--red)">✗</span> W1 EMA50 trend too slow to adapt<br>
+            <span style="color:var(--gold)">✓</span> PF still strong at 2.22<br>
+            <span style="color:var(--green)">✓</span> H1 remains the better timeframe
+          </div>
+          <div style="margin-top:10px;padding:8px;background:rgba(255,68,102,.08);border-radius:6px;font-size:.68rem;color:var(--dim)">
+            H4 OBs take longer to form and fewer occur per year → insufficient trade frequency for the compounding engine to work.
+          </div>
+        </div>
+      </div>
+      <canvas id="p6TFChart" height="80" style="width:100%;margin-bottom:8px"></canvas>
+      <div style="font-size:.65rem;color:var(--dim);text-align:center">Monthly return comparison: H1 (blue) vs H4 (red) · 2020–2026 · XAUUSDm</div>
+    </div>
+
+    <!-- PIVOT 2: Spread Analysis -->
+    <div id="p6pivot2" class="p6-sub" style="display:none">
+      <div style="font-size:.72rem;color:#22d3ee;font-weight:700;margin-bottom:10px">PIVOT 2 — SPREAD IMPACT ANALYSIS (APEX_MAXIMUM_v2 · Gold H1 · 2% risk)</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-bottom:12px">
+        <div class="glass" style="padding:12px;border-color:rgba(255,68,102,.4);text-align:center">
+          <div style="font-size:.58rem;color:var(--red)">28pt — CURRENT</div>
+          <div style="font-size:.9rem;font-weight:700;color:var(--text);margin-top:4px">Exness Standard</div>
+          <div style="font-size:1.3rem;font-weight:800;color:var(--gold)">0.68%</div>
+          <div style="font-size:.65rem;color:var(--dim)">/month · baseline</div>
+        </div>
+        <div class="glass" style="padding:12px;border-color:rgba(167,139,250,.3);text-align:center">
+          <div style="font-size:.58rem;color:#a78bfa">20pt</div>
+          <div style="font-size:.9rem;font-weight:700;color:var(--text);margin-top:4px">Exness Pro</div>
+          <div style="font-size:1.3rem;font-weight:800;color:var(--gold)">0.88%</div>
+          <div style="font-size:.65rem;color:var(--dim)">/month · +0.20%</div>
+        </div>
+        <div class="glass" style="padding:12px;border-color:rgba(34,211,238,.3);text-align:center">
+          <div style="font-size:.58rem;color:#22d3ee">15pt</div>
+          <div style="font-size:.9rem;font-weight:700;color:var(--text);margin-top:4px">IC Markets Raw</div>
+          <div style="font-size:1.3rem;font-weight:800;color:var(--gold)">1.00%</div>
+          <div style="font-size:.65rem;color:var(--dim)">/month · +0.32%</div>
+        </div>
+        <div class="glass" style="padding:12px;border-color:rgba(0,255,136,.4);text-align:center">
+          <div style="font-size:.58rem;color:var(--green)">10pt</div>
+          <div style="font-size:.9rem;font-weight:700;color:var(--text);margin-top:4px">Pepperstone Razor</div>
+          <div style="font-size:1.3rem;font-weight:800;color:var(--gold)">1.12%</div>
+          <div style="font-size:.65rem;color:var(--dim)">/month · +0.44%</div>
+        </div>
+        <div class="glass" style="padding:12px;border-color:rgba(255,215,0,.5);text-align:center">
+          <div style="font-size:.58rem;color:var(--gold)">5pt ★ BEST</div>
+          <div style="font-size:.9rem;font-weight:700;color:var(--text);margin-top:4px">Pepperstone Razor+</div>
+          <div style="font-size:1.3rem;font-weight:800;color:var(--gold)">1.24%</div>
+          <div style="font-size:.65rem;color:var(--dim)">/month · +0.56%</div>
+        </div>
+      </div>
+      <canvas id="p6SpreadChart" height="80" style="width:100%;margin-bottom:8px"></canvas>
+      <div style="font-size:.65rem;color:var(--dim);text-align:center;margin-bottom:10px">Monthly return vs spread (points) — linear relationship, each 1pt saves 0.0245%/month</div>
+      <div style="padding:10px;background:rgba(34,211,238,.07);border:1px solid rgba(34,211,238,.2);border-radius:8px;font-size:.73rem;color:var(--dim)">
+        <strong style="color:#22d3ee">Key insight:</strong> Spread reduction is the single highest-impact free optimization. Moving from Exness Standard (28pt) to Pepperstone Razor (5pt) adds <strong style="color:var(--gold)">+0.56%/month</strong> = <strong>+83% relative improvement</strong> on the same strategy with zero code changes. Commission-based accounts (Razor: $3.50/lot) are included in the 5pt effective spread estimate.
+      </div>
+    </div>
+
+    <!-- COMBINED PROJECTION -->
+    <div id="p6combined" class="p6-sub" style="display:none">
+      <div style="font-size:.72rem;color:var(--gold);font-weight:700;margin-bottom:10px">COMBINED PROJECTION — Phase 6 Best vs KPI</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-bottom:12px">
+        <div class="glass" style="padding:12px;text-align:center;border-color:rgba(255,68,102,.3)">
+          <div style="font-size:.58rem;color:var(--red)">CURRENT</div>
+          <div style="font-size:.85rem;font-weight:700;color:var(--text)">H1 · 28pt · 2%</div>
+          <div style="font-size:1.2rem;font-weight:800;color:var(--gold)">0.68%/mo</div>
+          <div style="font-size:.7rem;color:var(--dim)">Median 12mo: $3,171</div>
+          <div style="font-size:.7rem;color:var(--red)">P($30k) ≈ 0%</div>
+        </div>
+        <div class="glass" style="padding:12px;text-align:center;border-color:rgba(34,211,238,.3)">
+          <div style="font-size:.58rem;color:#22d3ee">PHASE 6 BEST</div>
+          <div style="font-size:.85rem;font-weight:700;color:var(--text)">H1 · 5pt · 2%</div>
+          <div style="font-size:1.2rem;font-weight:800;color:var(--gold)">1.24%/mo</div>
+          <div style="font-size:.7rem;color:var(--dim)">Median 12mo: $3,333</div>
+          <div style="font-size:.7rem;color:var(--red)">P($30k) ≈ 0%</div>
+        </div>
+        <div class="glass" style="padding:12px;text-align:center;border-color:rgba(167,139,250,.3)">
+          <div style="font-size:.58rem;color:#a78bfa">BOOSTED</div>
+          <div style="font-size:.85rem;font-weight:700;color:var(--text)">H1 · 5pt · 5%</div>
+          <div style="font-size:1.2rem;font-weight:800;color:var(--gold)">3.10%/mo</div>
+          <div style="font-size:.7rem;color:var(--dim)">Median 12mo: $3,562</div>
+          <div style="font-size:.7rem;color:var(--red)">P($30k) ≈ 0%</div>
+        </div>
+        <div class="glass" style="padding:12px;text-align:center;border-color:rgba(255,215,0,.4)">
+          <div style="font-size:.58rem;color:var(--gold)">KPI TARGET</div>
+          <div style="font-size:.85rem;font-weight:700;color:var(--text)">Required</div>
+          <div style="font-size:1.2rem;font-weight:800;color:var(--red)">21.5%/mo</div>
+          <div style="font-size:.7rem;color:var(--dim)">$3k → $30k in 12 months</div>
+          <div style="font-size:.7rem;color:var(--red)">17.2× more than current best</div>
+        </div>
+      </div>
+
+      <!-- KPI Gap analysis -->
+      <div style="padding:14px;background:rgba(255,68,102,.07);border:1px solid rgba(255,68,102,.3);border-radius:10px;margin-bottom:12px">
+        <div style="font-size:.7rem;color:var(--red);font-weight:700;margin-bottom:8px">HONEST KPI GAP ANALYSIS</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:.72rem">
+          <div style="line-height:1.9">
+            <strong style="color:#22d3ee">Phase 6 impact:</strong><br>
+            H4 switch → <span style="color:var(--red)">WORSE</span> (-0.74%/mo vs H1)<br>
+            Spread 28→5pt → <span style="color:var(--green)">+0.56%/mo</span> (best free gain)<br>
+            Combined best → <span style="color:var(--gold)">1.24%/mo</span> at same risk<br>
+            <br>
+            <strong style="color:#22d3ee">What's needed for KPI:</strong><br>
+            • 21.5%/month sustained → ~17× current<br>
+            • OR: 50%+ WR strategy at 15%+ risk/trade
+          </div>
+          <div style="line-height:1.9">
+            <strong style="color:#22d3ee">Realistic 12-month outlook:</strong><br>
+            At 2% risk, 5pt spread: <span style="color:var(--gold)">$3,333</span> median<br>
+            At 5% risk, 5pt spread: <span style="color:var(--gold)">$3,562</span> median<br>
+            At 10% risk (high DD): ~<span style="color:#a78bfa">$4,200+</span> median<br>
+            <br>
+            <strong style="color:var(--red)">KPI path: requires either</strong><br>
+            • Volume (10+ markets simultaneously)<br>
+            • Higher edge (WR 55%+ or RR 3.0+)
+          </div>
+        </div>
+      </div>
+
+      <!-- Next steps recommendation -->
+      <div style="padding:12px;background:rgba(34,211,238,.07);border:1px solid rgba(34,211,238,.2);border-radius:8px;font-size:.74rem;color:var(--dim)">
+        <strong style="color:#22d3ee">Phase 6 Recommendation:</strong>
+        Switch broker to Pepperstone Razor (5pt effective spread) — this is the only Phase 6 change that genuinely improves returns at zero additional risk. The H4 timeframe produces too few trades (113 vs 492) for the compounding engine to build momentum. Best immediate action: keep H1, switch broker, and consider increasing risk to 3-5% for accelerated compounding.
+      </div>
+    </div>
+  </div>
+
   <!-- BRACKET POPUP -->
   <div id="bracketPopup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:1000;align-items:center;justify-content:center;padding:16px">
     <div class="glass" style="max-width:480px;width:100%;padding:22px;border-radius:14px;position:relative;border-color:rgba(108,143,255,.5)">
