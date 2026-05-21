@@ -502,6 +502,14 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
 .dna-tab-bar{display:flex;border-bottom:1px solid var(--gray-200);margin-bottom:14px;gap:0;}
 .dna-tab{padding:8px 14px;border:none;background:none;font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit;border-bottom:2px solid transparent;color:var(--gray-500);}
 .dna-tab.on{border-bottom-color:var(--blue-500);color:var(--blue-500);}
+@keyframes dotPulse{0%,80%,100%{transform:scale(0);opacity:.4}40%{transform:scale(1);opacity:1}}
+.dash-footer{padding:14px 24px;text-align:center;font-size:.75rem;color:var(--gray-400);line-height:2;border-top:1px solid var(--gray-200);background:var(--surface);margin-left:var(--sidebar-w);}
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--gray-200);z-index:90;}
+.bottom-nav-items{display:flex;justify-content:space-around;padding:4px 0 env(safe-area-inset-bottom,4px);}
+.bottom-nav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 8px;cursor:pointer;border:none;background:none;font-size:.62rem;color:var(--gray-500);min-width:44px;min-height:44px;justify-content:center;font-family:inherit;}
+.bottom-nav-btn.active,.bottom-nav-btn:focus{color:var(--blue-500);}
+.bottom-nav-btn-icon{font-size:1.1rem;}
+@media(max-width:768px){.bottom-nav{display:block;}.main-content{padding-bottom:68px;}.dash-footer{margin-left:0;}}
 </style>
 </head>
 <body>
