@@ -151,7 +151,7 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
 .nav-item-icon{font-size:1rem;width:20px;text-align:center;flex-shrink:0;}
 .nav-item-badge{
   margin-left:auto;padding:2px 7px;border-radius:var(--radius-full);
-  font-size:.7rem;font-weight:600;background:var(--blue-100);color:var(--blue-500);
+  font-size:.75rem;font-weight:600;background:var(--blue-100);color:var(--blue-500);
 }
 .nav-item-badge.green{background:var(--green-100);color:var(--green-500);}
 .nav-item-badge.pink{background:var(--pink-100);color:var(--pink-600);}
@@ -421,7 +421,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
 .bracket-wrap{overflow-x:auto;padding-bottom:16px;}
 .bracket-grid{display:flex;gap:0;min-width:1440px;}
 .bracket-col{flex:0 0 178px;display:flex;flex-direction:column;}
-.bracket-col-header{padding:7px 10px;background:var(--blue-900);color:#fff;font-size:.7rem;font-weight:700;text-align:center;border-radius:var(--radius-sm) var(--radius-sm) 0 0;margin:0 4px 6px;}
+.bracket-col-header{padding:7px 10px;background:var(--blue-900);color:#fff;font-size:.75rem;font-weight:700;text-align:center;border-radius:var(--radius-sm) var(--radius-sm) 0 0;margin:0 4px 6px;}
 .bracket-card{background:#fff;border:1px solid var(--gray-200);border-left:3px solid var(--gray-300);border-radius:8px;padding:7px 10px;margin:2px 4px;cursor:pointer;transition:all .15s;position:relative;}
 .bracket-card:hover{box-shadow:var(--shadow-md);transform:translateX(2px);}
 .bracket-card.advancing{border-left-color:var(--green-500);}
@@ -429,12 +429,12 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
 .bracket-card.eliminated:hover{transform:none;box-shadow:none;}
 .bracket-card.champion{background:linear-gradient(135deg,#4F46E5,#EC4899);border:none;border-radius:10px;padding:10px 12px;animation:champGlow 2s ease-in-out infinite;}
 @keyframes champGlow{0%,100%{box-shadow:0 0 12px rgba(79,70,229,.4);}50%{box-shadow:0 0 24px rgba(236,72,153,.6);}}
-.bracket-card-name{font-size:.7rem;font-weight:600;color:var(--blue-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:145px;}
+.bracket-card-name{font-size:.75rem;font-weight:600;color:var(--blue-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:145px;}
 .bracket-card.champion .bracket-card-name{color:#fff;font-size:.8rem;}
 .bracket-card.eliminated .bracket-card-name{color:var(--gray-400);}
 .bracket-card-pf{font-size:.75rem;color:var(--gray-500);margin-top:2px;}
 .bracket-card.champion .bracket-card-pf{color:rgba(255,255,255,.75);}
-.bracket-more{text-align:center;padding:5px 4px;font-size:.7rem;color:var(--gray-400);font-style:italic;}
+.bracket-more{text-align:center;padding:5px 4px;font-size:.75rem;color:var(--gray-400);font-style:italic;}
 /* slide panel */
 .slide-backdrop{display:none;position:fixed;inset:0;background:rgba(17,24,39,.3);z-index:300;backdrop-filter:blur(2px);}
 .slide-backdrop.open{display:block;}
@@ -1815,10 +1815,10 @@ function renderDNATab(){
     const champ=DNA_STRATS[0];
     c.innerHTML=`<div style="height:230px;margin-bottom:14px"><canvas id="dnaRadar"></canvas></div>
       <div class="grid-4">
-        <div class="metric-card blue" style="padding:10px"><div class="metric-label" style="font-size:.7rem">PF</div><div class="metric-value" style="font-size:1.1rem">${s.pf.toFixed(3)}</div></div>
-        <div class="metric-card pink" style="padding:10px"><div class="metric-label" style="font-size:.7rem">Win Rate</div><div class="metric-value pink" style="font-size:1.1rem">${s.wr}%</div></div>
-        <div class="metric-card green" style="padding:10px"><div class="metric-label" style="font-size:.7rem">Monthly</div><div class="metric-value green" style="font-size:1.1rem">${s.monthly.toFixed(2)}%</div></div>
-        <div class="metric-card orange" style="padding:10px"><div class="metric-label" style="font-size:.7rem">Max DD</div><div class="metric-value orange" style="font-size:1.1rem">${s.maxdd}%</div></div>
+        <div class="metric-card blue" style="padding:10px"><div class="metric-label" style="font-size:.75rem">PF</div><div class="metric-value" style="font-size:1.1rem">${s.pf.toFixed(3)}</div></div>
+        <div class="metric-card pink" style="padding:10px"><div class="metric-label" style="font-size:.75rem">Win Rate</div><div class="metric-value pink" style="font-size:1.1rem">${s.wr}%</div></div>
+        <div class="metric-card green" style="padding:10px"><div class="metric-label" style="font-size:.75rem">Monthly</div><div class="metric-value green" style="font-size:1.1rem">${s.monthly.toFixed(2)}%</div></div>
+        <div class="metric-card orange" style="padding:10px"><div class="metric-label" style="font-size:.75rem">Max DD</div><div class="metric-value orange" style="font-size:1.1rem">${s.maxdd}%</div></div>
       </div>`;
     setTimeout(()=>{
       const rc=document.getElementById('dnaRadar');if(!rc)return;
@@ -1855,7 +1855,7 @@ function renderDNATab(){
         const txt=Math.abs(v)<0.3?'':v.toFixed(1);
         return`<div class="hm-cell" style="background:${bg};padding:6px 0" title="${y} ${MONS[mi]}: ${v.toFixed(2)}%">${txt}</div>`;
       }).join('');
-      return`<div style="font-size:.7rem;color:var(--gray-500);display:flex;align-items:center;justify-content:flex-end;padding-right:5px">${y}</div>${cells}`;
+      return`<div style="font-size:.75rem;color:var(--gray-500);display:flex;align-items:center;justify-content:flex-end;padding-right:5px">${y}</div>${cells}`;
     }).join('');
     c.innerHTML=`<div style="font-size:.8rem;color:var(--gray-500);margin-bottom:8px">Monthly returns 2020–2025 · Hover cell for exact value</div>
       <div class="hm-grid" style="grid-template-columns:40px repeat(12,1fr)">${monHdr}${dataRows}</div>
@@ -1895,21 +1895,21 @@ pageInitFns['stress']=function(){
       <div class="crisis-card" style="background:#FFF1F2;border-top:3px solid var(--red-500)" onclick="showCrisis('covid')">
         <div style="font-size:.72rem;font-weight:600;color:var(--gray-500);margin-bottom:3px">COVID CRASH · Jan–Jun 2020</div>
         <div style="font-size:1.25rem;font-weight:800;color:var(--green-500)">+$1,017</div>
-        <span style="display:inline-block;padding:2px 9px;background:var(--green-100);color:var(--green-500);border-radius:999px;font-size:.7rem;font-weight:700;margin:5px 0">✅ SURVIVED</span>
+        <span style="display:inline-block;padding:2px 9px;background:var(--green-100);color:var(--green-500);border-radius:999px;font-size:.75rem;font-weight:700;margin:5px 0">✅ SURVIVED</span>
         <div style="height:55px;margin-top:7px"><canvas id="cvMini"></canvas></div>
         <div style="font-size:.72rem;color:var(--gray-400);margin-top:5px">Click for breakdown →</div>
       </div>
       <div class="crisis-card" style="background:#FFF7ED;border-top:3px solid var(--orange-500)" onclick="showCrisis('fed')">
         <div style="font-size:.72rem;font-weight:600;color:var(--gray-500);margin-bottom:3px">FED RATE HIKES · Jan–Dec 2022</div>
         <div style="font-size:1.25rem;font-weight:800;color:var(--orange-500)">-$120</div>
-        <span style="display:inline-block;padding:2px 9px;background:var(--amber-100);color:#92400E;border-radius:999px;font-size:.7rem;font-weight:700;margin:5px 0">⚠️ WEAK PERIOD</span>
+        <span style="display:inline-block;padding:2px 9px;background:var(--amber-100);color:#92400E;border-radius:999px;font-size:.75rem;font-weight:700;margin:5px 0">⚠️ WEAK PERIOD</span>
         <div style="height:55px;margin-top:7px"><canvas id="fedMini"></canvas></div>
         <div style="font-size:.72rem;color:var(--gray-400);margin-top:5px">Click for breakdown →</div>
       </div>
       <div class="crisis-card" style="background:#F0FDF4;border-top:3px solid var(--green-500)" onclick="showCrisis('gold')">
         <div style="font-size:.72rem;font-weight:600;color:var(--gray-500);margin-bottom:3px">GOLD BULL RUN · Oct 2024–May 2025</div>
         <div style="font-size:1.25rem;font-weight:800;color:var(--green-500)">+$1,179</div>
-        <span style="display:inline-block;padding:2px 9px;background:var(--green-100);color:var(--green-500);border-radius:999px;font-size:.7rem;font-weight:700;margin:5px 0">✅ THRIVED</span>
+        <span style="display:inline-block;padding:2px 9px;background:var(--green-100);color:var(--green-500);border-radius:999px;font-size:.75rem;font-weight:700;margin:5px 0">✅ THRIVED</span>
         <div style="height:55px;margin-top:7px"><canvas id="goldMini"></canvas></div>
         <div style="font-size:.72rem;color:var(--gray-400);margin-top:5px">Click for breakdown →</div>
       </div>
@@ -1989,7 +1989,7 @@ pageInitFns['multimarket']=function(){
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
         <div style="display:flex;align-items:center;gap:7px">
           <span style="font-size:1.2rem">${m.flag}</span>
-          <div><div style="font-size:.875rem;font-weight:700;color:var(--blue-900)">${m.name}</div><div style="font-size:.7rem;color:var(--gray-500)">${m.sym}</div></div>
+          <div><div style="font-size:.875rem;font-weight:700;color:var(--blue-900)">${m.name}</div><div style="font-size:.75rem;color:var(--gray-500)">${m.sym}</div></div>
         </div>
         <span style="padding:2px 8px;border-radius:999px;font-size:.75rem;font-weight:700;background:${cfg.bbg};color:${cfg.bcol}">${cfg.label}</span>
       </div>
@@ -2005,7 +2005,7 @@ pageInitFns['multimarket']=function(){
   const mktN=['Gold','US30','GBPJPY','NAS100'];
   const corr=[[1.00,0.45,0.32,0.38],[0.45,1.00,0.67,0.81],[0.32,0.67,1.00,0.72],[0.38,0.81,0.72,1.00]];
   const corrGrid=mktN.map((n,i)=>`<div style="font-size:.75rem;font-weight:600;color:var(--gray-500);text-align:center;padding:2px">${n}</div>`).join('')+corr.map((row,i)=>`<div style="font-size:.75rem;color:var(--gray-600,#4B5563);display:flex;align-items:center;font-weight:600;padding-right:3px">${mktN[i]}</div>`+row.map((v,j)=>{const bg=i===j?'#E5E7EB':v<0.4?'#DBEAFE':v<0.65?'#FEF3C7':'#FEE2E2';const tc=i===j?'#9CA3AF':v<0.4?'#1E40AF':v<0.65?'#92400E':'#991B1B';return`<div style="background:${bg};color:${tc};border-radius:3px;padding:6px 2px;text-align:center;font-size:.75rem;font-weight:700" title="${mktN[i]} vs ${mktN[j]}: ${v}">${v.toFixed(2)}</div>`;}).join('')).join('');
-  const ranking=MKTDATA.map((m,i)=>{const bw=Math.max(4,Math.min(100,(m.monthly+0.7)/1.4*100));const bc=m.monthly>=0?'var(--green-500)':'var(--red-500)';return`<div style="display:flex;align-items:center;gap:7px;margin-bottom:7px"><span style="font-size:.7rem;color:var(--gray-400);width:14px">${i+1}</span><span style="font-size:.72rem;flex:1;min-width:55px;color:var(--gray-700)">${m.sym}</span><div style="flex:2;height:7px;background:var(--gray-100);border-radius:3px;overflow:hidden"><div style="height:100%;width:${bw}%;background:${bc};border-radius:3px"></div></div><span style="font-size:.7rem;font-weight:600;width:40px;text-align:right;color:${bc}">${m.monthly>=0?'+':''}${m.monthly.toFixed(2)}%</span></div>`;}).join('');
+  const ranking=MKTDATA.map((m,i)=>{const bw=Math.max(4,Math.min(100,(m.monthly+0.7)/1.4*100));const bc=m.monthly>=0?'var(--green-500)':'var(--red-500)';return`<div style="display:flex;align-items:center;gap:7px;margin-bottom:7px"><span style="font-size:.75rem;color:var(--gray-400);width:14px">${i+1}</span><span style="font-size:.72rem;flex:1;min-width:55px;color:var(--gray-700)">${m.sym}</span><div style="flex:2;height:7px;background:var(--gray-100);border-radius:3px;overflow:hidden"><div style="height:100%;width:${bw}%;background:${bc};border-radius:3px"></div></div><span style="font-size:.75rem;font-weight:600;width:40px;text-align:right;color:${bc}">${m.monthly>=0?'+':''}${m.monthly.toFixed(2)}%</span></div>`;}).join('');
   el.innerHTML=`
     <div class="mkt-grid">${cards}</div>
     <div style="padding:18px;background:var(--blue-100);border-radius:var(--radius-lg);margin-bottom:18px">
@@ -2322,7 +2322,7 @@ pageInitFns['phase7']=function(){
     <span style="display:inline-block;padding:3px 11px;background:var(--green-100);color:var(--green-500);border-radius:999px;font-size:.72rem;font-weight:700">✅ ROBUST</span>
   </div>`).join('');
   const compRows=[{sym:'XAUUSDm (Exness)',pf:2.36,wr:44,tr:492,mo:0.68,st:'✅'},{sym:'XAUUSD Pepper 18pt',pf:3.19,wr:51.5,tr:198,mo:0.754,st:'✅ ROBUST'},{sym:'XAUUSD Pepper 10pt',pf:3.19,wr:51.5,tr:198,mo:0.950,st:'✅ ROBUST'}].map((r,i)=>`<tr style="background:${i%2?'var(--gray-50)':'#fff'}"><td style="padding:8px 11px;font-size:.8rem;font-weight:600;color:var(--blue-900)">${r.sym}</td><td style="padding:8px 11px;font-size:.8rem;font-weight:700;color:var(--green-500)">${r.pf.toFixed(2)}</td><td style="padding:8px 11px;font-size:.8rem">${r.wr}%</td><td style="padding:8px 11px;font-size:.8rem;color:var(--gray-500)">${r.tr}</td><td style="padding:8px 11px;font-size:.8rem;font-weight:600;color:var(--blue-500)">${r.mo.toFixed(3)}%</td><td style="padding:8px 11px;font-size:.8rem;font-weight:700;color:var(--green-500)">${r.st}</td></tr>`).join('');
-  const simCards=PEP_SIM.map(([sp,mo,note])=>`<div style="padding:12px;background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius-lg);text-align:center"><div style="font-size:.7rem;color:var(--gray-500);margin-bottom:3px">${sp}</div><div style="font-size:1.1rem;font-weight:800;color:var(--blue-500)">${mo.toFixed(3)}%/mo</div><div style="font-size:.75rem;color:var(--gray-400);margin-top:2px">${note}</div></div>`).join('');
+  const simCards=PEP_SIM.map(([sp,mo,note])=>`<div style="padding:12px;background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius-lg);text-align:center"><div style="font-size:.75rem;color:var(--gray-500);margin-bottom:3px">${sp}</div><div style="font-size:1.1rem;font-weight:800;color:var(--blue-500)">${mo.toFixed(3)}%/mo</div><div style="font-size:.75rem;color:var(--gray-400);margin-top:2px">${note}</div></div>`).join('');
   const p7saved=JSON.parse(localStorage.getItem(PHASE7_KEY)||'[]');
   const p7done=p7saved.filter(Boolean).length;
   const chklist=CHECKLIST.map((item,i)=>{const chk=!!p7saved[i];return`<label style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:${i<CHECKLIST.length-1?'1px solid var(--gray-100)':'none'};cursor:pointer"><input type="checkbox" ${chk?'checked':''} onchange="p7Check(${i},this.checked)" style="width:16px;height:16px;accent-color:var(--green-500);flex-shrink:0;cursor:pointer"><span style="font-size:.8rem;color:${chk?'var(--green-500)':'var(--gray-700)'};text-decoration:${chk?'none':'none'};transition:color .2s">${item}</span></label>`;}).join('');
@@ -2420,17 +2420,17 @@ pageInitFns['pepperstone']=function(){
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
       <div style="padding:10px 12px;background:var(--green-100);border-radius:var(--radius-md);border-left:3px solid var(--green-500)">
         <div style="font-size:.72rem;font-weight:700;color:var(--green-500)">09:00 BKK — Pre-London</div>
-        <div style="font-size:.7rem;color:var(--gray-700);margin-top:3px">Check spread trend. Asian session winding down. Spread starts tightening.</div>
+        <div style="font-size:.75rem;color:var(--gray-700);margin-top:3px">Check spread trend. Asian session winding down. Spread starts tightening.</div>
         <div style="font-size:.75rem;color:var(--gray-500);margin-top:4px">Expected: 15-20pt · Action: Monitor</div>
       </div>
       <div style="padding:10px 12px;background:var(--green-100);border-radius:var(--radius-md);border-left:3px solid var(--green-500);border:2px solid var(--green-500)">
         <div style="font-size:.72rem;font-weight:700;color:var(--green-500)">15:00 BKK — London Open ⭐</div>
-        <div style="font-size:.7rem;color:var(--gray-700);margin-top:3px"><strong>Best time to check and log spread.</strong> EA should be primed for entries 15:00–17:00.</div>
+        <div style="font-size:.75rem;color:var(--gray-700);margin-top:3px"><strong>Best time to check and log spread.</strong> EA should be primed for entries 15:00–17:00.</div>
         <div style="font-size:.75rem;color:var(--gray-500);margin-top:4px">Expected: 8-12pt · Action: /spread [value]</div>
       </div>
       <div style="padding:10px 12px;background:var(--amber-100);border-radius:var(--radius-md);border-left:3px solid var(--amber-500)">
         <div style="font-size:.72rem;font-weight:700;color:var(--amber-500)">21:00 BKK — NY Session</div>
-        <div style="font-size:.7rem;color:var(--gray-700);margin-top:3px">NY Kill Zone 19:00–22:00 BKK. Higher volatility, wider spreads. EA trades cautiously.</div>
+        <div style="font-size:.75rem;color:var(--gray-700);margin-top:3px">NY Kill Zone 19:00–22:00 BKK. Higher volatility, wider spreads. EA trades cautiously.</div>
         <div style="font-size:.75rem;color:var(--gray-500);margin-top:4px">Expected: 12-18pt · Action: Monitor + log</div>
       </div>
     </div>
@@ -2570,7 +2570,7 @@ pageInitFns['compound']=function(){
   c.innerHTML=`
   <div class="section-heading" style="margin-bottom:12px"><span>Hybrid Growth Path</span><div class="section-heading-line"></div></div>
   <div style="display:flex;gap:0;margin-bottom:20px;border-radius:var(--radius-xl);overflow:hidden;box-shadow:var(--shadow-sm)">
-    ${phases.map((p,i)=>`<div style="flex:1;min-width:140px;padding:14px;border-top:3px solid ${p.col};background:var(--surface);${i<3?'border-right:1px solid var(--gray-200)':''}"><div style="font-size:1.4rem">${p.icon}</div><div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-500);margin-top:6px">${p.phase} · ${p.months}</div><div style="font-weight:700;font-size:.875rem;margin:3px 0">${p.title}</div><div style="font-size:.75rem;color:var(--gray-500);line-height:1.5">${p.desc}</div></div>`).join('')}
+    ${phases.map((p,i)=>`<div style="flex:1;min-width:140px;padding:14px;border-top:3px solid ${p.col};background:var(--surface);${i<3?'border-right:1px solid var(--gray-200)':''}"><div style="font-size:1.4rem">${p.icon}</div><div style="font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-500);margin-top:6px">${p.phase} · ${p.months}</div><div style="font-weight:700;font-size:.875rem;margin:3px 0">${p.title}</div><div style="font-size:.75rem;color:var(--gray-500);line-height:1.5">${p.desc}</div></div>`).join('')}
   </div>
   <div style="display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:18px">
     <div class="card card-sm">
@@ -2800,7 +2800,7 @@ pageInitFns['phase9']=function(){
           <td style="padding:8px 10px;border-bottom:1px solid var(--gray-100)">${f.pf}</td>
           <td style="padding:8px 10px;border-bottom:1px solid var(--gray-100)">
             <span style="background:#FEE2E2;color:#DC2626;padding:2px 8px;border-radius:999px;font-size:.72rem;font-weight:700">SKIP</span>
-            <span style="font-size:.7rem;color:var(--gray-400);margin-left:4px">${f.reason}</span>
+            <span style="font-size:.75rem;color:var(--gray-400);margin-left:4px">${f.reason}</span>
           </td>
         </tr>`).join('')}
       </tbody>
@@ -3039,7 +3039,7 @@ pageInitFns['phase8']=function(){
   <div class="section-heading" style="margin-bottom:14px"><span>3-Month Roadmap</span><div class="section-heading-line"></div></div>
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-bottom:18px;border-radius:var(--radius-xl);overflow:hidden;box-shadow:var(--shadow-sm)">
     ${months.map((m,i)=>`<div style="padding:16px;border-top:3px solid ${m.col};background:${m.locked?'var(--gray-50)':'var(--surface)'};${i<2?'border-right:1px solid var(--gray-200)':''}">
-      <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-500)">Month ${m.n}</div>
+      <div style="font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-500)">Month ${m.n}</div>
       <div style="font-size:1rem;font-weight:800;margin:3px 0">${m.title}</div>
       <div style="font-size:.75rem;color:${m.locked?'var(--gray-400)':'var(--green-500)'};font-weight:600;margin-bottom:10px">${m.status}</div>
       <div style="font-size:.75rem;color:var(--gray-600);margin-bottom:5px"><strong>Risk:</strong> ${m.risk}/trade</div>
