@@ -2883,6 +2883,43 @@ window.showP7Sub = showP7Sub;
   }
 })();
 
+// ── PEPPERSTONE SPREAD CHART ──────────────────────────────────────────────
+(function initPepperstone(){
+  var c = document.getElementById('pepSpreadChart');
+  if(!c) return;
+  var ctx = c.getContext('2d');
+  var W = c.offsetWidth || 320, H = 140;
+  c.width = W; c.height = H;
+  var data = [
+    {label:'28pt\nExness',  val:0.680, col:'rgba(255,100,100,.85)'},
+    {label:'25pt\n18pt+com',val:0.754, col:'rgba(255,180,60,.85)'},
+    {label:'22pt\n15pt+com',val:0.827, col:'rgba(255,215,0,.85)'},
+    {label:'19pt\n12pt+com',val:0.900, col:'rgba(100,220,130,.85)'},
+    {label:'17pt\n10pt+com',val:0.950, col:'rgba(16,185,129,.9)'},
+    {label:'15pt\n8pt+com', val:0.999, col:'rgba(16,185,129,.7)'},
+  ];
+  var maxV = 1.05;
+  var bW = Math.floor(W/data.length)-8, bX0 = 4;
+  ctx.clearRect(0,0,W,H);
+  data.forEach(function(d,i){
+    var bH = Math.floor((d.val/maxV)*(H-30));
+    var x = bX0 + i*(bW+8);
+    var y = H-20-bH;
+    ctx.fillStyle = d.col;
+    ctx.beginPath(); ctx.roundRect(x,y,bW,bH,3); ctx.fill();
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 9px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(d.val.toFixed(3)+'%', x+bW/2, y-3);
+    ctx.font = '8px sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,.5)';
+    d.label.split('\n').forEach(function(ln,li){
+      ctx.fillText(ln, x+bW/2, H-10+li*0); // single line at bottom
+    });
+    ctx.fillText(d.label.split('\n')[0], x+bW/2, H-10);
+  });
+})();
+
 // Init calculators
 setTimeout(function(){calcLotSize();calcRuinRisk();calcTarget();calcCompound();},200);
 
