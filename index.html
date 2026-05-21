@@ -701,15 +701,54 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
       <div class="metric-delta up">↑ +17% vs Phase 1</div>
     </div>
     <div class="metric-card green">
-      <div class="metric-label" data-tip="At 10pt London spread">Monthly Return</div>
+      <div class="metric-label" data-tip="London session 10pt spread — best case">Monthly @ London 10pt</div>
       <div class="metric-value green" id="home-monthly">0.95%</div>
-      <div class="metric-delta" style="color:var(--gray-500)">Pepperstone @ 10pt spread</div>
+      <div class="metric-delta" style="color:var(--gray-500)">Asian avg: 0.754% · Gap: 22.6×</div>
     </div>
     <div class="metric-card orange">
-      <div class="metric-label" data-tip="Best Monte Carlo scenario">P($30k in 12mo)</div>
-      <div class="metric-value orange" id="home-p30k">46.7%</div>
-      <div class="metric-delta" style="color:var(--gray-500)">Best case (MC simulation)</div>
+      <div class="metric-label" data-tip="Need 21.5%/mo · Have 0.95%/mo">KPI Gap</div>
+      <div class="metric-value orange" id="home-kpigap">22.6×</div>
+      <div class="metric-delta" style="color:var(--orange-500)">Need 21.5%/mo · Have 0.95%/mo</div>
     </div>
+  </div>
+
+  <!-- KPI GAP PROGRESS BAR -->
+  <div class="card card-sm" style="margin-bottom:24px;border-left:4px solid var(--orange-500)">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <div style="font-size:.875rem;font-weight:700;color:var(--blue-900)">KPI Gap — $3,000 → $30,000 in 12 months</div>
+      <span class="badge badge-orange">22.6× improvement needed</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px">
+      <div style="padding:10px;background:var(--green-100);border-radius:var(--radius-md);text-align:center;border:1.5px solid var(--green-500)">
+        <div style="font-size:.65rem;font-weight:600;color:var(--gray-500);text-transform:uppercase;margin-bottom:3px">Conservative</div>
+        <div style="font-size:1.1rem;font-weight:800;color:var(--green-500)">0.95%/mo</div>
+        <div style="font-size:.65rem;color:var(--gray-500)">→ $3,360 in 12mo</div>
+        <div style="font-size:.6rem;color:var(--gray-400);margin-top:2px">Current system</div>
+      </div>
+      <div style="padding:10px;background:var(--blue-100);border-radius:var(--radius-md);text-align:center;border:1.5px solid var(--blue-300)">
+        <div style="font-size:.65rem;font-weight:600;color:var(--gray-500);text-transform:uppercase;margin-bottom:3px">Moderate</div>
+        <div style="font-size:1.1rem;font-weight:800;color:var(--blue-500)">3%/mo</div>
+        <div style="font-size:.65rem;color:var(--gray-500)">→ $4,272 in 12mo</div>
+        <div style="font-size:.6rem;color:var(--gray-400);margin-top:2px">London + 2% risk</div>
+      </div>
+      <div style="padding:10px;background:var(--amber-100);border-radius:var(--radius-md);text-align:center;border:1.5px solid var(--amber-500)">
+        <div style="font-size:.65rem;font-weight:600;color:var(--gray-500);text-transform:uppercase;margin-bottom:3px">Aggressive</div>
+        <div style="font-size:1.1rem;font-weight:800;color:var(--amber-500)">7%/mo</div>
+        <div style="font-size:.65rem;color:var(--gray-500)">→ $6,700 in 12mo</div>
+        <div style="font-size:.6rem;color:var(--gray-400);margin-top:2px">Multi-market + AM</div>
+      </div>
+      <div style="padding:10px;background:var(--orange-100);border-radius:var(--radius-md);text-align:center;border:1.5px solid var(--orange-500)">
+        <div style="font-size:.65rem;font-weight:600;color:var(--gray-500);text-transform:uppercase;margin-bottom:3px">KPI Target</div>
+        <div style="font-size:1.1rem;font-weight:800;color:var(--orange-500)">21.5%/mo</div>
+        <div style="font-size:.65rem;color:var(--gray-500)">→ $30,000 in 12mo</div>
+        <div style="font-size:.6rem;color:var(--red-500);margin-top:2px">Requires ~5-8% risk/trade</div>
+      </div>
+    </div>
+    <div style="background:var(--gray-200);border-radius:999px;height:10px;overflow:hidden;position:relative">
+      <div style="width:4.4%;height:100%;background:linear-gradient(90deg,var(--green-500),var(--blue-500));border-radius:999px;transition:width .5s" title="0.95% / 21.5% = 4.4%"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:.65rem;color:var(--gray-400);margin-top:4px"><span>0%/mo (current start)</span><span style="color:var(--green-500)">0.95%</span><span style="color:var(--orange-500)">21.5% KPI</span></div>
+    <div style="font-size:.72rem;color:var(--gray-500);margin-top:6px;text-align:center">Realistic 3-year path: $3k → $30k at 3%/mo compounding · <a href="#" onclick="showPage('roadmap');return false;" style="color:var(--blue-500)">View KPI Roadmap →</a></div>
   </div>
 
   <!-- PHASE PROGRESS -->
