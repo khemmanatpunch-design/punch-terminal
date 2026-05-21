@@ -2439,6 +2439,16 @@ function updateRisk(i){
   const rBal=document.getElementById('rBal');if(rBal)rBal.textContent='$'+d[2].toLocaleString();
   const rBl=document.getElementById('rBlow');if(rBl){rBl.textContent=d[3]+'%';rBl.style.color=blC;}
   const rBlI=document.getElementById('rBlowInline');if(rBlI){rBlI.textContent=d[3]+'%';rBlI.style.color=blC;}
+  // BUG 6: mini bars below stat boxes
+  let bMo=document.getElementById('rMoBar');
+  if(!bMo&&document.getElementById('rMo')){bMo=document.createElement('div');bMo.id='rMoBar';document.getElementById('rMo').parentNode.appendChild(bMo);}
+  if(bMo)bMo.innerHTML=_miniBar(d[1],RISK_DATA[0][1],RISK_DATA[RISK_DATA.length-1][1],'var(--green-500)');
+  let bBal=document.getElementById('rBalBar');
+  if(!bBal&&document.getElementById('rBal')){bBal=document.createElement('div');bBal.id='rBalBar';document.getElementById('rBal').parentNode.appendChild(bBal);}
+  if(bBal)bBal.innerHTML=_miniBar(d[2],RISK_DATA[0][2],RISK_DATA[RISK_DATA.length-1][2],'var(--blue-500)');
+  let bBl=document.getElementById('rBlBar');
+  if(!bBl&&document.getElementById('rBlow')){bBl=document.createElement('div');bBl.id='rBlBar';document.getElementById('rBlow').parentNode.appendChild(bBl);}
+  if(bBl)bBl.innerHTML=_miniBar(d[3],RISK_DATA[0][3],RISK_DATA[RISK_DATA.length-1][3],'var(--red-500)');
   const idx=parseInt(i);
   if(riskBarChartInst&&riskBarChartInst.data){
     riskBarChartInst.data.datasets[0].backgroundColor=RISK_DATA.map((_,j)=>j===idx?'rgba(79,70,229,.9)':'rgba(79,70,229,.3)');
