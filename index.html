@@ -2818,9 +2818,14 @@ function calcCompound(){
   const mo=+document.getElementById('cp-mo').value||0.83;
   const labs=[],data=[];let b=bal;
   for(let i=0;i<=24;i++){labs.push('M'+i);data.push(+b.toFixed(0));b*=(1+mo/100);}
-  if(cpChartInst){cpChartInst.destroy();cpChartInst=null;}
   const ctx=document.getElementById('cp-chart');if(!ctx)return;
-  cpChartInst=new Chart(ctx,{type:'line',data:{labels:labs,datasets:[{label:'Balance',data,borderColor:'var(--blue-500)',backgroundColor:'rgba(79,70,229,.08)',borderWidth:2,pointRadius:0,fill:true,tension:.4}]},options:{plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>'$'+v.toLocaleString(),font:{size:9}}},x:{ticks:{maxTicksLimit:7,font:{size:9}}}}}});
+  if(cpChartInst&&cpChartInst.data){
+    cpChartInst.data.labels=labs;
+    cpChartInst.data.datasets[0].data=data;
+    cpChartInst.update('none');
+  } else {
+    cpChartInst=new Chart(ctx,{type:'line',data:{labels:labs,datasets:[{label:'Balance',data,borderColor:'var(--blue-500)',backgroundColor:'rgba(79,70,229,.08)',borderWidth:2,pointRadius:0,fill:true,tension:.4}]},options:{plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>'$'+v.toLocaleString(),font:{size:9}}},x:{ticks:{maxTicksLimit:7,font:{size:9}}}}}});
+  }
   const final=data[data.length-1];
   document.getElementById('cp-result').textContent='24-month: $'+final.toLocaleString()+' (+'+(((final/bal-1)*100).toFixed(0))+'%)';
 }
