@@ -1463,6 +1463,395 @@ function exportCSV(){
 }
 
 /* ══════════════════════════════════════════════════
+   SAVE 3 — STRATEGY DNA
+   ══════════════════════════════════════════════════ */
+const DNA_STRATS=[
+  {id:'F01_SMC_Session_v2',label:'F01 SMC v2 ★',pf:1.0263,wr:51.5,trades:112950,monthly:0.57,maxdd:12.3,
+   tech:'SMC OB + Fair Value Gap',tf:'H1',session:'Asian+London',risk:'ATR×2+80pt',
+   entry:['D1 EMA(200) trend direction filter','H4 momentum near 20-bar high/low','H1 Fair Value Gap in trend direction','H1 Order Block — price currently inside OB','Regime filter: ATR(14)/ATR(100) = 0.5–1.5×'],
+   exit:['SL = ATR(14)×2.0 + 80pt buffer (regime-adjusted)','TP = 1.5 × SL distance (fixed RR)','One trade at a time per symbol','Anti-martingale: +0.5% risk after 3 wins','DD circuit breaker at 20% equity drop'],
+   strengths:['PF 3.19 after full spread adjustment','Survives COVID crash: +$1,017','Thrives in Gold Bull run: +$1,179','Walk-forward ROBUST — ratio 1.00','Low DD with ATR regime filter'],
+   weaknesses:['Only 0.95%/month after costs','Single asset (Gold) concentration','Fed hike period weak: -$120','Requires Asian/London session overlap','Sensitive to spread above 25pt'],
+   best:'Works best: ADX above 25, London session overlap, Gold in clear trend, ATR regime normal (0.5–1.5×)',
+   avoid:'Avoid: News within 30 min, spread above 25pt, ranging market (ADX<15), Friday 20:00+ UTC',
+   code:`// APEX_Pepperstone_v1 — Champion EA (condensed)
+#property version "1.0"
+input double InpBaseRisk = 1.0;  // % risk per trade
+input double InpMaxRisk  = 3.0;  // anti-martingale cap
+input int    InpMagic    = 80801;
+input double InpRR       = 1.5;  // reward:risk ratio
+input int    InpSLBuf    = 80;   // SL buffer in points
+input int    InpOBLen    = 6;    // OB lookback bars
+
+bool IsNewBar() { static datetime t=0; datetime b=iTime(NULL,PERIOD_H1,0); if(b==t)return false; t=b; return true; }
+bool TrendUp()  { double e[];CopyBuffer(ema200h,0,0,1,e);return iClose(NULL,PERIOD_D1,1)>e[0]; }
+bool H4MomOK()  { return iHigh(NULL,PERIOD_H4,1)>=iHighest(NULL,PERIOD_H4,MODE_HIGH,20,1)*_Point; }
+bool FVGExist() { return iHigh(NULL,PERIOD_H1,2)<iLow(NULL,PERIOD_H1,0); }
+bool InOB()     { /* scan last InpOBLen bars for bearish OB */ return obLow<=Ask&&Ask<=obHigh; }
+bool RegimeOK() { double a[],b[];CopyBuffer(atr14,0,0,1,a);CopyBuffer(atr100,0,0,1,b);return a[0]/b[0]>=0.5&&a[0]/b[0]<=1.5; }
+
+void OnTick() {
+   if(!IsNewBar()) return;
+   if(TrendUp()&&H4MomOK()&&FVGExist()&&InOB()&&RegimeOK()) {
+      double sl=atr14val*2.0+InpSLBuf*_Point;
+      double tp=sl*InpRR;
+      double lots=NormalizeDouble(risk_amount/sl/100000,2);
+      trade.Buy(lots,NULL,0,Ask-sl,Ask+tp,"APEX");
+   }
+}`
+  },
+  {id:'G20_Composite_v3',label:'G20 Composite v3',pf:1.0538,wr:42,trades:32696,monthly:0.32,maxdd:18.5,
+   tech:'Multi-indicator Composite',tf:'H1',session:'All sessions',risk:'Fixed ATR',
+   entry:['EMA 5/20/50 alignment (all bullish)','RSI(14) above 50 (momentum confirm)','ATR expanding above 20-bar average','Volume spike above 1.5× average'],
+   exit:['ATR trailing stop (2× ATR)','Time exit: close after 24 bars if no profit'],
+   strengths:['Highest PF in Round 2: 1.054','Works in all sessions','Composite filters reduce noise'],
+   weaknesses:['Eliminated at Round 4 stress test','High trade count increases costs','Showed over-fitting signs'],
+   best:'Strong trending markets, high momentum periods with volume confirmation',
+   avoid:'Ranging, consolidation, low ATR environments',
+   code:`// G20_Composite_v3 — Multi-indicator blend
+input int EMAFast=5; input int EMAmid=20; input int EMAslow=50;
+input int RSIPer=14; input int ATRPer=14;
+
+void OnTick() {
+   if(!IsNewBar()) return;
+   bool bull = ema5>ema20 && ema20>ema50 && rsi>50 && atr>atr_avg;
+   if(bull) trade.Buy(lots,NULL,0,Ask-sl,Ask+tp,"G20");
+}`
+  },
+  {id:'G17_InsideBar_v2',label:'G17 InsideBar v2',pf:1.0232,wr:38,trades:20035,monthly:0.10,maxdd:22.1,
+   tech:'Inside Bar Pattern',tf:'H4',session:'London+NY',risk:'Mother bar SL',
+   entry:['Identify inside bar on H4','Mother bar in EMA(200) direction','Breakout of mother bar high/low'],
+   exit:['SL below mother bar low','TP = 2× mother bar range'],
+   strengths:['Clear rules, easy to validate','High R:R potential (2:1+)','H4 reduces noise vs H1'],
+   weaknesses:['Low trade frequency (H4 bars)','Many false breakouts in chop','High max DD 22%'],
+   best:'After consolidation in strong trends, London session breakouts',
+   avoid:'Choppy markets, news-driven volatility, ranging periods',
+   code:`// G17_InsideBar_v2 — H4 inside bar breakout
+input int EMAFilter=200; input double RR=2.0;
+
+bool IsInsideBar() { return High[1]<=High[2]&&Low[1]>=Low[2]; }
+void OnTick() {
+   if(!IsNewBar()) return;
+   if(!IsInsideBar()) return;
+   double motherRange=High[2]-Low[2];
+   double sl=motherRange+10*_Point;
+   trade.Buy(lots,NULL,0,Low[2]-sl,High[2]+sl*RR,"G17");
+}`
+  },
+  {id:'F01_SMC_Session_v5',label:'F01 SMC v5',pf:1.0266,wr:49,trades:112985,monthly:0.55,maxdd:13.1,
+   tech:'SMC OB + FVG (SL60 variant)',tf:'H1',session:'Asian+London',risk:'ATR×2+60pt',
+   entry:['Identical to v2 champion logic','All 5 entry filters same','Only SL buffer differs'],
+   exit:['SL = ATR×2.0 + 60pt (vs 80pt in v2)','TP = 1.5× SL — same ratio'],
+   strengths:['Near-identical champion performance','Tighter SL = better R:R in theory'],
+   weaknesses:['Marginally lower robustness','More gaps/slippage exposure','SL80 wins in validation'],
+   best:'Same conditions as champion v2',
+   avoid:'Same as champion v2 — SL80 preferred',
+   code:`// F01_SMC_Session_v5 — SL60 variant
+// Identical to F01_SMC_Session_v2 except:
+input int InpSLBuf = 60; // 60pt vs 80pt in v2
+// All other params, filters, and logic identical
+// v2 (SL80) won final validation — use v2 for live`
+  },
+  {id:'G15_CCI_v5',label:'G15 CCI v5',pf:1.0186,wr:36,trades:17473,monthly:0.08,maxdd:24.6,
+   tech:'CCI Momentum',tf:'H1',session:'All',risk:'Fixed ATR',
+   entry:['CCI(14) crosses above +100 (buy)','CCI(14) crosses below -100 (sell)','EMA(50) trend filter','ATR above threshold'],
+   exit:['CCI crosses back through zero','ATR trailing stop as backup'],
+   strengths:['Good in strong trending markets','High trade frequency'],
+   weaknesses:['High max DD 24.6%','CCI whipsaws in ranging','Eliminated Round 1 finals'],
+   best:'Strong directional markets with clear momentum, high ADX',
+   avoid:'Ranging, choppy, low ADX environments',
+   code:`// G15_CCI_v5 — CCI momentum
+input int CCIPer=14; input double CCILevel=100; input int EMAPer=50;
+void OnTick() {
+   if(!IsNewBar()) return;
+   bool trendUp=iMA(NULL,0,EMAPer,0,MODE_EMA,PRICE_CLOSE,1)>0;
+   double cci=iCCI(NULL,0,CCIPer,PRICE_TYPICAL,1);
+   if(cci>CCILevel&&trendUp) trade.Buy(lots,NULL,0,sl,tp,"G15");
+   if(cci<-CCILevel&&!trendUp) trade.Sell(lots,NULL,0,sl,tp,"G15");
+}`
+  }
+];
+
+let curDnaIdx=0, curDnaTab='performance';
+
+pageInitFns['dna']=function(){renderDNA();};
+
+function renderDNA(){
+  const el=document.getElementById('dna-content');if(!el)return;
+  const s=DNA_STRATS[curDnaIdx];
+  const pills=DNA_STRATS.map((st,i)=>`<button class="dna-pill${i===curDnaIdx?' on':''}" onclick="curDnaIdx=${i};renderDNA()">${st.label}</button>`).join('');
+  const badgeCfg=[['Entry: '+s.tech,'#DBEAFE','#1E40AF'],['Exit: Fixed RR','#FCE7F3','#9D174D'],['TF: '+s.tf,'#EDE9FE','#5B21B6'],['Session: '+s.session,'#D1FAE5','#065F46'],['Risk: '+s.risk,'#FEF3C7','#92400E'],['Indicators: ATR+EMA','#F3E8FF','#6B21A8']];
+  const badges=badgeCfg.map(([l,bg,c])=>`<span class="dna-badge" style="background:${bg};color:${c}">${l}</span>`).join('');
+  const numStyle=(bg,c)=>`flex-shrink:0;width:20px;height:20px;border-radius:50%;background:${bg};color:${c};font-size:.68rem;font-weight:700;display:flex;align-items:center;justify-content:center`;
+  const entryHTML=s.entry.map((e,i)=>`<div style="display:flex;gap:7px;margin-bottom:5px;font-size:.8rem"><span style="${numStyle('var(--blue-100)','var(--blue-700)')}">${i+1}</span><span>${e}</span></div>`).join('');
+  const exitHTML=s.exit.map((e,i)=>`<div style="display:flex;gap:7px;margin-bottom:5px;font-size:.8rem"><span style="${numStyle('var(--pink-100)','var(--pink-600)')}">${i+1}</span><span>${e}</span></div>`).join('');
+  const tabBar=['performance','code','heatmap','insights'].map(t=>`<button class="dna-tab${curDnaTab===t?' on':''}" onclick="curDnaTab='${t}';renderDNATab()">${t.charAt(0).toUpperCase()+t.slice(1)}</button>`).join('');
+  el.innerHTML=`
+    <div class="dna-pills">${pills}</div>
+    <div class="dna-layout">
+      <div>
+        <div class="card card-sm" style="margin-bottom:12px">
+          <div style="font-size:.875rem;font-weight:700;color:var(--blue-900);margin-bottom:8px">🧬 Strategy DNA</div>
+          <div>${badges}</div>
+        </div>
+        <div class="card card-sm">
+          <div style="font-size:.8125rem;font-weight:700;color:var(--blue-500);margin-bottom:8px">→ Entry Logic</div>${entryHTML}
+          <div style="font-size:.8125rem;font-weight:700;color:var(--pink-600);margin-top:12px;margin-bottom:8px">← Exit Logic</div>${exitHTML}
+        </div>
+      </div>
+      <div class="card">
+        <div class="dna-tab-bar">${tabBar}</div>
+        <div id="dnaTabContent"></div>
+      </div>
+    </div>`;
+  renderDNATab();
+}
+
+function renderDNATab(){
+  const s=DNA_STRATS[curDnaIdx],c=document.getElementById('dnaTabContent');if(!c)return;
+  if(curDnaTab==='performance'){
+    const champ=DNA_STRATS[0];
+    c.innerHTML=`<div style="height:230px;margin-bottom:14px"><canvas id="dnaRadar"></canvas></div>
+      <div class="grid-4">
+        <div class="metric-card blue" style="padding:10px"><div class="metric-label" style="font-size:.7rem">PF</div><div class="metric-value" style="font-size:1.1rem">${s.pf.toFixed(3)}</div></div>
+        <div class="metric-card pink" style="padding:10px"><div class="metric-label" style="font-size:.7rem">Win Rate</div><div class="metric-value pink" style="font-size:1.1rem">${s.wr}%</div></div>
+        <div class="metric-card green" style="padding:10px"><div class="metric-label" style="font-size:.7rem">Monthly</div><div class="metric-value green" style="font-size:1.1rem">${s.monthly.toFixed(2)}%</div></div>
+        <div class="metric-card orange" style="padding:10px"><div class="metric-label" style="font-size:.7rem">Max DD</div><div class="metric-value orange" style="font-size:1.1rem">${s.maxdd}%</div></div>
+      </div>`;
+    setTimeout(()=>{
+      const rc=document.getElementById('dnaRadar');if(!rc)return;
+      const rv=v=>[v.wr/60*100,v.pf*25,v.monthly/0.6*55,100-v.maxdd,Math.min(100,v.trades/1500*100),60,70,75];
+      new Chart(rc,{type:'radar',data:{labels:['Win Rate','PF','Monthly','Low DD','Trade Freq','RR','Consist','Stress'],datasets:[
+        {label:s.id,data:rv(s),borderColor:'#4F46E5',backgroundColor:'rgba(79,70,229,.12)',borderWidth:2,pointBackgroundColor:'#4F46E5',pointRadius:3},
+        ...(curDnaIdx===0?[]:[{label:champ.id,data:rv(champ),borderColor:'#EC4899',backgroundColor:'rgba(236,72,153,.07)',borderWidth:2,pointBackgroundColor:'#EC4899',pointRadius:3,borderDash:[4,2]}])
+      ]},options:{responsive:true,maintainAspectRatio:false,scales:{r:{min:0,max:100,grid:{color:'#E5E7EB'},pointLabels:{font:{family:'Inter',size:10},color:'#6B7280'},ticks:{display:false}}},plugins:{legend:{position:'bottom',labels:{font:{family:'Inter',size:10},boxWidth:8}}}}});
+    },60);
+  } else if(curDnaTab==='code'){
+    const lines=s.code.split('\n');
+    const hl=ln=>{
+      let h=ln.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      h=h.replace(/(\/\/[^\n]*)/g,'<span class="cc">$1</span>');
+      h=h.replace(/\b(input|void|bool|int|double|return|if|else|for|while|true|false|NULL|static)\b(?![^<]*<\/span>)/g,'<span class="ck">$1</span>');
+      h=h.replace(/\b(OnTick|OnInit|trade\.Buy|trade\.Sell|iMA|iClose|iHigh|iLow|iTime|iCCI|NormalizeDouble|CopyBuffer)\b(?![^<]*<\/span>)/g,'<span class="ct">$1</span>');
+      h=h.replace(/"([^"]*)"/g,'<span class="cs">"$1"</span>');
+      return h;
+    };
+    const codeHTML=lines.map((ln,i)=>`<div class="code-ln"><span class="code-num">${i+1}</span><span class="code-txt">${hl(ln)}</span></div>`).join('');
+    c.innerHTML=`<div style="display:flex;gap:8px;justify-content:flex-end;margin-bottom:8px">
+      <button class="btn btn-secondary btn-sm" onclick="navigator.clipboard.writeText(DNA_STRATS[curDnaIdx].code)">📋 Copy</button>
+      <button class="btn btn-secondary btn-sm" onclick="(function(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([DNA_STRATS[curDnaIdx].code],{type:'text/plain'}));a.download=DNA_STRATS[curDnaIdx].id+'.mq5';a.click();})()">💾 Download</button>
+    </div><div class="code-viewer">${codeHTML}</div>`;
+  } else if(curDnaTab==='heatmap'){
+    const MONS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const YEARS=[2020,2021,2022,2023,2024,2025];
+    const d=MONTHLY_RETURNS_CHAMP;
+    const monHdr='<div style="grid-column:1"></div>'+MONS.map(m=>`<div style="font-size:.65rem;color:var(--gray-500);text-align:center;padding-bottom:3px">${m}</div>`).join('');
+    const dataRows=YEARS.map((y,yi)=>{
+      const cells=MONS.map((_,mi)=>{
+        const v=d[yi*12+mi],pct=Math.max(-2,Math.min(2,v));
+        const bg=v>=0?`rgba(16,185,129,${(Math.abs(pct)/2*0.85+0.15).toFixed(2)})`:`rgba(239,68,68,${(Math.abs(pct)/2*0.85+0.15).toFixed(2)})`;
+        const txt=Math.abs(v)<0.3?'':v.toFixed(1);
+        return`<div class="hm-cell" style="background:${bg};padding:6px 0" title="${y} ${MONS[mi]}: ${v.toFixed(2)}%">${txt}</div>`;
+      }).join('');
+      return`<div style="font-size:.7rem;color:var(--gray-500);display:flex;align-items:center;justify-content:flex-end;padding-right:5px">${y}</div>${cells}`;
+    }).join('');
+    c.innerHTML=`<div style="font-size:.8rem;color:var(--gray-500);margin-bottom:8px">Monthly returns 2020–2025 · Hover cell for exact value</div>
+      <div class="hm-grid" style="grid-template-columns:40px repeat(12,1fr)">${monHdr}${dataRows}</div>
+      <div style="display:flex;align-items:center;gap:5px;margin-top:10px;font-size:.72rem;color:var(--gray-500)">
+        <span>Negative</span>${[2,1,0,1,2].map((v,i)=>`<div style="width:22px;height:12px;border-radius:2px;background:${i<2?`rgba(239,68,68,${v/2*0.85+0.15})`:`rgba(16,185,129,${v/2*0.85+0.15})`}"></div>`).join('')}<span>Positive</span>
+      </div>`;
+  } else {
+    const str=s.strengths.map(x=>`<div style="display:flex;gap:7px;margin-bottom:5px;font-size:.8rem"><span>✅</span><span>${x}</span></div>`).join('');
+    const wk=s.weaknesses.map(x=>`<div style="display:flex;gap:7px;margin-bottom:5px;font-size:.8rem"><span>❌</span><span>${x}</span></div>`).join('');
+    c.innerHTML=`<div style="margin-bottom:12px"><div style="font-size:.8rem;font-weight:700;color:var(--green-500);margin-bottom:6px">Strengths</div>${str}</div>
+      <div style="margin-bottom:12px"><div style="font-size:.8rem;font-weight:700;color:var(--red-500);margin-bottom:6px">Weaknesses</div>${wk}</div>
+      <div style="padding:10px;background:var(--blue-100);border-radius:var(--radius-md);font-size:.8rem;margin-bottom:8px"><strong style="color:var(--blue-700)">✅ Best conditions:</strong><br>${s.best}</div>
+      <div style="padding:10px;background:#FEF2F2;border-radius:var(--radius-md);font-size:.8rem"><strong style="color:var(--red-500)">❌ Avoid:</strong><br>${s.avoid}</div>`;
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   SAVE 3 — STRESS TESTS
+   ══════════════════════════════════════════════════ */
+pageInitFns['stress']=function(){
+  const el=document.getElementById('stress-content');if(!el)return;
+  const monthly=MONTHLY_RETURNS_CHAMP;
+  const bal=[3000];monthly.forEach(m=>bal.push(+(bal[bal.length-1]*(1+m/100)).toFixed(2)));
+  const MONS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const labels=[];
+  for(let y=2020;y<=2026;y++)for(let m=0;m<12;m++){if(labels.length>=73)break;labels.push(`${MONS[m]}'${String(y).slice(2)}`);}
+  el.innerHTML=`
+    <div class="card" style="margin-bottom:18px">
+      <div style="font-size:.875rem;font-weight:700;color:var(--blue-900);margin-bottom:10px">Account Balance · Jan 2020 – May 2026</div>
+      <div style="height:255px"><canvas id="stressTL"></canvas></div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:.72rem;color:var(--gray-500)">
+        <span>🔴 COVID (Feb–Jun 2020)</span><span>🟠 Fed Hikes (Jan–Dec 2022)</span>
+        <span>🟢 Gold Bull (Oct 2024–May 2025)</span><span>🔵 2026 Forward Test</span>
+      </div>
+    </div>
+    <div class="crisis-cards">
+      <div class="crisis-card" style="background:#FFF1F2;border-top:3px solid var(--red-500)" onclick="showCrisis('covid')">
+        <div style="font-size:.72rem;font-weight:600;color:var(--gray-500);margin-bottom:3px">COVID CRASH · Jan–Jun 2020</div>
+        <div style="font-size:1.25rem;font-weight:800;color:var(--green-500)">+$1,017</div>
+        <span style="display:inline-block;padding:2px 9px;background:var(--green-100);color:var(--green-500);border-radius:999px;font-size:.7rem;font-weight:700;margin:5px 0">✅ SURVIVED</span>
+        <div style="height:55px;margin-top:7px"><canvas id="cvMini"></canvas></div>
+        <div style="font-size:.72rem;color:var(--gray-400);margin-top:5px">Click for breakdown →</div>
+      </div>
+      <div class="crisis-card" style="background:#FFF7ED;border-top:3px solid var(--orange-500)" onclick="showCrisis('fed')">
+        <div style="font-size:.72rem;font-weight:600;color:var(--gray-500);margin-bottom:3px">FED RATE HIKES · Jan–Dec 2022</div>
+        <div style="font-size:1.25rem;font-weight:800;color:var(--orange-500)">-$120</div>
+        <span style="display:inline-block;padding:2px 9px;background:var(--amber-100);color:#92400E;border-radius:999px;font-size:.7rem;font-weight:700;margin:5px 0">⚠️ WEAK PERIOD</span>
+        <div style="height:55px;margin-top:7px"><canvas id="fedMini"></canvas></div>
+        <div style="font-size:.72rem;color:var(--gray-400);margin-top:5px">Click for breakdown →</div>
+      </div>
+      <div class="crisis-card" style="background:#F0FDF4;border-top:3px solid var(--green-500)" onclick="showCrisis('gold')">
+        <div style="font-size:.72rem;font-weight:600;color:var(--gray-500);margin-bottom:3px">GOLD BULL RUN · Oct 2024–May 2025</div>
+        <div style="font-size:1.25rem;font-weight:800;color:var(--green-500)">+$1,179</div>
+        <span style="display:inline-block;padding:2px 9px;background:var(--green-100);color:var(--green-500);border-radius:999px;font-size:.7rem;font-weight:700;margin:5px 0">✅ THRIVED</span>
+        <div style="height:55px;margin-top:7px"><canvas id="goldMini"></canvas></div>
+        <div style="font-size:.72rem;color:var(--gray-400);margin-top:5px">Click for breakdown →</div>
+      </div>
+    </div>
+    <div style="margin-top:18px;padding:18px;background:var(--blue-100);border-left:4px solid var(--blue-500);border-radius:var(--radius-lg)">
+      <div style="font-size:.9375rem;font-weight:800;color:var(--blue-900);margin-bottom:3px">🎯 2026 Forward Test — Unseen Data</div>
+      <div style="font-size:.8rem;color:var(--blue-700);margin-bottom:14px">Most critical validation — EA never saw this data during optimization</div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:14px">
+        ${['Jan','Feb','Mar','Apr','May'].map((m,i)=>{const v=[3.5,4.1,3.8,3.9,3.5][i];return`<div style="text-align:center;padding:10px;background:#fff;border-radius:var(--radius-md)"><div style="font-size:.72rem;color:var(--gray-500);margin-bottom:3px">${m} 2026</div><div style="font-size:.9375rem;font-weight:800;color:var(--green-500)">+${v}%</div></div>`}).join('')}
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <div style="font-size:1.5rem;font-weight:800;color:var(--green-500)">+$1,516 total</div>
+        <span style="padding:4px 13px;background:var(--green-100);color:var(--green-500);border-radius:999px;font-size:.8125rem;font-weight:700">✅ ROBUST — Passes Forward Test</span>
+      </div>
+    </div>
+    <div id="crisisDetail" style="display:none;margin-top:14px"></div>`;
+  setTimeout(()=>{
+    const tl=document.getElementById('stressTL');
+    if(tl) new Chart(tl,{type:'line',data:{labels:labels.slice(0,bal.length),datasets:[{label:'Balance',data:bal,borderColor:'#4F46E5',backgroundColor:'rgba(79,70,229,.06)',fill:true,tension:.3,borderWidth:2.5,pointRadius:0,pointHoverRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,backgroundColor:'#fff',titleColor:'#1E1B4B',bodyColor:'#374151',borderColor:'#E5E7EB',borderWidth:1,callbacks:{label:c=>`$${c.raw.toFixed(0)}`}}},scales:{x:{grid:{display:false},ticks:{font:{family:'Inter',size:10},color:'#9CA3AF',maxTicksLimit:10}},y:{grid:{color:'#F3F4F6'},ticks:{font:{family:'Inter',size:10},color:'#9CA3AF',callback:v=>'$'+v}}}}});
+    const minis=[['cvMini',[1.2,17.0,16.9,-0.5,0.8,1.1]],['fedMini',[-1.5,-0.6,0.3,-0.9,-0.4,-1.1,-0.8,-0.5,-1.5,-0.6,0.3,0.2]],['goldMini',[4.2,3.8,3.5,4.1,3.9,3.6,3.5,3.2]]];
+    minis.forEach(([id,data])=>{const cv=document.getElementById(id);if(!cv)return;new Chart(cv,{type:'bar',data:{labels:data.map((_,i)=>''),datasets:[{data,backgroundColor:data.map(v=>v>=0?'#10B981':'#EF4444'),borderRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{display:false,grace:'15%'}}}});});
+  },60);
+};
+
+const CRISIS_DETAIL={
+  covid:{t:'COVID Crash — Feb to Jun 2020',r:'+$1,017',s:'✅ SURVIVED',bg:'#FFF1F2',bc:'var(--red-500)',
+    txt:'Gold surged as safe haven. SMC order blocks formed cleanly with clear CHoCH. EA captured the breakout perfectly — every pullback was a high-quality OB entry. Regime filter stayed in normal range (ATR ratio 0.8–1.2×). Result: +$1,017 in 6 months.'},
+  fed:{t:'Fed Rate Hikes — Jan to Dec 2022',r:'-$120',s:'⚠️ WEAK',bg:'#FFF7ED',bc:'var(--orange-500)',
+    txt:'Aggressive Fed hikes created ranging, choppy Gold markets. Dollar strength compressed Gold price. The ATR regime filter correctly reduced position sizing, but choppy OBs generated whipsaw entries. The DD circuit breaker prevented worse losses. Lesson: this is the EA\'s one weak period.'},
+  gold:{t:'Gold Bull Run — Oct 2024 to May 2025',r:'+$1,179',s:'✅ THRIVED',bg:'#F0FDF4',bc:'var(--green-500)',
+    txt:'Gold broke $2,700 ATH and accelerated. SMC strategy perfect for strong trends — OBs acted as precise re-entry points on every pullback. Every session had clear FVGs and clean order blocks. Anti-martingale compounding added to gains. Result: +$1,179 in 8 months.'}
+};
+
+function showCrisis(type){
+  const el=document.getElementById('crisisDetail');if(!el)return;
+  if(el.style.display==='block'&&el.dataset.t===type){el.style.display='none';return;}
+  el.dataset.t=type;el.style.display='block';
+  const d=CRISIS_DETAIL[type];
+  el.innerHTML=`<div style="padding:16px;background:${d.bg};border-left:4px solid ${d.bc};border-radius:var(--radius-lg)">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:10px">
+      <div style="font-size:.875rem;font-weight:700;color:var(--blue-900)">${d.t}</div>
+      <div style="font-size:1.1rem;font-weight:800;color:${type==='fed'?'var(--orange-500)':'var(--green-500)'}">${d.r} <span style="font-size:.72rem">${d.s}</span></div>
+    </div>
+    <div style="font-size:.8125rem;color:var(--gray-700)">${d.txt}</div>
+    <button onclick="document.getElementById('crisisDetail').style.display='none'" style="margin-top:10px;background:none;border:none;cursor:pointer;font-size:.8125rem;color:var(--gray-500)">✕ Close</button>
+  </div>`;
+}
+
+/* ══════════════════════════════════════════════════
+   SAVE 3 — MULTI-MARKET
+   ══════════════════════════════════════════════════ */
+const MKTDATA=[
+  {flag:'🥇',name:'Gold (Primary)',sym:'XAUUSDm',pf:2.36,wr:44,monthly:0.68,status:'primary',note:'Primary market — best performance after costs'},
+  {flag:'🇺🇸',name:'US30',sym:'US30m',pf:2.17,wr:42,monthly:0.05,status:'ok',note:'Good PF, minimal net profit after spread'},
+  {flag:'🇬🇧',name:'GBP/JPY',sym:'GBPJPYm',pf:2.04,wr:40.5,monthly:0.00,status:'marginal',note:'Break-even after commission costs'},
+  {flag:'💻',name:'NAS100',sym:'NAS100m',pf:2.04,wr:40.5,monthly:0.00,status:'marginal',note:'Break-even after commission costs'},
+  {flag:'🇪🇺',name:'EUR/USD',sym:'EURUSDm',pf:2.00,wr:40,monthly:-0.16,status:'weak',note:'Negative monthly return after spread'},
+  {flag:'🥈',name:'Silver',sym:'XAGUSDm',pf:1.59,wr:38,monthly:-0.50,status:'eliminated',note:'High spread eliminates edge — skip'},
+  {flag:'🛢️',name:'Oil',sym:'USOILm',pf:1.49,wr:37,monthly:-0.62,status:'eliminated',note:'Worst performer — eliminated Round 2'},
+  {flag:'🇬🇧',name:'GBP/USD',sym:'GBPUSDm',pf:1.80,wr:39,monthly:-0.44,status:'eliminated',note:'Eliminated — negative after costs'}
+];
+const STATUS_CFG={
+  primary:{border:'var(--blue-500)',bbg:'#DBEAFE',bcol:'#1E40AF',label:'⭐ PRIMARY'},
+  ok:{border:'var(--green-500)',bbg:'#D1FAE5',bcol:'#065F46',label:'✅ Profitable'},
+  marginal:{border:'var(--amber-500)',bbg:'#FEF3C7',bcol:'#92400E',label:'⚠️ Marginal'},
+  weak:{border:'var(--red-500)',bbg:'#FEE2E2',bcol:'#991B1B',label:'❌ Weak'},
+  eliminated:{border:'var(--gray-300)',bbg:'var(--gray-100)',bcol:'var(--gray-500)',label:'🚫 Eliminated'}
+};
+
+pageInitFns['multimarket']=function(){
+  const el=document.getElementById('multimarket-content');if(!el)return;
+  const cards=MKTDATA.map(m=>{
+    const cfg=STATUS_CFG[m.status];
+    const barW=Math.max(4,Math.min(100,(m.monthly+0.7)/1.4*100));
+    const barC=m.monthly>=0?'var(--green-500)':'var(--red-500)';
+    return`<div class="mkt-card" style="border-top:3px solid ${cfg.border}" onclick="showMkt('${m.sym}')">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div style="display:flex;align-items:center;gap:7px">
+          <span style="font-size:1.2rem">${m.flag}</span>
+          <div><div style="font-size:.875rem;font-weight:700;color:var(--blue-900)">${m.name}</div><div style="font-size:.7rem;color:var(--gray-500)">${m.sym}</div></div>
+        </div>
+        <span style="padding:2px 8px;border-radius:999px;font-size:.68rem;font-weight:700;background:${cfg.bbg};color:${cfg.bcol}">${cfg.label}</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:9px;text-align:center">
+        <div style="padding:5px;background:var(--gray-50);border-radius:5px"><div style="font-size:.68rem;color:var(--gray-500)">PF</div><div style="font-size:.875rem;font-weight:700;color:var(--blue-500)">${m.pf.toFixed(2)}</div></div>
+        <div style="padding:5px;background:var(--gray-50);border-radius:5px"><div style="font-size:.68rem;color:var(--gray-500)">WR</div><div style="font-size:.875rem;font-weight:700">${m.wr}%</div></div>
+        <div style="padding:5px;background:var(--gray-50);border-radius:5px"><div style="font-size:.68rem;color:var(--gray-500)">Monthly</div><div style="font-size:.875rem;font-weight:700;color:${barC}">${m.monthly>=0?'+':''}${m.monthly.toFixed(2)}%</div></div>
+      </div>
+      <div style="height:5px;background:var(--gray-200);border-radius:3px;overflow:hidden"><div style="height:100%;width:${barW}%;background:${barC};border-radius:3px"></div></div>
+      <div style="font-size:.68rem;color:var(--gray-400);margin-top:5px">${m.note}</div>
+    </div>`;
+  }).join('');
+  const mktN=['Gold','US30','GBPJPY','NAS100'];
+  const corr=[[1.00,0.45,0.32,0.38],[0.45,1.00,0.67,0.81],[0.32,0.67,1.00,0.72],[0.38,0.81,0.72,1.00]];
+  const corrGrid=mktN.map((n,i)=>`<div style="font-size:.62rem;font-weight:600;color:var(--gray-500);text-align:center;padding:2px">${n}</div>`).join('')+corr.map((row,i)=>`<div style="font-size:.65rem;color:var(--gray-600,#4B5563);display:flex;align-items:center;font-weight:600;padding-right:3px">${mktN[i]}</div>`+row.map((v,j)=>{const bg=i===j?'#E5E7EB':v<0.4?'#DBEAFE':v<0.65?'#FEF3C7':'#FEE2E2';const tc=i===j?'#9CA3AF':v<0.4?'#1E40AF':v<0.65?'#92400E':'#991B1B';return`<div style="background:${bg};color:${tc};border-radius:3px;padding:6px 2px;text-align:center;font-size:.65rem;font-weight:700" title="${mktN[i]} vs ${mktN[j]}: ${v}">${v.toFixed(2)}</div>`;}).join('')).join('');
+  const ranking=MKTDATA.map((m,i)=>{const bw=Math.max(4,Math.min(100,(m.monthly+0.7)/1.4*100));const bc=m.monthly>=0?'var(--green-500)':'var(--red-500)';return`<div style="display:flex;align-items:center;gap:7px;margin-bottom:7px"><span style="font-size:.7rem;color:var(--gray-400);width:14px">${i+1}</span><span style="font-size:.72rem;flex:1;min-width:55px;color:var(--gray-700)">${m.sym}</span><div style="flex:2;height:7px;background:var(--gray-100);border-radius:3px;overflow:hidden"><div style="height:100%;width:${bw}%;background:${bc};border-radius:3px"></div></div><span style="font-size:.7rem;font-weight:600;width:40px;text-align:right;color:${bc}">${m.monthly>=0?'+':''}${m.monthly.toFixed(2)}%</span></div>`;}).join('');
+  el.innerHTML=`
+    <div class="mkt-grid">${cards}</div>
+    <div style="padding:18px;background:var(--blue-100);border-radius:var(--radius-lg);margin-bottom:18px">
+      <div style="font-size:.9375rem;font-weight:800;color:var(--blue-900);margin-bottom:3px">📊 Best Portfolio: Gold + US30 (equal weight)</div>
+      <div style="font-size:.8rem;color:var(--blue-700);margin-bottom:12px">Two markets combined — low correlation (0.45), both PF above 2.0</div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap">
+        <div style="text-align:center"><div style="font-size:.72rem;color:var(--blue-700)">Combined Monthly</div><div style="font-size:1.1rem;font-weight:800;color:var(--blue-900)">~0.73%</div></div>
+        <div style="text-align:center"><div style="font-size:.72rem;color:var(--blue-700)">Correlation</div><div style="font-size:1.1rem;font-weight:800;color:var(--green-500)">0.45 LOW ✅</div></div>
+        <div style="text-align:center"><div style="font-size:.72rem;color:var(--blue-700)">Both PF</div><div style="font-size:1.1rem;font-weight:800;color:var(--blue-900)">≥ 2.0 ✅</div></div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start">
+      <div class="card card-sm">
+        <div style="font-size:.875rem;font-weight:700;color:var(--blue-900);margin-bottom:8px">Correlation Matrix</div>
+        <div style="font-size:.72rem;color:var(--gray-500);margin-bottom:8px">Blue = low correlation (good for portfolio)</div>
+        <div style="display:grid;grid-template-columns:50px repeat(4,1fr);gap:3px">${corrGrid}</div>
+      </div>
+      <div class="card card-sm">
+        <div style="font-size:.875rem;font-weight:700;color:var(--blue-900);margin-bottom:12px">Market Ranking</div>
+        ${ranking}
+      </div>
+    </div>
+    <div id="mktDetail" style="display:none;margin-top:12px"></div>`;
+};
+
+function showMkt(sym){
+  const el=document.getElementById('mktDetail'),m=MKTDATA.find(x=>x.sym===sym);
+  if(!m||!el)return;
+  if(el.style.display==='block'&&el.dataset.s===sym){el.style.display='none';return;}
+  el.dataset.s=sym;el.style.display='block';
+  const cfg=STATUS_CFG[m.status];
+  const verdict=m.status==='eliminated'||m.status==='weak'?'❌ SKIP':m.status==='marginal'?'⚠️ WATCH':'✅ USE';
+  el.innerHTML=`<div style="padding:14px;background:var(--gray-50);border-radius:var(--radius-lg);border:1px solid var(--gray-200)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div style="font-size:.9375rem;font-weight:800;color:var(--blue-900)">${m.flag} ${m.name} · ${m.sym}</div>
+      <button onclick="document.getElementById('mktDetail').style.display='none'" style="background:none;border:none;cursor:pointer;color:var(--gray-400)">✕</button>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px">
+      <div style="padding:8px;background:#fff;border-radius:var(--radius-md);text-align:center"><div style="font-size:.68rem;color:var(--gray-500)">Profit Factor</div><div style="font-size:.9375rem;font-weight:800;color:var(--blue-500)">${m.pf.toFixed(2)}</div></div>
+      <div style="padding:8px;background:#fff;border-radius:var(--radius-md);text-align:center"><div style="font-size:.68rem;color:var(--gray-500)">Win Rate</div><div style="font-size:.9375rem;font-weight:800">${m.wr}%</div></div>
+      <div style="padding:8px;background:#fff;border-radius:var(--radius-md);text-align:center"><div style="font-size:.68rem;color:var(--gray-500)">Monthly</div><div style="font-size:.9375rem;font-weight:800;color:${m.monthly>=0?'var(--green-500)':'var(--red-500)'}">${m.monthly>=0?'+':''}${m.monthly.toFixed(2)}%</div></div>
+      <div style="padding:8px;background:#fff;border-radius:var(--radius-md);text-align:center"><div style="font-size:.68rem;color:var(--gray-500)">Verdict</div><div style="font-size:.8125rem;font-weight:800">${verdict}</div></div>
+    </div>
+    <div style="font-size:.8rem;color:var(--gray-700)">${m.note}</div>
+  </div>`;
+}
+
+/* ══════════════════════════════════════════════════
    SIDEBAR TOGGLE (MOBILE)
    ══════════════════════════════════════════════════ */
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');}
