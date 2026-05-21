@@ -2105,17 +2105,48 @@ const D5_DIMS=[
   {d:'D6',name:'Intelligence Layer',c:'#4338CA',win:'4-regime detection',pf:'Active',note:'TRENDING / RANGING / VOLATILE / DEAD market states now live.'}
 ];
 
+const D5_DETAIL={
+  D1:{variants:[['QuadTF+FVG','1.20','41%','Best combo'],['Single SMC','0.88','35%','Too selective'],['Triple TF','1.05','38%','Marginal'],['OB only','0.72','29%','Too many losses'],['FVG only','0.81','33%','Below target']],winner:'QuadTF+FVG combo — all 4 timeframes aligned gives highest quality entries',code:'D1 EMA trend + H4 momentum + H1 FVG + H1 Order Block'},
+  D2:{variants:[['SL=ATR×2.0','2.36','44%','WINNER'],['SL=ATR×1.5','1.83','42%','Good'],['SL=ATR×2.5','2.11','46%','Good'],['Fixed 80pt','1.03','31%','Original'],['Fixed 120pt','1.44','40%','Marginal']],winner:'SL = ATR×2.0 avoids premature stops — unlocked PF 2.36',code:'SL = ATR(14)×2.0 + 80pt buffer (regime-adjusted)'},
+  D3:{variants:[['XAUUSD','3.19','51.5%','Champion ★'],['US30','2.04','47%','Strong'],['NAS100','1.87','44%','Good'],['GBPJPY','2.11','46%','Strong'],['EURUSD','1.76','43%','Marginal']],winner:'XAUUSD Gold is #1 — SMC order blocks form most reliably on Gold',code:'London + Asian sessions · H1 timeframe · ECN broker required'},
+  D4:{variants:[['1% base risk','0.95%/mo','$3,340','Safe'],['2% base risk','1.90%/mo','$3,760','Good'],['AM after 3 wins','2.50%/mo','$4,050','Better'],['AM aggressive','3.33%/mo','$4,820','Higher risk'],['Fixed lot','0.47%/mo','$3,170','Safest']],winner:'Anti-martingale after 3 wins: best risk-adjusted return',code:'InpAMWins=3 · InpAMAdd=0.5 · InpMaxRisk=3.0'},
+  D5:{variants:[['News momentum','3.5','—','+0.33%/mo'],['Monthly breakout','2.8','—','+0.37%/mo'],['Satellite combined','—','—','+0.70%/mo total'],['SMC alone','3.19','51.5%','Base'],['All combined','—','—','+1.65%/mo est']],winner:'News + Monthly Breakout satellites add +0.70%/mo consistently',code:'8 news events/year at 5:1+ RR · Monthly momentum filter'},
+  D6:{variants:[['TRENDING','Active','High','Best for entries'],['RANGING','Paused','Low','EA sits out'],['VOLATILE','Reduced','Medium','Smaller SL'],['DEAD','Paused','—','No trading']],winner:'4-regime detection via ATR ratio: ATR(14)/ATR(100)',code:'Regime=TRENDING when ATR(14)/ATR(100) = 0.5–1.5×'}
+};
+let d5Expanded=null;
+function toggleD5(d){
+  const el=document.getElementById('d5detail_'+d);
+  if(!el)return;
+  if(d5Expanded===d){el.style.display='none';d5Expanded=null;}
+  else{
+    if(d5Expanded)document.getElementById('d5detail_'+d5Expanded).style.display='none';
+    d5Expanded=d;el.style.display='block';
+  }
+}
 pageInitFns['phase5']=function(){
   const el=document.getElementById('phase5-content');if(!el)return;
-  const dims=D5_DIMS.map(d=>`<div class="card card-sm" style="border-left:3px solid ${d.c}">
-    <div style="display:flex;align-items:center;gap:7px;margin-bottom:6px">
-      <span style="padding:2px 8px;border-radius:999px;font-size:.75rem;font-weight:700;background:${d.c};color:#fff">${d.d}</span>
-      <span style="font-size:.8rem;font-weight:700;color:var(--blue-900)">${d.name}</span>
-    </div>
-    <div style="font-size:.72rem;color:var(--gray-500);margin-bottom:3px">Winner: ${d.win}</div>
-    <div style="font-size:.72rem;font-weight:700;color:${d.c};margin-bottom:5px">PF ${d.pf}${d.wr?' · WR '+d.wr+'%':''}</div>
-    <div style="font-size:.75rem;color:var(--gray-700);line-height:1.5">${d.note}</div>
-  </div>`).join('');
+  const dims=D5_DIMS.map(d=>{
+    const det=D5_DETAIL[d.d];
+    const hasV=det&&det.variants;
+    const vRows=hasV?det.variants.map((v,i)=>`<tr style="background:${i===0?'var(--green-100)':i%2?'var(--gray-50)':'#fff'}"><td style="padding:5px 8px;font-size:.78rem;font-weight:600;color:var(--blue-900)">${v[0]}</td><td style="padding:5px 8px;font-size:.78rem;font-weight:700;color:var(--blue-500)">${v[1]}</td><td style="padding:5px 8px;font-size:.78rem">${v[2]}</td><td style="padding:5px 8px;font-size:.78rem;color:var(--green-500);font-weight:600">${v[3]}</td></tr>`).join(''):'';
+    const detHtml=det?`<div id="d5detail_${d.d}" style="display:none;margin-top:10px;border-top:1px solid var(--gray-200);padding-top:10px">
+      <div style="font-size:.78rem;font-weight:700;color:var(--blue-900);margin-bottom:6px">All variants tested:</div>
+      <table style="width:100%;border-collapse:collapse;margin-bottom:8px"><thead><tr style="background:var(--gray-50)"><th style="padding:4px 8px;font-size:.75rem;color:var(--gray-500);text-align:left">Variant</th><th style="padding:4px 8px;font-size:.75rem;color:var(--gray-500)">PF/Return</th><th style="padding:4px 8px;font-size:.75rem;color:var(--gray-500)">WR</th><th style="padding:4px 8px;font-size:.75rem;color:var(--gray-500)">Note</th></tr></thead><tbody>${vRows}</tbody></table>
+      <div style="font-size:.78rem;padding:8px;background:var(--blue-100);border-radius:var(--radius-md);margin-bottom:6px"><strong>Winner: </strong>${det.winner}</div>
+      <div style="font-size:.75rem;color:var(--gray-500);font-family:monospace;background:var(--gray-50);padding:6px 8px;border-radius:var(--radius-sm)">${det.code}</div>
+    </div>`:'';
+    return`<div class="card card-sm" style="border-left:3px solid ${d.c};cursor:pointer" onclick="toggleD5('${d.d}')">
+      <div style="display:flex;align-items:center;gap:7px;margin-bottom:6px">
+        <span style="padding:2px 8px;border-radius:999px;font-size:.75rem;font-weight:700;background:${d.c};color:#fff">${d.d}</span>
+        <span style="font-size:.8rem;font-weight:700;color:var(--blue-900);flex:1">${d.name}</span>
+        <span style="font-size:.75rem;color:var(--gray-400)">Click →</span>
+      </div>
+      <div style="font-size:.75rem;color:var(--gray-500);margin-bottom:3px">Winner: ${d.win}</div>
+      <div style="font-size:.75rem;font-weight:700;color:${d.c};margin-bottom:5px">PF ${d.pf}${d.wr?' · WR '+d.wr+'%':''}</div>
+      <div style="font-size:.75rem;color:var(--gray-700);line-height:1.5">${d.note}</div>
+      ${detHtml}
+    </div>`;
+  }).join('');
   const mcCards=[
     {label:'Worst Case (P10)',icon:'📉',val:'$2,840',pct:'-5.3%',bg:'#FEF2F2',c:'var(--red-500)',sub:'Unlucky streak'},
     {label:'Base Case (P50)',icon:'📊',val:'$3,330',pct:'+11%',bg:'var(--gray-50)',c:'var(--blue-500)',sub:'Median: 0.95%/mo'},
