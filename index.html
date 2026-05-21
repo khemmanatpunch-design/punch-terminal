@@ -1852,6 +1852,206 @@ function showMkt(sym){
 }
 
 /* ══════════════════════════════════════════════════
+   SAVE 4 — PHASE 4: ROOT CAUSE
+   ══════════════════════════════════════════════════ */
+const PROB_CARDS=[
+  {sev:'CRITICAL',icon:'📊',bg:'#FEF2F2',border:'var(--red-500)',pill:'#FEE2E2',pillC:'#991B1B',title:'Over-Trading',prob:'49 trades/day average',cost:'$1,382/day in spread costs',fix:'Reduce to max 3 trades/day with strict filters'},
+  {sev:'CRITICAL',icon:'💸',bg:'#FEF2F2',border:'var(--red-500)',pill:'#FEE2E2',pillC:'#991B1B',title:'Spread Costs',prob:'28pt Exness spread',cost:'$30,402/month lost to spread',fix:'Switch to Pepperstone 5–10pt spread'},
+  {sev:'HIGH',icon:'📉',bg:'#FFF7ED',border:'var(--orange-500)',pill:'#FFEDD5',pillC:'#9A3412',title:'Low Profit Factor',prob:'PF 1.03 — only 2.8% edge',cost:'Not enough edge to cover costs',fix:'Need PF 1.5+ with better entry filters'},
+  {sev:'HIGH',icon:'🎯',bg:'#FFF7ED',border:'var(--orange-500)',pill:'#FFEDD5',pillC:'#9A3412',title:'RR Ratio',prob:'1.5:1 RR too low for costs',cost:'Each loss wipes 1.5 wins',fix:'Need 3:1 minimum reward-to-risk'},
+  {sev:'MEDIUM',icon:'🌍',bg:'#FFFBEB',border:'var(--amber-500)',pill:'#FEF3C7',pillC:'#92400E',title:'Single Market',prob:'Gold only — 3–6 trades/month',cost:'Low frequency, high dependency',fix:'5+ uncorrelated markets needed'},
+  {sev:'MEDIUM',icon:'📈',bg:'#FFFBEB',border:'var(--amber-500)',pill:'#FEF3C7',pillC:'#92400E',title:'No Compounding',prob:'Fixed 0.01 lot forever',cost:'Missing exponential growth',fix:'Anti-martingale 2% risk per trade'}
+];
+const RISK_DATA=[[0.5,3.5,4536,1],[1.0,7.1,6850,9],[1.5,10.9,10332,18],[2.0,14.7,15567,27],[2.5,18.7,23427,36],[3.0,22.8,35214,45],[3.5,27.0,52870,54],[4.0,31.4,79289,63],[4.5,35.9,118774,72],[5.0,40.5,177721,81]];
+const HYBRID_PATH=[
+  {range:'Month 1–3',c:'var(--blue-500)',bg:'#EFF6FF',risk:'1.0%',mo:'7.1%',bal:'$3,648'},
+  {range:'Month 4–6',c:'var(--green-500)',bg:'#F0FDF4',risk:'2.0%',mo:'14.7%',bal:'$5,407'},
+  {range:'Month 7–9',c:'var(--orange-500)',bg:'#FFF7ED',risk:'3.0%',mo:'22.8%',bal:'$10,186'},
+  {range:'Month 10–12',c:'var(--pink-600)',bg:'#FDF2F8',risk:'3.5%',mo:'27.0%',bal:'$27,000+'}
+];
+
+pageInitFns['phase4']=function(){
+  const el=document.getElementById('phase4-content');if(!el)return;
+  const pCards=PROB_CARDS.map(p=>`<div class="card card-sm" style="border-top:3px solid ${p.border}">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+      <span style="font-size:1.1rem">${p.icon}</span>
+      <span style="padding:2px 8px;border-radius:999px;font-size:.68rem;font-weight:700;background:${p.pill};color:${p.pillC}">${p.sev}</span>
+    </div>
+    <div style="font-size:.875rem;font-weight:700;color:var(--blue-900);margin-bottom:5px">${p.title}</div>
+    <div style="font-size:.78rem;color:var(--gray-700);margin-bottom:2px">⚠️ ${p.prob}</div>
+    <div style="font-size:.78rem;color:var(--red-500);margin-bottom:5px">Cost: ${p.cost}</div>
+    <div style="font-size:.78rem;color:var(--green-500);font-weight:600">Fix: ${p.fix}</div>
+  </div>`).join('');
+  const gapRows=[['Trades/day','49/day','25/day','5/day','0.5/day'],['Profit Factor','1.03','1.20','1.50','1.83'],['RR Ratio','1.5:1','2.0:1','2.5:1','3.0:1'],['Markets','1 (Gold)','2','3','5+'],['Risk %','0.01 fixed','0.5%','1.0%','2.0%']].map(r=>`<tr>${r.map((c,i)=>`<td style="padding:8px 12px;border-bottom:1px solid var(--gray-100);background:${i===1?'#FEE2E2':i===2?'#FEF3C7':i>=3?'#D1FAE5':'var(--gray-50)'};font-size:.8rem;font-weight:${i===0?600:400}">${c}</td>`).join('')}</tr>`).join('');
+  const lights=[['#EF4444','1000% in 1 month','Mathematically impossible'],['#F59E0B','1000% in 1 year','54% blowup risk'],['#10B981','500% in 1 year','Achievable, 35% blowup'],['#10B981','200% in 1 year','Realistic, 15% blowup'],['#10B981','100% in 1 year','Very achievable, 8% blowup']].map(([c,l,n])=>`<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--gray-100)"><div style="width:16px;height:16px;border-radius:50%;background:${c};flex-shrink:0"></div><div><div style="font-size:.8rem;font-weight:600;color:var(--blue-900)">${l}</div><div style="font-size:.72rem;color:var(--gray-500)">${n}</div></div></div>`).join('');
+  const hybrid=HYBRID_PATH.map((h,i)=>(i>0?`<div style="font-size:1.25rem;color:var(--gray-300);align-self:center">→</div>`:'')+`<div style="flex:1;min-width:120px;padding:12px;background:${h.bg};border-radius:var(--radius-lg);border-top:3px solid ${h.c}"><div style="font-size:.68rem;font-weight:600;color:var(--gray-500);margin-bottom:3px">${h.range}</div><div style="font-size:.875rem;font-weight:800;color:var(--blue-900)">${h.risk} risk</div><div style="font-size:.8rem;color:${h.c};font-weight:600">${h.mo}/mo</div><div style="font-size:.875rem;font-weight:800;color:var(--blue-900);margin-top:5px">${h.bal}</div></div>`).join('');
+  el.innerHTML=`
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">${pCards}</div>
+    <div class="section-heading"><span>Gap Analysis Table</span><div class="section-heading-line"></div></div>
+    <div style="background:#fff;border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:20px"><table style="width:100%;border-collapse:collapse"><thead><tr>${['Metric','Current ❌','5%/mo 🟡','10%/mo 🟢','21.5%/mo 🏆'].map(h=>`<th style="padding:9px 12px;background:var(--gray-50);font-size:.75rem;font-weight:600;color:var(--gray-500);text-align:left;border-bottom:1px solid var(--gray-200)">${h}</th>`).join('')}</tr></thead><tbody>${gapRows}</tbody></table></div>
+    <div class="section-heading"><span>Ultra vs Champion</span><div class="section-heading-line"></div></div>
+    <div class="grid-2" style="margin-bottom:14px">
+      <div style="padding:16px;background:#F0FDF4;border:2px solid var(--green-500);border-radius:var(--radius-lg)"><div style="font-size:.875rem;font-weight:700;color:var(--green-500);margin-bottom:8px">✅ Champion — 3 Filters</div><div style="font-size:.8rem;color:var(--gray-700);line-height:1.9">Trades: 845 (0.51/day)<br>PF: 1.83 | Monthly: +2.1%<br><strong>WORKS</strong></div></div>
+      <div style="padding:16px;background:#FEF2F2;border:2px solid var(--red-500);border-radius:var(--radius-lg)"><div style="font-size:.875rem;font-weight:700;color:var(--red-500);margin-bottom:8px">❌ Ultra — 10 Filters</div><div style="font-size:.8rem;color:var(--gray-700);line-height:1.9">Trades: 0 (never fired)<br>PF: 0.00 | Monthly: 0%<br><strong>TOO SELECTIVE</strong></div></div>
+    </div>
+    <div style="padding:12px 16px;background:var(--blue-100);border-radius:var(--radius-md);font-size:.8125rem;color:var(--blue-900);margin-bottom:20px">💡 <strong>Sweet spot: 3–5 strong filters.</strong> 10 simultaneous conditions = statistically near-impossible in 6 years of data.</div>
+    <div class="section-heading"><span>1000% Path Analysis</span><div class="section-heading-line"></div></div>
+    <div class="grid-2" style="margin-bottom:20px">
+      <div class="card card-sm">${lights}</div>
+      <div class="card card-sm">
+        <div style="font-size:.875rem;font-weight:700;color:var(--blue-900);margin-bottom:10px">🎚️ Interactive Risk Slider</div>
+        <input type="range" id="riskSlider" min="0" max="9" value="1" oninput="updateRisk(this.value)" style="width:100%;accent-color:var(--blue-500);margin-bottom:10px">
+        <div style="text-align:center;font-size:.8rem;color:var(--gray-500);margin-bottom:12px">Risk per trade: <strong id="rLabel">1.0%</strong></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+          <div style="padding:10px;background:var(--gray-50);border-radius:var(--radius-md);text-align:center"><div style="font-size:.65rem;color:var(--gray-500)">Monthly</div><div id="rMo" style="font-size:1rem;font-weight:800;color:var(--green-500)">7.1%</div></div>
+          <div style="padding:10px;background:var(--gray-50);border-radius:var(--radius-md);text-align:center"><div style="font-size:.65rem;color:var(--gray-500)">12mo Balance</div><div id="rBal" style="font-size:.875rem;font-weight:800;color:var(--blue-500)">$6,850</div></div>
+          <div style="padding:10px;background:var(--gray-50);border-radius:var(--radius-md);text-align:center"><div style="font-size:.65rem;color:var(--gray-500)">Blowup Risk</div><div id="rBlow" style="font-size:1rem;font-weight:800;color:var(--orange-500)">9%</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="section-heading"><span>Hybrid Path to $30k</span><div class="section-heading-line"></div></div>
+    <div style="display:flex;gap:8px;align-items:stretch;flex-wrap:wrap">${hybrid}</div>`;
+};
+function updateRisk(i){
+  const d=RISK_DATA[i];
+  document.getElementById('rLabel').textContent=d[0].toFixed(1)+'%';
+  document.getElementById('rMo').textContent=d[1].toFixed(1)+'%';
+  document.getElementById('rMo').style.color=d[1]<10?'var(--orange-500)':'var(--green-500)';
+  document.getElementById('rBal').textContent='$'+d[2].toLocaleString();
+  document.getElementById('rBlow').textContent=d[3]+'%';
+  document.getElementById('rBlow').style.color=d[3]<20?'var(--green-500)':d[3]<40?'var(--orange-500)':'var(--red-500)';
+}
+
+/* ══════════════════════════════════════════════════
+   SAVE 4 — PHASE 5: MAX AGGRESSION
+   ══════════════════════════════════════════════════ */
+const D5_DIMS=[
+  {d:'D1',name:'Win Rate Revolution',c:'var(--blue-500)',win:'QuadTF+FVG combo',pf:'1.20',tr:458,note:'More filters ≠ better WR. Single EAs all lose money individually.'},
+  {d:'D2',name:'RR Revolution',c:'var(--pink-600)',win:'SL = ATR×2.0',pf:'2.36',wr:44,note:'Wider SL avoids premature stops — unlocked PF 2.36 and WR 44%.'},
+  {d:'D3',name:'Market Universe',c:'var(--green-500)',win:'Gold+US30+GBPJPY+NAS100',pf:'2.04',note:'Top 5 markets all PF>2.0. Combined monthly: ~0.15%/mo total.'},
+  {d:'D4',name:'Compounding',c:'var(--amber-500)',win:'Base MC median $6,708',pf:'—',note:'P($30k) = 46.7% best case with anti-martingale win streaks.'},
+  {d:'D5',name:'Special Strategies',c:'#7C3AED',win:'News + Monthly Momentum',pf:'3.5 / 2.8',note:'Satellite strategies add +0.70%/mo: News PF 3.5, Monthly PF 2.8.'},
+  {d:'D6',name:'Intelligence Layer',c:'#4338CA',win:'4-regime detection',pf:'Active',note:'TRENDING / RANGING / VOLATILE / DEAD market states now live.'}
+];
+
+pageInitFns['phase5']=function(){
+  const el=document.getElementById('phase5-content');if(!el)return;
+  const dims=D5_DIMS.map(d=>`<div class="card card-sm" style="border-left:3px solid ${d.c}">
+    <div style="display:flex;align-items:center;gap:7px;margin-bottom:6px">
+      <span style="padding:2px 8px;border-radius:999px;font-size:.68rem;font-weight:700;background:${d.c};color:#fff">${d.d}</span>
+      <span style="font-size:.8rem;font-weight:700;color:var(--blue-900)">${d.name}</span>
+    </div>
+    <div style="font-size:.72rem;color:var(--gray-500);margin-bottom:3px">Winner: ${d.win}</div>
+    <div style="font-size:.72rem;font-weight:700;color:${d.c};margin-bottom:5px">PF ${d.pf}${d.wr?' · WR '+d.wr+'%':''}</div>
+    <div style="font-size:.75rem;color:var(--gray-700);line-height:1.5">${d.note}</div>
+  </div>`).join('');
+  const mcCards=[
+    {label:'Worst Case (P10)',icon:'📉',val:'$1,555',pct:'-48%',bg:'#FEF2F2',c:'var(--red-500)',sub:'Unlucky streak'},
+    {label:'Base Case (P50)',icon:'📊',val:'$6,708',pct:'+124%',bg:'var(--gray-50)',c:'var(--blue-500)',sub:'Median result'},
+    {label:'Best Case (P90)',icon:'🚀',val:'$28,302',pct:'+843%',bg:'#F0FDF4',c:'var(--green-500)',sub:'AM streaks'}
+  ].map(m=>`<div style="padding:14px;background:${m.bg};border-radius:var(--radius-lg);text-align:center">
+    <div style="font-size:1.25rem;margin-bottom:3px">${m.icon}</div>
+    <div style="font-size:.72rem;font-weight:600;color:var(--gray-500);margin-bottom:3px">${m.label}</div>
+    <div style="font-size:1.375rem;font-weight:800;color:${m.c}">${m.val}</div>
+    <div style="font-size:.8125rem;font-weight:600;color:${m.c}">${m.pct} in 12mo</div>
+    <div style="font-size:.68rem;color:var(--gray-400);margin-top:3px">${m.sub}</div>
+  </div>`).join('');
+  el.innerHTML=`
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">${dims}</div>
+    <div class="section-heading"><span>Monte Carlo (1000 simulations · $3,000 start · 2% risk)</span><div class="section-heading-line"></div></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px">${mcCards}</div>
+    <div class="card" style="margin-bottom:18px"><div style="height:110px"><canvas id="mcChart"></canvas></div></div>
+    <div style="padding:16px;background:#FEF2F2;border-left:4px solid var(--red-500);border-radius:var(--radius-lg)">
+      <div style="font-size:.875rem;font-weight:800;color:var(--blue-900);margin-bottom:8px">⚠️ Honest KPI Assessment</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:.8rem">
+        <div>🎯 KPI: $3k→$30k requires <strong>21.5%/month</strong></div>
+        <div>📊 At 2% risk: <strong>0.68%/mo</strong> → median $6,708</div>
+        <div>💰 P($30k) base case: <strong>1.1%</strong></div>
+        <div>🔥 Best case (AM streaks): <strong>46.7%</strong></div>
+        <div>📈 Gap: need <strong>5%+ risk</strong> + win streaks</div>
+        <div>✅ Realistic 12mo target: <strong>$4,500–$8,000</strong></div>
+      </div>
+    </div>`;
+  setTimeout(()=>{
+    const mc=document.getElementById('mcChart');if(!mc)return;
+    const vals=[1555,2200,2900,3600,4400,5200,6100,6708,7900,9300,11200,13800,16500,20000,24000,28302];
+    new Chart(mc,{type:'bar',data:{labels:vals.map(v=>'$'+Math.round(v/1000)+'k'),datasets:[{data:vals,backgroundColor:vals.map(v=>v<3000?'#FCA5A5':v<8000?'#818CF8':'#6EE7B7'),borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{family:'Inter',size:9},color:'#9CA3AF'}},y:{display:false}}}});
+  },60);
+};
+
+/* ══════════════════════════════════════════════════
+   SAVE 4 — PHASE 6: BROKER OPTIMIZATION
+   ══════════════════════════════════════════════════ */
+pageInitFns['phase6']=function(){
+  const el=document.getElementById('phase6-content');if(!el)return;
+  const h4rows=[['Trades/6yr','492','113','H1 better ✅'],['Profit Factor','2.33','2.22','H1 better ✅'],['Monthly Return','+0.68%','-0.06%','H1 wins ✅'],['Swap costs','Minimal','Eats profit','H1 wins ✅'],['OB frequency','High (H1 bars)','Low (H4 bars)','H1 wins ✅']].map((r,i)=>`<tr style="background:${i%2?'var(--gray-50)':'#fff'}">${r.map((c,ci)=>`<td style="padding:8px 12px;border-bottom:1px solid var(--gray-100);font-size:.8rem;font-weight:${ci===3?700:400};color:${ci===3?'var(--green-500)':'var(--gray-700)'}">${c}</td>`).join('')}</tr>`).join('');
+  el.innerHTML=`
+    <div class="section-heading"><span>H4 vs H1 Comparison</span><div class="section-heading-line"></div></div>
+    <div style="background:#fff;border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:14px"><table style="width:100%;border-collapse:collapse"><thead><tr>${['Metric','H1 (current)','H4 (tested)','Verdict'].map(h=>`<th style="padding:9px 12px;background:var(--gray-50);font-size:.75rem;font-weight:600;color:var(--gray-500);text-align:left;border-bottom:1px solid var(--gray-200)">${h}</th>`).join('')}</tr></thead><tbody>${h4rows}</tbody></table></div>
+    <div style="padding:12px 16px;background:#FFFBEB;border-left:3px solid var(--amber-500);border-radius:var(--radius-md);font-size:.8125rem;color:var(--gray-700);margin-bottom:20px">⚠️ <strong>H4 fails because:</strong> fewer OBs form on 4H chart and overnight swap costs eat small profits. H1 is optimal.</div>
+    <div class="section-heading"><span>Spread Impact by Broker</span><div class="section-heading-line"></div></div>
+    <div class="card" style="margin-bottom:18px"><div style="height:210px"><canvas id="spreadChart"></canvas></div></div>
+    <div class="section-heading"><span>Broker Selection</span><div class="section-heading-line"></div></div>
+    <div style="padding:20px;background:linear-gradient(135deg,var(--blue-100),var(--pink-100));border-radius:var(--radius-lg);border:1.5px solid var(--blue-300)">
+      <div style="font-size:.9375rem;font-weight:800;color:var(--blue-900);margin-bottom:10px">🏆 Pepperstone Razor — Recommended</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:.8rem;color:var(--blue-900)">
+        ${['5–10pt spread (vs 28pt Exness)','$7/lot commission (ECN model)','MT5 fully supported','EA/algo trading allowed','1:200 leverage sufficient','Thai deposits accepted'].map(r=>`<div>✅ ${r}</div>`).join('')}
+      </div>
+    </div>`;
+  setTimeout(()=>{
+    const sc=document.getElementById('spreadChart');if(!sc)return;
+    new Chart(sc,{type:'bar',data:{
+      labels:['Exness Std (28pt)','Exness Pro (20pt)','IC Markets (15pt)','Pepperstone (10pt)','Pepperstone Best (5pt)'],
+      datasets:[{data:[0.68,0.88,1.12,1.37,1.87],backgroundColor:['#FCA5A5','#FCD34D','#FCD34D','#6EE7B7','#059669'],borderRadius:5}]
+    },options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.raw.toFixed(2)}%/month`}}},scales:{x:{grid:{color:'#F3F4F6'},ticks:{font:{family:'Inter',size:11},callback:v=>v+'%'}},y:{grid:{display:false},ticks:{font:{family:'Inter',size:11},color:'#374151'}}}}});
+  },60);
+};
+
+/* ══════════════════════════════════════════════════
+   SAVE 4 — PHASE 7: FINAL VALIDATION
+   ══════════════════════════════════════════════════ */
+const WF_ROWS=[
+  {period:'WF Period 1',train:'2020–2022',test:'2023',tpf:3.19,spf:3.19,ratio:1.00},
+  {period:'WF Period 2',train:'2020–2023',test:'2024–2026',tpf:3.19,spf:3.19,ratio:1.00}
+];
+const PEP_SIM=[['18pt Asian session',0.754,'Current confirmed'],['15pt average',0.827,'Typical session'],['10pt London kill zone',0.950,'Best regular'],['5pt best case',1.240,'Ideal conditions']];
+const CHECKLIST=['Backtest validated 2020–2026 (6 years full)','Walk-forward Period 1: ROBUST (ratio 1.00)','Walk-forward Period 2: ROBUST (ratio 1.00)','Forward test 2026 profitable (+$1,516)','Pepperstone account connected (51489276)','EA compiled: APEX_Pepperstone_v1 (0 errors)','MT5 connected — XAUUSD confirmed','Spread confirmed 18pt Asian / 10pt London','Risk defined: 1% base, 20% DD stop','Discord monitoring active'];
+
+pageInitFns['phase7']=function(){
+  const el=document.getElementById('phase7-content');if(!el)return;
+  const wfCards=WF_ROWS.map(w=>`<div class="card card-sm" style="border-top:3px solid var(--green-500)">
+    <div style="font-size:.875rem;font-weight:700;color:var(--blue-900);margin-bottom:6px">${w.period}</div>
+    <div style="font-size:.78rem;color:var(--gray-500);margin-bottom:10px">Train: ${w.train} → Test: ${w.test}</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:10px;text-align:center">
+      <div style="padding:7px;background:var(--gray-50);border-radius:6px"><div style="font-size:.65rem;color:var(--gray-500)">Train PF</div><div style="font-size:.875rem;font-weight:800;color:var(--blue-500)">${w.tpf.toFixed(2)}</div></div>
+      <div style="padding:7px;background:var(--gray-50);border-radius:6px"><div style="font-size:.65rem;color:var(--gray-500)">Test PF</div><div style="font-size:.875rem;font-weight:800;color:var(--blue-500)">${w.spf.toFixed(2)}</div></div>
+      <div style="padding:7px;background:var(--green-100);border-radius:6px"><div style="font-size:.65rem;color:var(--gray-500)">Ratio</div><div style="font-size:.875rem;font-weight:800;color:var(--green-500)">${w.ratio.toFixed(2)}</div></div>
+    </div>
+    <span style="display:inline-block;padding:3px 11px;background:var(--green-100);color:var(--green-500);border-radius:999px;font-size:.72rem;font-weight:700">✅ ROBUST</span>
+  </div>`).join('');
+  const compRows=[{sym:'XAUUSDm (Exness)',pf:2.36,wr:44,tr:492,mo:0.68,st:'✅'},{sym:'XAUUSD Pepper 18pt',pf:3.19,wr:51.5,tr:198,mo:0.754,st:'✅ ROBUST'},{sym:'XAUUSD Pepper 10pt',pf:3.19,wr:51.5,tr:198,mo:0.950,st:'✅ ROBUST'}].map((r,i)=>`<tr style="background:${i%2?'var(--gray-50)':'#fff'}"><td style="padding:8px 11px;font-size:.8rem;font-weight:600;color:var(--blue-900)">${r.sym}</td><td style="padding:8px 11px;font-size:.8rem;font-weight:700;color:var(--green-500)">${r.pf.toFixed(2)}</td><td style="padding:8px 11px;font-size:.8rem">${r.wr}%</td><td style="padding:8px 11px;font-size:.8rem;color:var(--gray-500)">${r.tr}</td><td style="padding:8px 11px;font-size:.8rem;font-weight:600;color:var(--blue-500)">${r.mo.toFixed(3)}%</td><td style="padding:8px 11px;font-size:.8rem;font-weight:700;color:var(--green-500)">${r.st}</td></tr>`).join('');
+  const simCards=PEP_SIM.map(([sp,mo,note])=>`<div style="padding:12px;background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius-lg);text-align:center"><div style="font-size:.7rem;color:var(--gray-500);margin-bottom:3px">${sp}</div><div style="font-size:1.1rem;font-weight:800;color:var(--blue-500)">${mo.toFixed(3)}%/mo</div><div style="font-size:.65rem;color:var(--gray-400);margin-top:2px">${note}</div></div>`).join('');
+  const chklist=CHECKLIST.map((item,i)=>`<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:${i<CHECKLIST.length-1?'1px solid var(--gray-100)':'none'}"><span style="color:var(--green-500);flex-shrink:0">✅</span><span style="font-size:.8rem;color:var(--gray-700)">${item}</span></div>`).join('');
+  el.innerHTML=`
+    <div class="grid-2" style="margin-bottom:18px">${wfCards}</div>
+    <div class="section-heading"><span>Final Comparison</span><div class="section-heading-line"></div></div>
+    <div style="background:#fff;border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:18px"><table style="width:100%;border-collapse:collapse"><thead><tr>${['Symbol','PF','WR','Trades','Monthly','WF Status'].map(h=>`<th style="padding:8px 11px;background:var(--gray-50);font-size:.75rem;font-weight:600;color:var(--gray-500);text-align:left;border-bottom:1px solid var(--gray-200)">${h}</th>`).join('')}</tr></thead><tbody>${compRows}</tbody></table></div>
+    <div class="section-heading"><span>Pepperstone Spread Simulation</span><div class="section-heading-line"></div></div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px">${simCards}</div>
+    <div class="section-heading"><span>Readiness Checklist</span><div class="section-heading-line"></div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div class="card card-sm">${chklist}</div>
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;background:linear-gradient(135deg,var(--green-100),#DCFCE7);border-radius:var(--radius-xl);border:2px solid var(--green-500);text-align:center">
+        <div style="font-size:1.75rem;margin-bottom:6px">🎯</div>
+        <div style="font-size:2.5rem;font-weight:800;color:var(--green-500)">10/10</div>
+        <div style="font-size:.875rem;font-weight:700;color:var(--blue-900);margin-top:4px">All Checks Passed</div>
+        <div style="margin-top:12px;padding:8px 22px;background:var(--green-500);color:#fff;border-radius:999px;font-size:.875rem;font-weight:700">✅ READY FOR DEMO</div>
+        <div style="font-size:.72rem;color:var(--gray-500);margin-top:8px">Demo only — never real money</div>
+      </div>
+    </div>`;
+};
+
+/* ══════════════════════════════════════════════════
    SIDEBAR TOGGLE (MOBILE)
    ══════════════════════════════════════════════════ */
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');}
