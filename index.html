@@ -2362,6 +2362,165 @@ pageInitFns['demolplan']=function(){
 };
 
 /* ══════════════════════════════════════════════════
+   SAVE 6 — CLAUDE AI ADVISOR
+   ══════════════════════════════════════════════════ */
+const APEX_SYS=`You are an expert trading analyst for the APEX GREATEST project. Be concise, honest, specific. Never inflate numbers. Respond in plain text with light markdown (**bold**, numbered lists). Keep answers under 280 words unless asked for more detail.
+
+KEY DATA:
+Champion EA: APEX_Pepperstone_v1 (SMC Order Blocks + FVG, XAUUSD H1)
+Broker: Pepperstone Razor — demo account 51489276
+Backtest 2020-2026: PF=3.19, WR=51.5%, 198 trades, Monthly avg=0.827%
+Walk-forward: ROBUST both periods (PF ratio=1.00)
+KPI: $3,000 → $30,000 in 12 months (requires 21.5%/month — currently 0.827%)
+GAP: 22.6× improvement needed vs current monthly return
+Phase 8 of 8: demo trading just starting — need 50+ trades before conclusions
+Risk: 1.0% base, 3.0% max (anti-martingale: +0.5% after each 3-win streak)
+DD limit: 20% (halt trading if equity < $2,400 from $3,000 start)
+Risk of ruin at 1%: ~3% (safe). At 3%: ~15% (acceptable)
+Multi-market: Only XAUUSD contributes positively; other markets near breakeven
+Sessions: ATR-filtered, London + NY kill zones only
+Stats require 50+ live trades for validity. Walk-forward is optimistic due to limited local data.
+Always be honest that $30k in 12 months is highly unlikely at 0.83%/mo. Suggest realistic alternatives.`;
+
+let chatHistory=[];
+
+function renderClaudeSetup(c){
+  c.innerHTML=`
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:480px">
+    <div class="card card-sm" style="max-width:420px;width:100%;text-align:center;padding:36px 32px">
+      <div style="width:56px;height:56px;background:linear-gradient(135deg,#FF6B2B,#F97316);border-radius:14px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:800;color:#fff">C</div>
+      <div style="font-size:1.2rem;font-weight:800;color:var(--blue-900);margin-bottom:8px">Connect Claude AI</div>
+      <div style="font-size:.8rem;color:var(--gray-500);margin-bottom:20px;line-height:1.6">Enter your Anthropic API key to unlock<br>personalized strategy analysis</div>
+      <input id="claude-key-input" type="password" placeholder="sk-ant-..." style="width:100%;padding:10px 14px;border:1.5px solid var(--gray-200);border-radius:10px;font-size:.875rem;margin-bottom:12px;box-sizing:border-box;font-family:monospace;outline:none" oninput="this.style.borderColor=this.value.startsWith('sk-')?'var(--green-500)':'var(--gray-200)'" onkeydown="if(event.key==='Enter')connectClaude()">
+      <button onclick="connectClaude()" style="width:100%;padding:11px;background:var(--blue-500);color:#fff;border:none;border-radius:10px;font-size:.875rem;font-weight:700;cursor:pointer;margin-bottom:14px">Save &amp; Connect</button>
+      <div style="font-size:.75rem"><a href="https://console.anthropic.com/settings/keys" target="_blank" style="color:var(--blue-500)">Get key at console.anthropic.com/settings/keys</a></div>
+      <div style="margin-top:10px;font-size:.72rem;color:var(--gray-400)">Stored locally in browser. Never sent anywhere except Anthropic.</div>
+    </div>
+    <div style="max-width:420px;width:100%;margin-top:18px">
+      <div style="font-size:.78rem;color:var(--gray-400);text-align:center;margin-bottom:10px">🔒 Connect API key to ask these questions:</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center">
+        ${['Rate my system 1-10','Am I on track for $30k?','What should I improve?','Which risk level is right?','What is Phase 8 plan?','How do I reduce blowup risk?'].map(q=>`<div style="padding:6px 12px;background:var(--bg-secondary);border:1px solid var(--gray-200);border-radius:999px;font-size:.75rem;color:var(--gray-400)">🔒 ${q}</div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderClaudeChat(c){
+  const pills=['Rate my system 1-10','Am I on track for $30k?','What should I improve first?','Which risk level is right for me?','What is Phase 8 plan?','How do I reduce blowup risk?','Compare F01 vs F06 strategy','When can I go live?'];
+  c.innerHTML=`
+  <div style="display:flex;flex-direction:column;height:calc(100vh - 190px);min-height:480px">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:linear-gradient(90deg,#FF6B2B,#F97316);border-radius:var(--radius-xl);margin-bottom:14px;color:#fff">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:32px;height:32px;background:rgba(255,255,255,.2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800">C</div>
+        <div><div style="font-weight:700;font-size:.95rem">Claude — APEX Advisor</div><div style="font-size:.72rem;opacity:.85">claude-sonnet-4-20250514</div></div>
+      </div>
+      <button onclick="disconnectClaude()" style="background:rgba(255,255,255,.2);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:.75rem;cursor:pointer">Disconnect</button>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
+      ${pills.map(p=>`<button onclick="sendPill(this.textContent)" style="padding:5px 12px;background:#fff;border:1px solid var(--gray-200);border-radius:999px;font-size:.75rem;cursor:pointer;color:var(--blue-700);white-space:nowrap;font-family:inherit">${p}</button>`).join('')}
+    </div>
+    <div id="claude-msgs" style="flex:1;overflow-y:auto;padding:2px 0;display:flex;flex-direction:column"></div>
+    <div style="display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--gray-200)">
+      <input id="claude-input" type="text" placeholder="Ask about your APEX trading system..." style="flex:1;padding:10px 14px;border:1.5px solid var(--gray-200);border-radius:10px;font-size:.875rem;font-family:inherit;outline:none" onkeydown="if(event.key==='Enter')sendClaudeMsg()">
+      <button onclick="sendClaudeMsg()" style="padding:10px 18px;background:var(--blue-500);color:#fff;border:none;border-radius:10px;font-size:.875rem;font-weight:700;cursor:pointer;font-family:inherit">Send</button>
+    </div>
+  </div>`;
+  setTimeout(()=>appendClaudeMsg('assistant',`I can see your **APEX GREATEST** system data. Here are the top 3 areas I'd focus on:\n\n1. **Monthly return gap**: 0.83% actual vs 21.5% KPI needed → 22.6× improvement still required\n\n2. **Only gold contributing positively** → Other markets near breakeven — concentration risk\n\n3. **Demo phase just starting** → 50+ trades needed before any live capital decision\n\nWhat would you like to explore first?`),120);
+}
+
+pageInitFns['claude']=function(){
+  const c=document.getElementById('claude-content');
+  chatHistory=[];
+  const key=localStorage.getItem('apex_anthropic_key');
+  if(!key)renderClaudeSetup(c);else renderClaudeChat(c);
+};
+
+function connectClaude(){
+  const k=(document.getElementById('claude-key-input')?.value||'').trim();
+  if(!k.startsWith('sk-')){
+    const el=document.getElementById('claude-key-input');
+    if(el){el.style.borderColor='var(--red-500)';el.placeholder='Must start with sk-ant-...';}
+    return;
+  }
+  localStorage.setItem('apex_anthropic_key',k);
+  chatHistory=[];
+  renderClaudeChat(document.getElementById('claude-content'));
+}
+
+function disconnectClaude(){
+  localStorage.removeItem('apex_anthropic_key');
+  chatHistory=[];
+  pageInited['claude']=false;
+  pageInitFns['claude']();
+}
+
+function sendPill(text){
+  const inp=document.getElementById('claude-input');
+  if(inp){inp.value=text;sendClaudeMsg();}
+}
+
+function sendClaudeMsg(){
+  const inp=document.getElementById('claude-input');
+  const msg=(inp?.value||'').trim();if(!msg)return;
+  inp.value='';
+  appendClaudeMsg('user',msg);
+  chatHistory.push({role:'user',content:msg});
+  showClaudeTyping();
+  callClaude();
+}
+
+function appendClaudeMsg(role,text){
+  const wrap=document.getElementById('claude-msgs');if(!wrap)return;
+  const div=document.createElement('div');
+  div.style.cssText='margin-bottom:12px;display:flex;'+(role==='user'?'justify-content:flex-end':'justify-content:flex-start');
+  const html=text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
+  div.innerHTML=role==='user'
+    ?`<div style="max-width:70%;background:var(--blue-500);color:#fff;padding:10px 14px;border-radius:16px 16px 4px 16px;font-size:.875rem;line-height:1.5">${html}</div>`
+    :`<div style="max-width:82%;background:#fff;box-shadow:var(--shadow-sm);padding:12px 16px;border-radius:4px 16px 16px 16px;font-size:.875rem;line-height:1.6;color:var(--gray-900);border:1px solid var(--gray-200)">${html}</div>`;
+  wrap.appendChild(div);wrap.scrollTop=wrap.scrollHeight;
+}
+
+function showClaudeTyping(){
+  const wrap=document.getElementById('claude-msgs');if(!wrap)return;
+  const div=document.createElement('div');
+  div.id='claude-typing';div.style.cssText='margin-bottom:12px;display:flex;justify-content:flex-start';
+  div.innerHTML='<div style="background:#fff;box-shadow:var(--shadow-sm);padding:12px 16px;border-radius:4px 16px 16px 16px;border:1px solid var(--gray-200)"><span style="display:inline-flex;gap:5px;align-items:center"><span style="width:7px;height:7px;border-radius:50%;background:var(--gray-300);animation:dotPulse 1.2s 0s infinite ease-in-out;display:inline-block"></span><span style="width:7px;height:7px;border-radius:50%;background:var(--gray-300);animation:dotPulse 1.2s .2s infinite ease-in-out;display:inline-block"></span><span style="width:7px;height:7px;border-radius:50%;background:var(--gray-300);animation:dotPulse 1.2s .4s infinite ease-in-out;display:inline-block"></span></span></div>';
+  wrap.appendChild(div);wrap.scrollTop=wrap.scrollHeight;
+}
+
+async function callClaude(){
+  const apiKey=localStorage.getItem('apex_anthropic_key');
+  if(!apiKey){const d=document.getElementById('claude-typing');if(d)d.remove();return;}
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1024,system:APEX_SYS,messages:chatHistory.slice(-10)})
+    });
+    const d=document.getElementById('claude-typing');if(d)d.remove();
+    if(!resp.ok){
+      const msg=resp.status===401?'Invalid API key. Check console.anthropic.com/settings/keys':
+                 resp.status===529?'API overloaded. Wait a moment and try again.':
+                 resp.status>=500?'Anthropic server error. Try again in a moment.':
+                 `API error ${resp.status}. Try again.`;
+      appendClaudeMsg('assistant','⚠️ '+msg);return;
+    }
+    const data=await resp.json();
+    const txt=data.content?.[0]?.text||'(no response)';
+    chatHistory.push({role:'assistant',content:txt});
+    appendClaudeMsg('assistant',txt);
+  }catch(e){
+    const d=document.getElementById('claude-typing');if(d)d.remove();
+    appendClaudeMsg('assistant','⚠️ Connection error. Check your internet and try again.');
+  }
+}
+
+function setBnav(id){
+  document.querySelectorAll('.bottom-nav-btn').forEach(b=>b.classList.remove('active'));
+  const el=document.getElementById('bn-'+id);if(el)el.classList.add('active');
+}
+
+/* ══════════════════════════════════════════════════
    SIDEBAR TOGGLE (MOBILE)
    ══════════════════════════════════════════════════ */
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');}
