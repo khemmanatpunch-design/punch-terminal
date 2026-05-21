@@ -2218,8 +2218,18 @@ pageInitFns['phase4']=function(){
       </div>
     </div>
     <div class="section-heading"><span>Hybrid Path to $30k</span><div class="section-heading-line"></div></div>
-    <div style="display:flex;gap:8px;align-items:stretch;flex-wrap:wrap">${hybrid}</div>`;
+    <div style="display:flex;gap:8px;align-items:stretch;flex-wrap:wrap">${hybrid}</div>
+    <div class="section-heading" style="margin-top:20px"><span>Risk vs Return — Live Chart</span><div class="section-heading-line"></div></div>
+    <div class="card card-sm"><canvas id="risk-bar-chart" height="180"></canvas></div>`;
+  setTimeout(()=>{
+    const ctx=document.getElementById('risk-bar-chart');if(!ctx)return;
+    riskBarChartInst=new Chart(ctx,{type:'bar',data:{labels:RISK_DATA.map(d=>d[0]+'%'),datasets:[
+      {label:'Monthly Return %',data:RISK_DATA.map(d=>d[1]),backgroundColor:RISK_DATA.map((_,j)=>j===1?'rgba(79,70,229,.9)':'rgba(79,70,229,.3)'),yAxisID:'y'},
+      {label:'Blowup Risk %',data:RISK_DATA.map(d=>d[3]),type:'line',borderColor:'#EF4444',backgroundColor:'rgba(239,68,68,.1)',yAxisID:'y2',tension:.4,pointRadius:3,fill:false}
+    ]},options:{plugins:{legend:{labels:{font:{size:10},boxWidth:12}}},scales:{y:{title:{display:true,text:'Monthly %',font:{size:10}},ticks:{font:{size:10}}},y2:{position:'right',title:{display:true,text:'Blowup %',font:{size:10}},ticks:{font:{size:10}},grid:{drawOnChartArea:false}}}}});
+  },80);
 };
+let riskBarChartInst=null;
 function updateRisk(i){
   const d=RISK_DATA[i];
   const moC=d[1]<10?'var(--green-500)':d[1]<20?'var(--orange-500)':'var(--red-500)';
@@ -2230,6 +2240,11 @@ function updateRisk(i){
   const rBal=document.getElementById('rBal');if(rBal)rBal.textContent='$'+d[2].toLocaleString();
   const rBl=document.getElementById('rBlow');if(rBl){rBl.textContent=d[3]+'%';rBl.style.color=blC;}
   const rBlI=document.getElementById('rBlowInline');if(rBlI){rBlI.textContent=d[3]+'%';rBlI.style.color=blC;}
+  if(riskBarChartInst&&riskBarChartInst.data){
+    const idx=parseInt(i);
+    riskBarChartInst.data.datasets[0].backgroundColor=RISK_DATA.map((_,j)=>j===idx?'rgba(79,70,229,.9)':'rgba(79,70,229,.3)');
+    riskBarChartInst.update('none');
+  }
 }
 
 /* ══════════════════════════════════════════════════
