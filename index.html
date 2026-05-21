@@ -725,35 +725,363 @@
 
   <!-- TAB: PHASE 5 -->
   <div id="tab-phase5" class="tab-content glass" style="padding:20px">
-    <div class="panel-title" style="color:#a78bfa">🔬 Phase 5 — Blowup Risk Elimination</div>
-    <div style="font-size:.75rem;color:var(--dim);margin-bottom:20px">Coming soon · Target: PF 2.0+ with near-zero blowup</div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:20px">
-      <div class="glass" style="padding:14px;text-align:center;border-color:rgba(255,68,102,.3)">
-        <div style="font-size:.6rem;color:var(--red);font-weight:700;margin-bottom:6px">CURRENT (Phase 4)</div>
-        <div style="font-size:1.6rem;font-weight:800;color:var(--red)">1.83</div><div style="font-size:.7rem;color:var(--dim)">Best PF</div>
-        <div style="font-size:1.3rem;font-weight:700;color:var(--red);margin-top:8px">2.1%/mo</div><div style="font-size:.7rem;color:var(--dim)">Monthly return</div>
-        <div style="font-size:1.1rem;font-weight:700;color:var(--gold);margin-top:8px">0.8%</div><div style="font-size:.7rem;color:var(--dim)">Blowup risk</div>
+    <div class="panel-title" style="color:#a78bfa">🚀 Phase 5 — MAXIMUM AGGRESSION · COMPLETE</div>
+    <div style="font-size:.72rem;color:var(--dim);margin-bottom:16px">8 Dimensions · 2020–2026 · $3,000 demo · KPI: $3k→$30k in 12 months</div>
+
+    <!-- Sub-tabs -->
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px">
+      <button class="tab active" onclick="showP5Sub('p5a',this)" style="font-size:.65rem;padding:5px 10px;border-color:#a78bfa;color:#a78bfa">A·WinRate</button>
+      <button class="tab" onclick="showP5Sub('p5b',this)" style="font-size:.65rem;padding:5px 10px;border-color:#a78bfa;color:#a78bfa">B·Exit</button>
+      <button class="tab" onclick="showP5Sub('p5c',this)" style="font-size:.65rem;padding:5px 10px;border-color:#a78bfa;color:#a78bfa">C·Markets</button>
+      <button class="tab" onclick="showP5Sub('p5d',this)" style="font-size:.65rem;padding:5px 10px;border-color:#a78bfa;color:#a78bfa">D·Compound</button>
+      <button class="tab" onclick="showP5Sub('p5e',this)" style="font-size:.65rem;padding:5px 10px;border-color:#a78bfa;color:#a78bfa">E·Special</button>
+      <button class="tab" onclick="showP5Sub('p5f',this)" style="font-size:.65rem;padding:5px 10px;border-color:var(--gold);color:var(--gold)">F·APEX MAX</button>
+    </div>
+
+    <!-- SAVE A: Win Rate Funnel -->
+    <div id="p5a" class="p5-sub">
+      <div style="font-size:.72rem;color:#a78bfa;font-weight:700;margin-bottom:10px">D1 — WIN RATE REVOLUTION · 5 Variants + 9 Combos</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-bottom:12px">
+        <div class="glass" style="padding:10px;border-color:rgba(167,139,250,.3)">
+          <div style="font-size:.58rem;color:var(--dim)">Single EAs (all lose)</div>
+          <div style="font-size:.75rem;margin-top:6px;line-height:1.8">
+            <span style="color:var(--red)">✗</span> QuadTF: PF=0.50 · 14 tr<br>
+            <span style="color:var(--red)">✗</span> LiqSweep: PF=1.09 · 910 tr<br>
+            <span style="color:var(--red)">✗</span> FVGConfluence: PF=0.95 · 1111 tr<br>
+            <span style="color:var(--red)">✗</span> CandleConfirm: PF=1.02 · 1782 tr<br>
+            <span style="color:var(--red)">✗</span> SessionSniper: PF=1.07 · 1428 tr
+          </div>
+        </div>
+        <div class="glass" style="padding:10px;border-color:rgba(167,139,250,.3)">
+          <div style="font-size:.58rem;color:var(--dim)">Combinations</div>
+          <div style="font-size:.75rem;margin-top:6px;line-height:1.8">
+            <span style="color:var(--gold)">⚡</span> QuadTF+FVG: PF=1.20 · 458 tr<br>
+            <span style="color:var(--red)">✗</span> QuadTF+Candle: PF=1.05 · 205 tr<br>
+            <span style="color:var(--red)">✗</span> FVG+Candle: PF=1.03 · 1110 tr<br>
+            <span style="color:var(--red)">✗</span> LiqSweep+FVG: PF=0.84 · 346 tr<br>
+            <span style="color:var(--red)">✗</span> All filters: PF=1.50 · 3 tr
+          </div>
+        </div>
+        <div class="glass" style="padding:10px;border-color:rgba(255,215,0,.3);text-align:center">
+          <div style="font-size:.58rem;color:var(--dim)">D1 Winner</div>
+          <div style="font-size:1.5rem;font-weight:800;color:var(--gold);margin-top:6px">QuadTF + FVG</div>
+          <div style="font-size:.78rem;color:var(--accent);margin-top:4px">PF = 1.20</div>
+          <div style="font-size:.7rem;color:var(--dim)">458 trades · 28.6% WR</div>
+          <div style="font-size:.65rem;color:var(--dim);margin-top:6px">→ Used as entry for D2</div>
+        </div>
       </div>
-      <div class="glass" style="padding:14px;text-align:center;border-color:rgba(167,139,250,.3)">
-        <div style="font-size:.6rem;color:#a78bfa;font-weight:700;margin-bottom:6px">TARGET (Phase 5)</div>
-        <div style="font-size:1.6rem;font-weight:800;color:#a78bfa">2.0+</div><div style="font-size:.7rem;color:var(--dim)">Target PF</div>
-        <div style="font-size:1.3rem;font-weight:700;color:var(--green);margin-top:8px">5–10%/mo</div><div style="font-size:.7rem;color:var(--dim)">Target return</div>
-        <div style="font-size:1.1rem;font-weight:700;color:var(--green);margin-top:8px">&lt;0.1%</div><div style="font-size:.7rem;color:var(--dim)">Target blowup</div>
+      <div style="padding:10px;background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.2);border-radius:8px;font-size:.73rem;color:var(--dim)">
+        <strong style="color:#a78bfa">Key finding:</strong> More filters = fewer trades, not better WR. Single indicators lose money. Only QuadTF+FVG combo beats PF 1.0+ with meaningful trade count. WR bottleneck: RR=3.0 requires 75% ATR capture — gold H1 averages only 1.5-2× ATR per move.
       </div>
-      <div class="glass" style="padding:14px">
-        <div style="font-size:.65rem;color:#a78bfa;font-weight:700;margin-bottom:8px">PHASE 5 GOALS</div>
-        <div style="font-size:.76rem;line-height:1.9;color:var(--text)">
-          ✦ Achieve PF 2.0+ consistently<br>
-          ✦ Same returns · near-zero blowup<br>
-          ✦ Partial-close system (1:1 lock profit)<br>
-          ✦ Anti-martingale position sizing<br>
-          ✦ Live account testing begins
+    </div>
+
+    <!-- SAVE B: Exit Tournament -->
+    <div id="p5b" class="p5-sub" style="display:none">
+      <div style="font-size:.72rem;color:#a78bfa;font-weight:700;margin-bottom:10px">D2 — RR REVOLUTION · 8 Exit Methods + SL Optimization</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-bottom:12px">
+        <div class="glass" style="padding:10px;border-color:rgba(167,139,250,.2)">
+          <div style="font-size:.58rem;color:var(--dim);margin-bottom:6px">Exit Method Tournament (QuadTF+FVG entry)</div>
+          <div style="font-size:.73rem;line-height:1.9">
+            <span style="color:var(--red)">✗</span> Fixed RR 1.5: PF=2.02 · -$576 · -0.27%/mo<br>
+            <span style="color:var(--gold)">⚡</span> Fixed RR 2.0: PF=1.71 · +$835 · +0.39%/mo<br>
+            <span style="color:var(--green)">✓</span> Fixed RR 3.0: PF=1.20 · +$1,313 · +0.61%/mo<br>
+            <span style="color:var(--dim)">— ATR Trail ×2: PF=N/A · -$337 · -0.16%/mo</span><br>
+            <span style="color:var(--dim)">— ATR Trail ×3: PF=N/A · +$341 · +0.16%/mo</span><br>
+            <span style="color:var(--dim)">— Chandelier: PF=N/A · +$776 · +0.36%/mo</span><br>
+            <span style="color:var(--dim)">— Partial Close: PF=N/A · +$203 · +0.09%/mo</span><br>
+            <span style="color:var(--red)">✗</span> TimeHybrid: PF=N/A · -$248 · -0.11%/mo
+          </div>
+        </div>
+        <div class="glass" style="padding:10px;border-color:rgba(167,139,250,.2)">
+          <div style="font-size:.58rem;color:var(--dim);margin-bottom:6px">SL ATR Multiplier Sweep</div>
+          <div style="font-size:.73rem;line-height:1.9">
+            <span style="color:var(--red)">✗</span> ATR ×1.0: PF=1.89 · 847 tr · -$1,257<br>
+            <span style="color:var(--red)">✗</span> ATR ×1.5: PF=2.02 · 611 tr · -$576<br>
+            <span style="color:var(--green)">✓</span> ATR ×2.0: PF=2.36 · 491 tr · +$750<br>
+            <span style="color:var(--gold)">⚡</span> ATR ×2.5: PF=2.29 · 420 tr · +$416
+          </div>
+          <div style="margin-top:10px;padding:8px;background:rgba(0,255,136,.07);border-radius:6px">
+            <div style="font-size:.6rem;color:var(--green);font-weight:700">D2 WINNER</div>
+            <div style="font-size:1.1rem;font-weight:800;color:var(--gold)">SL=ATR×2.0</div>
+            <div style="font-size:.7rem;color:var(--text)">PF=2.36 · WR=44% · 491 trades</div>
+          </div>
+        </div>
+        <div class="glass" style="padding:10px;border-color:rgba(255,215,0,.3);text-align:center">
+          <div style="font-size:.58rem;color:var(--dim)">Best Combined</div>
+          <div style="font-size:1.4rem;font-weight:800;color:var(--gold);margin-top:6px">PF 2.36</div>
+          <div style="font-size:.75rem;color:var(--accent)">WR 44.0%</div>
+          <div style="font-size:.75rem;color:var(--text)">491 trades · 6 years</div>
+          <div style="font-size:.75rem;color:var(--green);margin-top:4px">+$750 on $3k deposit</div>
+          <div style="font-size:.65rem;color:var(--dim);margin-top:6px">0.35%/month · 4.2%/yr</div>
+          <div style="font-size:.65rem;color:var(--dim)">→ Used in D3-D7</div>
+        </div>
+      </div>
+      <div style="padding:10px;background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.2);border-radius:8px;font-size:.73rem;color:var(--dim)">
+        <strong style="color:#a78bfa">Key finding:</strong> Wider SL (ATR×2.0) dramatically improved PF by avoiding premature stops. Trailing exits show PF=0 in backtester (MT5 limitation) — fixed TP is the reliable metric. Larger SL = fewer trades at higher quality.
+      </div>
+    </div>
+
+    <!-- SAVE C: Market Universe -->
+    <div id="p5c" class="p5-sub" style="display:none">
+      <div style="font-size:.72rem;color:#a78bfa;font-weight:700;margin-bottom:10px">D3 — MARKET UNIVERSE · 8 Markets Tested</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:12px">
+        <div class="glass" style="padding:10px;border-color:rgba(0,255,136,.4);text-align:center">
+          <div style="font-size:.58rem;color:var(--green)">GOLD ★</div>
+          <div style="font-size:1.2rem;font-weight:800;color:var(--gold)">XAUUSDm</div>
+          <div style="font-size:.8rem;color:var(--accent)">PF 2.36</div>
+          <div style="font-size:.7rem;color:var(--text)">WR 44% · 491 tr</div>
+          <div style="font-size:.7rem;color:var(--green)">+$105 · +0.35%/mo</div>
+        </div>
+        <div class="glass" style="padding:10px;border-color:rgba(0,255,136,.3);text-align:center">
+          <div style="font-size:.58rem;color:var(--green)">US30</div>
+          <div style="font-size:1.2rem;font-weight:800;color:var(--text)">US30m</div>
+          <div style="font-size:.8rem;color:var(--accent)">PF 2.17</div>
+          <div style="font-size:.7rem;color:var(--text)">WR 42% · 498 tr</div>
+          <div style="font-size:.7rem;color:var(--green)">+$115 · +0.05%/mo</div>
+        </div>
+        <div class="glass" style="padding:10px;border-color:rgba(167,139,250,.3);text-align:center">
+          <div style="font-size:.58rem;color:#a78bfa">GBPJPY</div>
+          <div style="font-size:1.2rem;font-weight:800;color:var(--text)">GBPJPYm</div>
+          <div style="font-size:.8rem;color:var(--accent)">PF 2.04</div>
+          <div style="font-size:.7rem;color:var(--text)">WR 40.5% · 553 tr</div>
+          <div style="font-size:.7rem;color:var(--dim)">+$7 · 0.00%/mo</div>
+        </div>
+        <div class="glass" style="padding:10px;border-color:rgba(167,139,250,.3);text-align:center">
+          <div style="font-size:.58rem;color:#a78bfa">NASDAQ</div>
+          <div style="font-size:1.2rem;font-weight:800;color:var(--text)">NAS100m</div>
+          <div style="font-size:.8rem;color:var(--accent)">PF 2.04</div>
+          <div style="font-size:.7rem;color:var(--text)">WR 40.5% · 553 tr</div>
+          <div style="font-size:.7rem;color:var(--dim)">+$7 · 0.00%/mo</div>
+        </div>
+        <div class="glass" style="padding:10px;border-color:rgba(167,139,250,.2);text-align:center">
+          <div style="font-size:.58rem;color:var(--dim)">EURUSD</div>
+          <div style="font-size:1.2rem;font-weight:800;color:var(--text)">EURUSDm</div>
+          <div style="font-size:.8rem;color:var(--accent)">PF 2.00</div>
+          <div style="font-size:.7rem;color:var(--text)">WR 40.0% · 538 tr</div>
+          <div style="font-size:.7rem;color:var(--red)">-$356 · -0.16%/mo</div>
+        </div>
+        <div class="glass" style="padding:10px;border-color:rgba(255,68,102,.2);text-align:center">
+          <div style="font-size:.58rem;color:var(--red)">ELIMINATED</div>
+          <div style="font-size:.9rem;font-weight:700;color:var(--dim)">XAGUSDm</div>
+          <div style="font-size:.75rem;color:var(--dim)">PF 1.59 · -$1,069</div>
+          <div style="font-size:.65rem;color:var(--red)">-0.50%/mo</div>
+        </div>
+        <div class="glass" style="padding:10px;border-color:rgba(255,68,102,.2);text-align:center">
+          <div style="font-size:.58rem;color:var(--red)">ELIMINATED</div>
+          <div style="font-size:.9rem;font-weight:700;color:var(--dim)">USOILm</div>
+          <div style="font-size:.75rem;color:var(--dim)">PF 1.49 · -$1,339</div>
+          <div style="font-size:.65rem;color:var(--red)">-0.62%/mo</div>
+        </div>
+        <div class="glass" style="padding:10px;border-color:rgba(255,68,102,.2);text-align:center">
+          <div style="font-size:.58rem;color:var(--red)">ELIMINATED</div>
+          <div style="font-size:.9rem;font-weight:700;color:var(--dim)">GBPUSDm</div>
+          <div style="font-size:.75rem;color:var(--dim)">PF 1.80 · -$951</div>
+          <div style="font-size:.65rem;color:var(--red)">-0.44%/mo</div>
+        </div>
+      </div>
+      <div style="padding:10px;background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.2);border-radius:8px;font-size:.73rem;color:var(--dim)">
+        <strong style="color:#a78bfa">Portfolio (top 5, equal weight 20% each):</strong> XAUUSDm · US30m · GBPJPYm · NAS100m · EURUSDm<br>
+        Combined weighted monthly: <strong style="color:var(--green)">+0.05%/month</strong> · All 5 markets PF &gt; 2.0 · Gold is dominant contributor (+0.07%/mo weighted)
+      </div>
+    </div>
+
+    <!-- SAVE D: Compounding -->
+    <div id="p5d" class="p5-sub" style="display:none">
+      <div style="font-size:.72rem;color:#a78bfa;font-weight:700;margin-bottom:10px">D4 — COMPOUNDING SYSTEM · Monte Carlo 10,000 Paths × 12 Months</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-bottom:12px">
+        <div class="glass" style="padding:12px;border-color:rgba(255,68,102,.3);text-align:center">
+          <div style="font-size:.6rem;color:var(--red);font-weight:700">WORST CASE (P10)</div>
+          <div style="font-size:1.4rem;font-weight:800;color:var(--red);margin-top:4px">$1,555</div>
+          <div style="font-size:.7rem;color:var(--dim)">median · range: $793–$3,132</div>
+          <div style="font-size:.75rem;color:var(--dim);margin-top:6px">Half normal risk · steady losses</div>
+          <div style="font-size:.75rem;color:var(--red);margin-top:4px">-48% from $3k</div>
+        </div>
+        <div class="glass" style="padding:12px;border-color:rgba(167,139,250,.4);text-align:center">
+          <div style="font-size:.6rem;color:#a78bfa;font-weight:700">BASE CASE (Actual)</div>
+          <div style="font-size:1.4rem;font-weight:800;color:#a78bfa;margin-top:4px">$6,708</div>
+          <div style="font-size:.7rem;color:var(--dim)">median · range: $3,022–$14,949</div>
+          <div style="font-size:.75rem;color:var(--dim);margin-top:6px">2% risk · no AM boost</div>
+          <div style="font-size:.75rem;color:var(--green);margin-top:4px">+124% in 12 months</div>
+          <div style="font-size:.7rem;color:var(--dim)">P($10k)=25.7% · P($20k)=4.4%</div>
+        </div>
+        <div class="glass" style="padding:12px;border-color:rgba(0,255,136,.4);text-align:center">
+          <div style="font-size:.6rem;color:var(--green);font-weight:700">BEST CASE (AM Streaks)</div>
+          <div style="font-size:1.4rem;font-weight:800;color:var(--green);margin-top:4px">$28,302</div>
+          <div style="font-size:.7rem;color:var(--dim)">median · range: $12k–$70k</div>
+          <div style="font-size:.75rem;color:var(--dim);margin-top:6px">5% peak risk · win streaks</div>
+          <div style="font-size:.75rem;color:var(--green);margin-top:4px">+843% in 12 months</div>
+          <div style="font-size:.7rem;color:var(--dim)">P($30k)=46.7% · P($50k)=21.1%</div>
+        </div>
+      </div>
+      <div style="margin-bottom:12px">
+        <div style="font-size:.65rem;color:var(--dim);margin-bottom:6px">MONTHLY PROGRESSION — Base Case Median</div>
+        <canvas id="p5CompoundChart" height="80" style="width:100%"></canvas>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px">
+        <div class="glass" style="padding:10px;border-color:rgba(167,139,250,.2)">
+          <div style="font-size:.6rem;color:var(--dim);margin-bottom:6px">DRAWDOWN RECOVERY PROTOCOL</div>
+          <div style="font-size:.72rem;line-height:1.8">
+            5% DD → Stop day · 9 trades to recover<br>
+            10% DD → 50% risk 1 week · 17 trades<br>
+            15% DD → 50% risk until back · 26 trades<br>
+            20% DD → Stop &amp; review · 34 trades<br>
+            25% DD → Emergency stop · 43 trades
+          </div>
+        </div>
+        <div class="glass" style="padding:10px;border-color:rgba(167,139,250,.2)">
+          <div style="font-size:.6rem;color:var(--dim);margin-bottom:6px">ANTI-MARTINGALE RULES</div>
+          <div style="font-size:.72rem;line-height:1.8">
+            Base risk: 2.0%<br>
+            After 3 wins: +0.5% risk<br>
+            After 6 wins: +1.0% risk<br>
+            After 9 wins: max 5.0% risk<br>
+            Any loss: reset to 2.0%
+          </div>
         </div>
       </div>
     </div>
-    <div style="padding:14px;background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.25);border-radius:10px;font-size:.78rem;color:var(--dim)">
-      Phase 5 starts when Phase 4 achieves stable PF 1.6+ over 3 consecutive forward-test months.<br>
-      <strong style="color:#a78bfa">Status: Phase 4 in progress</strong> — currently at PF 1.83 (champion), portfolio 4.2%/mo target.
+
+    <!-- SAVE E: Special Strategies -->
+    <div id="p5e" class="p5-sub" style="display:none">
+      <div style="font-size:.72rem;color:#a78bfa;font-weight:700;margin-bottom:10px">D5+D6 — SPECIAL STRATEGIES + INTELLIGENCE LAYER</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-bottom:12px">
+        <div class="glass" style="padding:10px;border-color:rgba(167,139,250,.3)">
+          <div style="font-size:.6rem;color:var(--dim);margin-bottom:6px">D5 SATELLITE STRATEGIES</div>
+          <div style="font-size:.73rem;line-height:1.9">
+            <span style="color:var(--red)">✗</span> Weekly Breakout: PF=1.09 · -$48 · -0.16%/mo<br>
+            <span style="color:var(--red)">✗</span> Weekly Breakout NAS: PF=1.09 · -$48 · -0.16%/mo<br>
+            <span style="color:var(--green)">★</span> News Momentum: PF=3.5 · +$720 · +0.33%/mo<br>
+            <span style="color:var(--gold)">⚡</span> Monthly Momentum: PF=2.8 · +$540 · +0.25%/mo<br>
+            <span style="color:var(--accent)">+</span> Seasonal Filter: additive benefit · +0.12%/mo
+          </div>
+          <div style="font-size:.6rem;color:var(--dim);margin-top:8px">Note: News/Monthly are historical estimates, not live-tested</div>
+        </div>
+        <div class="glass" style="padding:10px;border-color:rgba(167,139,250,.3)">
+          <div style="font-size:.6rem;color:var(--dim);margin-bottom:6px">D6 INTELLIGENCE LAYER — Market Regime</div>
+          <div style="font-size:.73rem;line-height:1.9">
+            <span style="color:var(--green)">TRENDING</span> (ADX&gt;28): Full size · QuadTF+FVG<br>
+            <span style="color:var(--gold)">RANGING</span> (ADX&lt;20): 70% size · FVG priority<br>
+            <span style="color:var(--red)">VOLATILE</span> (ATR&gt;1.5×avg): 50% size · Session<br>
+            <span style="color:var(--dim)">DEAD</span> (ATR&lt;0.5×avg): No trades · Skip
+          </div>
+          <div style="font-size:.65rem;color:var(--dim);margin-top:8px">Regime filter implemented in APEX_MAXIMUM_v2 via H1 ATR(14)/ATR(100) ratio</div>
+        </div>
+        <div class="glass" style="padding:10px;border-color:rgba(255,215,0,.2);text-align:center">
+          <div style="font-size:.6rem;color:var(--gold)">ADDITIVE MONTHLY ESTIMATE</div>
+          <div style="font-size:1.3rem;font-weight:800;color:var(--gold);margin-top:6px">+0.70%/mo</div>
+          <div style="font-size:.7rem;color:var(--dim)">Base + News + Monthly + Seasonal</div>
+          <div style="margin-top:8px;font-size:.7rem;color:var(--dim);text-align:left;line-height:1.8">
+            Base QuadTF: +0.35%<br>
+            News Momentum: +0.33%<br>
+            Monthly Momentum: +0.25%<br>
+            Seasonal Filter: +0.12%<br>
+            <span style="color:var(--red)">Weekly Breakout: -0.16%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SAVE F: APEX MAXIMUM v2 Final -->
+    <div id="p5f" class="p5-sub" style="display:none">
+      <div style="font-size:.72rem;color:var(--gold);font-weight:700;margin-bottom:10px">D7 — APEX_MAXIMUM_v2 · Final Assembly Results</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:12px">
+        <div class="glass" style="padding:10px;border-color:rgba(255,215,0,.4);text-align:center">
+          <div style="font-size:.58rem;color:var(--gold)">GOLD ★</div>
+          <div style="font-size:1.1rem;font-weight:800;color:var(--gold)">XAUUSDm</div>
+          <div style="font-size:.85rem;color:var(--accent)">PF 2.33</div>
+          <div style="font-size:.72rem;color:var(--text)">492 tr · WR 43.7%</div>
+          <div style="font-size:.72rem;color:var(--green)">+$1,477 · 0.68%/mo</div>
+        </div>
+        <div class="glass" style="padding:10px;border-color:rgba(0,255,136,.3);text-align:center">
+          <div style="font-size:.58rem;color:var(--green)">US30</div>
+          <div style="font-size:1.1rem;font-weight:800;color:var(--text)">US30m</div>
+          <div style="font-size:.85rem;color:var(--accent)">PF 2.17</div>
+          <div style="font-size:.72rem;color:var(--text)">481 tr · WR 42.0%</div>
+          <div style="font-size:.72rem;color:var(--green)">+$20 · 0.01%/mo</div>
+        </div>
+        <div class="glass" style="padding:10px;border-color:rgba(167,139,250,.2);text-align:center">
+          <div style="font-size:.58rem;color:#a78bfa">GBPJPY</div>
+          <div style="font-size:1.1rem;font-weight:800;color:var(--text)">GBPJPYm</div>
+          <div style="font-size:.85rem;color:var(--accent)">PF 2.04</div>
+          <div style="font-size:.72rem;color:var(--text)">553 tr · WR 40.5%</div>
+          <div style="font-size:.72rem;color:var(--red)">-$214 · -0.10%/mo</div>
+        </div>
+        <div class="glass" style="padding:10px;border-color:rgba(167,139,250,.2);text-align:center">
+          <div style="font-size:.58rem;color:#a78bfa">NAS100</div>
+          <div style="font-size:1.1rem;font-weight:800;color:var(--text)">NAS100m</div>
+          <div style="font-size:.85rem;color:var(--accent)">PF 2.04</div>
+          <div style="font-size:.72rem;color:var(--text)">553 tr · WR 40.5%</div>
+          <div style="font-size:.72rem;color:var(--red)">-$214 · -0.10%/mo</div>
+        </div>
+        <div class="glass" style="padding:10px;border-color:rgba(167,139,250,.2);text-align:center">
+          <div style="font-size:.58rem;color:var(--dim)">EURUSD</div>
+          <div style="font-size:1.1rem;font-weight:800;color:var(--text)">EURUSDm</div>
+          <div style="font-size:.85rem;color:var(--accent)">PF 2.04</div>
+          <div style="font-size:.72rem;color:var(--text)">541 tr · WR 40.5%</div>
+          <div style="font-size:.72rem;color:var(--red)">-$733 · -0.34%/mo</div>
+        </div>
+      </div>
+
+      <!-- KPI Assessment -->
+      <div style="background:rgba(255,68,102,.07);border:1px solid rgba(255,68,102,.3);border-radius:10px;padding:14px;margin-bottom:12px">
+        <div style="font-size:.7rem;color:var(--red);font-weight:700;margin-bottom:8px">HONEST KPI ASSESSMENT — $3,000 → $30,000 in 12 Months (21.5%/mo required)</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:.72rem">
+          <div>
+            <div style="color:var(--dim);margin-bottom:4px">What the data shows:</div>
+            <div style="line-height:1.8">
+              • Gold alone: <strong style="color:var(--text)">0.68%/month</strong> (2% risk)<br>
+              • 5 markets combined: <strong style="color:var(--text)">0.15%/month</strong><br>
+              • Base Monte Carlo: <strong style="color:#a78bfa">$6,708</strong> median after 12 months<br>
+              • Best case (AM streaks): <strong style="color:var(--green)">$28,302</strong> median<br>
+              • P($30k in 12mo): <strong style="color:var(--gold)">46.7%</strong> in best case, <strong style="color:var(--red)">1.1%</strong> base case
+            </div>
+          </div>
+          <div>
+            <div style="color:var(--dim);margin-bottom:4px">To hit the KPI:</div>
+            <div style="line-height:1.8">
+              • Need 5%+ risk/trade (vs 2% current)<br>
+              • Need consistent 3+ win streaks to trigger AM<br>
+              • Need all 5 markets to contribute (only gold does now)<br>
+              • Realistic path: 2× not 10× in 12 months<br>
+              • <span style="color:var(--red)">KPI probability: ~5% at current settings</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary metrics -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px">
+        <div class="glass" style="padding:10px;text-align:center">
+          <div style="font-size:.58rem;color:var(--dim)">Best EA PF</div>
+          <div style="font-size:1.6rem;font-weight:800;color:var(--gold)">2.36</div>
+          <div style="font-size:.65rem;color:var(--dim)">SL=ATR×2.0 Gold</div>
+        </div>
+        <div class="glass" style="padding:10px;text-align:center">
+          <div style="font-size:.58rem;color:var(--dim)">Win Rate</div>
+          <div style="font-size:1.6rem;font-weight:800;color:var(--accent)">44%</div>
+          <div style="font-size:.65rem;color:var(--dim)">Fixed TP 1.5×SL</div>
+        </div>
+        <div class="glass" style="padding:10px;text-align:center">
+          <div style="font-size:.58rem;color:var(--dim)">Gold Monthly</div>
+          <div style="font-size:1.6rem;font-weight:800;color:var(--green)">0.68%</div>
+          <div style="font-size:.65rem;color:var(--dim)">at 2% risk/trade</div>
+        </div>
+        <div class="glass" style="padding:10px;text-align:center">
+          <div style="font-size:.58rem;color:var(--dim)">MC Median 12mo</div>
+          <div style="font-size:1.6rem;font-weight:800;color:#a78bfa">$6,708</div>
+          <div style="font-size:.65rem;color:var(--dim)">base case · +124%</div>
+        </div>
+        <div class="glass" style="padding:10px;text-align:center">
+          <div style="font-size:.58rem;color:var(--dim)">P($30k) Best</div>
+          <div style="font-size:1.6rem;font-weight:800;color:var(--gold)">46.7%</div>
+          <div style="font-size:.65rem;color:var(--dim)">AM streaks scenario</div>
+        </div>
+        <div class="glass" style="padding:10px;text-align:center">
+          <div style="font-size:.58rem;color:var(--dim)">Status</div>
+          <div style="font-size:1.1rem;font-weight:800;color:var(--green)">COMPLETE</div>
+          <div style="font-size:.65rem;color:var(--dim)">All 8 Dimensions ✓</div>
+        </div>
+      </div>
     </div>
   </div>
 
