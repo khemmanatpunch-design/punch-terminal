@@ -2221,6 +2221,48 @@ pageInitFns['pepperstone']=function(){
       <button onclick="navigator.clipboard.writeText(document.getElementById('pep-code').textContent)" style="padding:4px 12px;background:var(--blue-500);color:#fff;border:none;border-radius:6px;font-size:.75rem;cursor:pointer">Copy</button>
     </div>
     <pre id="pep-code" style="background:#1E1B4B;color:#A5B4FC;padding:14px;border-radius:8px;font-size:.78rem;line-height:1.7;overflow-x:auto;margin:0">${eaCode}</pre>
+  </div>
+
+  <div class="section-heading" style="margin-bottom:12px;margin-top:18px"><span>Spread Timing Guide — Bangkok (UTC+7)</span><div class="section-heading-line"></div><span class="badge badge-green">Check before trading</span></div>
+  <div class="card card-sm" style="margin-bottom:18px">
+    <div style="font-size:.78rem;color:var(--gray-500);margin-bottom:12px">24-hour spread cycle · Best entries during London Kill Zone 15:00–16:00 BKK</div>
+    <div style="display:flex;gap:0;border-radius:var(--radius-md);overflow:hidden;height:36px;margin-bottom:10px">
+      ${[
+        {h:'00',w:3,c:'#E5E7EB',t:'Asian'},
+        {h:'03',w:3,c:'#E5E7EB',t:''},
+        {h:'06',w:3,c:'#E5E7EB',t:''},
+        {h:'09',w:3,c:'#E5E7EB',t:'Pre-London'},
+        {h:'12',w:2,c:'#BFDBFE',t:'Pre'},
+        {h:'14',w:1,c:'#A7F3D0',t:''},
+        {h:'15',w:2,c:'#10B981',t:'🎯 BEST'},
+        {h:'17',w:2,c:'#FDE68A',t:'NY Open'},
+        {h:'19',w:3,c:'#FCA5A5',t:'NY KZ'},
+        {h:'22',w:2,c:'#E5E7EB',t:'Close'}
+      ].map(s=>`<div style="flex:${s.w};background:${s.c};display:flex;align-items:center;justify-content:center;font-size:.55rem;font-weight:700;color:${s.c==='#10B981'?'#fff':'#374151'};overflow:hidden;white-space:nowrap">${s.t||''}</div>`).join('')}
+    </div>
+    <div style="display:flex;gap:0;margin-bottom:12px">
+      ${[0,3,6,9,12,14,15,17,19,22].map(h=>`<div style="font-size:.6rem;color:var(--gray-400);text-align:left">${h}:00</div>`).join('<div style="flex:1"></div>')}
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+      <div style="padding:10px 12px;background:var(--green-100);border-radius:var(--radius-md);border-left:3px solid var(--green-500)">
+        <div style="font-size:.72rem;font-weight:700;color:var(--green-500)">09:00 BKK — Pre-London</div>
+        <div style="font-size:.7rem;color:var(--gray-700);margin-top:3px">Check spread trend. Asian session winding down. Spread starts tightening.</div>
+        <div style="font-size:.65rem;color:var(--gray-500);margin-top:4px">Expected: 15-20pt · Action: Monitor</div>
+      </div>
+      <div style="padding:10px 12px;background:var(--green-100);border-radius:var(--radius-md);border-left:3px solid var(--green-500);border:2px solid var(--green-500)">
+        <div style="font-size:.72rem;font-weight:700;color:var(--green-500)">15:00 BKK — London Open ⭐</div>
+        <div style="font-size:.7rem;color:var(--gray-700);margin-top:3px"><strong>Best time to check and log spread.</strong> EA should be primed for entries 15:00–17:00.</div>
+        <div style="font-size:.65rem;color:var(--gray-500);margin-top:4px">Expected: 8-12pt · Action: /spread [value]</div>
+      </div>
+      <div style="padding:10px 12px;background:var(--amber-100);border-radius:var(--radius-md);border-left:3px solid var(--amber-500)">
+        <div style="font-size:.72rem;font-weight:700;color:var(--amber-500)">21:00 BKK — NY Session</div>
+        <div style="font-size:.7rem;color:var(--gray-700);margin-top:3px">NY Kill Zone 19:00–22:00 BKK. Higher volatility, wider spreads. EA trades cautiously.</div>
+        <div style="font-size:.65rem;color:var(--gray-500);margin-top:4px">Expected: 12-18pt · Action: Monitor + log</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px">
+      ${[['5–10pt','GREEN','Trade normally','#10B981','#D1FAE5'],['10–15pt','AMBER','Acceptable','#F59E0B','#FEF3C7'],['15–25pt','ORANGE','Monitor closely','#F97316','#FFEDD5'],['25pt+','RED','Stop trading','#EF4444','#FEE2E2']].map(([sp,label,action,col,bg])=>`<div style="padding:7px;background:${bg};border-radius:var(--radius-md);text-align:center"><div style="font-size:.72rem;font-weight:800;color:${col}">${sp}</div><div style="font-size:.65rem;font-weight:600;color:${col};margin-top:1px">${label}</div><div style="font-size:.6rem;color:var(--gray-500);margin-top:2px">${action}</div></div>`).join('')}
+    </div>
   </div>`;
   setTimeout(()=>{
     const ctx=document.getElementById('pep-spread-chart');if(!ctx)return;
