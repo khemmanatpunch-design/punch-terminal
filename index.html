@@ -3127,10 +3127,10 @@ pageInitFns['roadmap']=function(){
       <div><label style="font-size:.75rem;font-weight:600;color:var(--gray-500)">Target ($)</label><input id="tc-target" type="number" value="30000" min="1000" step="1000" oninput="tcCalc()" style="width:100%;margin-top:4px;padding:8px 10px;border:1.5px solid var(--gray-200);border-radius:8px;font-size:.875rem;font-family:inherit;box-sizing:border-box;outline:none"></div>
       <div><label style="font-size:.75rem;font-weight:600;color:var(--gray-500)">Months</label><input id="tc-months" type="number" value="12" min="1" max="60" step="1" oninput="tcCalc()" style="width:100%;margin-top:4px;padding:8px 10px;border:1.5px solid var(--gray-200);border-radius:8px;font-size:.875rem;font-family:inherit;box-sizing:border-box;outline:none"></div>
     </div>
-    <div id="tc-result" style="background:linear-gradient(135deg,var(--blue-100),var(--pink-100));border-radius:var(--radius-lg);padding:14px;text-align:center">
+    <div style="background:linear-gradient(135deg,var(--blue-100),var(--pink-100));border-radius:var(--radius-lg);padding:14px;text-align:center">
       <div style="font-size:.75rem;color:var(--gray-500);margin-bottom:4px">Required Monthly Return</div>
-      <div style="font-size:2.5rem;font-weight:800;color:var(--blue-500)">21.5%</div>
-      <div style="font-size:.78rem;color:var(--gray-500);margin-top:4px">Current system: 0.95%/mo · Gap: 22.6×</div>
+      <div id="tc-mo" style="font-size:2.5rem;font-weight:800;color:var(--blue-500)">21.5%</div>
+      <div id="tc-gap" style="font-size:.78rem;color:var(--gray-500);margin-top:4px">Current system: 0.95%/mo · Gap: 22.6×</div>
       <div id="tc-note" style="font-size:.75rem;font-weight:600;color:var(--orange-500);margin-top:6px">⚠️ Requires 5-8% risk per trade — 45-60% ruin probability at this rate</div>
     </div>
   </div>
