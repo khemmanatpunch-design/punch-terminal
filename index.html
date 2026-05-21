@@ -1409,12 +1409,13 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
     <div style="padding:12px;background:var(--gray-50);border-radius:8px">
       <div style="font-size:.78rem;font-weight:600;color:var(--gray-700);margin-bottom:8px">Risk Level Slider — Adjust portfolio risk</div>
       <input type="range" id="kpi-risk-slider" min="30" max="150" value="100" style="width:100%;accent-color:var(--green-500);margin-bottom:6px">
-      <div id="kpi-slider-result" style="font-size:.8rem;color:var(--gray-700);display:flex;gap:24px;flex-wrap:wrap">
+      <div id="kpi-slider-result" style="font-size:.8rem;color:var(--gray-700);display:flex;gap:24px;flex-wrap:wrap;margin-bottom:10px">
         <span>Monthly: <b id="kpi-sl-monthly" style="color:var(--green-500)">24.3%</b></span>
         <span>P($30k): <b id="kpi-sl-p30k" style="color:var(--blue-500)">65.5%</b></span>
         <span>Max DD: <b id="kpi-sl-dd" style="color:var(--orange-500)">35%</b></span>
         <span>Blowup: <b id="kpi-sl-blowup" style="color:var(--red-500)">20%</b></span>
       </div>
+      <canvas id="kpi-risk-chart" height="90"></canvas>
     </div>
   </div>
 
