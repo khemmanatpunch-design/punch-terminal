@@ -1440,7 +1440,7 @@ function openPanel(eaName,roundIdx){
     const bg=champ?'#FEF3C7':survived?'#D1FAE5':'var(--gray-100)';
     const col=champ?'#92400E':survived?'#065F46':'var(--gray-400)';
     const icon=champ?'👑':survived?'✓':'·';
-    return`<span style="display:inline-flex;align-items:center;gap:2px;font-size:.68rem;padding:2px 7px;border-radius:999px;background:${bg};color:${col};margin:2px">${icon} ${rn}</span>`;
+    return`<span style="display:inline-flex;align-items:center;gap:2px;font-size:.75rem;padding:2px 7px;border-radius:999px;background:${bg};color:${col};margin:2px">${icon} ${rn}</span>`;
   }).join('');
   const rec=pf>=1.5?'✅ USE':pf>=1?'⚠️ WATCH':'❌ SKIP';
   const recBg=pf>=1.5?'#D1FAE5':pf>=1?'#FEF3C7':'#FEE2E2';
