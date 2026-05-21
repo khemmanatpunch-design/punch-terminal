@@ -3213,6 +3213,29 @@ function rmCalc(){
   }
 }
 
+function tcCalc(){
+  const start=parseFloat(document.getElementById('tc-start')?.value||3000);
+  const target=parseFloat(document.getElementById('tc-target')?.value||30000);
+  const months=parseInt(document.getElementById('tc-months')?.value||12);
+  if(!start||!target||!months||target<=start){return;}
+  const mo=+(Math.pow(target/start,1/months)-1)*100;
+  const moFmt=mo.toFixed(2)+'%';
+  const gap=+(mo/0.95).toFixed(1);
+  const res=document.getElementById('tc-result');
+  const note=document.getElementById('tc-note');
+  if(res){
+    res.querySelector('div:nth-child(2)').textContent=moFmt;
+    res.querySelector('div:nth-child(3)').textContent=`Current system: 0.95%/mo · Gap: ${gap}×`;
+  }
+  if(note){
+    if(mo<=1)note.textContent='✅ Achievable at current 0.95%/mo — patient compounding!';
+    else if(mo<=3)note.textContent='✅ Achievable by Month 3+ with 2% risk + London filter';
+    else if(mo<=7)note.textContent='⚠️ Requires capital addition + multi-market expansion in Year 2';
+    else if(mo<=15)note.textContent='⚠️ Requires 3-5% risk per trade — elevated ruin risk ~30-45%';
+    else note.textContent='❌ Requires 5-8% risk per trade — 45-60% ruin probability. Not recommended.';
+  }
+}
+
 /* ══════════════════════════════════════════════════
    SIDEBAR TOGGLE (MOBILE)
    ══════════════════════════════════════════════════ */
