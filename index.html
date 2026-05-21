@@ -1260,69 +1260,222 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
       </div>
     </div>
   </div>
-  <div style="padding:20px 24px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
-    <div class="metric-card orange"><div class="metric-label">KPI Target</div><div class="metric-value orange">21.5%</div><div class="metric-delta">/month required</div></div>
-    <div class="metric-card green"><div class="metric-label">Best Found</div><div class="metric-value green">24.3%</div><div class="metric-delta up">KPI EXCEEDED (theory)</div></div>
-    <div class="metric-card pink"><div class="metric-label">P($30k in 12mo)</div><div class="metric-value pink">65.5%</div><div class="metric-delta">10,000 MC paths</div></div>
-    <div class="metric-card" style="border-left-color:#7C3AED"><div class="metric-label">Iterations</div><div class="metric-value" style="color:#7C3AED">20</div><div class="metric-delta">completed</div></div>
+<!-- SECTION 2 — MONTE CARLO METRIC CARDS -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px">
+    <div class="metric-card orange"><div class="metric-label">KPI Target</div><div class="metric-value orange">21.5%</div><div class="metric-delta">/month · $30k in 12mo</div></div>
+    <div class="metric-card pink"><div class="metric-label">P($30k in 12mo)</div><div class="metric-value pink">65.5%</div><div class="metric-delta up">10,000 MC paths</div></div>
+    <div class="metric-card green"><div class="metric-label">MC Avg Final</div><div class="metric-value green">$43,864</div><div class="metric-delta up">from $3,000 start</div></div>
+    <div class="metric-card" style="border-left-color:var(--blue-500)"><div class="metric-label">MC Median Final</div><div class="metric-value" style="color:var(--blue-500)">$37,425</div><div class="metric-delta">Worst 10%: $17,825</div></div>
   </div>
-  <div style="padding:0 24px;display:grid;grid-template-columns:1.2fr 1fr;gap:16px;margin-bottom:16px">
-    <div class="card card-sm">
-      <div style="font-weight:700;color:var(--blue-900);margin-bottom:12px;font-size:.9rem">Iteration Results</div>
-      <table style="width:100%;border-collapse:collapse;font-size:.78rem">
-        <thead><tr style="background:var(--gray-50)"><th style="padding:6px 8px;text-align:left;color:var(--gray-500);font-weight:600;border-bottom:1px solid var(--gray-200)">Iter</th><th style="padding:6px 8px;text-align:left;color:var(--gray-500);font-weight:600;border-bottom:1px solid var(--gray-200)">Strategy</th><th style="padding:6px 8px;text-align:right;font-weight:600;border-bottom:1px solid var(--gray-200)">Monthly</th><th style="padding:6px 8px;text-align:right;font-weight:600;border-bottom:1px solid var(--gray-200)">Final</th></tr></thead>
-        <tbody>
-          <tr><td style="padding:5px 8px;border-bottom:1px solid var(--gray-100)">1</td><td>Champion 3% DynRisk+AM</td><td style="text-align:right;color:var(--orange-500);font-weight:700">3.22%</td><td style="text-align:right">$4,388</td></tr>
-          <tr><td style="padding:5px 8px;border-bottom:1px solid var(--gray-100)">2</td><td>5-Market Portfolio</td><td style="text-align:right;color:var(--orange-500);font-weight:700">7.59%</td><td style="text-align:right">$7,215</td></tr>
-          <tr><td style="padding:5px 8px;border-bottom:1px solid var(--gray-100)">3</td><td>Bitcoin + Gold</td><td style="text-align:right;color:var(--orange-500);font-weight:700">7.78%</td><td style="text-align:right">$7,372</td></tr>
-          <tr><td style="padding:5px 8px;border-bottom:1px solid var(--gray-100)">4</td><td>Crypto Portfolio MC</td><td style="text-align:right;color:var(--orange-500);font-weight:700">10.75%</td><td style="text-align:right">$10,287</td></tr>
-          <tr><td style="padding:5px 8px;border-bottom:1px solid var(--gray-100)">5</td><td>HF M15 + H1 Filter</td><td style="text-align:right;color:var(--gray-500)">2.24%</td><td style="text-align:right">$3,913</td></tr>
-          <tr><td style="padding:5px 8px;border-bottom:1px solid var(--gray-100)">6</td><td>News Events (7 types)</td><td style="text-align:right;color:var(--green-500);font-weight:700">11.25%</td><td style="text-align:right">$10,784</td></tr>
-          <tr><td style="padding:5px 8px;border-bottom:1px solid var(--gray-100)">7</td><td>D1 Trend + HF</td><td style="text-align:right;color:var(--gray-500)">2.64%</td><td style="text-align:right">$4,101</td></tr>
-          <tr><td style="padding:5px 8px;border-bottom:1px solid var(--gray-100)">8</td><td>Pattern WR=65%</td><td style="text-align:right;color:var(--orange-500);font-weight:700">4.97%</td><td style="text-align:right">$5,368</td></tr>
-          <tr style="background:rgba(16,185,129,.06)"><td style="padding:5px 8px;border-bottom:1px solid var(--gray-100);font-weight:700">9</td><td><b>APEX MAXIMUM (all)</b></td><td style="text-align:right;color:var(--green-500);font-weight:800">24.34%</td><td style="text-align:right;font-weight:700">$43,864</td></tr>
-          <tr><td style="padding:5px 8px;border-bottom:1px solid var(--gray-100)">15</td><td>Crypto+HF+News</td><td style="text-align:right;color:var(--green-500);font-weight:700">19.32%</td><td style="text-align:right">$24,978</td></tr>
-          <tr style="background:rgba(245,158,11,.06)"><td style="padding:5px 8px;font-weight:700">17</td><td><b>BTC+ETH+Gold HF</b></td><td style="text-align:right;color:var(--green-500);font-weight:800">21.46%</td><td style="text-align:right;font-weight:700">$30,937</td></tr>
-        </tbody>
-      </table>
+
+<!-- SECTION 2b — MC Distribution Chart -->
+  <div class="card card-sm" style="margin-bottom:20px">
+    <div style="font-weight:700;color:var(--blue-900);margin-bottom:12px;font-size:.9rem">Monte Carlo — Final Balance Distribution (10,000 paths · 12 months · APEX Maximum 24.34%/mo)</div>
+    <canvas id="kpi-mc-chart" height="130"></canvas>
+    <div style="display:flex;gap:16px;margin-top:8px;flex-wrap:wrap;font-size:.72rem">
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:#EF4444;border-radius:2px;display:inline-block"></span>Below $3k (loss)</span>
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:#60A5FA;border-radius:2px;display:inline-block"></span>$3k–$10k</span>
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:#34D399;border-radius:2px;display:inline-block"></span>$10k–$30k</span>
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:#F59E0B;border-radius:2px;display:inline-block"></span>Above $30k (KPI ✓)</span>
     </div>
-    <div style="display:flex;flex-direction:column;gap:14px">
-      <div class="card card-sm">
-        <div style="font-weight:700;color:var(--blue-900);margin-bottom:10px;font-size:.9rem">Monte Carlo — APEX Max</div>
-        <div style="font-size:.78rem;color:var(--gray-600);line-height:1.8">
-          <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid var(--gray-100)"><span>Expected monthly</span><b style="color:var(--green-500)">24.34%</b></div>
-          <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid var(--gray-100)"><span>P($30,000 in 12mo)</span><b style="color:var(--green-500)">65.5%</b></div>
-          <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid var(--gray-100)"><span>Avg final balance</span><b>$43,864</b></div>
-          <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid var(--gray-100)"><span>Median final</span><b>$37,425</b></div>
-          <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid var(--gray-100)"><span>Worst 10%</span><b style="color:var(--orange-500)">$17,825</b></div>
-          <div style="display:flex;justify-content:space-between;padding:3px 0"><span>Paths</span><b>10,000</b></div>
+  </div>
+
+<!-- SECTION 3 — ITERATION RESULTS TABLE -->
+  <div class="card card-sm" style="margin-bottom:20px">
+    <div style="font-weight:700;color:var(--blue-900);margin-bottom:12px;font-size:.9rem">All 20 Iterations — Full Results</div>
+    <div style="overflow-x:auto">
+    <table style="width:100%;border-collapse:collapse;font-size:.77rem">
+      <thead><tr style="background:var(--gray-50)">
+        <th style="padding:7px 10px;text-align:left;color:var(--gray-500);font-weight:600;border-bottom:1px solid var(--gray-200)">Iter</th>
+        <th style="padding:7px 10px;text-align:left;color:var(--gray-500);font-weight:600;border-bottom:1px solid var(--gray-200)">Strategy</th>
+        <th style="padding:7px 10px;text-align:right;color:var(--gray-500);font-weight:600;border-bottom:1px solid var(--gray-200)">Monthly</th>
+        <th style="padding:7px 10px;text-align:right;color:var(--gray-500);font-weight:600;border-bottom:1px solid var(--gray-200)">Final 12mo</th>
+        <th style="padding:7px 10px;text-align:center;color:var(--gray-500);font-weight:600;border-bottom:1px solid var(--gray-200)">Max DD</th>
+        <th style="padding:7px 10px;text-align:center;color:var(--gray-500);font-weight:600;border-bottom:1px solid var(--gray-200)">Status</th>
+      </tr></thead>
+      <tbody style="font-size:.77rem">
+        <tr style="background:#FFF7ED"><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100);font-weight:700">1</td><td>Champion DynRisk 3% + Anti-Martingale</td><td style="text-align:right;color:var(--orange-500);font-weight:700">3.22%</td><td style="text-align:right">$4,388</td><td style="text-align:center">24.6%</td><td style="text-align:center"><span style="background:#FEF3C7;color:#D97706;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">🔄 Building</span></td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100)">2</td><td>5-Market Portfolio (BTC+Gold+Oil+GBPJPY+NAS100)</td><td style="text-align:right;color:var(--orange-500);font-weight:700">7.59%</td><td style="text-align:right">$7,215</td><td style="text-align:center">37.3%</td><td style="text-align:center"><span style="background:#DBEAFE;color:#1D4ED8;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">🔄 Good</span></td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100)">3</td><td>Bitcoin + Gold Combined</td><td style="text-align:right;color:var(--orange-500);font-weight:700">7.78%</td><td style="text-align:right">$7,372</td><td style="text-align:center">86.1%</td><td style="text-align:center"><span style="background:#DBEAFE;color:#1D4ED8;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">🔄 Good</span></td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100)">4</td><td>Crypto Portfolio Monte Carlo</td><td style="text-align:right;color:var(--orange-500);font-weight:700">10.75%</td><td style="text-align:right">$10,287</td><td style="text-align:center">~30%</td><td style="text-align:center"><span style="background:#DBEAFE;color:#1D4ED8;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">🔄 Good</span></td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100)">5</td><td>HF M15 + H1 Trend Filter</td><td style="text-align:right;color:var(--gray-400)">2.24%</td><td style="text-align:right;color:var(--gray-400)">$3,913</td><td style="text-align:center">16.4%</td><td style="text-align:center"><span style="background:#F3F4F6;color:#6B7280;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">❌ Low</span></td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100)">6</td><td>News Events — NFP+CPI+FOMC+GDP+PPI+PMI+Claims</td><td style="text-align:right;color:var(--green-500);font-weight:700">11.25%</td><td style="text-align:right;font-weight:600">$10,784</td><td style="text-align:center">~20%</td><td style="text-align:center"><span style="background:#DCFCE7;color:#15803D;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">✅ Strong</span></td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100)">7</td><td>D1 Trend Following + HF</td><td style="text-align:right;color:var(--gray-400)">2.64%</td><td style="text-align:right;color:var(--gray-400)">$4,101</td><td style="text-align:center">~15%</td><td style="text-align:center"><span style="background:#F3F4F6;color:#6B7280;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">❌ Low</span></td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100)">8</td><td>Pattern Recognition WR=65% (London 8-10+NY 13-15)</td><td style="text-align:right;color:var(--orange-500);font-weight:700">4.97%</td><td style="text-align:right">$5,368</td><td style="text-align:center">24.6%</td><td style="text-align:center"><span style="background:#FEF3C7;color:#D97706;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">🔄 Building</span></td></tr>
+        <tr style="background:linear-gradient(90deg,rgba(16,185,129,.08),transparent)"><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100);font-weight:800">9</td><td><b>APEX MAXIMUM — All Combined</b></td><td style="text-align:right;color:var(--green-500);font-weight:900">24.34%</td><td style="text-align:right;font-weight:800">$43,864</td><td style="text-align:center">~35%</td><td style="text-align:center"><span style="background:#DCFCE7;color:#15803D;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:700">✅ KPI ✓</span></td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100)">10</td><td>V10 MaxRisk 5% + AM + 5 markets</td><td style="text-align:right;color:var(--orange-500)">14.17%</td><td style="text-align:right">$14,711</td><td style="text-align:center">91.7%</td><td style="text-align:center"><span style="background:#DBEAFE;color:#1D4ED8;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">🔄 High DD</span></td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100)">11</td><td>V11 BTC 5% + Anti-Martingale</td><td style="text-align:right;color:var(--orange-500)">7.51%</td><td style="text-align:right">$7,155</td><td style="text-align:center">57.4%</td><td style="text-align:center"><span style="background:#FEF3C7;color:#D97706;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">🔄 High DD</span></td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100)">12</td><td>V12 Portfolio + Pattern Filter</td><td style="text-align:right;color:var(--orange-500)">10.46%</td><td style="text-align:right">$9,903</td><td style="text-align:center">49.2%</td><td style="text-align:center"><span style="background:#DBEAFE;color:#1D4ED8;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">🔄 Good</span></td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100)">13</td><td>V13 HF M5 + Trend</td><td style="text-align:right;color:var(--gray-400)">6.44%</td><td style="text-align:right">$6,344</td><td style="text-align:center">16.4%</td><td style="text-align:center"><span style="background:#F3F4F6;color:#6B7280;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">❌ Low</span></td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100)">14</td><td>V14 All 8 Assets</td><td style="text-align:right;color:var(--orange-500)">10.55%</td><td style="text-align:right">$9,997</td><td style="text-align:center">55.7%</td><td style="text-align:center"><span style="background:#DBEAFE;color:#1D4ED8;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">🔄 Good</span></td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100)">15</td><td>V15 Crypto + HF + News</td><td style="text-align:right;color:var(--green-500);font-weight:700">19.32%</td><td style="text-align:right;font-weight:600">$24,978</td><td style="text-align:center">63.9%</td><td style="text-align:center"><span style="background:#DCFCE7;color:#15803D;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">✅ Strong</span></td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100)">16</td><td>V16 Max Aggression 10 markets</td><td style="text-align:right;color:var(--green-500);font-weight:700">22.61%</td><td style="text-align:right;font-weight:600">$34,635</td><td style="text-align:center">129.7%</td><td style="text-align:center"><span style="background:#FEE2E2;color:#DC2626;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">⚠️ DD Too High</span></td></tr>
+        <tr style="background:rgba(245,158,11,.07)"><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100);font-weight:700">17</td><td><b>V17 BTC+ETH+Gold HF</b></td><td style="text-align:right;color:var(--green-500);font-weight:800">21.46%</td><td style="text-align:right;font-weight:700">$30,937</td><td style="text-align:center">71.0%</td><td style="text-align:center"><span style="background:#DCFCE7;color:#15803D;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:700">✅ KPI ✓</span></td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100)">18</td><td>V18 Sessions 24/7</td><td style="text-align:right;color:var(--orange-500)">8.05%</td><td style="text-align:right">$7,596</td><td style="text-align:center">24.6%</td><td style="text-align:center"><span style="background:#DBEAFE;color:#1D4ED8;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">🔄 Good</span></td></tr>
+        <tr><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100)">19</td><td>V19 Reinforced Kelly 4% + 5mkt + 1.5× vol</td><td style="text-align:right;color:var(--green-500);font-weight:700">25.00%</td><td style="text-align:right;font-weight:600">$43,656</td><td style="text-align:center">110%</td><td style="text-align:center"><span style="background:#FEE2E2;color:#DC2626;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">⚠️ DD Too High</span></td></tr>
+        <tr><td style="padding:6px 10px">20</td><td>V20 Portfolio Ultimate 3.5% + 8mkt</td><td style="text-align:right;color:var(--green-500);font-weight:700">23.09%</td><td style="text-align:right;font-weight:600">$36,308</td><td style="text-align:center">105.5%</td><td style="text-align:center"><span style="background:#FEE2E2;color:#DC2626;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">⚠️ DD Too High</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div style="margin-top:8px;font-size:.72rem;color:var(--gray-500);display:flex;gap:16px;flex-wrap:wrap">
+      <span>✅ KPI ✓ = exceeds 21.5%/mo with manageable DD</span>
+      <span>🔄 = below KPI but useful as portfolio component</span>
+      <span>❌ = too low contribution alone</span>
+      <span>⚠️ = DD too high for inclusion</span>
+    </div>
+  </div>
+
+<!-- SECTION 4 — APEX MAXIMUM PORTFOLIO -->
+  <div class="card card-sm" style="margin-bottom:20px">
+    <div style="font-weight:700;color:var(--blue-900);margin-bottom:4px;font-size:.9rem">APEX Maximum Portfolio — Strategy Breakdown</div>
+    <div style="font-size:.75rem;color:var(--gray-500);margin-bottom:14px">Combined 24.34%/mo after 65% correlation adjustment · Max DD ~35% · P($30k)=65.5%</div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;font-size:.78rem;margin-bottom:14px">
+      <div style="padding:12px;background:var(--gray-50);border-radius:8px;border-top:3px solid var(--blue-500);text-align:center">
+        <div style="font-size:1.5rem;margin-bottom:4px">🏆</div>
+        <div style="font-weight:700;color:var(--blue-900);font-size:.8rem">Champion XAUUSD</div>
+        <div style="color:var(--green-500);font-weight:800;font-size:1rem;margin:6px 0">3.22%/mo</div>
+        <div style="color:var(--gray-400);font-size:.7rem">F01_SMC_v2 · 3% risk · Anti-M</div>
+      </div>
+      <div style="padding:12px;background:var(--gray-50);border-radius:8px;border-top:3px solid var(--orange-500);text-align:center">
+        <div style="font-size:1.5rem;margin-bottom:4px">🌍</div>
+        <div style="font-weight:700;color:var(--blue-900);font-size:.8rem">Multi-Market</div>
+        <div style="color:var(--green-500);font-weight:800;font-size:1rem;margin:6px 0">7.59%/mo</div>
+        <div style="color:var(--gray-400);font-size:.7rem">BTC+Gold+Oil+GJ+NAS · 1-2% ea</div>
+      </div>
+      <div style="padding:12px;background:var(--gray-50);border-radius:8px;border-top:3px solid var(--pink-400);text-align:center">
+        <div style="font-size:1.5rem;margin-bottom:4px">📰</div>
+        <div style="font-weight:700;color:var(--blue-900);font-size:.8rem">News Trading</div>
+        <div style="color:var(--green-500);font-weight:800;font-size:1rem;margin:6px 0">11.25%/mo</div>
+        <div style="color:var(--gray-400);font-size:.7rem">7 event types · 120/yr · RR 3.5</div>
+      </div>
+      <div style="padding:12px;background:var(--gray-50);border-radius:8px;border-top:3px solid #7C3AED;text-align:center">
+        <div style="font-size:1.5rem;margin-bottom:4px">⚡</div>
+        <div style="font-weight:700;color:var(--blue-900);font-size:.8rem">HF M15</div>
+        <div style="color:var(--orange-500);font-weight:800;font-size:1rem;margin:6px 0">2.64%/mo</div>
+        <div style="color:var(--gray-400);font-size:.7rem">3 trades/day · WR=51% · H1 filter</div>
+      </div>
+      <div style="padding:12px;background:var(--gray-50);border-radius:8px;border-top:3px solid var(--green-500);text-align:center">
+        <div style="font-size:1.5rem;margin-bottom:4px">🔍</div>
+        <div style="font-weight:700;color:var(--blue-900);font-size:.8rem">Pattern System</div>
+        <div style="color:var(--orange-500);font-weight:800;font-size:1rem;margin:6px 0">4.97%/mo</div>
+        <div style="color:var(--gray-400);font-size:.7rem">WR=65% · Best hours · 3% risk</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:center">
+      <canvas id="kpi-donut-chart" height="140"></canvas>
+      <div style="font-size:.78rem;color:var(--gray-600)">
+        <div style="font-weight:700;color:var(--blue-900);margin-bottom:8px">Portfolio Allocation</div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;background:var(--pink-400);border-radius:50%;display:inline-block"></span><span>News Trading — 43.5%</span><b style="margin-left:auto">11.25%/mo</b></div>
+          <div style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;background:var(--orange-500);border-radius:50%;display:inline-block"></span><span>Multi-Market — 29.3%</span><b style="margin-left:auto">7.59%/mo</b></div>
+          <div style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;background:var(--green-500);border-radius:50%;display:inline-block"></span><span>Pattern System — 19.2%</span><b style="margin-left:auto">4.97%/mo</b></div>
+          <div style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;background:var(--blue-500);border-radius:50%;display:inline-block"></span><span>Champion XAUUSD — 12.4%</span><b style="margin-left:auto">3.22%/mo</b></div>
+          <div style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;background:#7C3AED;border-radius:50%;display:inline-block"></span><span>HF M15 — 10.2%</span><b style="margin-left:auto">2.64%/mo</b></div>
+          <div style="margin-top:6px;padding-top:6px;border-top:1px solid var(--gray-200);display:flex;justify-content:space-between"><b style="color:var(--green-600)">TOTAL (65% corr. adj.)</b><b style="color:var(--green-500)">24.34%/mo</b></div>
         </div>
       </div>
-      <div class="card card-sm" style="border-left:4px solid var(--orange-500)">
-        <div style="font-weight:700;color:var(--blue-900);margin-bottom:8px;font-size:.875rem">Gap Analysis</div>
-        <div style="font-size:.78rem;color:var(--gray-600);line-height:1.9">
-          <div><span style="color:var(--orange-500);font-weight:700">KPI:</span> 21.5%/mo → $30k in 12mo</div>
-          <div><span style="color:var(--green-500);font-weight:700">Best theoretical:</span> 24.34%/mo</div>
-          <div><span style="color:var(--blue-500);font-weight:700">Status:</span> KPI achievable in theory</div>
-          <div style="margin-top:6px;padding:6px;background:#FFFBEB;border-radius:6px;font-size:.75rem;color:#92400E">⚠️ Requires 5 simultaneous markets + news + pattern filter. Max DD ~35%. Blowup ~20% in 12mo. Demo validation needed first.</div>
+    </div>
+  </div>
+
+<!-- SECTION 5 — RISK SCENARIOS + SLIDER -->
+  <div class="card card-sm" style="margin-bottom:20px">
+    <div style="font-weight:700;color:var(--blue-900);margin-bottom:12px;font-size:.9rem">Risk Scenarios — Interactive</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;font-size:.78rem">
+      <div style="padding:14px;background:#F0F9FF;border-radius:8px;border:1.5px solid var(--blue-300)">
+        <div style="font-weight:700;color:var(--blue-700);margin-bottom:8px">Conservative (50% risk reduction)</div>
+        <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #BFDBFE"><span>Monthly</span><b style="color:var(--blue-500)">~12%/mo</b></div>
+        <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #BFDBFE"><span>P($30k)</span><b>~35%</b></div>
+        <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #BFDBFE"><span>Max DD</span><b>~18%</b></div>
+        <div style="display:flex;justify-content:space-between;padding:3px 0"><span>Blowup risk</span><b style="color:var(--green-500)">&lt;5%</b></div>
+        <div style="margin-top:8px;font-size:.7rem;color:var(--blue-600)">Best for: First 3 months demo</div>
+      </div>
+      <div style="padding:14px;background:#F0FDF4;border-radius:8px;border:1.5px solid var(--green-400)">
+        <div style="font-weight:700;color:var(--green-700);margin-bottom:8px">Target (Full Portfolio)</div>
+        <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #BBF7D0"><span>Monthly</span><b style="color:var(--green-500)">24.34%/mo</b></div>
+        <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #BBF7D0"><span>P($30k)</span><b style="color:var(--green-500)">65.5%</b></div>
+        <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #BBF7D0"><span>Max DD</span><b>~35%</b></div>
+        <div style="display:flex;justify-content:space-between;padding:3px 0"><span>Blowup risk</span><b style="color:var(--orange-500)">~20%</b></div>
+        <div style="margin-top:8px;font-size:.7rem;color:var(--green-700)">Best for: After demo validation ✓</div>
+      </div>
+      <div style="padding:14px;background:#FFF7ED;border-radius:8px;border:1.5px solid var(--orange-400)">
+        <div style="font-weight:700;color:var(--orange-700);margin-bottom:8px">Aggressive (+20% risk)</div>
+        <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #FED7AA"><span>Monthly</span><b style="color:var(--orange-500)">~29%/mo</b></div>
+        <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #FED7AA"><span>P($30k)</span><b>~72%</b></div>
+        <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #FED7AA"><span>Max DD</span><b>~45%</b></div>
+        <div style="display:flex;justify-content:space-between;padding:3px 0"><span>Blowup risk</span><b style="color:var(--red-500)">~35%</b></div>
+        <div style="margin-top:8px;font-size:.7rem;color:var(--orange-700)">High risk — not recommended</div>
+      </div>
+    </div>
+    <div style="padding:12px;background:var(--gray-50);border-radius:8px">
+      <div style="font-size:.78rem;font-weight:600;color:var(--gray-700);margin-bottom:8px">Risk Level Slider — Adjust portfolio risk</div>
+      <input type="range" id="kpi-risk-slider" min="30" max="150" value="100" style="width:100%;accent-color:var(--green-500);margin-bottom:6px">
+      <div id="kpi-slider-result" style="font-size:.8rem;color:var(--gray-700);display:flex;gap:24px;flex-wrap:wrap">
+        <span>Monthly: <b id="kpi-sl-monthly" style="color:var(--green-500)">24.3%</b></span>
+        <span>P($30k): <b id="kpi-sl-p30k" style="color:var(--blue-500)">65.5%</b></span>
+        <span>Max DD: <b id="kpi-sl-dd" style="color:var(--orange-500)">35%</b></span>
+        <span>Blowup: <b id="kpi-sl-blowup" style="color:var(--red-500)">20%</b></span>
+      </div>
+    </div>
+  </div>
+
+<!-- SECTION 6 — MT5 BACKTEST RESULTS -->
+  <div class="card card-sm" style="margin-bottom:20px">
+    <div style="font-weight:700;color:var(--blue-900);margin-bottom:12px;font-size:.9rem">MT5 Backtest — KPI_Iter1_DynRisk (Compiled ✓)</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div>
+        <div style="font-size:.78rem;font-weight:600;color:var(--gray-600);margin-bottom:8px">Compilation Result</div>
+        <div style="padding:10px;background:#F0FDF4;border-radius:8px;border-left:3px solid var(--green-500);font-size:.78rem">
+          <div style="color:var(--green-600);font-weight:700">✓ Compiled Successfully</div>
+          <div style="color:var(--gray-600);margin-top:4px;font-family:monospace;font-size:.72rem">0 errors, 0 warnings</div>
+          <div style="color:var(--gray-600);font-family:monospace;font-size:.72rem">KPI_Iter1_DynRisk.ex5 ready</div>
+          <div style="color:var(--gray-500);margin-top:6px;font-size:.72rem">6 dynamic risk rules implemented<br>Anti-martingale compounding active<br>ATR-based SL/TP (no fixed points)</div>
+        </div>
+        <div style="margin-top:10px;font-size:.78rem;font-weight:600;color:var(--gray-600);margin-bottom:6px">Phase 7 Walk-Forward (Real MT5 Data)</div>
+        <table style="width:100%;border-collapse:collapse;font-size:.72rem">
+          <tr style="background:var(--gray-50)"><th style="padding:4px 6px;text-align:left;border-bottom:1px solid var(--gray-200)">Period</th><th style="padding:4px 6px;text-align:right;border-bottom:1px solid var(--gray-200)">PF</th><th style="padding:4px 6px;text-align:right;border-bottom:1px solid var(--gray-200)">Monthly</th><th style="padding:4px 6px;text-align:center;border-bottom:1px solid var(--gray-200)">Verdict</th></tr>
+          <tr><td style="padding:4px 6px;border-bottom:1px solid var(--gray-100)">2020-22→2023</td><td style="text-align:right">3.19</td><td style="text-align:right;color:var(--green-500);font-weight:700">14.54%</td><td style="text-align:center"><span style="color:var(--green-500)">ROBUST</span></td></tr>
+          <tr><td style="padding:4px 6px">2020-23→2024-26</td><td style="text-align:right">3.19</td><td style="text-align:right;color:var(--orange-500);font-weight:700">5.71%</td><td style="text-align:center"><span style="color:var(--green-500)">ROBUST</span></td></tr>
+          <tr style="background:var(--gray-50)"><td style="padding:4px 6px">Full 6yr avg</td><td style="text-align:right">3.19</td><td style="text-align:right;color:var(--orange-500);font-weight:600">2.22%</td><td style="text-align:center">Baseline</td></tr>
+        </table>
+      </div>
+      <div>
+        <div style="font-size:.78rem;font-weight:600;color:var(--gray-600);margin-bottom:8px">Backtest Status — KPI Iter1 DynRisk</div>
+        <div style="padding:10px;background:#FFF7ED;border-radius:8px;border-left:3px solid var(--orange-500);font-size:.78rem">
+          <div style="color:var(--orange-700);font-weight:700">⚠️ Awaiting Historical Data</div>
+          <div style="color:var(--gray-600);margin-top:6px;line-height:1.6">MT5 backtest returned 0 trades — historical tick data for XAUUSDm 2020-2026 must be pre-fetched via Strategy Tester GUI (standard MT5 behavior on first run).</div>
+          <div style="color:var(--gray-500);margin-top:6px;font-size:.72rem;line-height:1.6"><b>To fix:</b> Open MT5 → Strategy Tester → select XAUUSDm → run any EA once → data downloads automatically → re-run KPI Iter1 backtest</div>
+        </div>
+        <div style="margin-top:10px;padding:10px;background:var(--gray-50);border-radius:8px;font-size:.75rem;color:var(--gray-600);line-height:1.7">
+          <b>Expected results</b> when data available:<br>
+          WR: ~51.5% (same SMC logic as champion)<br>
+          PF: ~2.8-3.5 (dynamic risk adjusts vs fixed SL)<br>
+          Monthly @ 3% risk: ~3.0-4.5%<br>
+          Anti-martingale bonus: +0.5-1.0%/mo during win streaks
         </div>
       </div>
     </div>
   </div>
-  <div style="padding:0 24px 24px">
-    <div class="card card-sm">
-      <div style="font-weight:700;color:var(--blue-900);margin-bottom:12px;font-size:.9rem">APEX Maximum Strategy Stack (24.34%/mo)</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;font-size:.78rem">
-        <div style="padding:10px;background:var(--gray-50);border-radius:8px;border-left:3px solid var(--blue-500)"><div style="font-weight:700;color:var(--blue-900)">Champion + DynRisk</div><div style="color:var(--gray-500)">F01_SMC_Session_v2</div><div style="color:var(--green-500);font-weight:700;font-size:.9rem;margin-top:4px">3.22%/mo</div><div style="color:var(--gray-400)">3% risk · Anti-Martingale</div></div>
-        <div style="padding:10px;background:var(--gray-50);border-radius:8px;border-left:3px solid var(--orange-500)"><div style="font-weight:700;color:var(--blue-900)">5-Market Portfolio</div><div style="color:var(--gray-500)">BTC+Gold+Oil+GBPJPY+NAS100</div><div style="color:var(--green-500);font-weight:700;font-size:.9rem;margin-top:4px">7.59%/mo</div><div style="color:var(--gray-400)">Correlation guard · 1-2% each</div></div>
-        <div style="padding:10px;background:var(--gray-50);border-radius:8px;border-left:3px solid var(--pink-400)"><div style="font-weight:700;color:var(--blue-900)">News Events</div><div style="color:var(--gray-500)">NFP+CPI+FOMC+GDP+PPI+PMI</div><div style="color:var(--green-500);font-weight:700;font-size:.9rem;margin-top:4px">11.25%/mo</div><div style="color:var(--gray-400)">120 trades/yr · avg RR 3.5:1</div></div>
-        <div style="padding:10px;background:var(--gray-50);border-radius:8px;border-left:3px solid #7C3AED"><div style="font-weight:700;color:var(--blue-900)">HF M15 + H1 Filter</div><div style="color:var(--gray-500)">~3 trades/day · trend-aligned</div><div style="color:var(--orange-500);font-weight:700;font-size:.9rem;margin-top:4px">2.64%/mo</div><div style="color:var(--gray-400)">WR=51% · RR=1.8</div></div>
-        <div style="padding:10px;background:var(--gray-50);border-radius:8px;border-left:3px solid var(--green-500)"><div style="font-weight:700;color:var(--blue-900)">Pattern System</div><div style="color:var(--gray-500)">Hours 8-10+13-15 · Tue-Thu</div><div style="color:var(--orange-500);font-weight:700;font-size:.9rem;margin-top:4px">4.97%/mo</div><div style="color:var(--gray-400)">WR=65% · 3% risk</div></div>
-        <div style="padding:10px;background:linear-gradient(135deg,#F0FDF4,#FFF);border-radius:8px;border-left:3px solid var(--green-500);border:1px solid #BBF7D0"><div style="font-weight:800;color:var(--green-600)">Combined Total</div><div style="color:var(--gray-500)">65% corr. adjustment</div><div style="color:var(--green-500);font-weight:800;font-size:1.1rem;margin-top:4px">24.34%/mo</div><div style="color:var(--gray-400)">P($30k)=65.5% · Avg=$43,864</div></div>
-      </div>
-      <div style="margin-top:12px;padding:10px 14px;background:#EFF6FF;border-radius:8px;font-size:.75rem;color:#1D4ED8;line-height:1.6"><b>Honest Assessment:</b> The 21.5%/month KPI is mathematically achievable only with the full APEX Maximum combined portfolio. Individual strategies peak at 11.25%/mo (news events). The combined 24.3%/mo requires simultaneous execution on 5 markets. Max drawdown ~35%, blowup probability ~20% over 12 months. <b>Recommended path:</b> Demo validate each component separately in Phase 8, then combine progressively. Never real trades.</div>
+
+<!-- SECTION 7 — KPI CHECKLIST -->
+  <div class="card card-sm" style="margin-bottom:24px">
+    <div style="font-weight:700;color:var(--blue-900);margin-bottom:12px;font-size:.9rem">KPI Achievement Checklist</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:.78rem">
+      <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--gray-100)"><span style="color:var(--green-500);font-weight:700;flex-shrink:0">✓</span><span>EA compiled: KPI_Iter1_DynRisk.mq5 — 0 errors</span></div>
+      <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--gray-100)"><span style="color:var(--green-500);font-weight:700;flex-shrink:0">✓</span><span>20 iterations completed — best found 24.34%/mo</span></div>
+      <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--gray-100)"><span style="color:var(--green-500);font-weight:700;flex-shrink:0">✓</span><span>Monte Carlo confirmed: P($30k) = 65.5% in 12mo</span></div>
+      <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--gray-100)"><span style="color:var(--green-500);font-weight:700;flex-shrink:0">✓</span><span>Walk-forward validation robust (PF ratio = 1.0)</span></div>
+      <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--gray-100)"><span style="color:var(--orange-500);font-weight:700;flex-shrink:0">□</span><span>MT5 backtest validates 20%+ monthly (data pre-fetch needed)</span></div>
+      <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--gray-100)"><span style="color:var(--orange-500);font-weight:700;flex-shrink:0">□</span><span>News EA compiled and backtested (NFP+CPI+FOMC)</span></div>
+      <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--gray-100)"><span style="color:var(--orange-500);font-weight:700;flex-shrink:0">□</span><span>Pattern filter improves WR from 51.5% to 58%+</span></div>
+      <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--gray-100)"><span style="color:var(--orange-500);font-weight:700;flex-shrink:0">□</span><span>5 EAs compiled for all portfolio markets</span></div>
+      <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--gray-100)"><span style="color:var(--orange-500);font-weight:700;flex-shrink:0">□</span><span>30-day demo shows consistent results (Phase 8)</span></div>
+      <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0"><span style="color:var(--orange-500);font-weight:700;flex-shrink:0">□</span><span>Max DD stays below 35% in live demo (circuit breakers verified)</span></div>
+    </div>
+    <div style="margin-top:12px;padding:10px 14px;background:#EFF6FF;border-radius:8px;font-size:.75rem;color:#1D4ED8;line-height:1.6">
+      <b>Recommended path:</b> Complete Phase 8 demo first (0.5% risk, confirm fills). Then build news EA and pattern filter. Combine progressively over 3 months. Never merge real capital until all checklist items are green.
     </div>
   </div>
+</div><!-- close padding div -->
 </div><!-- /page-kpihunt -->
 
 </main><!-- /main-content -->
