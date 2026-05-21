@@ -3078,6 +3078,31 @@ function showP7Sub(id, btn) {
 }
 window.showP7Sub = showP7Sub;
 
+function pepCopy(val, btn) {
+  navigator.clipboard.writeText(val).then(function(){
+    var orig = btn.textContent;
+    btn.textContent = '✓';
+    btn.style.color = '#10b981';
+    setTimeout(function(){ btn.textContent = orig; btn.style.color = ''; }, 1200);
+  }).catch(function(){
+    var ta = document.createElement('textarea');
+    ta.value = val; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+    btn.textContent = '✓'; setTimeout(function(){ btn.textContent = 'copy'; }, 1200);
+  });
+}
+function pepCopyAll() {
+  var all = 'EA: APEX_Pepperstone_v1.mq5\nSymbol: XAUUSD\nTimeframe: H1\nInpBaseRisk = 1.0\nInpMaxRisk = 3.0\nInpMagic = 80801\nInpRR = 1.5\nInpSLBuf = 80\nInpOBLen = 6\nInpMaxDDPct = 20.0\nInpAMWins = 3\nInpAMAdd = 0.5';
+  navigator.clipboard.writeText(all).then(function(){
+    var el = document.getElementById('pepCopyAllMsg');
+    if(el){ el.style.display='block'; setTimeout(function(){ el.style.display='none'; }, 2000); }
+  }).catch(function(){
+    var ta = document.createElement('textarea');
+    ta.value = all; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+    var el = document.getElementById('pepCopyAllMsg');
+    if(el){ el.style.display='block'; setTimeout(function(){ el.style.display='none'; }, 2000); }
+  });
+}
+
 (function initPhase7(){
   // Walk-forward PF comparison chart
   var c1 = document.getElementById('p7WFChart');
