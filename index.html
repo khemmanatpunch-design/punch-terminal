@@ -2906,7 +2906,7 @@ function renderClaudeSetup(c){
     <div style="max-width:420px;width:100%;margin-top:18px">
       <div style="font-size:.78rem;color:var(--gray-400);text-align:center;margin-bottom:10px">🔒 Connect API key to ask these questions:</div>
       <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center">
-        ${['Rate my system 1-10','Am I on track for $30k?','What should I improve?','Which risk level is right?','What is Phase 8 plan?','How do I reduce blowup risk?'].map(q=>`<div style="padding:6px 12px;background:var(--bg-secondary);border:1px solid var(--gray-200);border-radius:999px;font-size:.75rem;color:var(--gray-400)">🔒 ${q}</div>`).join('')}
+        ${['Rate my system 1-10','Am I on track for $30k?','What should I improve?','Which risk level is right?','What is Phase 8 plan?','How do I reduce blowup risk?'].map(q=>`<div title="Connect API key first" style="padding:6px 12px;background:var(--bg-secondary);border:1px solid var(--gray-200);border-radius:999px;font-size:.75rem;color:var(--gray-400);cursor:not-allowed;user-select:none">🔒 ${q}</div>`).join('')}
       </div>
     </div>
   </div>`;
