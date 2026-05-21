@@ -862,7 +862,23 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
   <div class="page-title">Tournament Bracket</div>
   <div class="page-subtitle">8-Round Elimination · 100 strategies · Champion: F01_SMC_Session_v2</div>
   <div class="page-divider"></div>
-  <div id="bracket-content"><div class="stub-page"><div class="stub-icon">🏆</div><div class="stub-title">Tournament Bracket</div><div class="stub-text">Loading in Save 2...</div></div></div>
+  <div id="bracket-content">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px" id="bracketPills">
+      <span class="spill gy">100 Strategies</span>
+      <span class="spill gn">43 Profitable</span>
+      <span class="spill bl">8 Rounds</span>
+      <span class="spill gd">👑 Champion: F01_SMC_Session_v2</span>
+    </div>
+    <div class="bracket-wrap"><div id="bracketGrid"></div></div>
+    <div class="slide-backdrop" id="panelBackdrop" onclick="closePanel()"></div>
+    <div class="slide-panel" id="slidePanel">
+      <div class="spanel-hdr" id="panelHdr" style="background:var(--gray-50)">
+        <div><div id="panelTitle" style="font-size:.9375rem;font-weight:800;color:var(--blue-900)"></div><div id="panelSub" style="font-size:.75rem;color:var(--gray-500);margin-top:2px"></div></div>
+        <button class="spanel-close" onclick="closePanel()">✕</button>
+      </div>
+      <div class="spanel-body" id="panelBody"></div>
+    </div>
+  </div>
 </div>
 </div>
 
