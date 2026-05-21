@@ -2417,6 +2417,7 @@ pageInitFns['phase4']=function(){
   },80);
 };
 let riskBarChartInst=null;
+let riskCurveMiniInst=null;
 function updateRisk(i){
   const d=RISK_DATA[i];
   const moC=d[1]<10?'var(--green-500)':d[1]<20?'var(--orange-500)':'var(--red-500)';
@@ -2427,10 +2428,17 @@ function updateRisk(i){
   const rBal=document.getElementById('rBal');if(rBal)rBal.textContent='$'+d[2].toLocaleString();
   const rBl=document.getElementById('rBlow');if(rBl){rBl.textContent=d[3]+'%';rBl.style.color=blC;}
   const rBlI=document.getElementById('rBlowInline');if(rBlI){rBlI.textContent=d[3]+'%';rBlI.style.color=blC;}
+  const idx=parseInt(i);
   if(riskBarChartInst&&riskBarChartInst.data){
-    const idx=parseInt(i);
     riskBarChartInst.data.datasets[0].backgroundColor=RISK_DATA.map((_,j)=>j===idx?'rgba(79,70,229,.9)':'rgba(79,70,229,.3)');
     riskBarChartInst.update('none');
+  }
+  if(riskCurveMiniInst&&riskCurveMiniInst.data){
+    riskCurveMiniInst.data.datasets[0].pointRadius=RISK_DATA.map((_,j)=>j===idx?5:2);
+    riskCurveMiniInst.data.datasets[0].pointBackgroundColor=RISK_DATA.map((_,j)=>j===idx?'#4F46E5':'rgba(79,70,229,.4)');
+    riskCurveMiniInst.data.datasets[1].pointRadius=RISK_DATA.map((_,j)=>j===idx?5:2);
+    riskCurveMiniInst.data.datasets[1].pointBackgroundColor=RISK_DATA.map((_,j)=>j===idx?'#EF4444':'rgba(239,68,68,.4)');
+    riskCurveMiniInst.update('none');
   }
 }
 
