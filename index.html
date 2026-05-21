@@ -2090,7 +2090,8 @@ pageInitFns['phase5']=function(){
   </div>`).join('');
   el.innerHTML=`
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">${dims}</div>
-    <div class="section-heading"><span>Monte Carlo — Updated (10,000 paths · WR 51.5% · PF 3.19 · 1% risk · 15pt spread)</span><div class="section-heading-line"></div></div>
+    <div style="padding:8px 14px;background:var(--blue-100);border-radius:var(--radius-md);margin-bottom:10px;font-size:.78rem;color:var(--blue-900)">📍 <strong>Phase 7 Reality Data</strong> — Pepperstone XAUUSD · PF 3.19 · WR 51.5% · 1% risk · 15pt avg spread · 10,000 simulation paths</div>
+    <div class="section-heading"><span>Monte Carlo — Phase 7 Pepperstone Results</span><div class="section-heading-line"></div></div>
     <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px">
       ${[
         {label:'P($10k) in 12mo',val:'< 0.1%',c:'var(--red-500)',bg:'#FEF2F2',note:'Requires 11.5%/mo'},
