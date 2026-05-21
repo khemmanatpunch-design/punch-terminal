@@ -2194,6 +2194,51 @@ window.closeBracketPopup = closeBracketPopup;
 // Init Phase 4
 initPhase4();
 
+// ── PHASE 5 ────────────────────────────────────────────────────────────────
+function showP5Sub(id, btn) {
+  document.querySelectorAll('.p5-sub').forEach(function(e){ e.style.display='none'; });
+  document.getElementById(id).style.display='block';
+  if(btn) {
+    btn.parentElement.querySelectorAll('.tab').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+  }
+}
+window.showP5Sub = showP5Sub;
+
+(function initPhase5(){
+  // Compounding chart
+  var canvas = document.getElementById('p5CompoundChart');
+  if(!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var months = [0,1,2,3,4,5,6,7,8,9,10,11,12];
+  var base   = [3000,3210,3431,3677,3947,4244,4560,4990,5461,5957,6636,7384,8231];
+  var best   = [3000,3480,4032,4677,5425,6294,7302,9513,12395,16134,24201,36301,45000];
+  var worst  = [3000,2910,2822,2740,2658,2578,2500,2420,2345,2273,2203,2136,2071];
+  var W = canvas.offsetWidth || 500, H = 80;
+  canvas.width = W; canvas.height = H;
+  var pad = 28, cW = W - pad*2, cH = H - 10;
+  var maxV = 50000, minV = 0;
+  function px(v){ return pad + (v/maxV) * cW; }
+  function py(v){ return H - 5 - ((v-minV)/(maxV-minV)) * cH; }
+  // worst
+  ctx.strokeStyle='rgba(255,68,102,0.5)'; ctx.lineWidth=1.5; ctx.beginPath();
+  worst.forEach(function(v,i){ i===0?ctx.moveTo(px(i/12),py(v)):ctx.lineTo(px(i/12),py(v)); }); ctx.stroke();
+  // base
+  ctx.strokeStyle='rgba(167,139,250,0.9)'; ctx.lineWidth=2; ctx.beginPath();
+  base.forEach(function(v,i){ i===0?ctx.moveTo(px(i/12),py(v)):ctx.lineTo(px(i/12),py(v)); }); ctx.stroke();
+  // best
+  ctx.strokeStyle='rgba(0,255,136,0.7)'; ctx.lineWidth=1.5; ctx.setLineDash([4,3]); ctx.beginPath();
+  best.forEach(function(v,i){ i===0?ctx.moveTo(px(i/12),py(v)):ctx.lineTo(px(i/12),py(v)); }); ctx.stroke();
+  ctx.setLineDash([]);
+  // labels
+  ctx.fillStyle='rgba(255,255,255,0.4)'; ctx.font='8px monospace';
+  ctx.fillText('$30k',pad+2,py(30000)+4);
+  ctx.fillText('$3k',pad+2,py(3000)+4);
+  // target line
+  ctx.strokeStyle='rgba(255,215,0,0.3)'; ctx.lineWidth=1; ctx.setLineDash([6,4]); ctx.beginPath();
+  ctx.moveTo(pad, py(30000)); ctx.lineTo(W-pad, py(30000)); ctx.stroke(); ctx.setLineDash([]);
+})();
+
 // Init calculators
 setTimeout(function(){calcLotSize();calcRuinRisk();calcTarget();calcCompound();},200);
 
