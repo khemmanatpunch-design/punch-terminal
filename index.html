@@ -2250,6 +2250,8 @@ const WF_ROWS=[
 ];
 const PEP_SIM=[['18pt Asian session',0.754,'Current confirmed'],['15pt average',0.827,'Typical session'],['10pt London kill zone',0.950,'Best regular'],['5pt best case',1.240,'Ideal conditions']];
 const CHECKLIST=['Backtest validated 2020–2026 (6 years full)','Walk-forward Period 1: ROBUST (ratio 1.00)','Walk-forward Period 2: ROBUST (ratio 1.00)','Forward test 2026 profitable (+$1,516)','Pepperstone account connected (51489276)','EA compiled: APEX_Pepperstone_v1 (0 errors)','MT5 connected — XAUUSD confirmed','Spread confirmed 18pt Asian / 10pt London','Risk defined: 1% base, 20% DD stop','Discord monitoring active'];
+const PHASE7_KEY='apex_p7_checks';
+function p7Check(i,v){const arr=JSON.parse(localStorage.getItem(PHASE7_KEY)||'[]');arr[i]=v;localStorage.setItem(PHASE7_KEY,JSON.stringify(arr));const done=arr.filter(Boolean).length;const el=document.getElementById('p7chkCount');if(el)el.textContent=done+' / '+CHECKLIST.length+' complete';const lockEl=document.getElementById('p7lockStatus');if(lockEl){lockEl.textContent=done===CHECKLIST.length?'✅ UNLOCKED!':'🔒 Locked';lockEl.style.color=done===CHECKLIST.length?'var(--green-500)':'var(--gray-400)';}}
 
 pageInitFns['phase7']=function(){
   const el=document.getElementById('phase7-content');if(!el)return;
