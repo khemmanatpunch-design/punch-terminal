@@ -2052,6 +2052,291 @@ pageInitFns['phase7']=function(){
 };
 
 /* ══════════════════════════════════════════════════
+   SAVE 5 — PEPPERSTONE SETUP
+   ══════════════════════════════════════════════════ */
+pageInitFns['pepperstone']=function(){
+  const c=document.getElementById('pepperstone-content');
+  const accs=[['Broker','Pepperstone'],['Account','Razor ECN'],['Symbol','XAUUSD H1'],['Currency','USD'],['Leverage','1:500'],['Commission','$7/lot RT']];
+  const mets=[{icon:'📊',label:'Profit Factor',val:'3.19',sub:'6-year backtest'},{icon:'🎯',label:'Win Rate',val:'51.5%',sub:'198 trades'},{icon:'📈',label:'Monthly (avg)',val:'0.827%',sub:'$24.8/mo on $3k'},{icon:'🔬',label:'Walk-Forward',val:'ROBUST',sub:'PF ratio = 1.00'}];
+  const riskRows=[[0.5,15,0.41,4.9,1],[1.0,30,0.83,9.8,1],[1.5,45,1.24,14.7,0],[2.0,60,1.65,19.6,0],[3.0,90,2.48,29.4,0]];
+  const steps=[
+    {m:'Month 1',title:'Validation',icon:'🔍',items:['≥5 trades executed','PF > 1.3 required','No DD breach','Journal clean'],col:'var(--blue-500)'},
+    {m:'Month 2',title:'Confirmation',icon:'✅',items:['Compare to backtest','Fill quality OK','Session timing OK','If DD>10% pause'],col:'var(--pink-400)'},
+    {m:'Month 3',title:'Go/No-Go',icon:'🚀',items:['PF ≥ 1.5 → GO LIVE','PF 1.0-1.5 → extend','PF < 1.0 → no live','Start $500 test capital'],col:'var(--green-500)'}
+  ];
+  const eaCode=`InpBaseRisk   = 1.0   // % risk/trade\nInpMaxRisk    = 3.0   // max after anti-martingale\nInpMagic      = 80801 // unique — do NOT change\nInpRR         = 1.5   // TP = 1.5 × SL\nInpSLBuf      = 80    // stop-loss buffer (points)\nInpOBLen      = 6     // order block lookback\nInpMaxDDPct   = 20.0  // halt if equity DD ≥ 20%\nInpAMWins     = 3     // scale up after 3 wins\nInpAMAdd      = 0.5   // add 0.5% per streak`;
+  c.innerHTML=`
+  <div style="background:linear-gradient(90deg,#059669,#10B981);color:#fff;padding:14px 22px;border-radius:var(--radius-xl);margin-bottom:18px;display:flex;align-items:center;gap:12px;font-weight:700">
+    <span style="font-size:1.5rem">✅</span>
+    <div><div style="font-size:1rem">APEX_Pepperstone_v1 — READY FOR DEMO</div>
+    <div style="font-size:.78rem;opacity:.85;font-weight:400">XAUUSD H1 · Pepperstone Razor · Demo Only · InpMagic=80801</div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px">
+    ${accs.map(([k,v])=>`<div class="card card-sm" style="padding:12px 16px"><div style="font-size:.72rem;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em">${k}</div><div style="font-size:.95rem;font-weight:700;color:var(--blue-900);margin-top:2px">${v}</div></div>`).join('')}
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px">
+    ${mets.map(m=>`<div class="kpi-card"><div style="font-size:1.4rem">${m.icon}</div><div class="kpi-label">${m.label}</div><div class="kpi-value" style="font-size:1.4rem">${m.val}</div><div style="font-size:.72rem;color:var(--gray-500)">${m.sub}</div></div>`).join('')}
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px">
+    <div class="card card-sm">
+      <div class="section-heading" style="margin-bottom:10px"><span>Broker Spread Comparison</span><div class="section-heading-line"></div></div>
+      <canvas id="pep-spread-chart" height="160"></canvas>
+    </div>
+    <div class="card card-sm">
+      <div class="section-heading" style="margin-bottom:10px"><span>Risk Table ($3,000 deposit)</span><div class="section-heading-line"></div></div>
+      <table style="width:100%;font-size:.78rem;border-collapse:collapse">
+        <tr style="background:var(--bg-secondary)"><th style="padding:5px 8px;text-align:left">Risk%</th><th style="padding:5px 8px;text-align:center">$/Trade</th><th style="padding:5px 8px;text-align:center">Monthly%</th><th style="padding:5px 8px;text-align:center">12mo%</th><th style="padding:5px 8px;text-align:center">Blowup</th></tr>
+        ${riskRows.map(([r,d,m,y,ok])=>`<tr style="border-top:1px solid var(--gray-200)"><td style="padding:4px 8px;font-weight:700;color:${ok?'var(--green-500)':'var(--red-500)'}">${r}%</td><td style="padding:4px 8px;text-align:center">$${d}</td><td style="padding:4px 8px;text-align:center">${m}%</td><td style="padding:4px 8px;text-align:center">${y}%</td><td style="padding:4px 8px;text-align:center">${ok?'<span style="color:var(--green-500)">Low</span>':'<span style="color:var(--red-500)">Med</span>'}</td></tr>`).join('')}
+      </table>
+    </div>
+  </div>
+  <div class="section-heading" style="margin-bottom:12px"><span>3-Month Demo Plan</span><div class="section-heading-line"></div></div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px">
+    ${steps.map(s=>`<div class="card card-sm" style="border-top:3px solid ${s.col}"><div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-500)">${s.m}</div><div style="font-size:1.1rem;font-weight:700;margin:4px 0 10px">${s.icon} ${s.title}</div>${s.items.map(it=>`<div style="font-size:.78rem;color:var(--gray-700);padding:3px 0;border-bottom:1px solid var(--gray-200)">□ ${it}</div>`).join('')}</div>`).join('')}
+  </div>
+  <div class="card card-sm">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <div style="font-weight:700;font-size:.875rem">EA Input Parameters — Copy Exactly</div>
+      <button onclick="navigator.clipboard.writeText(document.getElementById('pep-code').textContent)" style="padding:4px 12px;background:var(--blue-500);color:#fff;border:none;border-radius:6px;font-size:.75rem;cursor:pointer">Copy</button>
+    </div>
+    <pre id="pep-code" style="background:#1E1B4B;color:#A5B4FC;padding:14px;border-radius:8px;font-size:.78rem;line-height:1.7;overflow-x:auto;margin:0">${eaCode}</pre>
+  </div>`;
+  setTimeout(()=>{
+    const ctx=document.getElementById('pep-spread-chart');if(!ctx)return;
+    new Chart(ctx,{type:'bar',data:{labels:['Asian (18pt)','Average (15pt)','London (10pt)','Best (8pt)'],datasets:[
+      {label:'Exness XAUUSDm',data:[0.68,0.68,0.68,0.68],backgroundColor:'rgba(107,114,128,.4)',borderColor:'#6B7280',borderWidth:1.5},
+      {label:'Pepperstone Razor',data:[0.75,0.83,0.95,1.0],backgroundColor:'rgba(16,185,129,.4)',borderColor:'#10B981',borderWidth:1.5}
+    ]},options:{plugins:{legend:{labels:{font:{size:11}}}},scales:{y:{title:{display:true,text:'Monthly %',font:{size:10}},ticks:{font:{size:10}}},x:{ticks:{font:{size:10}}}}}});
+  },80);
+};
+
+/* ══════════════════════════════════════════════════
+   SAVE 5 — RISK CALCULATOR
+   ══════════════════════════════════════════════════ */
+let cpChartInst=null;
+pageInitFns['calculator']=function(){
+  const c=document.getElementById('calculator-content');
+  c.innerHTML=`
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+    <div class="card card-sm">
+      <div style="font-weight:700;margin-bottom:12px">🧮 Lot Size Calculator</div>
+      <label style="font-size:.78rem;color:var(--gray-500)">Account Balance ($)</label>
+      <input id="ls-bal" type="number" value="3000" oninput="calcLot()" style="width:100%;margin:4px 0 10px;padding:7px 10px;border:1px solid var(--gray-200);border-radius:8px;font-size:.875rem;box-sizing:border-box">
+      <label style="font-size:.78rem;color:var(--gray-500)">Risk % per trade</label>
+      <input id="ls-risk" type="number" value="1" step="0.1" oninput="calcLot()" style="width:100%;margin:4px 0 10px;padding:7px 10px;border:1px solid var(--gray-200);border-radius:8px;font-size:.875rem;box-sizing:border-box">
+      <label style="font-size:.78rem;color:var(--gray-500)">Stop Loss (points)</label>
+      <input id="ls-sl" type="number" value="200" oninput="calcLot()" style="width:100%;margin:4px 0 12px;padding:7px 10px;border:1px solid var(--gray-200);border-radius:8px;font-size:.875rem;box-sizing:border-box">
+      <div style="background:var(--bg-secondary);border-radius:10px;padding:12px;text-align:center">
+        <div style="font-size:.78rem;color:var(--gray-500)">Recommended Lot Size</div>
+        <div id="ls-val" style="font-size:2rem;font-weight:800;color:var(--blue-500)">—</div>
+        <div id="ls-info" style="font-size:.75rem;color:var(--gray-500)"></div>
+      </div>
+    </div>
+    <div class="card card-sm">
+      <div style="font-weight:700;margin-bottom:12px">🎯 Target Calculator</div>
+      <label style="font-size:.78rem;color:var(--gray-500)">Starting Balance ($)</label>
+      <input id="tc-bal" type="number" value="3000" oninput="calcTarget()" style="width:100%;margin:4px 0 10px;padding:7px 10px;border:1px solid var(--gray-200);border-radius:8px;font-size:.875rem;box-sizing:border-box">
+      <label style="font-size:.78rem;color:var(--gray-500)">Monthly Return (%)</label>
+      <input id="tc-mo" type="number" value="0.83" step="0.01" oninput="calcTarget()" style="width:100%;margin:4px 0 10px;padding:7px 10px;border:1px solid var(--gray-200);border-radius:8px;font-size:.875rem;box-sizing:border-box">
+      <label style="font-size:.78rem;color:var(--gray-500)">Target ($)</label>
+      <input id="tc-tgt" type="number" value="30000" oninput="calcTarget()" style="width:100%;margin:4px 0 12px;padding:7px 10px;border:1px solid var(--gray-200);border-radius:8px;font-size:.875rem;box-sizing:border-box">
+      <div style="background:var(--bg-secondary);border-radius:10px;padding:12px;text-align:center">
+        <div style="font-size:.78rem;color:var(--gray-500)">Months to Target</div>
+        <div id="tc-val" style="font-size:2rem;font-weight:800;color:var(--pink-400)">—</div>
+        <div id="tc-info" style="font-size:.75rem;color:var(--gray-500)"></div>
+      </div>
+    </div>
+    <div class="card card-sm">
+      <div style="font-weight:700;margin-bottom:12px">📊 Risk of Ruin</div>
+      <label style="font-size:.78rem;color:var(--gray-500)">Win Rate (%)</label>
+      <input id="ror-wr" type="number" value="51.5" step="0.1" oninput="calcRoR()" style="width:100%;margin:4px 0 10px;padding:7px 10px;border:1px solid var(--gray-200);border-radius:8px;font-size:.875rem;box-sizing:border-box">
+      <label style="font-size:.78rem;color:var(--gray-500)">Reward:Risk Ratio</label>
+      <input id="ror-rr" type="number" value="1.5" step="0.1" oninput="calcRoR()" style="width:100%;margin:4px 0 10px;padding:7px 10px;border:1px solid var(--gray-200);border-radius:8px;font-size:.875rem;box-sizing:border-box">
+      <label style="font-size:.78rem;color:var(--gray-500)">Risk per trade (%)</label>
+      <input id="ror-risk" type="number" value="1" step="0.1" oninput="calcRoR()" style="width:100%;margin:4px 0 12px;padding:7px 10px;border:1px solid var(--gray-200);border-radius:8px;font-size:.875rem;box-sizing:border-box">
+      <div style="background:var(--bg-secondary);border-radius:10px;padding:12px;text-align:center">
+        <div style="font-size:.78rem;color:var(--gray-500)">Risk of Ruin (50% DD)</div>
+        <div id="ror-val" style="font-size:2rem;font-weight:800;color:var(--green-500)">—</div>
+        <div id="ror-info" style="font-size:.75rem;color:var(--gray-500)"></div>
+      </div>
+    </div>
+    <div class="card card-sm">
+      <div style="font-weight:700;margin-bottom:10px">📈 Compounding Projector</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+        <div><label style="font-size:.78rem;color:var(--gray-500)">Balance ($)</label>
+        <input id="cp-bal" type="number" value="3000" oninput="calcCompound()" style="width:100%;margin-top:3px;padding:6px 8px;border:1px solid var(--gray-200);border-radius:8px;font-size:.875rem;box-sizing:border-box"></div>
+        <div><label style="font-size:.78rem;color:var(--gray-500)">Monthly (%)</label>
+        <input id="cp-mo" type="number" value="0.83" step="0.01" oninput="calcCompound()" style="width:100%;margin-top:3px;padding:6px 8px;border:1px solid var(--gray-200);border-radius:8px;font-size:.875rem;box-sizing:border-box"></div>
+      </div>
+      <canvas id="cp-chart" height="130"></canvas>
+      <div id="cp-result" style="text-align:center;margin-top:8px;font-size:.78rem;color:var(--gray-500)"></div>
+    </div>
+  </div>`;
+  setTimeout(()=>{calcLot();calcTarget();calcRoR();calcCompound();},60);
+};
+function calcLot(){
+  const bal=+document.getElementById('ls-bal').value||3000;
+  const risk=+document.getElementById('ls-risk').value||1;
+  const sl=+document.getElementById('ls-sl').value||200;
+  const rAmt=bal*risk/100;
+  const lot=Math.max(0.01,Math.min(10,+(rAmt/(sl*0.1)).toFixed(2)));
+  document.getElementById('ls-val').textContent=lot.toFixed(2);
+  document.getElementById('ls-info').textContent='$'+rAmt.toFixed(0)+' at risk · SL '+sl+'pt';
+}
+function calcTarget(){
+  const bal=+document.getElementById('tc-bal').value||3000;
+  const mo=+document.getElementById('tc-mo').value||0.83;
+  const tgt=+document.getElementById('tc-tgt').value||30000;
+  if(mo<=0){document.getElementById('tc-val').textContent='∞';return;}
+  const months=Math.ceil(Math.log(tgt/bal)/Math.log(1+mo/100));
+  document.getElementById('tc-val').textContent=months>0?months:'—';
+  document.getElementById('tc-info').textContent=months>0?'~'+(months/12).toFixed(1)+' years at '+mo+'%/mo':'Adjust inputs';
+}
+function calcRoR(){
+  const wr=+document.getElementById('ror-wr').value/100||0.515;
+  const risk=+document.getElementById('ror-risk').value||1;
+  const a=(1-wr)/wr;const n=Math.round(50/risk);
+  const ror=Math.min(99,+(Math.pow(a,n)*100).toFixed(2));
+  const el=document.getElementById('ror-val');
+  el.textContent=ror+'%';
+  el.style.color=ror<5?'var(--green-500)':ror<20?'var(--blue-500)':'var(--red-500)';
+  document.getElementById('ror-info').textContent=n+' consecutive losses to 50% DD';
+}
+function calcCompound(){
+  const bal=+document.getElementById('cp-bal').value||3000;
+  const mo=+document.getElementById('cp-mo').value||0.83;
+  const labs=[],data=[];let b=bal;
+  for(let i=0;i<=24;i++){labs.push('M'+i);data.push(+b.toFixed(0));b*=(1+mo/100);}
+  if(cpChartInst){cpChartInst.destroy();cpChartInst=null;}
+  const ctx=document.getElementById('cp-chart');if(!ctx)return;
+  cpChartInst=new Chart(ctx,{type:'line',data:{labels:labs,datasets:[{label:'Balance',data,borderColor:'var(--blue-500)',backgroundColor:'rgba(79,70,229,.08)',borderWidth:2,pointRadius:0,fill:true,tension:.4}]},options:{plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>'$'+v.toLocaleString(),font:{size:9}}},x:{ticks:{maxTicksLimit:7,font:{size:9}}}}}});
+  const final=data[data.length-1];
+  document.getElementById('cp-result').textContent='24-month: $'+final.toLocaleString()+' (+'+(((final/bal-1)*100).toFixed(0))+'%)';
+}
+
+/* ══════════════════════════════════════════════════
+   SAVE 5 — COMPOUNDING ANALYSIS
+   ══════════════════════════════════════════════════ */
+pageInitFns['compound']=function(){
+  const c=document.getElementById('compound-content');
+  const phases=[
+    {phase:'Phase 1',title:'Demo Validation',months:'0–3mo',icon:'🔍',desc:'$3,000 demo · 1.0% risk · Validate PF > 1.5',col:'var(--blue-500)'},
+    {phase:'Phase 2',title:'Live Micro',months:'3–6mo',icon:'🌱',desc:'$500 live · 0.5% risk · 20+ trades required',col:'var(--green-500)'},
+    {phase:'Phase 3',title:'Scale Up',months:'6–9mo',icon:'📈',desc:'$1k–$3k · 1.0% risk · Full position size',col:'var(--pink-400)'},
+    {phase:'Phase 4',title:'Compound',months:'9–12mo',icon:'🚀',desc:'Anti-martingale on · 3.0% max · KPI $30k',col:'#7C3AED'}
+  ];
+  const mcScen=[
+    {label:'Bear Case',icon:'🐻',monthly:'0.41%',bal12:'$3,150',dd:'12%',col:'var(--red-500)'},
+    {label:'Base Case',icon:'📊',monthly:'0.83%',bal12:'$3,310',dd:'8%',col:'var(--blue-500)'},
+    {label:'Bull Case',icon:'🐂',monthly:'1.65%',bal12:'$3,620',dd:'5%',col:'var(--green-500)'}
+  ];
+  c.innerHTML=`
+  <div class="section-heading" style="margin-bottom:12px"><span>Hybrid Growth Path</span><div class="section-heading-line"></div></div>
+  <div style="display:flex;gap:0;margin-bottom:20px;border-radius:var(--radius-xl);overflow:hidden;box-shadow:var(--shadow-sm)">
+    ${phases.map((p,i)=>`<div style="flex:1;min-width:140px;padding:14px;border-top:3px solid ${p.col};background:var(--surface);${i<3?'border-right:1px solid var(--gray-200)':''}"><div style="font-size:1.4rem">${p.icon}</div><div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-500);margin-top:6px">${p.phase} · ${p.months}</div><div style="font-weight:700;font-size:.875rem;margin:3px 0">${p.title}</div><div style="font-size:.75rem;color:var(--gray-500);line-height:1.5">${p.desc}</div></div>`).join('')}
+  </div>
+  <div style="display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:18px">
+    <div class="card card-sm">
+      <div style="font-weight:700;margin-bottom:10px">📉 24-Month Compound Scenarios</div>
+      <canvas id="comp-chart" height="200"></canvas>
+    </div>
+    <div>
+      <div class="section-heading" style="margin-bottom:10px"><span>Anti-Martingale</span><div class="section-heading-line"></div></div>
+      <div style="font-size:.75rem;color:var(--gray-500);margin-bottom:8px">Drag: consecutive wins → risk level</div>
+      <input type="range" id="am-slider" min="0" max="9" value="0" oninput="calcAM()" style="width:100%;margin-bottom:10px;accent-color:var(--blue-500)">
+      <div style="text-align:center;padding:14px;background:var(--bg-secondary);border-radius:10px;margin-bottom:10px">
+        <div style="font-size:.75rem;color:var(--gray-500)">Current Risk Level</div>
+        <div id="am-val" style="font-size:2rem;font-weight:800;color:var(--blue-500)">1.0%</div>
+        <div id="am-info" style="font-size:.75rem;color:var(--gray-500)">0 consecutive wins</div>
+      </div>
+      ${[0,3,6,9].map(w=>{const r=Math.min(3,1+(Math.floor(w/3)*0.5));return`<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--gray-200);font-size:.78rem"><span style="color:var(--gray-600)">${w}+ wins</span><span style="font-weight:700;color:var(--blue-500)">${r.toFixed(1)}% risk · $${(3000*r/100).toFixed(0)}</span></div>`;}).join('')}
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+    ${mcScen.map(s=>`<div class="card card-sm" style="border-top:3px solid ${s.col};text-align:center"><div style="font-size:1.5rem">${s.icon}</div><div style="font-weight:700;font-size:.875rem;margin:6px 0">${s.label}</div><div style="display:flex;justify-content:space-around;margin-top:8px"><div><div style="font-size:.72rem;color:var(--gray-500)">Monthly</div><div style="font-weight:700;font-size:.875rem">${s.monthly}</div></div><div><div style="font-size:.72rem;color:var(--gray-500)">12mo</div><div style="font-weight:700;font-size:.875rem">${s.bal12}</div></div><div><div style="font-size:.72rem;color:var(--gray-500)">Max DD</div><div style="font-weight:700;font-size:.875rem;color:var(--red-500)">${s.dd}</div></div></div></div>`).join('')}
+  </div>`;
+  setTimeout(()=>{
+    const ctx=document.getElementById('comp-chart');if(!ctx)return;
+    const labs=[],con=[],base=[],agg=[];let b0=3000,b1=3000,b2=3000;
+    for(let i=0;i<=24;i++){labs.push('M'+i);con.push(+b0.toFixed(0));base.push(+b1.toFixed(0));agg.push(+b2.toFixed(0));b0*=1.0041;b1*=1.0083;b2*=1.0165;}
+    new Chart(ctx,{type:'line',data:{labels:labs,datasets:[
+      {label:'Bear (0.41%)',data:con,borderColor:'#EF4444',borderWidth:2,pointRadius:0,tension:.4},
+      {label:'Base (0.83%)',data:base,borderColor:'#4F46E5',borderWidth:2,pointRadius:0,tension:.4},
+      {label:'Bull (1.65%)',data:agg,borderColor:'#10B981',borderWidth:2,pointRadius:0,tension:.4}
+    ]},options:{plugins:{legend:{labels:{font:{size:10}}}},scales:{y:{ticks:{callback:v=>'$'+v.toLocaleString(),font:{size:9}}},x:{ticks:{maxTicksLimit:7,font:{size:9}}}}}});
+    calcAM();
+  },80);
+};
+function calcAM(){
+  const wins=+document.getElementById('am-slider').value;
+  const risk=Math.min(3,1+(Math.floor(wins/3)*0.5));
+  document.getElementById('am-val').textContent=risk.toFixed(1)+'%';
+  document.getElementById('am-info').textContent=wins+' consecutive win'+(wins!==1?'s':'')+' · $'+(3000*risk/100).toFixed(0)+' at risk';
+}
+
+/* ══════════════════════════════════════════════════
+   SAVE 5 — DEMO PLAN
+   ══════════════════════════════════════════════════ */
+pageInitFns['demolplan']=function(){
+  const c=document.getElementById('demolplan-content');
+  const months=[
+    {num:1,title:'Validation',icon:'🔍',col:'var(--blue-500)',items:['Open Pepperstone Demo (51489276 or new)','Deploy APEX_Pepperstone_v1 on XAUUSD H1','Set all inputs (verify InpMagic = 80801)','Enable "Allow live trading" in EA','Wait for ≥5 trades to execute','PF > 1.3 required — check after 5 trades','No DD breach (equity stays above $2,400)','Journal clean — no OnInit errors']},
+    {num:2,title:'Confirmation',icon:'✅',col:'var(--pink-400)',items:['Compare fills vs backtest expectations','Verify session timing (London/NY kill zones)','Record spread at each entry in logbook','Check daily journal for any errors','Expected: ~0.75–0.95%/month performance','If DD > 10%: pause and review regime filter','If trades < 2/month: check H4Mom threshold','Monthly PF must stay > 1.0']},
+    {num:3,title:'Go / No-Go',icon:'🚀',col:'var(--green-500)',items:['Cumulative PF ≥ 1.5 → GO LIVE with $500','Cumulative PF 1.0–1.5 → extend demo 1 month','Cumulative PF < 1.0 → do NOT go live','Live: InpBaseRisk = 0.5% to start','After 20 live trades PF > 1.5 → $1,000','After 50 live trades → full $3,000 capital','Never DCA a losing position','Only add capital when account is profitable']}
+  ];
+  const checks=['□ Open XAUUSD H1 chart in MetaTrader 5','□ Drag APEX_Pepperstone_v1 onto chart','□ Set all inputs exactly as in settings file','□ Enable "Allow live trading" in EA properties','□ Enable "Allow DLL imports" if prompted','□ Verify EA shows smiley face (no errors)','□ Confirm journal: "APEX Pepperstone v1 initialized"','□ Set alert: equity < $2,400 = 20% DD breach'];
+  c.innerHTML=`
+  <div class="section-heading" style="margin-bottom:16px"><span>3-Month Demo Roadmap</span><div class="section-heading-line"></div></div>
+  <div style="position:relative;margin-bottom:24px">
+    <div style="position:absolute;left:29px;top:30px;bottom:30px;width:2px;background:var(--gray-200);z-index:0"></div>
+    ${months.map(mo=>`
+    <div style="display:flex;gap:16px;margin-bottom:20px;position:relative;z-index:1">
+      <div style="flex-shrink:0;width:58px;height:58px;border-radius:50%;background:${mo.col};color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.15)">
+        <div style="font-size:1.1rem">${mo.icon}</div>
+        <div style="font-size:.65rem;font-weight:700">M${mo.num}</div>
+      </div>
+      <div class="card card-sm" style="flex:1;border-left:3px solid ${mo.col}">
+        <div style="font-weight:700;font-size:.95rem;margin-bottom:8px">Month ${mo.num}: ${mo.title}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
+          ${mo.items.map(it=>`<div style="font-size:.77rem;color:var(--gray-600);padding:3px 6px;background:var(--bg-secondary);border-radius:5px">${it}</div>`).join('')}
+        </div>
+      </div>
+    </div>`).join('')}
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+    <div class="card card-sm">
+      <div style="font-weight:700;margin-bottom:10px">🗒️ First-Day Checklist</div>
+      ${checks.map(ch=>`<div style="font-size:.8rem;padding:5px 0;border-bottom:1px solid var(--gray-200);color:var(--gray-700)">${ch}</div>`).join('')}
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="card card-sm" style="border:2px solid var(--green-500);background:linear-gradient(135deg,rgba(16,185,129,.06),rgba(16,185,129,.01))">
+        <div style="font-weight:700;font-size:.95rem;color:var(--green-500);margin-bottom:8px">✅ Go Live Decision</div>
+        <div style="font-size:.8rem;line-height:2;color:var(--gray-700)">
+          <div><strong>PF ≥ 1.5</strong> → Deploy $500 live @ 0.5% risk</div>
+          <div><strong>PF 1.0–1.5</strong> → Extend demo one month</div>
+          <div><strong>PF &lt; 1.0</strong> → Do NOT go live — review</div>
+        </div>
+      </div>
+      <div class="card card-sm" style="border:2px solid var(--pink-400)">
+        <div style="font-weight:700;font-size:.875rem;color:var(--pink-600);margin-bottom:8px">⚠️ Risk Rules — Never Break</div>
+        <div style="font-size:.78rem;line-height:2;color:var(--gray-700)">
+          <div>▸ DEMO ONLY until 3-month plan complete</div>
+          <div>▸ Never risk more than 3% per trade</div>
+          <div>▸ Stop ALL trading if equity &lt; $2,400</div>
+          <div>▸ Never DCA a losing position</div>
+          <div>▸ Honest results — never inflate numbers</div>
+        </div>
+      </div>
+      <div style="padding:16px;background:linear-gradient(135deg,var(--blue-700),var(--blue-900));color:#fff;border-radius:var(--radius-xl);text-align:center">
+        <div style="font-size:1rem;font-weight:700">🎯 KPI North Star</div>
+        <div style="font-size:2rem;font-weight:800;margin:6px 0">$30,000</div>
+        <div style="font-size:.78rem;opacity:.85">From $3,000 · 12 months · Honest compounding</div>
+      </div>
+    </div>
+  </div>`;
+};
+
+/* ══════════════════════════════════════════════════
    SIDEBAR TOGGLE (MOBILE)
    ══════════════════════════════════════════════════ */
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');}
