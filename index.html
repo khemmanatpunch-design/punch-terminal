@@ -1462,11 +1462,20 @@ function openPanel(eaName,roundIdx){
     <div style="padding:9px;background:var(--gray-50);border-radius:var(--radius-md);font-size:.8125rem;color:var(--gray-700);margin-bottom:12px">${tech}${isChamp?' — Asian Session + FVG + Order Block':''}</div>
     <span style="display:inline-block;padding:4px 13px;background:${recBg};color:${recCol};border-radius:999px;font-size:.8125rem;font-weight:700">${rec}</span>`;
   setTimeout(()=>{
+    const eq=document.getElementById('eqCvs');
+    if(eq){
+      const seed=eaName.split('').reduce((a,c)=>a+c.charCodeAt(0),0);
+      let rng=seed;const rand=()=>{rng=(rng*1664525+1013904223)&0xffffffff;return(rng>>>0)/0xffffffff;};
+      const monthlyRet=pf>=1?(pf-1)*0.5:(pf-1)*0.8;
+      const pts=[3000];
+      for(let i=1;i<=12;i++){const v=(rand()-0.5)*0.3;pts.push(Math.max(500,pts[pts.length-1]*(1+monthlyRet+v)));}
+      new Chart(eq,{type:'line',data:{labels:Array.from({length:13},(_,i)=>'M'+i),datasets:[{data:pts,borderColor:pf>=1?'#10B981':'#EF4444',fill:true,backgroundColor:pf>=1?'rgba(16,185,129,.08)':'rgba(239,68,68,.08)',tension:.4,borderWidth:2,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{display:false}}}});
+    }
     const rc=document.getElementById('radarCvs');
     if(!rc)return;
     const rv=[isChamp?51.5:Math.min(65,35+pf*10),Math.min(100,pf*28),isChamp?9.5:Math.min(10,monthly*8),isChamp?85:65,Math.min(100,trades/1500*100),isChamp?75:60,isChamp?90:Math.min(85,50+pf*15),isChamp?88:Math.min(80,40+pf*20)];
     new Chart(rc,{type:'radar',data:{labels:['WR','PF','Monthly','Low DD','Freq','RR','Consist.','Stress'],datasets:[{data:rv,borderColor:'#4F46E5',backgroundColor:'rgba(79,70,229,.12)',borderWidth:2,pointBackgroundColor:'#4F46E5',pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,scales:{r:{min:0,max:100,grid:{color:'#E5E7EB'},pointLabels:{font:{family:'Inter',size:10},color:'#6B7280'},ticks:{display:false}}},plugins:{legend:{display:false}}}});
-  },60);
+  },80);
   document.getElementById('panelBackdrop').classList.add('open');
   document.getElementById('slidePanel').classList.add('open');
 }
