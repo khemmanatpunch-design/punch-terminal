@@ -1214,6 +1214,227 @@ function doSearch(q) {
 }
 
 /* ══════════════════════════════════════════════════
+   SAVE 2 — BRACKET
+   ══════════════════════════════════════════════════ */
+const ROUND_HDRS=['R1: 100→30','R2: 30→15','R3: 15→10','R4: 10→7','R5: 7→5','R6: 5→3','R7: 3 Ranked','👑 Champion'];
+
+function buildBracketRounds(){
+  const r1Set=new Set(R1_TOP30.map(e=>e.ea));
+  const r2Set=new Set(R2_TOP15.map(e=>e.ea));
+  const r3Set=new Set(R3_TOP10.map(e=>e.ea));
+  const r4Set=new Set(R4_TOP7.map(e=>e.ea));
+  const r5Set=new Set(R5_TOP5.map(e=>e.ea));
+  const r6Set=new Set(R6_TOP3.map(e=>e.ea));
+  const r7Set=new Set(R7_TOP3.map(e=>e.ea));
+  const elim=R1_ALL100.length-R1_TOP30.length;
+  return [
+    R1_TOP30.map(e=>({...e,state:'advancing'})).concat([{ea:`+ ${elim} eliminated`,pf:0,state:'count'}]),
+    R1_TOP30.map(e=>({...e,state:r2Set.has(e.ea)?'advancing':'eliminated'})),
+    R2_TOP15.slice(0,3).map(e=>({...e,state:r3Set.has(e.ea)?'advancing':'eliminated'}))
+      .concat(R1_TOP30.filter(e=>!R2_TOP15.find(x=>x.ea===e.ea)).slice(0,12).map(e=>({...e,state:'eliminated'}))),
+    R3_TOP10.slice(0,3).map(e=>({...e,state:r4Set.has(e.ea)?'advancing':'eliminated'}))
+      .concat(R2_TOP15.filter(e=>!R3_TOP10.find(x=>x.ea===e.ea)).slice(0,7).map(e=>({...e,state:'eliminated'}))),
+    R4_TOP7.slice(0,2).map(e=>({...e,state:r5Set.has(e.ea)?'advancing':'eliminated'}))
+      .concat(R3_TOP10.filter(e=>!R4_TOP7.find(x=>x.ea===e.ea)).slice(0,5).map(e=>({...e,state:'eliminated'}))),
+    R5_TOP5.slice(0,2).map(e=>({...e,state:r6Set.has(e.ea)?'advancing':'eliminated'}))
+      .concat(R4_TOP7.filter(e=>!R5_TOP5.find(x=>x.ea===e.ea)).slice(0,3).map(e=>({...e,state:'eliminated'}))),
+    R7_TOP3.map(e=>({...e,state:'advancing'})),
+    [{ea:CHAMPION.name,pf:CHAMPION.pf,pnl:CHAMPION.pnl6yr,trades:112950,state:'champion'}]
+  ];
+}
+
+pageInitFns['bracket']=function(){
+  const grid=document.getElementById('bracketGrid');
+  if(!grid)return;
+  const rounds=buildBracketRounds();
+  grid.innerHTML='<div class="bracket-grid">'+rounds.map((cards,ri)=>{
+    const items=cards.map(c=>{
+      if(c.state==='count')return`<div class="bracket-more">${c.ea}</div>`;
+      const isChamp=c.state==='champion';
+      const nm=c.ea.length>22?c.ea.slice(0,20)+'…':c.ea;
+      return`<div class="bracket-card ${c.state}" onclick="openPanel('${c.ea.replace(/'/g,"\\'")}',${ri})">
+        <div class="bracket-card-name">${isChamp?'👑 ':''}${nm}</div>
+        <div class="bracket-card-pf">PF ${c.pf?c.pf.toFixed(3):'—'}</div>
+      </div>`;
+    }).join('');
+    return`<div class="bracket-col"><div class="bracket-col-header">${ROUND_HDRS[ri]}</div>${items}</div>`;
+  }).join('')+'</div>';
+};
+
+function openPanel(eaName,roundIdx){
+  let d=R1_ALL100.find(e=>e.ea===eaName)||R2_TOP15.find(e=>e.ea===eaName)||R3_TOP10.find(e=>e.ea===eaName)||R7_TOP3.find(e=>e.ea===eaName)||{ea:eaName,pf:CHAMPION.pf,pnl:CHAMPION.pnl6yr,trades:112950};
+  const isChamp=eaName===CHAMPION.name;
+  const grp=eaName.match(/([A-Z]\d{2})/)?.[1]||'F01';
+  const tech=TECHNIQUE_MAP[grp]||'SMC Composite';
+  const pf=d.pf||0,pnl=d.pnl||0,trades=d.trades||0;
+  const monthly=trades>0?(pnl/3000/72*100):0;
+  const reached=isChamp?'Champion 👑':`Reached Round ${roundIdx+1}`;
+  document.getElementById('panelTitle').textContent=(isChamp?'👑 ':'')+eaName;
+  document.getElementById('panelSub').textContent=tech+' · '+reached;
+  document.getElementById('panelHdr').style.background=isChamp?'linear-gradient(135deg,#EDE9FE,#FCE7F3)':'var(--gray-50)';
+  const journeyRounds=['R1','R2','R3','R4','R5','R6','R7','Champ'];
+  const journey=journeyRounds.map((rn,i)=>{
+    const survived=i<roundIdx+1;
+    const champ=isChamp&&i===7;
+    const bg=champ?'#FEF3C7':survived?'#D1FAE5':'var(--gray-100)';
+    const col=champ?'#92400E':survived?'#065F46':'var(--gray-400)';
+    const icon=champ?'👑':survived?'✓':'·';
+    return`<span style="display:inline-flex;align-items:center;gap:2px;font-size:.68rem;padding:2px 7px;border-radius:999px;background:${bg};color:${col};margin:2px">${icon} ${rn}</span>`;
+  }).join('');
+  const rec=pf>=1.5?'✅ USE':pf>=1?'⚠️ WATCH':'❌ SKIP';
+  const recBg=pf>=1.5?'#D1FAE5':pf>=1?'#FEF3C7':'#FEE2E2';
+  const recCol=pf>=1.5?'#065F46':pf>=1?'#92400E':'#991B1B';
+  document.getElementById('panelBody').innerHTML=`
+    <div class="sm-grid">
+      <div class="sm-card"><div class="sm-val">${pf.toFixed(3)}</div><div class="sm-lbl">Profit Factor</div></div>
+      <div class="sm-card"><div class="sm-val">${isChamp?'51.5%':'—'}</div><div class="sm-lbl">Win Rate</div></div>
+      <div class="sm-card"><div class="sm-val" style="color:${pnl>=0?'var(--green-500)':'var(--red-500)'}">$${pnl.toFixed(0)}</div><div class="sm-lbl">6yr PnL</div></div>
+      <div class="sm-card"><div class="sm-val">${monthly>0?monthly.toFixed(2)+'%':'—'}</div><div class="sm-lbl">Monthly%</div></div>
+    </div>
+    <div style="font-size:.72rem;font-weight:600;color:var(--gray-500);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">Round Journey</div>
+    <div style="margin-bottom:14px;line-height:2">${journey}</div>
+    <div style="font-size:.72rem;font-weight:600;color:var(--gray-500);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">Radar</div>
+    <div style="height:180px;margin-bottom:14px"><canvas id="radarCvs"></canvas></div>
+    <div style="font-size:.72rem;font-weight:600;color:var(--gray-500);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">Technique</div>
+    <div style="padding:9px;background:var(--gray-50);border-radius:var(--radius-md);font-size:.8125rem;color:var(--gray-700);margin-bottom:12px">${tech}${isChamp?' — Asian Session + FVG + Order Block':''}</div>
+    <span style="display:inline-block;padding:4px 13px;background:${recBg};color:${recCol};border-radius:999px;font-size:.8125rem;font-weight:700">${rec}</span>`;
+  setTimeout(()=>{
+    const rc=document.getElementById('radarCvs');
+    if(!rc)return;
+    const rv=[isChamp?51.5:Math.min(65,35+pf*10),Math.min(100,pf*28),isChamp?9.5:Math.min(10,monthly*8),isChamp?85:65,Math.min(100,trades/1500*100),isChamp?75:60,isChamp?90:Math.min(85,50+pf*15),isChamp?88:Math.min(80,40+pf*20)];
+    new Chart(rc,{type:'radar',data:{labels:['WR','PF','Monthly','Low DD','Freq','RR','Consist.','Stress'],datasets:[{data:rv,borderColor:'#4F46E5',backgroundColor:'rgba(79,70,229,.12)',borderWidth:2,pointBackgroundColor:'#4F46E5',pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,scales:{r:{min:0,max:100,grid:{color:'#E5E7EB'},pointLabels:{font:{family:'Inter',size:10},color:'#6B7280'},ticks:{display:false}}},plugins:{legend:{display:false}}}});
+  },60);
+  document.getElementById('panelBackdrop').classList.add('open');
+  document.getElementById('slidePanel').classList.add('open');
+}
+function closePanel(){
+  document.getElementById('panelBackdrop').classList.remove('open');
+  document.getElementById('slidePanel').classList.remove('open');
+}
+
+/* ══════════════════════════════════════════════════
+   SAVE 2 — STRATEGIES TABLE
+   ══════════════════════════════════════════════════ */
+let stratData=[],stratFiltered=[],stratPage=1,stratPageSz=25,stratSortCol='pf',stratSortDir=-1,stratExpanded=null;
+
+function gradeFromPF(p){if(p>=2)return'Ap';if(p>=1.5)return'A';if(p>=1.2)return'B';if(p>=1)return'C';if(p>=0.7)return'D';return'F';}
+function gradeLabel(g){return g==='Ap'?'A+':g;}
+
+pageInitFns['strategies']=function(){
+  stratData=R1_ALL100.map(e=>{
+    const grp=e.ea.match(/([A-Z]\d{2})/)?.[1]||'G01';
+    return{...e,tech:TECHNIQUE_MAP[grp]||'Unknown',grade:gradeFromPF(e.pf),wr:e.ea===CHAMPION.name?51.5:null,monthly:e.trades>0?(e.pnl/3000/72*100):0};
+  });
+  const techs=[...new Set(stratData.map(e=>e.tech))].sort();
+  const tsel=document.getElementById('techFilter');
+  if(tsel)techs.forEach(t=>{const o=document.createElement('option');o.value=t;o.textContent=t;tsel.appendChild(o);});
+  filterStrategies();
+};
+
+function filterStrategies(){
+  const q=(document.getElementById('stratSearch')?.value||'').toLowerCase();
+  const tech=document.getElementById('techFilter')?.value||'';
+  const pfMin=parseFloat(document.getElementById('pfFilter')?.value)||0;
+  const profOnly=document.getElementById('profFilter')?.checked||false;
+  const sc=document.getElementById('sortColSel')?.value||'pf';
+  stratSortCol=sc;
+  stratFiltered=stratData.filter(e=>{
+    if(q&&!e.ea.toLowerCase().includes(q)&&!e.tech.toLowerCase().includes(q))return false;
+    if(tech&&e.tech!==tech)return false;
+    if(pfMin&&e.pf<pfMin)return false;
+    if(profOnly&&e.pf<1)return false;
+    return true;
+  }).sort((a,b)=>(a[stratSortCol]||0)<(b[stratSortCol]||0)?stratSortDir:-stratSortDir);
+  stratPage=1;stratExpanded=null;
+  renderStratPills();renderStratTable();
+}
+
+function sortBy(col){
+  if(stratSortCol===col)stratSortDir*=-1;else{stratSortCol=col;stratSortDir=-1;}
+  stratFiltered.sort((a,b)=>(a[col]||0)<(b[col]||0)?stratSortDir:-stratSortDir);
+  document.querySelectorAll('.strat-tbl th').forEach(t=>t.classList.remove('sorted'));
+  const el=document.getElementById('th-'+col);if(el)el.classList.add('sorted');
+  renderStratTable();
+}
+
+function renderStratPills(){
+  const el=document.getElementById('stratPills');if(!el)return;
+  const total=stratFiltered.length,prof=stratFiltered.filter(e=>e.pf>=1).length;
+  const best=stratFiltered.reduce((m,e)=>e.pf>m?e.pf:m,0);
+  el.innerHTML=`<span class="spill gy">${total} total</span><span class="spill gn">${prof} profitable</span><span class="spill bl">Best PF: ${best.toFixed(2)}</span><span class="spill gd">Champion ★ ${CHAMPION.name}</span>`;
+}
+
+function renderStratTable(){
+  const tbody=document.getElementById('stratBody');if(!tbody)return;
+  const s=(stratPage-1)*stratPageSz,e=s+stratPageSz;
+  const pg=stratFiltered.slice(s,e);
+  tbody.innerHTML=pg.map(r=>{
+    const isChamp=r.ea===CHAMPION.name;
+    const rc=r.pf>=2?'pfa':r.pf>=1.5?'pfb':r.pf<1?'pfd':'';
+    const pnlC=r.pnl>=0?'var(--green-500)':'var(--red-500)';
+    const pfC=r.pf>=1.5?'var(--green-500)':r.pf>=1?'var(--blue-500)':'var(--red-500)';
+    const chTag=isChamp?` <span style="font-size:.62rem;background:#FEF3C7;color:#92400E;padding:1px 5px;border-radius:3px;vertical-align:middle">👑</span>`:'';
+    return`<tr class="srow ${rc}" onclick="toggleExpand('${r.ea.replace(/'/g,"\\'")}',this)">
+      <td style="color:var(--gray-400);font-size:.72rem">${r.rank}</td>
+      <td><span style="font-weight:600;color:var(--blue-900)">${r.ea}</span>${chTag}</td>
+      <td style="color:var(--gray-500);font-size:.75rem">${r.tech}</td>
+      <td style="font-weight:700;color:${pfC}">${r.pf.toFixed(3)}</td>
+      <td style="color:var(--gray-500)">${r.wr?r.wr.toFixed(1)+'%':'—'}</td>
+      <td style="color:${pnlC};font-weight:600">$${r.pnl.toFixed(0)}</td>
+      <td style="color:var(--gray-500)">${r.trades.toLocaleString()}</td>
+      <td><span class="gpill ${r.grade}">${gradeLabel(r.grade)}</span></td>
+      <td style="color:var(--gray-400)">›</td>
+    </tr>`;
+  }).join('');
+  const total=stratFiltered.length,pages=Math.ceil(total/stratPageSz);
+  const pager=document.getElementById('stratPager');
+  if(pager){
+    let btns='';
+    for(let p=1;p<=Math.min(pages,8);p++)btns+=`<button class="pbtn${p===stratPage?' on':''}" onclick="goStratPage(${p})">${p}</button>`;
+    if(pages>8)btns+=`<span style="padding:0 6px">…</span>`;
+    pager.innerHTML=`<span>Showing ${s+1}–${Math.min(e,total)} of ${total}</span><div style="display:flex;gap:4px">${btns}</div>`;
+  }
+}
+
+function toggleExpand(eaName,rowEl){
+  const ex=document.querySelector('.sexpand');
+  if(ex){ex.remove();if(stratExpanded===eaName){stratExpanded=null;return;}}
+  stratExpanded=eaName;
+  const r=stratFiltered.find(s=>s.ea===eaName);if(!r)return;
+  const rec=r.pf>=1.5?'✅ USE':r.pf>=1?'⚠️ WATCH':'❌ SKIP';
+  const recBg=r.pf>=1.5?'#D1FAE5':r.pf>=1?'#FEF3C7':'#FEE2E2';
+  const recCol=r.pf>=1.5?'#065F46':r.pf>=1?'#92400E':'#991B1B';
+  const eid=r.ea.replace(/\W/g,'_');
+  const tr=document.createElement('tr');tr.className='sexpand';
+  tr.innerHTML=`<td colspan="9"><div class="sexpand-inner">
+    <div><div style="font-size:.72rem;font-weight:600;color:var(--gray-500);margin-bottom:6px">EQUITY CURVE</div><canvas id="sp_${eid}" height="90"></canvas></div>
+    <div><div style="font-size:.72rem;font-weight:600;color:var(--gray-500);margin-bottom:6px">WIN / LOSS</div><canvas id="dn_${eid}" height="90"></canvas></div>
+    <div style="padding:12px;background:#fff;border-radius:var(--radius-md);border:1px solid var(--gray-200)">
+      <div style="font-size:.875rem;font-weight:700;color:var(--blue-900);margin-bottom:6px">${r.ea}</div>
+      <div style="font-size:.8rem;color:var(--gray-600,#4B5563);margin-bottom:3px">PF: <strong>${r.pf.toFixed(3)}</strong></div>
+      <div style="font-size:.8rem;color:var(--gray-600,#4B5563);margin-bottom:3px">Technique: ${r.tech}</div>
+      <div style="font-size:.8rem;color:var(--gray-600,#4B5563);margin-bottom:10px">6yr PnL: $${r.pnl.toFixed(0)}</div>
+      <span style="display:inline-block;padding:4px 12px;background:${recBg};color:${recCol};border-radius:999px;font-size:.8rem;font-weight:700">${rec}</span>
+    </div>
+  </div></td>`;
+  rowEl.after(tr);
+  setTimeout(()=>{
+    const sc=document.getElementById('sp_'+eid);
+    if(sc){const pts=Array.from({length:13},(_,i)=>3000+r.pnl*(i/12));new Chart(sc,{type:'line',data:{labels:Array.from({length:13},(_,i)=>'M'+i),datasets:[{data:pts,borderColor:r.pf>=1?'#10B981':'#EF4444',fill:true,backgroundColor:r.pf>=1?'rgba(16,185,129,.08)':'rgba(239,68,68,.08)',tension:.4,borderWidth:2,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{display:false}}}});}
+    const dc=document.getElementById('dn_'+eid);
+    if(dc){const wr=r.wr||(r.pf/(1+r.pf)*100);new Chart(dc,{type:'doughnut',data:{labels:['Win','Loss'],datasets:[{data:[wr,100-wr],backgroundColor:['#10B981','#FEE2E2'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:8}},tooltip:{callbacks:{label:c=>`${c.label}: ${c.parsed.toFixed(1)}%`}}}}});}
+  },60);
+}
+
+function goStratPage(p){stratPage=p;renderStratTable();}
+
+function exportCSV(){
+  const h='rank,ea,technique,pf,pnl_usd,trades\n';
+  const rows=stratFiltered.map(e=>`${e.rank},"${e.ea}","${e.tech}",${e.pf.toFixed(4)},${e.pnl.toFixed(2)},${e.trades}`).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([h+rows],{type:'text/csv'}));a.download='apex_strategies_export.csv';a.click();
+}
+
+/* ══════════════════════════════════════════════════
    SIDEBAR TOGGLE (MOBILE)
    ══════════════════════════════════════════════════ */
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');}
