@@ -1454,9 +1454,11 @@ function openPanel(eaName,roundIdx){
     </div>
     <div style="font-size:.72rem;font-weight:600;color:var(--gray-500);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">Round Journey</div>
     <div style="margin-bottom:14px;line-height:2">${journey}</div>
-    <div style="font-size:.72rem;font-weight:600;color:var(--gray-500);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">Radar</div>
+    <div style="font-size:.75rem;font-weight:600;color:var(--gray-500);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">Equity Curve (simulated)</div>
+    <div style="height:90px;margin-bottom:14px"><canvas id="eqCvs"></canvas></div>
+    <div style="font-size:.75rem;font-weight:600;color:var(--gray-500);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">Radar</div>
     <div style="height:180px;margin-bottom:14px"><canvas id="radarCvs"></canvas></div>
-    <div style="font-size:.72rem;font-weight:600;color:var(--gray-500);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">Technique</div>
+    <div style="font-size:.75rem;font-weight:600;color:var(--gray-500);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em">Technique</div>
     <div style="padding:9px;background:var(--gray-50);border-radius:var(--radius-md);font-size:.8125rem;color:var(--gray-700);margin-bottom:12px">${tech}${isChamp?' — Asian Session + FVG + Order Block':''}</div>
     <span style="display:inline-block;padding:4px 13px;background:${recBg};color:${recCol};border-radius:999px;font-size:.8125rem;font-weight:700">${rec}</span>`;
   setTimeout(()=>{
