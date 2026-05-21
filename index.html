@@ -1347,18 +1347,31 @@ const SEARCH_INDEX = [
 ];
 
 function doSearch(q) {
-  const r = document.getElementById('searchResults');
-  if(!q.trim()){r.innerHTML='<div style="padding:20px;text-align:center;color:var(--gray-500);font-size:.875rem">Type to search...</div>';return;}
+  const r=document.getElementById('searchResults');
+  if(!q||q.length<2){r.innerHTML='<div style="padding:20px;text-align:center;color:var(--gray-500);font-size:.875rem">Type to search 100 strategies, 8 phases, all metrics</div>';return;}
   const lq=q.toLowerCase();
-  const hits=SEARCH_INDEX.filter(s=>s.title.toLowerCase().includes(lq)||s.desc.toLowerCase().includes(lq)).slice(0,8);
-  if(!hits.length){r.innerHTML='<div style="padding:20px;text-align:center;color:var(--gray-500);font-size:.875rem">No results for "'+q+'"</div>';return;}
-  r.innerHTML=hits.map(h=>`
-    <div class="search-result-item" onclick="showPage('${h.page}');closeSearch()">
+  const stratHits=(typeof R1_ALL100!=='undefined'?R1_ALL100:[])
+    .filter(s=>s.ea.toLowerCase().includes(lq))
+    .slice(0,5)
+    .map(s=>{
+      const pf=s.pf?s.pf.toFixed(3):'—';
+      const grade=typeof gradeFromPF==='function'?gradeFromPF(s.pf):'';
+      const gl=typeof gradeLabel==='function'?gradeLabel(grade):'';
+      return`<div onclick="closeSearch();showPage('strategies')" style="padding:10px 16px;cursor:pointer;border-bottom:1px solid var(--gray-100);display:flex;align-items:center;gap:10px">
+        <span style="font-size:1rem">📈</span>
+        <div><div style="font-size:.875rem;font-weight:600;color:var(--blue-900)">${s.ea}</div>
+        <div style="font-size:.75rem;color:var(--gray-500)">PF ${pf} · $${s.pnl.toFixed(0)} · ${s.trades} trades ${gl?'· Grade '+gl:''}</div></div>
+      </div>`;
+    }).join('');
+  const pageHits=SEARCH_INDEX.filter(s=>s.title.toLowerCase().includes(lq)||s.desc.toLowerCase().includes(lq)).slice(0,6)
+    .map(h=>`<div class="search-result-item" onclick="showPage('${h.page}');closeSearch()">
       <div>
         <div style="font-size:.875rem;font-weight:600;color:var(--blue-900)">${h.title}</div>
         <div style="font-size:.75rem;color:var(--gray-500)">${h.desc}</div>
       </div>
     </div>`).join('');
+  const all=stratHits+pageHits;
+  r.innerHTML=all||`<div style="padding:20px;text-align:center;color:var(--gray-500);font-size:.875rem">No results for "${q}"</div>`;
 }
 
 /* ══════════════════════════════════════════════════
