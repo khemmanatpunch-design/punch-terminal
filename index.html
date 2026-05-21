@@ -888,7 +888,37 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
   <div class="page-title">Strategy Database</div>
   <div class="page-subtitle">All 100 strategies tested in tournament · Sortable · Filterable</div>
   <div class="page-divider"></div>
-  <div id="strategies-content"><div class="stub-page"><div class="stub-icon">📋</div><div class="stub-title">All Strategies (100)</div><div class="stub-text">Loading in Save 2...</div></div></div>
+  <div id="strategies-content">
+    <div class="strat-toolbar">
+      <input class="strat-search" id="stratSearch" type="text" placeholder="🔍 Search strategies..." oninput="filterStrategies()">
+      <select class="strat-sel" id="techFilter" onchange="filterStrategies()"><option value="">Technique ▼</option></select>
+      <select class="strat-sel" id="pfFilter" onchange="filterStrategies()">
+        <option value="">PF Range ▼</option><option value="2">PF ≥ 2.0</option><option value="1.5">PF ≥ 1.5</option><option value="1">PF ≥ 1.0</option><option value="0">All</option>
+      </select>
+      <label style="display:flex;align-items:center;gap:5px;font-size:.8rem;cursor:pointer;white-space:nowrap"><input type="checkbox" id="profFilter" onchange="filterStrategies()"> Profitable only</label>
+      <select class="strat-sel" id="sortColSel" onchange="sortBy(this.value)">
+        <option value="pf">Sort: PF</option><option value="pnl">Sort: PnL</option><option value="trades">Sort: Trades</option><option value="rank">Sort: Rank</option>
+      </select>
+      <button class="btn btn-secondary btn-sm" onclick="exportCSV()">📥 Export CSV</button>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px" id="stratPills"></div>
+    <div class="strat-table-wrap" style="background:#fff;border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);overflow:hidden">
+      <table class="strat-tbl">
+        <thead><tr>
+          <th id="th-rank" onclick="sortBy('rank')">#</th>
+          <th id="th-ea" onclick="sortBy('ea')">Strategy</th>
+          <th id="th-tech" onclick="sortBy('tech')">Technique</th>
+          <th id="th-pf" onclick="sortBy('pf')" class="sorted">PF ↓</th>
+          <th>WR</th>
+          <th id="th-pnl" onclick="sortBy('pnl')">6yr PnL</th>
+          <th id="th-trades" onclick="sortBy('trades')">Trades</th>
+          <th>Grade</th><th></th>
+        </tr></thead>
+        <tbody id="stratBody"></tbody>
+      </table>
+      <div class="pager" id="stratPager"></div>
+    </div>
+  </div>
 </div>
 </div>
 
