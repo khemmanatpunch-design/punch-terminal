@@ -506,7 +506,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
 .dash-footer{padding:14px 24px;text-align:center;font-size:.75rem;color:var(--gray-400);line-height:2;border-top:1px solid var(--gray-200);background:var(--surface);margin-left:var(--sidebar-w);}
 .bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--gray-200);z-index:90;}
 .bottom-nav-items{display:flex;justify-content:space-around;padding:4px 0 env(safe-area-inset-bottom,4px);}
-.bottom-nav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 8px;cursor:pointer;border:none;background:none;font-size:.62rem;color:var(--gray-500);min-width:44px;min-height:44px;justify-content:center;font-family:inherit;}
+.bottom-nav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 8px;cursor:pointer;border:none;background:none;font-size:.75rem;color:var(--gray-500);min-width:44px;min-height:44px;justify-content:center;font-family:inherit;}
 .bottom-nav-btn.active,.bottom-nav-btn:focus{color:var(--blue-500);}
 .bottom-nav-btn-icon{font-size:1.1rem;}
 @media(max-width:768px){.bottom-nav{display:block;}.main-content{padding-bottom:68px;}.dash-footer{margin-left:0;}}
@@ -1534,7 +1534,7 @@ function renderStratTable(){
     const rc=r.pf>=2?'pfa':r.pf>=1.5?'pfb':r.pf<1?'pfd':'';
     const pnlC=r.pnl>=0?'var(--green-500)':'var(--red-500)';
     const pfC=r.pf>=1.5?'var(--green-500)':r.pf>=1?'var(--blue-500)':'var(--red-500)';
-    const chTag=isChamp?` <span style="font-size:.62rem;background:#FEF3C7;color:#92400E;padding:1px 5px;border-radius:3px;vertical-align:middle">👑</span>`:'';
+    const chTag=isChamp?` <span style="font-size:.75rem;background:#FEF3C7;color:#92400E;padding:1px 5px;border-radius:3px;vertical-align:middle">👑</span>`:'';
     return`<tr class="srow ${rc}" onclick="toggleExpand('${r.ea.replace(/'/g,"\\'")}',this)">
       <td style="color:var(--gray-400);font-size:.72rem">${r.rank}</td>
       <td><span style="font-weight:600;color:var(--blue-900)">${r.ea}</span>${chTag}</td>
@@ -1943,7 +1943,7 @@ pageInitFns['multimarket']=function(){
   }).join('');
   const mktN=['Gold','US30','GBPJPY','NAS100'];
   const corr=[[1.00,0.45,0.32,0.38],[0.45,1.00,0.67,0.81],[0.32,0.67,1.00,0.72],[0.38,0.81,0.72,1.00]];
-  const corrGrid=mktN.map((n,i)=>`<div style="font-size:.62rem;font-weight:600;color:var(--gray-500);text-align:center;padding:2px">${n}</div>`).join('')+corr.map((row,i)=>`<div style="font-size:.75rem;color:var(--gray-600,#4B5563);display:flex;align-items:center;font-weight:600;padding-right:3px">${mktN[i]}</div>`+row.map((v,j)=>{const bg=i===j?'#E5E7EB':v<0.4?'#DBEAFE':v<0.65?'#FEF3C7':'#FEE2E2';const tc=i===j?'#9CA3AF':v<0.4?'#1E40AF':v<0.65?'#92400E':'#991B1B';return`<div style="background:${bg};color:${tc};border-radius:3px;padding:6px 2px;text-align:center;font-size:.75rem;font-weight:700" title="${mktN[i]} vs ${mktN[j]}: ${v}">${v.toFixed(2)}</div>`;}).join('')).join('');
+  const corrGrid=mktN.map((n,i)=>`<div style="font-size:.75rem;font-weight:600;color:var(--gray-500);text-align:center;padding:2px">${n}</div>`).join('')+corr.map((row,i)=>`<div style="font-size:.75rem;color:var(--gray-600,#4B5563);display:flex;align-items:center;font-weight:600;padding-right:3px">${mktN[i]}</div>`+row.map((v,j)=>{const bg=i===j?'#E5E7EB':v<0.4?'#DBEAFE':v<0.65?'#FEF3C7':'#FEE2E2';const tc=i===j?'#9CA3AF':v<0.4?'#1E40AF':v<0.65?'#92400E':'#991B1B';return`<div style="background:${bg};color:${tc};border-radius:3px;padding:6px 2px;text-align:center;font-size:.75rem;font-weight:700" title="${mktN[i]} vs ${mktN[j]}: ${v}">${v.toFixed(2)}</div>`;}).join('')).join('');
   const ranking=MKTDATA.map((m,i)=>{const bw=Math.max(4,Math.min(100,(m.monthly+0.7)/1.4*100));const bc=m.monthly>=0?'var(--green-500)':'var(--red-500)';return`<div style="display:flex;align-items:center;gap:7px;margin-bottom:7px"><span style="font-size:.7rem;color:var(--gray-400);width:14px">${i+1}</span><span style="font-size:.72rem;flex:1;min-width:55px;color:var(--gray-700)">${m.sym}</span><div style="flex:2;height:7px;background:var(--gray-100);border-radius:3px;overflow:hidden"><div style="height:100%;width:${bw}%;background:${bc};border-radius:3px"></div></div><span style="font-size:.7rem;font-weight:600;width:40px;text-align:right;color:${bc}">${m.monthly>=0?'+':''}${m.monthly.toFixed(2)}%</span></div>`;}).join('');
   el.innerHTML=`
     <div class="mkt-grid">${cards}</div>
@@ -2115,7 +2115,7 @@ pageInitFns['phase5']=function(){
       ].map(m=>`<div style="padding:12px;background:${m.bg};border-radius:var(--radius-lg);text-align:center">
         <div style="font-size:.75rem;font-weight:600;color:var(--gray-500);margin-bottom:4px">${m.label}</div>
         <div style="font-size:1.25rem;font-weight:800;color:${m.c}">${m.val}</div>
-        <div style="font-size:.62rem;color:var(--gray-400);margin-top:3px">${m.note}</div>
+        <div style="font-size:.75rem;color:var(--gray-400);margin-top:3px">${m.note}</div>
       </div>`).join('')}
     </div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px">${mcCards}</div>
