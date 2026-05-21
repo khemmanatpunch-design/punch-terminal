@@ -2707,6 +2707,182 @@ function p8DeleteTrade(id){
   pageInitFns['phase8']();
   pageInited['phase8']=true;
 }
+pageInitFns['phase9']=function(){
+  const c=document.getElementById('phase9-content');
+  if(!c)return;
+
+  // Track 1 data
+  const base={trades:173,tpd:0.237,wr:51.4,pf:1.59,monthly:1.71};
+  const filters=[
+    {name:'F1 — Liquidity Sweep',trades:22,tpd:0.030,wr:54.5,pf:1.80,monthly:null,verdict:'SKIP',reason:'0.030/day < 0.2 minimum'},
+    {name:'F2 — FVG+OB Confluence 50pt',trades:35,tpd:0.048,wr:45.7,pf:1.26,monthly:null,verdict:'SKIP',reason:'0.048/day < 0.2 minimum'},
+    {name:'F3 — RSI Extreme <28/>72',trades:0,tpd:0.0,wr:0,pf:0,monthly:null,verdict:'SKIP',reason:'Never triggers on H1 gold'},
+    {name:'F4 — Kill Zone London+NY',trades:78,tpd:0.107,wr:55.1,pf:1.84,monthly:null,verdict:'SKIP',reason:'0.107/day < 0.2 minimum (best WR)'},
+    {name:'F5 — Min Swing 180pt',trades:100,tpd:0.137,wr:47.0,pf:1.33,monthly:null,verdict:'SKIP',reason:'0.137/day < 0.2 minimum'},
+  ];
+
+  // Track 3 data
+  const markets=[
+    {sym:'XAUUSD',trades:81,tpd:0.222,wr:45.7,pf:1.26,monthly:0.53,pass:true},
+    {sym:'EURUSD',trades:92,tpd:0.252,wr:38.0,pf:0.92,monthly:-0.96,pass:false},
+    {sym:'GBPUSD',trades:81,tpd:0.222,wr:42.0,pf:1.09,monthly:-0.04,pass:false},
+    {sym:'USDJPY',trades:92,tpd:0.252,wr:47.8,pf:1.38,monthly:2.16,pass:true},
+  ];
+
+  // Track 4 ramp data
+  const rampData=[
+    {yr:1,flat1:3677,flat15:4065,flat2:4491,ramp:3866},
+    {yr:2,flat1:4507,flat15:5509,flat2:6724,ramp:6081},
+    {yr:3,flat1:5523,flat15:7466,flat2:10067,ramp:10050},
+    {yr:5,flat1:8297,flat15:13711,flat2:22563,ramp:27447},
+  ];
+
+  c.innerHTML=`
+  <!-- PHASE 9 OVERVIEW -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px">
+    <div style="background:var(--surface);border-radius:var(--radius-lg);padding:14px;text-align:center;border:1px solid var(--gray-200)">
+      <div style="font-size:.72rem;color:var(--gray-500);margin-bottom:4px">Track 1 — Filters</div>
+      <div style="font-size:1.6rem;font-weight:800;color:#DC2626">0/5</div>
+      <div style="font-size:.72rem;color:var(--gray-400)">passed 0.2/day threshold</div>
+    </div>
+    <div style="background:var(--surface);border-radius:var(--radius-lg);padding:14px;text-align:center;border:1px solid var(--gray-200)">
+      <div style="font-size:.72rem;color:var(--gray-500);margin-bottom:4px">Track 2 — News</div>
+      <div style="font-size:1.6rem;font-weight:800;color:var(--green-500)">+17%</div>
+      <div style="font-size:.72rem;color:var(--gray-400)">8 trades/yr · PF 2.04</div>
+    </div>
+    <div style="background:var(--surface);border-radius:var(--radius-lg);padding:14px;text-align:center;border:1px solid var(--gray-200)">
+      <div style="font-size:.72rem;color:var(--gray-500);margin-bottom:4px">Track 3 — Markets</div>
+      <div style="font-size:1.6rem;font-weight:800;color:var(--blue-500)">2/4</div>
+      <div style="font-size:.72rem;color:var(--gray-400)">XAUUSD + USDJPY ✓</div>
+    </div>
+    <div style="background:var(--surface);border-radius:var(--radius-lg);padding:14px;text-align:center;border:1px solid var(--gray-200)">
+      <div style="font-size:.72rem;color:var(--gray-500);margin-bottom:4px">Track 4 — $30k ETA</div>
+      <div style="font-size:1.6rem;font-weight:800;color:#7C3AED">4.6yr</div>
+      <div style="font-size:.72rem;color:var(--gray-400)">at 2.5% risk, 1.71%/mo</div>
+    </div>
+  </div>
+
+  <!-- TRACK 1: FILTER RESULTS -->
+  <div style="background:var(--surface);border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:18px;margin-bottom:16px">
+    <div style="font-weight:700;font-size:.875rem;margin-bottom:12px;color:var(--gray-900)">Track 1 — Win Rate Filters (XAUUSD 2024–2025 · Base: 173 trades · 0.237/day)</div>
+    <div style="overflow-x:auto">
+    <table style="width:100%;border-collapse:collapse;font-size:.78rem">
+      <thead>
+        <tr style="background:var(--gray-50)">
+          ${['Filter','Trades','Trades/Day','WR%','PF (est)','Verdict'].map(h=>`<th style="padding:8px 10px;text-align:left;font-weight:600;color:var(--gray-600);border-bottom:1px solid var(--gray-200)">${h}</th>`).join('')}
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background:#ECFDF5">
+          <td style="padding:8px 10px;font-weight:600;color:var(--green-600);border-bottom:1px solid var(--gray-100)">Base APEX_Pepperstone_v1</td>
+          <td style="padding:8px 10px;border-bottom:1px solid var(--gray-100)">173</td>
+          <td style="padding:8px 10px;font-weight:600;color:var(--green-600);border-bottom:1px solid var(--gray-100)">0.237</td>
+          <td style="padding:8px 10px;border-bottom:1px solid var(--gray-100)">51.4%</td>
+          <td style="padding:8px 10px;border-bottom:1px solid var(--gray-100)">1.59</td>
+          <td style="padding:8px 10px;border-bottom:1px solid var(--gray-100)"><span style="background:#ECFDF5;color:var(--green-600);padding:2px 8px;border-radius:999px;font-size:.72rem;font-weight:700">BASELINE</span></td>
+        </tr>
+        ${filters.map(f=>`<tr>
+          <td style="padding:8px 10px;font-weight:500;border-bottom:1px solid var(--gray-100)">${f.name}</td>
+          <td style="padding:8px 10px;border-bottom:1px solid var(--gray-100)">${f.trades}</td>
+          <td style="padding:8px 10px;color:#DC2626;font-weight:600;border-bottom:1px solid var(--gray-100)">${f.tpd}</td>
+          <td style="padding:8px 10px;border-bottom:1px solid var(--gray-100)">${f.wr}%</td>
+          <td style="padding:8px 10px;border-bottom:1px solid var(--gray-100)">${f.pf}</td>
+          <td style="padding:8px 10px;border-bottom:1px solid var(--gray-100)">
+            <span style="background:#FEE2E2;color:#DC2626;padding:2px 8px;border-radius:999px;font-size:.72rem;font-weight:700">SKIP</span>
+            <span style="font-size:.7rem;color:var(--gray-400);margin-left:4px">${f.reason}</span>
+          </td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+    </div>
+    <div style="margin-top:10px;font-size:.75rem;color:var(--gray-500);font-style:italic">
+      Insight: F4 Kill Zone shows best win rate improvement (55.1% vs 51.4%) but still below 0.2/day threshold. Base EA trade frequency on Pepperstone is too low to support additional filters. Next step: relax F3 RSI to 40/60 range.
+    </div>
+  </div>
+
+  <!-- TRACK 2: NEWS MOMENTUM -->
+  <div style="background:var(--surface);border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:18px;margin-bottom:16px">
+    <div style="font-weight:700;font-size:.875rem;margin-bottom:12px;color:var(--gray-900)">Track 2 — News Momentum EA (NFP + CPI + FOMC · XAUUSD 2024–2025)</div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:12px">
+      ${[['Trades/yr','8 (max cap)','var(--gray-700)'],['WR','31.2%','var(--gray-700)'],['RR','4.5:1 (SL40%/TP180%)','var(--blue-500)'],['Real PF','2.04','var(--green-500)'],['2yr return','+17%','var(--green-500)']].map(([l,v,c])=>`
+      <div style="text-align:center;padding:10px;background:var(--gray-50);border-radius:var(--radius-md)">
+        <div style="font-size:.72rem;color:var(--gray-500);margin-bottom:4px">${l}</div>
+        <div style="font-size:.9rem;font-weight:700;color:${c}">${v}</div>
+      </div>`).join('')}
+    </div>
+    <div style="font-size:.75rem;color:var(--gray-600);padding:10px;background:#FFF7ED;border-radius:var(--radius-md);border-left:3px solid #F59E0B">
+      <strong>Honest assessment:</strong> Profitable but small sample (16 trades over 2 years). The 4.5:1 RR makes each win worth 4.5× the risk — a few big NFP/FOMC spikes carry the result. Not statistically robust enough to bet on alone. Supplement to main system.
+    </div>
+  </div>
+
+  <!-- TRACK 3: MULTI-MARKET -->
+  <div style="background:var(--surface);border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:18px;margin-bottom:16px">
+    <div style="font-weight:700;font-size:.875rem;margin-bottom:12px;color:var(--gray-900)">Track 3 — Multi-Market Test (APEX_Pepperstone_v1 · 2024 only · untuned)</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px">
+      ${markets.map(m=>`<div style="padding:12px;background:${m.pass?'#ECFDF5':'#FEF2F2'};border-radius:var(--radius-md);border:1px solid ${m.pass?'#D1FAE5':'#FECACA'}">
+        <div style="font-weight:700;font-size:.85rem;color:${m.pass?'var(--green-600)':'#DC2626'};margin-bottom:6px">${m.sym} ${m.pass?'✓':'✗'}</div>
+        <div style="font-size:.75rem;color:var(--gray-600)">${m.trades} trades</div>
+        <div style="font-size:.75rem;color:var(--gray-600)">WR ${m.wr}% · PF ${m.pf}</div>
+        <div style="font-size:.8rem;font-weight:700;color:${m.monthly>0?'var(--green-500)':'#DC2626'};margin-top:4px">${m.monthly>0?'+':''}${m.monthly}%/mo</div>
+      </div>`).join('')}
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div style="font-size:.75rem;color:var(--gray-600);padding:10px;background:#EDE9FE;border-radius:var(--radius-md)">
+        <strong style="color:#7C3AED">USDJPY Opportunity:</strong> +2.16%/mo with untuned gold EA. USD/JPY is structurally anti-correlated with gold during risk-off — natural hedge. With market-specific OB parameters, could reach PF 2.0+ target.
+      </div>
+      <div style="font-size:.75rem;color:var(--gray-600);padding:10px;background:#FFF7ED;border-radius:var(--radius-md)">
+        <strong style="color:#F59E0B">Note:</strong> US30/NAS100/GBPJPY data not available on Pepperstone account. EURUSD/GBPUSD losing because SMC logic optimized for commodities momentum, not EUR range behavior.
+      </div>
+    </div>
+  </div>
+
+  <!-- TRACK 4: RISK RAMP -->
+  <div style="background:var(--surface);border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:18px;margin-bottom:16px">
+    <div style="font-weight:700;font-size:.875rem;margin-bottom:4px;color:var(--gray-900)">Track 4 — Risk Ramp Model</div>
+    <div style="font-size:.75rem;color:var(--gray-500);margin-bottom:12px">Based on actual 2024–2025 MT5 result: 1.71%/mo at 1% risk (conservative 6yr avg: 0.95%/mo)</div>
+    <div style="overflow-x:auto">
+    <table style="width:100%;border-collapse:collapse;font-size:.78rem">
+      <thead><tr style="background:var(--gray-50)">
+        ${['Year','Flat 1% Risk','Flat 1.5% Risk','Flat 2% Risk','4-Stage Ramp','vs Flat 1%'].map(h=>`<th style="padding:8px 10px;text-align:right;font-weight:600;color:var(--gray-600);border-bottom:1px solid var(--gray-200);first-child:text-align:left">${h}</th>`).join('')}
+      </tr></thead>
+      <tbody>
+        ${rampData.map((r,i)=>`<tr style="background:${i%2===0?'var(--gray-50)':'var(--surface)'}">
+          <td style="padding:8px 10px;font-weight:600;border-bottom:1px solid var(--gray-100)">Year ${r.yr}</td>
+          <td style="padding:8px 10px;text-align:right;border-bottom:1px solid var(--gray-100)">$${r.flat1.toLocaleString()}</td>
+          <td style="padding:8px 10px;text-align:right;border-bottom:1px solid var(--gray-100)">$${r.flat15.toLocaleString()}</td>
+          <td style="padding:8px 10px;text-align:right;border-bottom:1px solid var(--gray-100)">$${r.flat2.toLocaleString()}</td>
+          <td style="padding:8px 10px;text-align:right;font-weight:700;color:${r.ramp>r.flat15?'var(--green-500)':'var(--gray-700)'};border-bottom:1px solid var(--gray-100)">$${r.ramp.toLocaleString()}</td>
+          <td style="padding:8px 10px;text-align:right;color:var(--green-500);font-weight:600;border-bottom:1px solid var(--gray-100)">+$${(r.ramp-r.flat1).toLocaleString()}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px">
+      <div style="padding:12px;background:#EDE9FE;border-radius:var(--radius-md)">
+        <div style="font-size:.75rem;font-weight:700;color:#7C3AED;margin-bottom:6px">$30,000 Target Timeline</div>
+        ${[['Flat 1% risk','11.3 years','var(--gray-600)'],['Flat 1.5% risk','7.6 years','var(--gray-600)'],['Flat 2% risk','5.7 years','var(--orange-500)'],['4-Stage Ramp 2.5%','4.6 years','var(--green-500)']].map(([l,v,col])=>`<div style="display:flex;justify-content:space-between;font-size:.75rem;padding:3px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="color:var(--gray-600)">${l}</span><span style="font-weight:700;color:${col}">${v}</span></div>`).join('')}
+      </div>
+      <div style="padding:12px;background:#FFF7ED;border-radius:var(--radius-md);font-size:.75rem;color:var(--gray-700)">
+        <strong style="color:#F59E0B">Honest Reality:</strong><br>
+        Demo alone cannot reach $30k in reasonable time without capital addition. The 1.71%/mo figure is from a 2-year favorable gold bull run (2024-2025). Conservative 6yr average is 0.95%/mo → $30k in 20+ years at 1% risk.<br><br>
+        <strong>Best path forward:</strong> Add capital monthly + USDJPY diversification + Ramp risk after 6-month proof of consistency.
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 10 PREVIEW -->
+  <div style="background:linear-gradient(135deg,#1E1B4B,#312E81);border-radius:var(--radius-lg);padding:20px;color:white">
+    <div style="font-weight:700;font-size:.875rem;margin-bottom:10px;color:#C7D2FE">Phase 10 Preview — What Comes Next</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      ${[['USDJPY Tuning','Adapt OB parameters for JPY pairs, rerun 2-yr test. Target: PF>2.5, monthly>1.5%'],['Capital Ramp','Monthly additions plan: +$200/mo from income. Compound at 2% risk after 6mo profit proof.'],['Phase 10 Live','Move to real micro account (Exness Standard Cent). Start 0.01 lots. $100 start. Prove real execution.']].map(([t,d])=>`<div style="background:rgba(255,255,255,.08);border-radius:8px;padding:12px">
+        <div style="font-weight:600;font-size:.8rem;color:#E0E7FF;margin-bottom:6px">${t}</div>
+        <div style="font-size:.75rem;color:#A5B4FC;line-height:1.5">${d}</div>
+      </div>`).join('')}
+    </div>
+  </div>
+  `;
+};
+
 pageInitFns['phase8']=function(){
   const c=document.getElementById('phase8-content');
   const saved=JSON.parse(localStorage.getItem(P8_CHECKLIST_KEY)||'[]');
