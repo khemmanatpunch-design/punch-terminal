@@ -3000,7 +3000,34 @@ function p8DeleteTrade(id){
   pageInitFns['phase8']();
   pageInited['phase8']=true;
 }
-pageInitFns['kpihunt']=function(){};
+pageInitFns['kpihunt']=function(){
+  // MC Distribution Chart
+  const mcCtx=document.getElementById('kpi-mc-chart');
+  if(mcCtx&&!mcCtx._chart){
+    const labels=['<$1k','$1k-3k','$3k-10k','$10k-20k','$20k-30k','$30k-50k','$50k-80k','>$80k'];
+    const data=[120,280,1150,1820,1130,3250,1680,570];
+    const colors=['#EF4444','#EF4444','#60A5FA','#34D399','#34D399','#F59E0B','#F59E0B','#F59E0B'];
+    mcCtx._chart=new Chart(mcCtx,{type:'bar',data:{labels,datasets:[{data,backgroundColor:colors,borderRadius:4,borderSkipped:false}]},options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.raw.toLocaleString()} paths`}}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:10},callback:v=>v>=1000?v/1000+'k':v}}},animation:{duration:600}}});
+  }
+  // Donut Chart
+  const doCtx=document.getElementById('kpi-donut-chart');
+  if(doCtx&&!doCtx._chart){
+    doCtx._chart=new Chart(doCtx,{type:'doughnut',data:{labels:['News Events','Multi-Market','Pattern System','Champion XAUUSD','HF M15'],datasets:[{data:[11.25,7.59,4.97,3.22,2.64],backgroundColor:['#F472B6','#F97316','#10B981','#3B82F6','#7C3AED'],borderWidth:2,borderColor:'#fff'}]},options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.raw}%/mo`}}},cutout:'60%',animation:{duration:600}}});
+  }
+  // Slider
+  const slider=document.getElementById('kpi-risk-slider');
+  if(slider&&!slider._init){
+    slider._init=true;
+    slider.addEventListener('input',function(){
+      const r=parseInt(this.value)/100;
+      document.getElementById('kpi-sl-monthly').textContent=(24.34*r).toFixed(1)+'%';
+      const p=Math.min(95,Math.max(5,65.5*Math.pow(r,1.5))).toFixed(0);
+      document.getElementById('kpi-sl-p30k').textContent=p+'%';
+      document.getElementById('kpi-sl-dd').textContent=Math.round(35*r)+'%';
+      document.getElementById('kpi-sl-blowup').textContent=Math.min(90,Math.round(20*Math.pow(r,2)))+'%';
+    });
+  }
+};
 pageInitFns['phase9']=function(){
   const c=document.getElementById('phase9-content');
   if(!c)return;
