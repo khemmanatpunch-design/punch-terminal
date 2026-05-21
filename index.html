@@ -1090,6 +1090,23 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
 
 </main><!-- /main-content -->
 
+<!-- ══════ FOOTER ══════ -->
+<footer class="dash-footer">
+  APEX GREATEST — Trading Research Platform &nbsp;·&nbsp; Demo Only — Never Real Trades<br>
+  Phase 8 of 8 · Pepperstone Razor · XAUUSD &nbsp;·&nbsp; Dashboard by Claude Code · Deployed on GitHub Pages
+</footer>
+
+<!-- ══════ MOBILE BOTTOM NAV ══════ -->
+<nav class="bottom-nav" id="bottomNav">
+  <div class="bottom-nav-items">
+    <button class="bottom-nav-btn" onclick="showPage('home');setBnav('home')" id="bn-home"><span class="bottom-nav-btn-icon">🏠</span>Home</button>
+    <button class="bottom-nav-btn" onclick="showPage('strategies');setBnav('strategies')" id="bn-strategies"><span class="bottom-nav-btn-icon">🏆</span>Research</button>
+    <button class="bottom-nav-btn" onclick="showPage('phase7');setBnav('phase7')" id="bn-phase7"><span class="bottom-nav-btn-icon">📊</span>Analysis</button>
+    <button class="bottom-nav-btn" onclick="showPage('pepperstone');setBnav('pepperstone')" id="bn-pepperstone"><span class="bottom-nav-btn-icon">🟢</span>Live</button>
+    <button class="bottom-nav-btn" onclick="showPage('claude');setBnav('claude')" id="bn-claude"><span class="bottom-nav-btn-icon">🤖</span>Claude</button>
+  </div>
+</nav>
+
 <!-- ══════ SEARCH MODAL ══════ -->
 <div class="search-modal" id="searchModal" onclick="if(event.target===this)closeSearch()">
   <div class="search-modal-box">
