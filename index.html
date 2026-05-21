@@ -3036,17 +3036,36 @@ pageInitFns['kpihunt']=function(){
   if(doCtx&&!doCtx._chart){
     doCtx._chart=new Chart(doCtx,{type:'doughnut',data:{labels:['News Events','Multi-Market','Pattern System','Champion XAUUSD','HF M15'],datasets:[{data:[11.25,7.59,4.97,3.22,2.64],backgroundColor:['#F472B6','#F97316','#10B981','#3B82F6','#7C3AED'],borderWidth:2,borderColor:'#fff'}]},options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.raw}%/mo`}}},cutout:'60%',animation:{duration:600}}});
   }
-  // Slider
+  // KPI Risk Slider + Chart
+  const kpiRiskCtx=document.getElementById('kpi-risk-chart');
+  if(kpiRiskCtx&&!kpiRiskCtx._chart){
+    const initR=1.0;
+    kpiRiskCtx._chart=new Chart(kpiRiskCtx,{type:'bar',data:{
+      labels:['Monthly','P($30k)','Max DD','Blowup'],
+      datasets:[{
+        data:[(24.34*initR),(65.5),(35),(20)],
+        backgroundColor:['#10B981','#4F46E5','#F59E0B','#EF4444'],
+        borderRadius:5,borderSkipped:false
+      }]
+    },options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.raw.toFixed(1)}%`}}},scales:{y:{ticks:{callback:v=>v+'%',font:{size:9}},grid:{color:'rgba(0,0,0,.05)'}},x:{grid:{display:false},ticks:{font:{size:10}}}},animation:{duration:0}}});
+  }
   const slider=document.getElementById('kpi-risk-slider');
   if(slider&&!slider._init){
     slider._init=true;
     slider.addEventListener('input',function(){
       const r=parseInt(this.value)/100;
-      document.getElementById('kpi-sl-monthly').textContent=(24.34*r).toFixed(1)+'%';
-      const p=Math.min(95,Math.max(5,65.5*Math.pow(r,1.5))).toFixed(0);
-      document.getElementById('kpi-sl-p30k').textContent=p+'%';
-      document.getElementById('kpi-sl-dd').textContent=Math.round(35*r)+'%';
-      document.getElementById('kpi-sl-blowup').textContent=Math.min(90,Math.round(20*Math.pow(r,2)))+'%';
+      const mo=(24.34*r);
+      const p=Math.min(95,Math.max(5,65.5*Math.pow(r,1.5)));
+      const dd=Math.round(35*r);
+      const bl=Math.min(90,Math.round(20*Math.pow(r,2)));
+      document.getElementById('kpi-sl-monthly').textContent=mo.toFixed(1)+'%';
+      document.getElementById('kpi-sl-p30k').textContent=p.toFixed(0)+'%';
+      document.getElementById('kpi-sl-dd').textContent=dd+'%';
+      document.getElementById('kpi-sl-blowup').textContent=bl+'%';
+      if(kpiRiskCtx&&kpiRiskCtx._chart){
+        kpiRiskCtx._chart.data.datasets[0].data=[mo,p,dd,bl];
+        kpiRiskCtx._chart.update('none');
+      }
     });
   }
 };
