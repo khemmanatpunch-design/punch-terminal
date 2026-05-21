@@ -937,22 +937,25 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
           <div class="activity-time">2026-05-21 · Blue/white/gray theme · Sidebar layout</div>
         </div>
       </div>
-      <div class="activity-item">
-        <div class="activity-dot green"></div>
-        <div class="activity-content">
-          <div class="activity-text">Phase 6 — Spread analysis · Pepperstone <strong>recommended</strong></div>
-          <div class="activity-time">2026-05-21 · H4 tested (loses), H1 stays champion</div>
+      <div id="activity-more" style="display:none">
+        <div class="activity-item">
+          <div class="activity-dot green"></div>
+          <div class="activity-content">
+            <div class="activity-text">Phase 6 — Spread analysis · Pepperstone <strong>recommended</strong></div>
+            <div class="activity-time">2026-05-21 · H4 tested (loses), H1 stays champion</div>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-dot blue"></div>
+          <div class="activity-content">
+            <div class="activity-text">Phase 5 — Max Aggression · PF <strong>3.19</strong> achieved</div>
+            <div class="activity-time">2026-05-20 · 8 dimensions tested · WR 51.5%</div>
+          </div>
         </div>
       </div>
-      <div class="activity-item">
-        <div class="activity-dot blue"></div>
-        <div class="activity-content">
-          <div class="activity-text">Phase 5 — Max Aggression · PF <strong>3.19</strong> achieved</div>
-          <div class="activity-time">2026-05-20 · 8 dimensions tested · WR 51.5%</div>
-        </div>
-      </div>
-      <div style="margin-top:16px">
-        <button class="btn btn-secondary btn-sm" onclick="showPage('phase7')">View All Phases →</button>
+      <div style="margin-top:16px;display:flex;gap:8px">
+        <button class="btn btn-secondary btn-sm" id="activity-expand-btn" onclick="(function(){const m=document.getElementById('activity-more');const b=document.getElementById('activity-expand-btn');if(m.style.display==='none'){m.style.display='';b.textContent='Show Less';}else{m.style.display='none';b.textContent='Show More (2)';}})()" >Show More (2)</button>
+        <button class="btn btn-secondary btn-sm" onclick="showPage('phase7')">All Phases →</button>
       </div>
     </div>
   </div>
