@@ -2111,7 +2111,7 @@ pageInitFns['pepperstone']=function(){
       <div class="section-heading" style="margin-bottom:10px"><span>Risk Table ($3,000 deposit)</span><div class="section-heading-line"></div></div>
       <table style="width:100%;font-size:.78rem;border-collapse:collapse">
         <tr style="background:var(--bg-secondary)"><th style="padding:5px 8px;text-align:left">Risk%</th><th style="padding:5px 8px;text-align:center">$/Trade</th><th style="padding:5px 8px;text-align:center">Monthly%</th><th style="padding:5px 8px;text-align:center">12mo%</th><th style="padding:5px 8px;text-align:center">Blowup</th></tr>
-        ${riskRows.map(([r,d,m,y,ok])=>`<tr style="border-top:1px solid var(--gray-200)"><td style="padding:4px 8px;font-weight:700;color:${ok?'var(--green-500)':'var(--red-500)'}">${r}%</td><td style="padding:4px 8px;text-align:center">$${d}</td><td style="padding:4px 8px;text-align:center">${m}%</td><td style="padding:4px 8px;text-align:center">${y}%</td><td style="padding:4px 8px;text-align:center">${ok?'<span style="color:var(--green-500)">Low</span>':'<span style="color:var(--red-500)">Med</span>'}</td></tr>`).join('')}
+        ${riskRows.map(([r,d,m,y,bl,bc])=>`<tr style="border-top:1px solid var(--gray-200)"><td style="padding:4px 8px;font-weight:700;color:var(--blue-900)">${r}%</td><td style="padding:4px 8px;text-align:center">$${d}</td><td style="padding:4px 8px;text-align:center">${m}%</td><td style="padding:4px 8px;text-align:center">${y}%</td><td style="padding:4px 8px;text-align:center"><span style="color:${bc};font-weight:600">${bl}</span></td></tr>`).join('')}
       </table>
     </div>
   </div>
