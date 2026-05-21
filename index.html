@@ -3069,6 +3069,24 @@ pageInitFns['kpihunt']=function(){
     });
   }
 };
+const P9_INSIGHTS=[
+  '<strong>Track 1 — All 5 filters cut trade frequency below the 0.2/day minimum.</strong> The base EA runs 173 trades over 730 days (0.237/day). Adding any structural filter drops this to 22–100 trades — sample sizes too small to be statistically meaningful. F4 Kill Zone showed the best WR improvement (+3.7% to 55.1%) while preserving the most trades (78). Key finding: gold SMC trades 24/7 but institutional setups concentrate in London+NY — applying Kill Zone alone is the least destructive filter. <strong>Next step:</strong> relax F3 RSI threshold to 40/60 range, or run on M15 to increase base frequency.',
+  '<strong>Track 2 — News momentum is profitable and structurally sound despite low win rate.</strong> 31.2% WR × 4.5:1 RR = positive expectancy of +1.04% per trade risked. 5 of 16 events exceeded the 150pt spike threshold (NFP June 2024, CPI Aug 2024, FOMC Sep 2024 most notable). Each triggered trade uses 40% of spike as SL and 180% as TP — a calibrated entry 1 bar after the spike. Key risk: 8 trades/year cap means a 2-trade losing streak costs −3% in an otherwise-quiet month. Best use as satellite: overlay on main XAUUSD position for event-driven boosts without over-exposure.',
+  '<strong>Track 3 — SMC logic is commodity-native; USDJPY is a structural opportunity.</strong> EURUSD lost −0.96%/mo: EUR range behavior doesn\'t produce the momentum candles that trigger SMC OB entries. GBPUSD broke even. USDJPY +2.16%/mo with untuned parameters — structurally anti-correlated with gold during risk-off, and its JPY carry dynamic produces the sharp momentum candles the EA thrives on. Adding USDJPY at 1% risk alongside XAUUSD would raise combined monthly from 0.53% to ~2.7% with natural hedging. Tuning OB lookback period from 6→10 bars may push USDJPY PF above 2.0.',
+  '<strong>Track 4 — The ramp accelerates in years 3-5 as stage 3-4 risk kicks in.</strong> Flat 1% risk reaches $30k in 11.3 years. The 4-stage ramp cuts this to 4.6 years by unlocking 2%→2.5% risk after balance milestones. The critical insight: compound growth is exponential — stage 4 (2.5% risk, ~4.3%/mo) at year 4 adds more than the entire first year. Sensitivity: if real returns regress to 0.95%/mo (conservative 6yr avg), the ramp still reaches $30k in ~7.2 years vs 20+ years at flat 1%. <strong>Rule:</strong> never advance a stage without 6 months of live positive P&L at the current stage.'
+];
+let p9OpenCard=-1;
+function p9Toggle(i){
+  const det=document.getElementById('p9detail');
+  if(!det)return;
+  if(p9OpenCard===i){det.style.display='none';p9OpenCard=-1;[0,1,2,3].forEach(j=>{const el=document.getElementById('p9ov'+j);if(el)el.style.boxShadow='';});}
+  else{
+    p9OpenCard=i;
+    [0,1,2,3].forEach(j=>{const el=document.getElementById('p9ov'+j);if(el)el.style.boxShadow=j===i?'0 0 0 2px var(--blue-500)':'';});
+    det.innerHTML=P9_INSIGHTS[i];det.style.display='block';
+    det.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+}
 pageInitFns['phase9']=function(){
   const c=document.getElementById('phase9-content');
   if(!c)return;
