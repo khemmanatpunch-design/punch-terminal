@@ -3322,6 +3322,11 @@ pageInitFns['phase8']=function(){
   </tr>`).join(''):`<tr><td colspan="8" style="padding:20px;text-align:center;color:var(--gray-400);font-size:.8rem">No trades logged yet · Add first trade above</td></tr>`;
   const balPct=Math.min(((3000+totalPnl-3000)/27000*100+2),100);
   c.innerHTML=`
+  <div style="background:linear-gradient(90deg,#D97706,#F59E0B);color:#fff;padding:12px 20px;border-radius:var(--radius-xl);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between">
+    <div><div style="font-size:.9rem;font-weight:800">⚠️ AUTO-BACKTEST ALERT — 2026-05-22</div>
+    <div style="font-size:.78rem;opacity:.9;margin-top:2px">Live MT5 run: PF 0.9507 · WR 38.8% · 116 trades · −0.51%/mo · EA halted at 20% DD (2021-09-30)</div></div>
+    <div style="text-align:right;font-size:.75rem;opacity:.9">vs Simulated<br>PF 3.19 · WR 51.5%</div>
+  </div>
   <div style="background:linear-gradient(90deg,#059669,#10B981);color:#fff;padding:16px 24px;border-radius:var(--radius-xl);margin-bottom:18px;display:flex;align-items:center;justify-content:space-between">
     <div><div style="font-size:1.05rem;font-weight:800">🟢 PHASE 8 ACTIVE — Demo Trading Running</div>
     <div style="font-size:.8rem;opacity:.85;margin-top:3px">APEX_Pepperstone_v1 · Magic 80801 · 0.5% risk · Started: 2026-05-21 · Account 51489276</div></div>
