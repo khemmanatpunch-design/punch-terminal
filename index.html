@@ -2385,6 +2385,177 @@ pageInitFns['demolplan']=function(){
 };
 
 /* ══════════════════════════════════════════════════
+   PHASE 8 — LIVE DEMO TRADING
+   ══════════════════════════════════════════════════ */
+const P8_CHECKLIST_KEY='apex_p8_checks';
+const P8_CHECKS=[
+  'EA attached to XAUUSD H1 chart in MT5',
+  'AutoTrading enabled (green button active)',
+  'First trade executed without errors',
+  'Spread confirmed below 15pt London session',
+  '10 trades completed — early signal',
+  '30 trades completed — meaningful sample',
+  '50 trades completed — statistically valid',
+  'Running PF above 1.3 after 30+ trades',
+  'Running WR within 10% of 51.5% backtest',
+  'No EA errors in MT5 Journal tab',
+  'Daily DD never exceeded 2% ($60 from $3k)',
+  'All trades properly journaled'
+];
+pageInitFns['phase8']=function(){
+  const c=document.getElementById('phase8-content');
+  const saved=JSON.parse(localStorage.getItem(P8_CHECKLIST_KEY)||'[]');
+  const chkDone=saved.filter(Boolean).length;
+  const chkHtml=P8_CHECKS.map((t,i)=>`<label style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--gray-200);cursor:pointer;font-size:.8rem"><input type="checkbox" ${saved[i]?'checked':''} onchange="p8Check(${i},this.checked)" style="margin-top:2px;accent-color:var(--green-500);width:16px;height:16px;flex-shrink:0"><span style="color:${saved[i]?'var(--green-500)':'var(--gray-700)'}${saved[i]?';text-decoration:line-through':''}">${t}</span></label>`).join('');
+  const months=[
+    {n:1,title:'VERIFY',status:'IN PROGRESS 🔄',risk:'0.5%',goal:'EA works correctly',unlock:'50+ trades · PF > 1.3 · No errors',exp:'~$14/month',col:'var(--green-500)',locked:false},
+    {n:2,title:'VALIDATE',status:'LOCKED 🔒',risk:'1.0%',goal:'Match backtest performance',unlock:'WR > 45% · PF > 2.0 · Monthly > 0.5%',exp:'~$28/month',col:'var(--blue-500)',locked:true},
+    {n:3,title:'OPTIMIZE',status:'LOCKED 🔒',risk:'1.5%',goal:'Achieve target returns',unlock:'PF > 2.5 · Monthly > 0.8%',exp:'~$43/month',col:'var(--pink-400)',locked:true}
+  ];
+  c.innerHTML=`
+  <div style="background:linear-gradient(90deg,#059669,#10B981);color:#fff;padding:16px 24px;border-radius:var(--radius-xl);margin-bottom:18px;display:flex;align-items:center;justify-content:space-between">
+    <div><div style="font-size:1.05rem;font-weight:800">🟢 PHASE 8 ACTIVE — Demo Trading Running</div>
+    <div style="font-size:.8rem;opacity:.85;margin-top:3px">APEX_Pepperstone_v1 · Magic 80801 · 0.5% risk · Started: 2026-05-21 · Account 51489276</div></div>
+    <div style="text-align:right;font-size:.78rem;opacity:.85">DEMO ONLY<br>Never Real Money</div>
+  </div>
+
+  <div class="card card-sm" style="margin-bottom:18px">
+    <div style="font-size:.875rem;font-weight:700;margin-bottom:8px">KPI Journey — $3,000 → $30,000</div>
+    <div style="display:flex;justify-content:space-between;font-size:.75rem;color:var(--gray-500);margin-bottom:6px"><span>$3,000 (Start)</span><span>$30,000 (Target)</span></div>
+    <div style="background:var(--gray-200);border-radius:999px;height:12px;overflow:hidden;margin-bottom:6px">
+      <div style="width:10%;height:100%;background:linear-gradient(90deg,var(--green-500),var(--blue-500));border-radius:999px;transition:width .5s"></div>
+    </div>
+    <div style="font-size:.75rem;color:var(--gray-500);text-align:center">Day 1 of ~365 · 0 trades completed · 10% initial capital safety buffer</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px">
+    <div class="kpi-card" style="border-top:3px solid var(--blue-500)"><div style="font-size:1.4rem">📈</div><div class="kpi-label">Trades</div><div class="kpi-value" style="font-size:1.5rem">0 <span style="font-size:.875rem;color:var(--gray-400)">/ 50</span></div><div style="font-size:.72rem;color:var(--gray-500)">Need 50+ for validity</div></div>
+    <div class="kpi-card" style="border-top:3px solid var(--gray-300)"><div style="font-size:1.4rem">📊</div><div class="kpi-label">Running PF</div><div class="kpi-value" style="font-size:1.5rem;color:var(--gray-400)">—</div><div style="font-size:.72rem;color:var(--gray-500)">Need 10+ trades</div></div>
+    <div class="kpi-card" style="border-top:3px solid var(--gray-300)"><div style="font-size:1.4rem">🎯</div><div class="kpi-label">Running WR</div><div class="kpi-value" style="font-size:1.5rem;color:var(--gray-400)">—</div><div style="font-size:.72rem;color:var(--gray-500)">Target: 45-55%</div></div>
+    <div class="kpi-card" style="border-top:3px solid var(--green-500)"><div style="font-size:1.4rem">💰</div><div class="kpi-label">Monthly Return</div><div class="kpi-value" style="font-size:1.5rem">0.00%</div><div style="font-size:.72rem;color:var(--gray-500)">Target: 0.95% · Day 1</div></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px">
+    <div class="card card-sm">
+      <div style="font-weight:700;font-size:.875rem;margin-bottom:4px">Month 1 — Verify Phase (0.5% risk)</div>
+      <div style="font-size:.75rem;color:var(--gray-500);margin-bottom:12px">Complete all items before increasing risk to 1.0%</div>
+      ${chkHtml}
+      <div style="margin-top:12px;background:var(--bg-secondary);border-radius:8px;padding:10px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:.78rem;font-weight:700"><span>${chkDone} / 12 complete</span><span style="color:var(--green-500)">${chkDone===12?'✅ UNLOCKED!':'🔒 Locked'}</span></div>
+        <div style="background:var(--gray-200);border-radius:999px;height:8px;overflow:hidden">
+          <div style="width:${Math.round(chkDone/12*100)}%;height:100%;background:var(--green-500);border-radius:999px"></div>
+        </div>
+        <div style="font-size:.72rem;color:var(--gray-500);margin-top:5px">Complete all 12 to unlock Month 2 (1.0% risk)</div>
+      </div>
+    </div>
+    <div class="card card-sm">
+      <div style="font-weight:700;font-size:.875rem;margin-bottom:12px">Real vs Backtest Comparison</div>
+      <table style="width:100%;font-size:.77rem;border-collapse:collapse">
+        <tr style="background:var(--bg-secondary)"><th style="padding:5px 8px;text-align:left">Metric</th><th style="padding:5px 8px;text-align:center">Backtest</th><th style="padding:5px 8px;text-align:center">Demo</th><th style="padding:5px 8px;text-align:center">Status</th></tr>
+        ${[['PF','3.19','—'],['WR','51.5%','—'],['Avg RR','1.5:1','—'],['Monthly','0.95%','—'],['Spread','18pt','—'],['Trades/day','0.51','—']].map(([m,b,a])=>`<tr style="border-top:1px solid var(--gray-200)"><td style="padding:5px 8px;font-weight:600">${m}</td><td style="padding:5px 8px;text-align:center;color:var(--blue-500)">${b}</td><td style="padding:5px 8px;text-align:center;color:var(--gray-400)">${a}</td><td style="padding:5px 8px;text-align:center;font-size:.72rem;color:var(--gray-400)">⏳ Pending</td></tr>`).join('')}
+      </table>
+      <div style="font-size:.72rem;color:var(--gray-500);margin-top:8px">Updates after 10+ trades · Acceptable variance: ±15%</div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px">
+    <div class="card card-sm">
+      <div style="font-weight:700;font-size:.875rem;margin-bottom:8px">🌊 London Spread Monitor</div>
+      <div style="font-size:.75rem;color:var(--gray-500);margin-bottom:10px">Check XAUUSD spread daily 15:00-17:00 Bangkok time</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+        <div style="text-align:center;padding:10px 6px;background:rgba(16,185,129,.08);border-radius:10px;border:1px solid var(--green-500)"><div style="font-size:.68rem;color:var(--green-500);font-weight:700">TARGET</div><div style="font-size:.95rem;font-weight:800;color:var(--green-500)">5–10pt</div></div>
+        <div style="text-align:center;padding:10px 6px;background:rgba(245,158,11,.08);border-radius:10px;border:1px solid #F59E0B"><div style="font-size:.68rem;color:#F59E0B;font-weight:700">OK</div><div style="font-size:.95rem;font-weight:800;color:#F59E0B">10–15pt</div></div>
+        <div style="text-align:center;padding:10px 6px;background:rgba(239,68,68,.08);border-radius:10px;border:1px solid var(--red-500)"><div style="font-size:.68rem;color:var(--red-500);font-weight:700">STOP</div><div style="font-size:.95rem;font-weight:800;color:var(--red-500)">25pt+</div></div>
+      </div>
+      <div style="font-size:.78rem;color:var(--gray-400);text-align:center;padding:16px;background:var(--bg-secondary);border-radius:8px">Log your first spread reading today!<br><code style="font-size:.75rem">/spread [value]</code> in Discord</div>
+    </div>
+    <div class="card card-sm">
+      <div style="font-weight:700;font-size:.875rem;margin-bottom:8px">📋 Trade Log</div>
+      <div style="font-size:.75rem;color:var(--gray-500);margin-bottom:10px">Columns: # · Date · Type · Entry · Exit · PnL · RR</div>
+      <div style="text-align:center;padding:24px 16px;background:var(--blue-50,#EFF6FF);border-radius:10px;border:1px dashed var(--blue-300,#93C5FD)">
+        <div style="font-size:1.5rem;margin-bottom:8px">📭</div>
+        <div style="font-weight:700;font-size:.875rem;color:var(--blue-900)">No trades yet</div>
+        <div style="font-size:.75rem;color:var(--gray-500);margin-top:4px;line-height:1.7">EA is monitoring XAUUSD H1 for setups<br>Trades appear here after closing in MT5<br>Expected: <strong>0.51 trades/day</strong> average</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-sm" style="margin-bottom:18px">
+    <div style="font-weight:700;font-size:.875rem;margin-bottom:12px">📉 Daily PnL Chart (30-day view)</div>
+    <canvas id="p8-pnl-chart" height="120"></canvas>
+    <div style="font-size:.75rem;color:var(--gray-400);text-align:center;margin-top:6px">Chart updates as you log daily results · Green = profit · Red = loss</div>
+  </div>
+
+  <div class="section-heading" style="margin-bottom:14px"><span>3-Month Roadmap</span><div class="section-heading-line"></div></div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-bottom:18px;border-radius:var(--radius-xl);overflow:hidden;box-shadow:var(--shadow-sm)">
+    ${months.map((m,i)=>`<div style="padding:16px;border-top:3px solid ${m.col};background:${m.locked?'var(--gray-50)':'var(--surface)'};${i<2?'border-right:1px solid var(--gray-200)':''}">
+      <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-500)">Month ${m.n}</div>
+      <div style="font-size:1rem;font-weight:800;margin:3px 0">${m.title}</div>
+      <div style="font-size:.75rem;color:${m.locked?'var(--gray-400)':'var(--green-500)'};font-weight:600;margin-bottom:10px">${m.status}</div>
+      <div style="font-size:.75rem;color:var(--gray-600);margin-bottom:5px"><strong>Risk:</strong> ${m.risk}/trade</div>
+      <div style="font-size:.75rem;color:var(--gray-600);margin-bottom:5px"><strong>Goal:</strong> ${m.goal}</div>
+      <div style="font-size:.72rem;color:var(--gray-500);margin-bottom:5px;line-height:1.5"><strong>Unlock:</strong> ${m.unlock}</div>
+      <div style="font-size:.75rem;font-weight:700;color:${m.col}">${m.exp}</div>
+    </div>`).join('')}
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px">
+    <div class="card card-sm">
+      <div style="font-weight:700;font-size:.875rem;margin-bottom:10px">🚦 Go/No-Go Decision (Month 3)</div>
+      <div style="padding:10px;background:rgba(16,185,129,.06);border-radius:8px;border-left:3px solid var(--green-500);margin-bottom:8px;font-size:.78rem;line-height:1.8">
+        <strong style="color:var(--green-500)">GO LIVE</strong> — PF > 2.5 + WR > 45% + Monthly > 0.8%<br>
+        → Deposit $3,000 real · Start 1% risk
+      </div>
+      <div style="padding:10px;background:rgba(245,158,11,.06);border-radius:8px;border-left:3px solid #F59E0B;margin-bottom:8px;font-size:.78rem;line-height:1.8">
+        <strong style="color:#F59E0B">EXTEND DEMO</strong> — PF 1.5-2.5 mixed results<br>
+        → One more month · Investigate sessions
+      </div>
+      <div style="padding:10px;background:rgba(239,68,68,.06);border-radius:8px;border-left:3px solid var(--red-500);font-size:.78rem;line-height:1.8">
+        <strong style="color:var(--red-500)">DO NOT GO LIVE</strong> — PF &lt; 1.5 consistently<br>
+        → Return to Phase 5-6 optimization
+      </div>
+    </div>
+    <div class="card card-sm">
+      <div style="font-weight:700;font-size:.875rem;margin-bottom:10px">📜 Trading Rules</div>
+      <div style="font-size:.78rem;color:var(--gray-700);line-height:2">
+        <div style="font-weight:700;color:var(--blue-900);margin-bottom:3px">Risk Rules:</div>
+        <div>✅ Month 1: 0.5% risk per trade</div>
+        <div>✅ Max 3 trades per day ever</div>
+        <div>✅ Stop if balance below $2,850 (-5%)</div>
+        <div>✅ Stop if 3 losses in one day</div>
+        <div>✅ Never interfere with EA manually</div>
+        <div style="font-weight:700;color:var(--blue-900);margin:6px 0 3px">EA Rules:</div>
+        <div>✅ Magic number 80801 — never change</div>
+        <div>✅ Only XAUUSD H1 — no other charts</div>
+        <div>✅ AutoTrading always enabled</div>
+        <div style="font-weight:700;color:var(--blue-900);margin:6px 0 3px">Data Rules:</div>
+        <div>✅ Log every trade to CSV</div>
+        <div>✅ Check spread every London session</div>
+        <div>✅ /trade /spread /balance in Discord</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-sm">
+    <div style="font-weight:700;font-size:.875rem;margin-bottom:8px">🔧 How to Log Trades</div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px">
+      ${['1. Open MT5 History tab','2. Note entry/exit/lots/PnL','3. /trade BUY 0.01 3245 3262','4. Or edit phase8_demo_trades.csv','5. Dashboard updates next deploy'].map((s,i)=>`<div style="padding:10px 8px;background:var(--bg-secondary);border-radius:8px;text-align:center;font-size:.75rem;color:var(--gray-700);line-height:1.5"><div style="font-size:1.1rem;margin-bottom:4px">${['📋','✍️','💬','📊','🚀'][i]}</div>${s}</div>`).join('')}
+    </div>
+  </div>`;
+
+  setTimeout(()=>{
+    const ctx=document.getElementById('p8-pnl-chart');if(!ctx)return;
+    const labs=Array.from({length:30},(_,i)=>'D'+(i+1));
+    new Chart(ctx,{type:'bar',data:{labels:labs,datasets:[{label:'Daily PnL ($)',data:Array(30).fill(0),backgroundColor:Array(30).fill('rgba(16,185,129,.25)'),borderColor:Array(30).fill('rgba(16,185,129,.6)'),borderWidth:1}]},options:{plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>'$'+v,font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
+  },80);
+};
+function p8Check(i,v){
+  const saved=JSON.parse(localStorage.getItem(P8_CHECKLIST_KEY)||'[]');
+  saved[i]=v;localStorage.setItem(P8_CHECKLIST_KEY,JSON.stringify(saved));
+  pageInited['phase8']=false;pageInitFns['phase8']();
+}
+
+/* ══════════════════════════════════════════════════
    SAVE 6 — CLAUDE AI ADVISOR
    ══════════════════════════════════════════════════ */
 const APEX_SYS=`You are an expert trading analyst for the APEX GREATEST project. Be concise, honest, specific. Never inflate numbers. Respond in plain text with light markdown (**bold**, numbered lists). Keep answers under 280 words unless asked for more detail.
