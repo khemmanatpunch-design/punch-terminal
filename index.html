@@ -2400,6 +2400,78 @@ window.showP5Sub = showP5Sub;
   ctx.moveTo(pad, py(30000)); ctx.lineTo(W-pad, py(30000)); ctx.stroke(); ctx.setLineDash([]);
 })();
 
+// ── PHASE 6 ────────────────────────────────────────────────────────────────
+function showP6Sub(id, btn) {
+  document.querySelectorAll('.p6-sub').forEach(function(e){ e.style.display='none'; });
+  document.getElementById(id).style.display='block';
+  if(btn) {
+    btn.parentElement.querySelectorAll('.tab').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+  }
+}
+window.showP6Sub = showP6Sub;
+
+(function initPhase6(){
+  // H4 vs H1 bar chart
+  var c1 = document.getElementById('p6TFChart');
+  if(c1) {
+    var ctx = c1.getContext('2d');
+    var W = c1.offsetWidth || 500, H = 80;
+    c1.width = W; c1.height = H;
+    var bars = [{label:'H1 Baseline',val:0.68,color:'rgba(0,255,136,0.8)'},{label:'H4 New',val:-0.06,color:'rgba(255,68,102,0.8)'}];
+    var maxV = 1.0, minV = -0.3;
+    var bw = W/5;
+    bars.forEach(function(b,i){
+      var x = W*0.2 + i * W*0.4;
+      var zero = H - 10 - ((0-minV)/(maxV-minV))*(H-20);
+      var yEnd = H - 10 - ((b.val-minV)/(maxV-minV))*(H-20);
+      var h2 = Math.abs(zero-yEnd);
+      ctx.fillStyle = b.color;
+      ctx.fillRect(x-bw*0.35, Math.min(zero,yEnd), bw*0.7, h2);
+      ctx.fillStyle='rgba(255,255,255,0.7)'; ctx.font='9px monospace'; ctx.textAlign='center';
+      ctx.fillText(b.label, x, H-2);
+      ctx.fillText(b.val.toFixed(2)+'%/mo', x, b.val>=0? yEnd-3 : yEnd+h2+10);
+    });
+    // zero line
+    var zero = H - 10 - ((0-minV)/(maxV-minV))*(H-20);
+    ctx.strokeStyle='rgba(255,255,255,0.3)'; ctx.lineWidth=1; ctx.beginPath();
+    ctx.moveTo(0,zero); ctx.lineTo(W,zero); ctx.stroke();
+  }
+
+  // Spread impact chart
+  var c2 = document.getElementById('p6SpreadChart');
+  if(c2) {
+    var ctx2 = c2.getContext('2d');
+    var W2 = c2.offsetWidth || 500, H2 = 80;
+    c2.width = W2; c2.height = H2;
+    var spreads = [5,10,15,20,28];
+    var returns  = [1.244,1.121,0.999,0.876,0.680];
+    var pad2 = 30;
+    var cW2 = W2 - pad2*2;
+    var minS=5, maxS=28, minR=0.5, maxR=1.4;
+    function sx(s){ return pad2 + (s-minS)/(maxS-minS)*cW2; }
+    function sy(r){ return H2-8-((r-minR)/(maxR-minR))*(H2-16); }
+    // Gradient fill
+    var grad = ctx2.createLinearGradient(0,0,W2,0);
+    grad.addColorStop(0,'rgba(255,215,0,0.3)'); grad.addColorStop(1,'rgba(255,68,102,0.1)');
+    ctx2.beginPath();
+    spreads.forEach(function(s,i){ i===0?ctx2.moveTo(sx(s),sy(returns[i])):ctx2.lineTo(sx(s),sy(returns[i])); });
+    ctx2.lineTo(sx(28),H2); ctx2.lineTo(sx(5),H2); ctx2.closePath();
+    ctx2.fillStyle=grad; ctx2.fill();
+    // Line
+    ctx2.strokeStyle='rgba(34,211,238,0.9)'; ctx2.lineWidth=2; ctx2.beginPath();
+    spreads.forEach(function(s,i){ i===0?ctx2.moveTo(sx(s),sy(returns[i])):ctx2.lineTo(sx(s),sy(returns[i])); }); ctx2.stroke();
+    // Points
+    spreads.forEach(function(s,i){
+      ctx2.fillStyle=i===0?'rgba(255,215,0,1)':'rgba(34,211,238,0.9)';
+      ctx2.beginPath(); ctx2.arc(sx(s),sy(returns[i]),3,0,Math.PI*2); ctx2.fill();
+      ctx2.fillStyle='rgba(255,255,255,0.6)'; ctx2.font='8px monospace'; ctx2.textAlign='center';
+      ctx2.fillText(s+'pt', sx(s), H2-1);
+      if(i===0) ctx2.fillText(returns[i].toFixed(3)+'%',sx(s),sy(returns[i])-5);
+    });
+  }
+})();
+
 // Init calculators
 setTimeout(function(){calcLotSize();calcRuinRisk();calcTarget();calcCompound();},200);
 
