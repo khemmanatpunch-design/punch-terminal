@@ -3444,6 +3444,12 @@ function rmCalc(){
     else if(mo>3)elN.textContent='✅ Achievable path — validate in demo first.';
     else elN.textContent='';
   }
+  if(roadmapChartInst&&roadmapChartInst.data&&roadmapChartInst.data.datasets[4]){
+    const _c=(start,mo2,n)=>Array.from({length:n+1},(_,i)=>+(start*Math.pow(1+mo2/100,i)).toFixed(0));
+    roadmapChartInst.data.datasets[4].data=_c(3000,mo,36);
+    roadmapChartInst.data.datasets[4].label='Your Scenario ('+mo+'%/mo)';
+    roadmapChartInst.update('none');
+  }
 }
 
 function tcCalc(){
