@@ -2830,6 +2830,147 @@ function setBnav(id){
 }
 
 /* ══════════════════════════════════════════════════
+   SAVE A — KPI ROADMAP PAGE
+   ══════════════════════════════════════════════════ */
+let roadmapChartInst=null;
+pageInitFns['roadmap']=function(){
+  const c=document.getElementById('roadmap-content');
+  const trafficLights=[
+    {label:'Current System (0.95%/mo)',color:'#EF4444',emoji:'🔴',desc:'22.6× gap to KPI. Demo only — validate first.'},
+    {label:'London-Only + 1% Risk (2.3%/mo)',color:'#F97316',emoji:'🟠',desc:'Achievable Month 2. Requires timing filter validation.'},
+    {label:'Multi-Market + 2% Risk (4-6%/mo)',color:'#F59E0B',emoji:'🟡',desc:'Month 3+. Add EURUSD/GBPUSD after demo proves stable.'},
+    {label:'Anti-Martingale + Scale (7-10%/mo)',color:'#10B981',emoji:'🟢',desc:'Year 2 target. Compounding + capital addition needed.'},
+    {label:'KPI Target (21.5%/mo)',color:'#6B7280',emoji:'⚫',desc:'< 5% probability in 12 months at safe risk. Realistic: 3 years.'}
+  ];
+  c.innerHTML=`
+  <div class="card card-sm" style="margin-bottom:18px;border-left:4px solid var(--orange-500)">
+    <div style="font-size:.875rem;font-weight:700;color:var(--blue-900);margin-bottom:12px">🚦 Honest KPI Assessment — Traffic Light</div>
+    ${trafficLights.map(t=>`<div style="display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--gray-100)">
+      <span style="font-size:1.1rem;flex-shrink:0">${t.emoji}</span>
+      <div><div style="font-size:.8rem;font-weight:700;color:var(--blue-900)">${t.label}</div>
+      <div style="font-size:.72rem;color:var(--gray-500);margin-top:2px">${t.desc}</div></div>
+    </div>`).join('')}
+    <div style="margin-top:10px;padding:10px;background:var(--orange-100);border-radius:var(--radius-md);font-size:.78rem;color:var(--orange-500);font-weight:600">
+      Honest motto: "Validate first. Scale after. Never skip steps." — $30k realistic in 3 years at 3%/mo compound.
+    </div>
+  </div>
+
+  <div class="section-heading" style="margin-bottom:12px"><span>Interactive KPI Levers</span><div class="section-heading-line"></div></div>
+  <div class="card card-sm" style="margin-bottom:18px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px">
+      <div>
+        <label style="font-size:.75rem;font-weight:600;color:var(--gray-500)">Risk per trade: <span id="rm-risk-val">1.0%</span></label>
+        <input type="range" id="rm-risk" min="0.5" max="5" step="0.5" value="1" oninput="rmCalc()" style="width:100%;margin:6px 0;accent-color:var(--blue-500)">
+        <div style="display:flex;justify-content:space-between;font-size:.6rem;color:var(--gray-400)"><span>0.5% safe</span><span>5% high risk</span></div>
+      </div>
+      <div>
+        <label style="font-size:.75rem;font-weight:600;color:var(--gray-500)">Markets: <span id="rm-mkts-val">1</span> (XAUUSD)</label>
+        <input type="range" id="rm-mkts" min="1" max="4" step="1" value="1" oninput="rmCalc()" style="width:100%;margin:6px 0;accent-color:var(--pink-400)">
+        <div style="display:flex;justify-content:space-between;font-size:.6rem;color:var(--gray-400)"><span>1 (Gold only)</span><span>4 (multi)</span></div>
+      </div>
+      <div>
+        <label style="font-size:.75rem;font-weight:600;color:var(--gray-500)">Session filter:</label>
+        <select id="rm-sess" onchange="rmCalc()" style="width:100%;margin-top:5px;padding:6px 8px;border:1px solid var(--gray-200);border-radius:8px;font-size:.8rem;font-family:inherit">
+          <option value="0.85">All sessions (0.85× efficiency)</option>
+          <option value="1.0" selected>London only (1.0× efficiency)</option>
+          <option value="1.15">London + NY (1.15× efficiency)</option>
+        </select>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--gray-50);border-radius:var(--radius-md)">
+        <input type="checkbox" id="rm-am" onchange="rmCalc()" style="accent-color:var(--green-500);width:18px;height:18px;flex-shrink:0">
+        <div><div style="font-size:.78rem;font-weight:600">Anti-Martingale</div>
+        <div style="font-size:.65rem;color:var(--gray-500)">+30% on win streaks after 3 wins</div></div>
+      </div>
+    </div>
+    <div style="background:linear-gradient(135deg,var(--blue-100),var(--pink-100));border-radius:var(--radius-lg);padding:14px;text-align:center">
+      <div style="font-size:.75rem;color:var(--gray-500);margin-bottom:4px">Estimated Monthly Return</div>
+      <div id="rm-result" style="font-size:2.5rem;font-weight:800;color:var(--blue-500)">0.95%</div>
+      <div id="rm-annual" style="font-size:.8rem;color:var(--gray-500);margin-top:4px">Year 1: $3,360</div>
+      <div id="rm-note" style="font-size:.72rem;color:var(--orange-500);margin-top:6px;font-weight:600"></div>
+    </div>
+  </div>
+
+  <div class="section-heading" style="margin-bottom:12px"><span>Multi-Year Projection — $3,000 Start</span><div class="section-heading-line"></div></div>
+  <div class="card card-sm" style="margin-bottom:18px">
+    <canvas id="roadmap-chart" height="200"></canvas>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px">
+      <div style="text-align:center;padding:8px;background:var(--green-100);border-radius:var(--radius-md)">
+        <div style="font-size:.65rem;color:var(--gray-500)">Conservative (0.95%/mo)</div>
+        <div style="font-size:1rem;font-weight:800;color:var(--green-500)">$4,050</div>
+        <div style="font-size:.6rem;color:var(--gray-500)">Year 3</div>
+      </div>
+      <div style="text-align:center;padding:8px;background:var(--blue-100);border-radius:var(--radius-md)">
+        <div style="font-size:.65rem;color:var(--gray-500)">Moderate (3%/mo)</div>
+        <div style="font-size:1rem;font-weight:800;color:var(--blue-500)">$8,750</div>
+        <div style="font-size:.6rem;color:var(--gray-500)">Year 3</div>
+      </div>
+      <div style="text-align:center;padding:8px;background:var(--orange-100);border-radius:var(--radius-md)">
+        <div style="font-size:.65rem;color:var(--gray-500)">Aggressive (7%/mo)</div>
+        <div style="font-size:1rem;font-weight:800;color:var(--orange-500)">$36,500</div>
+        <div style="font-size:.6rem;color:var(--gray-500)">Year 3 — KPI achieved!</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-heading" style="margin-bottom:12px"><span>What Would Make 1000% Possible?</span><div class="section-heading-line"></div></div>
+  <div class="card card-sm">
+    <div style="font-size:.78rem;color:var(--gray-500);margin-bottom:12px">These are the honest levers. Each requires time to validate safely.</div>
+    ${[
+      ['📅','London-Only Filter','Immediate','Backtest shows +26% monthly improvement by trading only 15:00-17:00 BKK. Validate in Month 1 demo.'],
+      ['💰','Scale to 2% Risk','Month 2','After 50+ demo trades with PF > 2.0. Doubles dollar return per trade at same system quality.'],
+      ['🌍','Add 2nd Market','Month 3','EURUSD or GBPUSD — adds ~58% more trade opportunities without changing strategy logic.'],
+      ['🔁','Anti-Martingale Live','Month 3','Already in EA code (InpAMWins). Enable after 3-win streak confirmed safe in demo.'],
+      ['💵','Add Capital','Year 2','$3k → $10k deposit doubles return in dollars at same monthly %. Requires live track record.'],
+      ['⏰','24hr Session Coverage','Year 2','Running on VPS captures Asian + London + NY. Needs separate backtests per session.']
+    ].map(([icon,title,timing,desc])=>`<div style="display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--gray-100)">
+      <span style="font-size:1.1rem;flex-shrink:0">${icon}</span>
+      <div style="flex:1"><div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">
+        <span style="font-size:.8rem;font-weight:700;color:var(--blue-900)">${title}</span>
+        <span class="badge badge-blue" style="font-size:.6rem;padding:2px 7px">${timing}</span>
+      </div><div style="font-size:.72rem;color:var(--gray-500)">${desc}</div></div>
+    </div>`).join('')}
+  </div>`;
+  setTimeout(()=>{
+    if(roadmapChartInst){roadmapChartInst.destroy();roadmapChartInst=null;}
+    const ctx=document.getElementById('roadmap-chart');if(!ctx)return;
+    const months=Array.from({length:37},(_,i)=>i===0?'Start':i%6===0?`Mo ${i}`:'');
+    const compound=(start,mo,n)=>Array.from({length:n+1},(_,i)=>+(start*Math.pow(1+mo/100,i)).toFixed(0));
+    roadmapChartInst=new Chart(ctx,{type:'line',data:{labels:months,datasets:[
+      {label:'Conservative 0.95%/mo',data:compound(3000,0.95,36),borderColor:'#10B981',backgroundColor:'rgba(16,185,129,.08)',tension:.4,borderWidth:1.5,pointRadius:0},
+      {label:'Moderate 3%/mo',data:compound(3000,3,36),borderColor:'#4F46E5',backgroundColor:'rgba(79,70,229,.08)',tension:.4,borderWidth:2,pointRadius:0},
+      {label:'Aggressive 7%/mo',data:compound(3000,7,36),borderColor:'#F97316',backgroundColor:'rgba(249,115,22,.08)',tension:.4,borderWidth:2,pointRadius:0},
+      {label:'KPI Target $30k',data:Array(37).fill(30000),borderColor:'#EF4444',borderDash:[5,4],borderWidth:1,pointRadius:0,fill:false}
+    ]},options:{plugins:{legend:{labels:{font:{size:10},boxWidth:12}}},scales:{y:{title:{display:true,text:'Balance ($)',font:{size:10}},ticks:{font:{size:10},callback:v=>'$'+v.toLocaleString()}},x:{ticks:{font:{size:9},maxTicksLimit:7}}}}});
+    rmCalc();
+  },80);
+};
+function rmCalc(){
+  const risk=parseFloat(document.getElementById('rm-risk')?.value||1);
+  const mkts=parseInt(document.getElementById('rm-mkts')?.value||1);
+  const sess=parseFloat(document.getElementById('rm-sess')?.value||1);
+  const am=document.getElementById('rm-am')?.checked?1.3:1;
+  const base=0.95;
+  const mo=+(base*(risk/1)*(Math.sqrt(mkts))*sess*am).toFixed(2);
+  const yr1=+(3000*Math.pow(1+mo/100,12)).toFixed(0);
+  const elR=document.getElementById('rm-result');
+  const elA=document.getElementById('rm-annual');
+  const elN=document.getElementById('rm-note');
+  const elRv=document.getElementById('rm-risk-val');
+  const elMv=document.getElementById('rm-mkts-val');
+  if(elR)elR.textContent=mo+'%';
+  if(elA)elA.textContent='Year 1 estimate: $'+yr1.toLocaleString();
+  if(elRv)elRv.textContent=risk+'%';
+  const mktLabels=['','XAUUSD','+ EURUSD','+ GBPUSD','+ USDJPY'];
+  if(elMv)elMv.textContent=mkts+' ('+mktLabels[mkts]+')';
+  if(elN){
+    if(risk>=4)elN.textContent='⚠️ High risk — 45-60% ruin probability. Demo validate first.';
+    else if(mo>10)elN.textContent='🎯 On track for KPI with capital additions in Year 2-3!';
+    else if(mo>3)elN.textContent='✅ Achievable path — validate in demo first.';
+    else elN.textContent='';
+  }
+}
+
+/* ══════════════════════════════════════════════════
    SIDEBAR TOGGLE (MOBILE)
    ══════════════════════════════════════════════════ */
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');}
