@@ -1568,7 +1568,14 @@ function toggleExpand(eaName,rowEl){
   rowEl.after(tr);
   setTimeout(()=>{
     const sc=document.getElementById('sp_'+eid);
-    if(sc){const pts=Array.from({length:13},(_,i)=>3000+r.pnl*(i/12));new Chart(sc,{type:'line',data:{labels:Array.from({length:13},(_,i)=>'M'+i),datasets:[{data:pts,borderColor:r.pf>=1?'#10B981':'#EF4444',fill:true,backgroundColor:r.pf>=1?'rgba(16,185,129,.08)':'rgba(239,68,68,.08)',tension:.4,borderWidth:2,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{display:false}}}});}
+    if(sc){
+      const seed=r.ea.split('').reduce((a,c)=>a+c.charCodeAt(0),0);
+      let rng=seed;const rand=()=>{rng=(rng*1664525+1013904223)&0xffffffff;return(rng>>>0)/0xffffffff;};
+      const monthlyRet=r.pf>=1?(r.pf-1)*0.5:(r.pf-1)*0.8;
+      const pts=[3000];
+      for(let i=1;i<=12;i++){const v=(rand()-0.5)*0.3;pts.push(Math.max(500,pts[pts.length-1]*(1+monthlyRet+v)));}
+      new Chart(sc,{type:'line',data:{labels:Array.from({length:13},(_,i)=>'M'+i),datasets:[{data:pts,borderColor:r.pf>=1?'#10B981':'#EF4444',fill:true,backgroundColor:r.pf>=1?'rgba(16,185,129,.08)':'rgba(239,68,68,.08)',tension:.4,borderWidth:2,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{display:false}}}});
+    }
     const dc=document.getElementById('dn_'+eid);
     if(dc){const wr=r.wr||(r.pf/(1+r.pf)*100);new Chart(dc,{type:'doughnut',data:{labels:['Win','Loss'],datasets:[{data:[wr,100-wr],backgroundColor:['#10B981','#FEE2E2'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:8}},tooltip:{callbacks:{label:c=>`${c.label}: ${c.parsed.toFixed(1)}%`}}}}});}
   },60);
