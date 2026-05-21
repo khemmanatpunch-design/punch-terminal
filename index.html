@@ -2089,7 +2089,7 @@ pageInitFns['phase7']=function(){
 pageInitFns['pepperstone']=function(){
   const c=document.getElementById('pepperstone-content');
   const accs=[['Broker','Pepperstone'],['Account','Razor ECN'],['Symbol','XAUUSD H1'],['Currency','USD'],['Leverage','1:200'],['Commission','$7/lot RT']];
-  const mets=[{icon:'📊',label:'Profit Factor',val:'3.19',sub:'6-year backtest'},{icon:'🎯',label:'Win Rate',val:'51.5%',sub:'198 trades'},{icon:'📈',label:'Monthly (Asian 18pt)',val:'0.754%',sub:'$22.6/mo on $3k'},{icon:'📈',label:'Monthly (London 10pt)',val:'0.950%',sub:'$28.5/mo on $3k'},{icon:'🔬',label:'Walk-Forward',val:'ROBUST',sub:'PF ratio = 1.00'}];
+  const mets=[{icon:'📊',label:'Profit Factor',val:'3.19',sub:'6-year backtest'},{icon:'🎯',label:'Win Rate',val:'51.5%',sub:'198 trades'},{icon:'📈',label:'Monthly Return',val:'0.95%',sub:'London 10pt · Asian 0.75%'},{icon:'🔬',label:'Walk-Forward',val:'ROBUST',sub:'PF ratio = 1.00'}];
   const riskRows=[[0.5,15,0.41,4.9,'Low','#10B981'],[1.0,30,0.83,9.8,'Low','#10B981'],[1.5,45,1.24,14.7,'Low','#10B981'],[2.0,60,1.65,19.6,'Moderate','#F59E0B'],[3.0,90,2.48,29.4,'Higher','#F97316']];
   const steps=[
     {m:'Month 1',title:'Validation',icon:'🔍',items:['≥5 trades executed','PF > 1.3 required','No DD breach','Journal clean'],col:'var(--blue-500)'},
