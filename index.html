@@ -2425,6 +2425,10 @@ pageInitFns['phase4']=function(){
 };
 let riskBarChartInst=null;
 let riskCurveMiniInst=null;
+function _miniBar(val,min,max,color){
+  const pct=Math.max(0,Math.min(100,((val-min)/(max-min))*100)).toFixed(0);
+  return`<div style="margin-top:3px;height:4px;background:var(--gray-200);border-radius:2px;overflow:hidden"><div style="height:100%;width:${pct}%;background:${color};border-radius:2px;transition:width .3s"></div></div>`;
+}
 function updateRisk(i){
   const d=RISK_DATA[i];
   const moC=d[1]<10?'var(--green-500)':d[1]<20?'var(--orange-500)':'var(--red-500)';
