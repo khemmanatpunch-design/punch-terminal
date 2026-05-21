@@ -474,6 +474,34 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
 .pbtn{padding:4px 10px;border:1.5px solid var(--gray-200);border-radius:var(--radius-sm);background:#fff;cursor:pointer;font-size:.8rem;font-family:inherit;}
 .pbtn:hover{border-color:var(--blue-300);color:var(--blue-500);}
 .pbtn.on{background:var(--blue-500);color:#fff;border-color:var(--blue-500);}
+
+/* ── SAVE 3 ─────────────────────────────────────── */
+.dna-pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+.dna-pill{padding:6px 14px;border-radius:var(--radius-full);font-size:.8rem;font-weight:600;cursor:pointer;border:1.5px solid var(--blue-500);color:var(--blue-500);background:#fff;transition:all .15s;}
+.dna-pill.on{background:var(--blue-500);color:#fff;}
+.dna-layout{display:grid;grid-template-columns:40% 60%;gap:14px;}
+@media(max-width:900px){.dna-layout{grid-template-columns:1fr;}}
+.dna-badge{display:inline-flex;padding:3px 9px;border-radius:var(--radius-full);font-size:.72rem;font-weight:600;margin:2px;}
+.code-viewer{background:#111827;border-radius:var(--radius-lg);padding:14px;overflow-x:auto;font-family:Consolas,'Fira Code',monospace;font-size:.76rem;line-height:1.65;max-height:340px;overflow-y:auto;}
+.code-ln{display:flex;gap:10px;}
+.code-num{color:#4B5563;flex-shrink:0;width:26px;text-align:right;user-select:none;}
+.code-txt{color:#E5E7EB;white-space:pre;}
+.ck{color:#818CF8;}.ct{color:#60A5FA;}.cs{color:#34D399;}.cn2{color:#FB923C;}.cc{color:#6B7280;font-style:italic;}
+.hm-grid{display:grid;gap:2px;}
+.hm-cell{border-radius:3px;cursor:pointer;transition:transform .1s;font-size:.54rem;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.85);font-weight:600;}
+.hm-cell:hover{transform:scale(1.15);z-index:2;position:relative;}
+.crisis-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px;}
+@media(max-width:768px){.crisis-cards{grid-template-columns:1fr;}}
+.crisis-card{border-radius:var(--radius-lg);padding:16px;cursor:pointer;transition:box-shadow .15s;}
+.crisis-card:hover{box-shadow:var(--shadow-md);}
+.mkt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px;}
+@media(max-width:900px){.mkt-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:600px){.mkt-grid{grid-template-columns:1fr;}}
+.mkt-card{background:#fff;border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:14px;cursor:pointer;transition:box-shadow .15s;border:1px solid var(--gray-200);}
+.mkt-card:hover{box-shadow:var(--shadow-md);}
+.dna-tab-bar{display:flex;border-bottom:1px solid var(--gray-200);margin-bottom:14px;gap:0;}
+.dna-tab{padding:8px 14px;border:none;background:none;font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit;border-bottom:2px solid transparent;color:var(--gray-500);}
+.dna-tab.on{border-bottom-color:var(--blue-500);color:var(--blue-500);}
 </style>
 </head>
 <body>
