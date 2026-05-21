@@ -724,34 +724,34 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
     </div>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px">
       <div style="padding:10px;background:var(--green-100);border-radius:var(--radius-md);text-align:center;border:1.5px solid var(--green-500)">
-        <div style="font-size:.65rem;font-weight:600;color:var(--gray-500);text-transform:uppercase;margin-bottom:3px">Conservative</div>
+        <div style="font-size:.75rem;font-weight:600;color:var(--gray-500);text-transform:uppercase;margin-bottom:3px">Conservative</div>
         <div style="font-size:1.1rem;font-weight:800;color:var(--green-500)">0.95%/mo</div>
-        <div style="font-size:.65rem;color:var(--gray-500)">→ $3,360 in 12mo</div>
+        <div style="font-size:.75rem;color:var(--gray-500)">→ $3,360 in 12mo</div>
         <div style="font-size:.6rem;color:var(--gray-400);margin-top:2px">Current system</div>
       </div>
       <div style="padding:10px;background:var(--blue-100);border-radius:var(--radius-md);text-align:center;border:1.5px solid var(--blue-300)">
-        <div style="font-size:.65rem;font-weight:600;color:var(--gray-500);text-transform:uppercase;margin-bottom:3px">Moderate</div>
+        <div style="font-size:.75rem;font-weight:600;color:var(--gray-500);text-transform:uppercase;margin-bottom:3px">Moderate</div>
         <div style="font-size:1.1rem;font-weight:800;color:var(--blue-500)">3%/mo</div>
-        <div style="font-size:.65rem;color:var(--gray-500)">→ $4,272 in 12mo</div>
+        <div style="font-size:.75rem;color:var(--gray-500)">→ $4,272 in 12mo</div>
         <div style="font-size:.6rem;color:var(--gray-400);margin-top:2px">London + 2% risk</div>
       </div>
       <div style="padding:10px;background:var(--amber-100);border-radius:var(--radius-md);text-align:center;border:1.5px solid var(--amber-500)">
-        <div style="font-size:.65rem;font-weight:600;color:var(--gray-500);text-transform:uppercase;margin-bottom:3px">Aggressive</div>
+        <div style="font-size:.75rem;font-weight:600;color:var(--gray-500);text-transform:uppercase;margin-bottom:3px">Aggressive</div>
         <div style="font-size:1.1rem;font-weight:800;color:var(--amber-500)">7%/mo</div>
-        <div style="font-size:.65rem;color:var(--gray-500)">→ $6,700 in 12mo</div>
+        <div style="font-size:.75rem;color:var(--gray-500)">→ $6,700 in 12mo</div>
         <div style="font-size:.6rem;color:var(--gray-400);margin-top:2px">Multi-market + AM</div>
       </div>
       <div style="padding:10px;background:var(--orange-100);border-radius:var(--radius-md);text-align:center;border:1.5px solid var(--orange-500)">
-        <div style="font-size:.65rem;font-weight:600;color:var(--gray-500);text-transform:uppercase;margin-bottom:3px">KPI Target</div>
+        <div style="font-size:.75rem;font-weight:600;color:var(--gray-500);text-transform:uppercase;margin-bottom:3px">KPI Target</div>
         <div style="font-size:1.1rem;font-weight:800;color:var(--orange-500)">21.5%/mo</div>
-        <div style="font-size:.65rem;color:var(--gray-500)">→ $30,000 in 12mo</div>
+        <div style="font-size:.75rem;color:var(--gray-500)">→ $30,000 in 12mo</div>
         <div style="font-size:.6rem;color:var(--red-500);margin-top:2px">Requires ~5-8% risk/trade</div>
       </div>
     </div>
     <div style="background:var(--gray-200);border-radius:999px;height:10px;overflow:hidden;position:relative">
       <div style="width:4.4%;height:100%;background:linear-gradient(90deg,var(--green-500),var(--blue-500));border-radius:999px;transition:width .5s" title="0.95% / 21.5% = 4.4%"></div>
     </div>
-    <div style="display:flex;justify-content:space-between;font-size:.65rem;color:var(--gray-400);margin-top:4px"><span>0%/mo (current start)</span><span style="color:var(--green-500)">0.95%</span><span style="color:var(--orange-500)">21.5% KPI</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:.75rem;color:var(--gray-400);margin-top:4px"><span>0%/mo (current start)</span><span style="color:var(--green-500)">0.95%</span><span style="color:var(--orange-500)">21.5% KPI</span></div>
     <div style="font-size:.72rem;color:var(--gray-500);margin-top:6px;text-align:center">Realistic 3-year path: $3k → $30k at 3%/mo compounding · <a href="#" onclick="showPage('roadmap');return false;" style="color:var(--blue-500)">View KPI Roadmap →</a></div>
   </div>
 
@@ -1786,7 +1786,7 @@ function renderDNATab(){
     const MONS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     const YEARS=[2020,2021,2022,2023,2024,2025];
     const d=MONTHLY_RETURNS_CHAMP;
-    const monHdr='<div style="grid-column:1"></div>'+MONS.map(m=>`<div style="font-size:.65rem;color:var(--gray-500);text-align:center;padding-bottom:3px">${m}</div>`).join('');
+    const monHdr='<div style="grid-column:1"></div>'+MONS.map(m=>`<div style="font-size:.75rem;color:var(--gray-500);text-align:center;padding-bottom:3px">${m}</div>`).join('');
     const dataRows=YEARS.map((y,yi)=>{
       const cells=MONS.map((_,mi)=>{
         const v=d[yi*12+mi],pct=Math.max(-2,Math.min(2,v));
@@ -1943,7 +1943,7 @@ pageInitFns['multimarket']=function(){
   }).join('');
   const mktN=['Gold','US30','GBPJPY','NAS100'];
   const corr=[[1.00,0.45,0.32,0.38],[0.45,1.00,0.67,0.81],[0.32,0.67,1.00,0.72],[0.38,0.81,0.72,1.00]];
-  const corrGrid=mktN.map((n,i)=>`<div style="font-size:.62rem;font-weight:600;color:var(--gray-500);text-align:center;padding:2px">${n}</div>`).join('')+corr.map((row,i)=>`<div style="font-size:.65rem;color:var(--gray-600,#4B5563);display:flex;align-items:center;font-weight:600;padding-right:3px">${mktN[i]}</div>`+row.map((v,j)=>{const bg=i===j?'#E5E7EB':v<0.4?'#DBEAFE':v<0.65?'#FEF3C7':'#FEE2E2';const tc=i===j?'#9CA3AF':v<0.4?'#1E40AF':v<0.65?'#92400E':'#991B1B';return`<div style="background:${bg};color:${tc};border-radius:3px;padding:6px 2px;text-align:center;font-size:.65rem;font-weight:700" title="${mktN[i]} vs ${mktN[j]}: ${v}">${v.toFixed(2)}</div>`;}).join('')).join('');
+  const corrGrid=mktN.map((n,i)=>`<div style="font-size:.62rem;font-weight:600;color:var(--gray-500);text-align:center;padding:2px">${n}</div>`).join('')+corr.map((row,i)=>`<div style="font-size:.75rem;color:var(--gray-600,#4B5563);display:flex;align-items:center;font-weight:600;padding-right:3px">${mktN[i]}</div>`+row.map((v,j)=>{const bg=i===j?'#E5E7EB':v<0.4?'#DBEAFE':v<0.65?'#FEF3C7':'#FEE2E2';const tc=i===j?'#9CA3AF':v<0.4?'#1E40AF':v<0.65?'#92400E':'#991B1B';return`<div style="background:${bg};color:${tc};border-radius:3px;padding:6px 2px;text-align:center;font-size:.75rem;font-weight:700" title="${mktN[i]} vs ${mktN[j]}: ${v}">${v.toFixed(2)}</div>`;}).join('')).join('');
   const ranking=MKTDATA.map((m,i)=>{const bw=Math.max(4,Math.min(100,(m.monthly+0.7)/1.4*100));const bc=m.monthly>=0?'var(--green-500)':'var(--red-500)';return`<div style="display:flex;align-items:center;gap:7px;margin-bottom:7px"><span style="font-size:.7rem;color:var(--gray-400);width:14px">${i+1}</span><span style="font-size:.72rem;flex:1;min-width:55px;color:var(--gray-700)">${m.sym}</span><div style="flex:2;height:7px;background:var(--gray-100);border-radius:3px;overflow:hidden"><div style="height:100%;width:${bw}%;background:${bc};border-radius:3px"></div></div><span style="font-size:.7rem;font-weight:600;width:40px;text-align:right;color:${bc}">${m.monthly>=0?'+':''}${m.monthly.toFixed(2)}%</span></div>`;}).join('');
   el.innerHTML=`
     <div class="mkt-grid">${cards}</div>
@@ -2113,7 +2113,7 @@ pageInitFns['phase5']=function(){
         {label:'P(Profit) at 12mo',val:'82%',c:'var(--green-500)',bg:'#F0FDF4',note:'System is robust'},
         {label:'Median 12mo',val:'$3,330',c:'var(--blue-500)',bg:'var(--blue-100)',note:'+11% · 0.95%/mo'}
       ].map(m=>`<div style="padding:12px;background:${m.bg};border-radius:var(--radius-lg);text-align:center">
-        <div style="font-size:.65rem;font-weight:600;color:var(--gray-500);margin-bottom:4px">${m.label}</div>
+        <div style="font-size:.75rem;font-weight:600;color:var(--gray-500);margin-bottom:4px">${m.label}</div>
         <div style="font-size:1.25rem;font-weight:800;color:${m.c}">${m.val}</div>
         <div style="font-size:.62rem;color:var(--gray-400);margin-top:3px">${m.note}</div>
       </div>`).join('')}
@@ -2189,14 +2189,14 @@ pageInitFns['phase7']=function(){
     <div style="font-size:.875rem;font-weight:700;color:var(--blue-900);margin-bottom:6px">${w.period}</div>
     <div style="font-size:.78rem;color:var(--gray-500);margin-bottom:10px">Train: ${w.train} → Test: ${w.test}</div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:10px;text-align:center">
-      <div style="padding:7px;background:var(--gray-50);border-radius:6px"><div style="font-size:.65rem;color:var(--gray-500)">Train PF</div><div style="font-size:.875rem;font-weight:800;color:var(--blue-500)">${w.tpf.toFixed(2)}</div></div>
-      <div style="padding:7px;background:var(--gray-50);border-radius:6px"><div style="font-size:.65rem;color:var(--gray-500)">Test PF</div><div style="font-size:.875rem;font-weight:800;color:var(--blue-500)">${w.spf.toFixed(2)}</div></div>
-      <div style="padding:7px;background:var(--green-100);border-radius:6px"><div style="font-size:.65rem;color:var(--gray-500)">Ratio</div><div style="font-size:.875rem;font-weight:800;color:var(--green-500)">${w.ratio.toFixed(2)}</div></div>
+      <div style="padding:7px;background:var(--gray-50);border-radius:6px"><div style="font-size:.75rem;color:var(--gray-500)">Train PF</div><div style="font-size:.875rem;font-weight:800;color:var(--blue-500)">${w.tpf.toFixed(2)}</div></div>
+      <div style="padding:7px;background:var(--gray-50);border-radius:6px"><div style="font-size:.75rem;color:var(--gray-500)">Test PF</div><div style="font-size:.875rem;font-weight:800;color:var(--blue-500)">${w.spf.toFixed(2)}</div></div>
+      <div style="padding:7px;background:var(--green-100);border-radius:6px"><div style="font-size:.75rem;color:var(--gray-500)">Ratio</div><div style="font-size:.875rem;font-weight:800;color:var(--green-500)">${w.ratio.toFixed(2)}</div></div>
     </div>
     <span style="display:inline-block;padding:3px 11px;background:var(--green-100);color:var(--green-500);border-radius:999px;font-size:.72rem;font-weight:700">✅ ROBUST</span>
   </div>`).join('');
   const compRows=[{sym:'XAUUSDm (Exness)',pf:2.36,wr:44,tr:492,mo:0.68,st:'✅'},{sym:'XAUUSD Pepper 18pt',pf:3.19,wr:51.5,tr:198,mo:0.754,st:'✅ ROBUST'},{sym:'XAUUSD Pepper 10pt',pf:3.19,wr:51.5,tr:198,mo:0.950,st:'✅ ROBUST'}].map((r,i)=>`<tr style="background:${i%2?'var(--gray-50)':'#fff'}"><td style="padding:8px 11px;font-size:.8rem;font-weight:600;color:var(--blue-900)">${r.sym}</td><td style="padding:8px 11px;font-size:.8rem;font-weight:700;color:var(--green-500)">${r.pf.toFixed(2)}</td><td style="padding:8px 11px;font-size:.8rem">${r.wr}%</td><td style="padding:8px 11px;font-size:.8rem;color:var(--gray-500)">${r.tr}</td><td style="padding:8px 11px;font-size:.8rem;font-weight:600;color:var(--blue-500)">${r.mo.toFixed(3)}%</td><td style="padding:8px 11px;font-size:.8rem;font-weight:700;color:var(--green-500)">${r.st}</td></tr>`).join('');
-  const simCards=PEP_SIM.map(([sp,mo,note])=>`<div style="padding:12px;background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius-lg);text-align:center"><div style="font-size:.7rem;color:var(--gray-500);margin-bottom:3px">${sp}</div><div style="font-size:1.1rem;font-weight:800;color:var(--blue-500)">${mo.toFixed(3)}%/mo</div><div style="font-size:.65rem;color:var(--gray-400);margin-top:2px">${note}</div></div>`).join('');
+  const simCards=PEP_SIM.map(([sp,mo,note])=>`<div style="padding:12px;background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius-lg);text-align:center"><div style="font-size:.7rem;color:var(--gray-500);margin-bottom:3px">${sp}</div><div style="font-size:1.1rem;font-weight:800;color:var(--blue-500)">${mo.toFixed(3)}%/mo</div><div style="font-size:.75rem;color:var(--gray-400);margin-top:2px">${note}</div></div>`).join('');
   const chklist=CHECKLIST.map((item,i)=>`<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:${i<CHECKLIST.length-1?'1px solid var(--gray-100)':'none'}"><span style="color:var(--green-500);flex-shrink:0">✅</span><span style="font-size:.8rem;color:var(--gray-700)">${item}</span></div>`).join('');
   el.innerHTML=`
     <div class="grid-2" style="margin-bottom:18px">${wfCards}</div>
@@ -2292,21 +2292,21 @@ pageInitFns['pepperstone']=function(){
       <div style="padding:10px 12px;background:var(--green-100);border-radius:var(--radius-md);border-left:3px solid var(--green-500)">
         <div style="font-size:.72rem;font-weight:700;color:var(--green-500)">09:00 BKK — Pre-London</div>
         <div style="font-size:.7rem;color:var(--gray-700);margin-top:3px">Check spread trend. Asian session winding down. Spread starts tightening.</div>
-        <div style="font-size:.65rem;color:var(--gray-500);margin-top:4px">Expected: 15-20pt · Action: Monitor</div>
+        <div style="font-size:.75rem;color:var(--gray-500);margin-top:4px">Expected: 15-20pt · Action: Monitor</div>
       </div>
       <div style="padding:10px 12px;background:var(--green-100);border-radius:var(--radius-md);border-left:3px solid var(--green-500);border:2px solid var(--green-500)">
         <div style="font-size:.72rem;font-weight:700;color:var(--green-500)">15:00 BKK — London Open ⭐</div>
         <div style="font-size:.7rem;color:var(--gray-700);margin-top:3px"><strong>Best time to check and log spread.</strong> EA should be primed for entries 15:00–17:00.</div>
-        <div style="font-size:.65rem;color:var(--gray-500);margin-top:4px">Expected: 8-12pt · Action: /spread [value]</div>
+        <div style="font-size:.75rem;color:var(--gray-500);margin-top:4px">Expected: 8-12pt · Action: /spread [value]</div>
       </div>
       <div style="padding:10px 12px;background:var(--amber-100);border-radius:var(--radius-md);border-left:3px solid var(--amber-500)">
         <div style="font-size:.72rem;font-weight:700;color:var(--amber-500)">21:00 BKK — NY Session</div>
         <div style="font-size:.7rem;color:var(--gray-700);margin-top:3px">NY Kill Zone 19:00–22:00 BKK. Higher volatility, wider spreads. EA trades cautiously.</div>
-        <div style="font-size:.65rem;color:var(--gray-500);margin-top:4px">Expected: 12-18pt · Action: Monitor + log</div>
+        <div style="font-size:.75rem;color:var(--gray-500);margin-top:4px">Expected: 12-18pt · Action: Monitor + log</div>
       </div>
     </div>
     <div style="margin-top:12px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px">
-      ${[['5–10pt','GREEN','Trade normally','#10B981','#D1FAE5'],['10–15pt','AMBER','Acceptable','#F59E0B','#FEF3C7'],['15–25pt','ORANGE','Monitor closely','#F97316','#FFEDD5'],['25pt+','RED','Stop trading','#EF4444','#FEE2E2']].map(([sp,label,action,col,bg])=>`<div style="padding:7px;background:${bg};border-radius:var(--radius-md);text-align:center"><div style="font-size:.72rem;font-weight:800;color:${col}">${sp}</div><div style="font-size:.65rem;font-weight:600;color:${col};margin-top:1px">${label}</div><div style="font-size:.6rem;color:var(--gray-500);margin-top:2px">${action}</div></div>`).join('')}
+      ${[['5–10pt','GREEN','Trade normally','#10B981','#D1FAE5'],['10–15pt','AMBER','Acceptable','#F59E0B','#FEF3C7'],['15–25pt','ORANGE','Monitor closely','#F97316','#FFEDD5'],['25pt+','RED','Stop trading','#EF4444','#FEE2E2']].map(([sp,label,action,col,bg])=>`<div style="padding:7px;background:${bg};border-radius:var(--radius-md);text-align:center"><div style="font-size:.72rem;font-weight:800;color:${col}">${sp}</div><div style="font-size:.75rem;font-weight:600;color:${col};margin-top:1px">${label}</div><div style="font-size:.6rem;color:var(--gray-500);margin-top:2px">${action}</div></div>`).join('')}
     </div>
   </div>`;
   setTimeout(()=>{
@@ -2501,7 +2501,7 @@ pageInitFns['demolplan']=function(){
     <div style="display:flex;gap:16px;margin-bottom:20px;position:relative;z-index:1">
       <div style="flex-shrink:0;width:58px;height:58px;border-radius:50%;background:${mo.col};color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.15)">
         <div style="font-size:1.1rem">${mo.icon}</div>
-        <div style="font-size:.65rem;font-weight:700">M${mo.num}</div>
+        <div style="font-size:.75rem;font-weight:700">M${mo.num}</div>
       </div>
       <div class="card card-sm" style="flex:1;border-left:3px solid ${mo.col}">
         <div style="font-weight:700;font-size:.95rem;margin-bottom:8px">Month ${mo.num}: ${mo.title}</div>
@@ -2616,7 +2616,7 @@ pageInitFns['phase8']=function(){
     <td style="padding:5px 8px;font-size:.75rem">${t.exit}</td>
     <td style="padding:5px 8px;font-size:.78rem;font-weight:700;color:${t.pnl>0?'var(--green-500)':'var(--red-500)'}">${t.pnl>0?'+':''}$${t.pnl}</td>
     <td style="padding:5px 8px;font-size:.75rem">${t.rr}</td>
-    <td style="padding:5px 8px"><button onclick="p8DeleteTrade(${t.id})" style="border:none;background:var(--red-100);color:var(--red-500);border-radius:4px;padding:2px 6px;font-size:.65rem;cursor:pointer">✕</button></td>
+    <td style="padding:5px 8px"><button onclick="p8DeleteTrade(${t.id})" style="border:none;background:var(--red-100);color:var(--red-500);border-radius:4px;padding:2px 6px;font-size:.75rem;cursor:pointer">✕</button></td>
   </tr>`).join(''):`<tr><td colspan="8" style="padding:20px;text-align:center;color:var(--gray-400);font-size:.8rem">No trades logged yet · Add first trade above</td></tr>`;
   const balPct=Math.min(((3000+totalPnl-3000)/27000*100+2),100);
   c.innerHTML=`
@@ -2631,34 +2631,34 @@ pageInitFns['phase8']=function(){
     <div style="font-size:.875rem;font-weight:700;margin-bottom:10px">➕ Log Closed Trade</div>
     <div style="display:grid;grid-template-columns:repeat(6,1fr) auto;gap:8px;align-items:end">
       <div>
-        <label style="font-size:.65rem;color:var(--gray-500);font-weight:600">DATE</label>
+        <label style="font-size:.75rem;color:var(--gray-500);font-weight:600">DATE</label>
         <input id="p8t-date" type="date" value="${new Date().toISOString().slice(0,10)}" style="width:100%;margin-top:3px;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-size:.75rem;font-family:inherit">
       </div>
       <div>
-        <label style="font-size:.65rem;color:var(--gray-500);font-weight:600">DIRECTION</label>
+        <label style="font-size:.75rem;color:var(--gray-500);font-weight:600">DIRECTION</label>
         <select id="p8t-dir" style="width:100%;margin-top:3px;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-size:.75rem;font-family:inherit;background:#fff">
           <option value="BUY">BUY</option><option value="SELL">SELL</option>
         </select>
       </div>
       <div>
-        <label style="font-size:.65rem;color:var(--gray-500);font-weight:600">LOTS</label>
+        <label style="font-size:.75rem;color:var(--gray-500);font-weight:600">LOTS</label>
         <input id="p8t-lots" type="number" value="0.01" step="0.01" min="0.01" style="width:100%;margin-top:3px;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-size:.75rem;font-family:inherit">
       </div>
       <div>
-        <label style="font-size:.65rem;color:var(--gray-500);font-weight:600">ENTRY PRICE</label>
+        <label style="font-size:.75rem;color:var(--gray-500);font-weight:600">ENTRY PRICE</label>
         <input id="p8t-entry" type="number" placeholder="3245.50" step="0.01" style="width:100%;margin-top:3px;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-size:.75rem;font-family:inherit">
       </div>
       <div>
-        <label style="font-size:.65rem;color:var(--gray-500);font-weight:600">EXIT PRICE</label>
+        <label style="font-size:.75rem;color:var(--gray-500);font-weight:600">EXIT PRICE</label>
         <input id="p8t-exit" type="number" placeholder="3261.80" step="0.01" style="width:100%;margin-top:3px;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-size:.75rem;font-family:inherit">
       </div>
       <div>
-        <label style="font-size:.65rem;color:var(--gray-500);font-weight:600">NOTE (opt)</label>
+        <label style="font-size:.75rem;color:var(--gray-500);font-weight:600">NOTE (opt)</label>
         <input id="p8t-note" type="text" placeholder="London OB" style="width:100%;margin-top:3px;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:6px;font-size:.75rem;font-family:inherit">
       </div>
       <button onclick="p8AddTrade()" style="padding:6px 14px;background:var(--blue-500);color:#fff;border:none;border-radius:6px;font-size:.78rem;font-weight:700;cursor:pointer;white-space:nowrap;margin-bottom:0">+ Add Trade</button>
     </div>
-    <div style="font-size:.65rem;color:var(--gray-400);margin-top:6px">PnL auto-calculated: BUY=(exit-entry)×lots×100, SELL=(entry-exit)×lots×100 · Saved to localStorage</div>
+    <div style="font-size:.75rem;color:var(--gray-400);margin-top:6px">PnL auto-calculated: BUY=(exit-entry)×lots×100, SELL=(entry-exit)×lots×100 · Saved to localStorage</div>
   </div>
 
   <div class="card card-sm" style="margin-bottom:18px">
@@ -2716,12 +2716,12 @@ pageInitFns['phase8']=function(){
       <div style="overflow-x:auto;border-radius:var(--radius-md);border:1px solid var(--gray-200)">
         <table style="width:100%;border-collapse:collapse;font-size:.78rem">
           <thead><tr style="background:var(--gray-50)">
-            ${['Date','Dir','Lots','Entry','Exit','P&L','RR',''].map(h=>`<th style="padding:5px 8px;text-align:left;font-size:.65rem;font-weight:700;color:var(--gray-500);text-transform:uppercase;border-bottom:1px solid var(--gray-200)">${h}</th>`).join('')}
+            ${['Date','Dir','Lots','Entry','Exit','P&L','RR',''].map(h=>`<th style="padding:5px 8px;text-align:left;font-size:.75rem;font-weight:700;color:var(--gray-500);text-transform:uppercase;border-bottom:1px solid var(--gray-200)">${h}</th>`).join('')}
           </tr></thead>
           <tbody>${tradeRows}</tbody>
         </table>
       </div>
-      <div style="font-size:.65rem;color:var(--gray-400);margin-top:6px">Stored in localStorage · Max 20 shown · Total: ${trades.length} trades</div>
+      <div style="font-size:.75rem;color:var(--gray-400);margin-top:6px">Stored in localStorage · Max 20 shown · Total: ${trades.length} trades</div>
     </div>
   </div>
 
@@ -3009,7 +3009,7 @@ pageInitFns['roadmap']=function(){
       <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--gray-50);border-radius:var(--radius-md)">
         <input type="checkbox" id="rm-am" onchange="rmCalc()" style="accent-color:var(--green-500);width:18px;height:18px;flex-shrink:0">
         <div><div style="font-size:.78rem;font-weight:600">Anti-Martingale</div>
-        <div style="font-size:.65rem;color:var(--gray-500)">+30% on win streaks after 3 wins</div></div>
+        <div style="font-size:.75rem;color:var(--gray-500)">+30% on win streaks after 3 wins</div></div>
       </div>
     </div>
     <div style="background:linear-gradient(135deg,var(--blue-100),var(--pink-100));border-radius:var(--radius-lg);padding:14px;text-align:center">
@@ -3025,17 +3025,17 @@ pageInitFns['roadmap']=function(){
     <canvas id="roadmap-chart" height="200"></canvas>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px">
       <div style="text-align:center;padding:8px;background:var(--green-100);border-radius:var(--radius-md)">
-        <div style="font-size:.65rem;color:var(--gray-500)">Conservative (0.95%/mo)</div>
+        <div style="font-size:.75rem;color:var(--gray-500)">Conservative (0.95%/mo)</div>
         <div style="font-size:1rem;font-weight:800;color:var(--green-500)">$4,050</div>
         <div style="font-size:.6rem;color:var(--gray-500)">Year 3</div>
       </div>
       <div style="text-align:center;padding:8px;background:var(--blue-100);border-radius:var(--radius-md)">
-        <div style="font-size:.65rem;color:var(--gray-500)">Moderate (3%/mo)</div>
+        <div style="font-size:.75rem;color:var(--gray-500)">Moderate (3%/mo)</div>
         <div style="font-size:1rem;font-weight:800;color:var(--blue-500)">$8,750</div>
         <div style="font-size:.6rem;color:var(--gray-500)">Year 3</div>
       </div>
       <div style="text-align:center;padding:8px;background:var(--orange-100);border-radius:var(--radius-md)">
-        <div style="font-size:.65rem;color:var(--gray-500)">Aggressive (7%/mo)</div>
+        <div style="font-size:.75rem;color:var(--gray-500)">Aggressive (7%/mo)</div>
         <div style="font-size:1rem;font-weight:800;color:var(--orange-500)">$36,500</div>
         <div style="font-size:.6rem;color:var(--gray-500)">Year 3 — KPI achieved!</div>
       </div>
