@@ -2684,11 +2684,13 @@ pageInitFns['compound']=function(){
     const ctx=document.getElementById('comp-chart');if(!ctx)return;
     const labs=[],con=[],base=[],agg=[];let b0=3000,b1=3000,b2=3000;
     for(let i=0;i<=24;i++){labs.push('M'+i);con.push(+b0.toFixed(0));base.push(+b1.toFixed(0));agg.push(+b2.toFixed(0));b0*=1.0041;b1*=1.0083;b2*=1.0165;}
-    new Chart(ctx,{type:'line',data:{labels:labs,datasets:[
+    const amPath0=[];let ab0=3000;for(let j=0;j<=24;j++){amPath0.push(+ab0.toFixed(0));ab0*=1.0095;}
+    compChartInst=new Chart(ctx,{type:'line',data:{labels:labs,datasets:[
       {label:'Bear (0.41%)',data:con,borderColor:'#EF4444',borderWidth:2,pointRadius:0,tension:.4},
       {label:'Base (0.83%)',data:base,borderColor:'#4F46E5',borderWidth:2,pointRadius:0,tension:.4},
-      {label:'Bull (1.65%)',data:agg,borderColor:'#10B981',borderWidth:2,pointRadius:0,tension:.4}
-    ]},options:{plugins:{legend:{labels:{font:{size:10}}}},scales:{y:{ticks:{callback:v=>'$'+v.toLocaleString(),font:{size:9}}},x:{ticks:{maxTicksLimit:7,font:{size:9}}}}}});
+      {label:'Bull (1.65%)',data:agg,borderColor:'#10B981',borderWidth:2,pointRadius:0,tension:.4},
+      {label:'Your AM Path (1.0% risk)',data:amPath0,borderColor:'#EC4899',borderWidth:2.5,pointRadius:0,tension:.4,borderDash:[5,3],fill:false}
+    ]},options:{plugins:{legend:{labels:{font:{size:10},boxWidth:12}}},scales:{y:{ticks:{callback:v=>'$'+v.toLocaleString(),font:{size:9}}},x:{ticks:{maxTicksLimit:7,font:{size:9}}}}}});
     calcAM();
   },80);
 };
@@ -2697,6 +2699,13 @@ function calcAM(){
   const risk=Math.min(3,1+(Math.floor(wins/3)*0.5));
   document.getElementById('am-val').textContent=risk.toFixed(1)+'%';
   document.getElementById('am-info').textContent=wins+' consecutive win'+(wins!==1?'s':'')+' · $'+(3000*risk/100).toFixed(0)+' at risk';
+  if(compChartInst&&compChartInst.data&&compChartInst.data.datasets[3]){
+    const moR=0.0095*risk;const amD=[];let b=3000;
+    for(let j=0;j<=24;j++){amD.push(+b.toFixed(0));b*=(1+moR);}
+    compChartInst.data.datasets[3].data=amD;
+    compChartInst.data.datasets[3].label='Your AM Path ('+risk.toFixed(1)+'% risk)';
+    compChartInst.update('none');
+  }
 }
 
 /* ══════════════════════════════════════════════════
