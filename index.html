@@ -2022,13 +2022,14 @@ pageInitFns['phase4']=function(){
       <div class="card card-sm">${lights}</div>
       <div class="card card-sm">
         <div style="font-size:.875rem;font-weight:700;color:var(--blue-900);margin-bottom:10px">🎚️ Interactive Risk Slider</div>
-        <input type="range" id="riskSlider" min="0" max="9" value="1" oninput="updateRisk(this.value)" style="width:100%;accent-color:var(--blue-500);margin-bottom:10px">
-        <div style="text-align:center;font-size:.8rem;color:var(--gray-500);margin-bottom:12px">Risk per trade: <strong id="rLabel">1.0%</strong></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
-          <div style="padding:10px;background:var(--gray-50);border-radius:var(--radius-md);text-align:center"><div style="font-size:.65rem;color:var(--gray-500)">Monthly</div><div id="rMo" style="font-size:1rem;font-weight:800;color:var(--green-500)">7.1%</div></div>
-          <div style="padding:10px;background:var(--gray-50);border-radius:var(--radius-md);text-align:center"><div style="font-size:.65rem;color:var(--gray-500)">12mo Balance</div><div id="rBal" style="font-size:.875rem;font-weight:800;color:var(--blue-500)">$6,850</div></div>
-          <div style="padding:10px;background:var(--gray-50);border-radius:var(--radius-md);text-align:center"><div style="font-size:.65rem;color:var(--gray-500)">Blowup Risk</div><div id="rBlow" style="font-size:1rem;font-weight:800;color:var(--orange-500)">9%</div></div>
+        <input type="range" id="riskSlider" min="0" max="9" value="1" oninput="updateRisk(this.value)" style="width:100%;accent-color:var(--blue-500);margin-bottom:8px">
+        <div style="text-align:center;font-size:.8rem;color:var(--gray-500);margin-bottom:12px">Risk per trade: <strong id="rLabel">1.0%</strong> &nbsp;|&nbsp; Monthly: <strong id="rMoInline">0.95%</strong> &nbsp;|&nbsp; Blowup: <strong id="rBlowInline">3%</strong></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px">
+          <div style="padding:10px;background:var(--gray-50);border-radius:var(--radius-md);text-align:center"><div style="font-size:.75rem;color:var(--gray-500)">Monthly</div><div id="rMo" style="font-size:1rem;font-weight:800;color:var(--green-500)">0.95%</div></div>
+          <div style="padding:10px;background:var(--gray-50);border-radius:var(--radius-md);text-align:center"><div style="font-size:.75rem;color:var(--gray-500)">12mo Balance</div><div id="rBal" style="font-size:.875rem;font-weight:800;color:var(--blue-500)">$3,340</div></div>
+          <div style="padding:10px;background:var(--gray-50);border-radius:var(--radius-md);text-align:center"><div style="font-size:.75rem;color:var(--gray-500)">Blowup Risk</div><div id="rBlow" style="font-size:1rem;font-weight:800;color:var(--green-500)">3%</div></div>
         </div>
+        <div style="font-size:.75rem;color:var(--gray-500);text-align:center;padding:6px;background:var(--blue-100);border-radius:var(--radius-md)">Based on Pepperstone PF 3.19 · WR 51.5% · $3,000 balance</div>
       </div>
     </div>
     <div class="section-heading"><span>Hybrid Path to $30k</span><div class="section-heading-line"></div></div>
