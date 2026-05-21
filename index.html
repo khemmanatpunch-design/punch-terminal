@@ -3080,6 +3080,15 @@ pageInitFns['kpihunt']=function(){
         kpiRiskCtx._chart.data.datasets[0].data=[mo,p,dd,bl];
         kpiRiskCtx._chart.update('none');
       }
+      // BUG 6: update mini bars in KPI slider result
+      const kpiIds=['kpi-sl-monthly','kpi-sl-p30k','kpi-sl-dd','kpi-sl-blowup'];
+      const kpiVals=[mo,p,dd,bl];const kpiMaxes=[24.34*1.5,95,35*1.5,90];const kpiCols=['#10B981','#4F46E5','#F59E0B','#EF4444'];
+      kpiIds.forEach((id,ki)=>{
+        const el=document.getElementById(id);if(!el)return;
+        let bar=document.getElementById(id+'-bar');
+        if(!bar){bar=document.createElement('div');bar.id=id+'-bar';el.parentNode.insertBefore(bar,el.nextSibling);}
+        bar.innerHTML=_miniBar(kpiVals[ki],0,kpiMaxes[ki],kpiCols[ki]);
+      });
     });
   }
 };
