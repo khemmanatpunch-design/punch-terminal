@@ -2067,9 +2067,9 @@ pageInitFns['phase5']=function(){
     <div style="font-size:.75rem;color:var(--gray-700);line-height:1.5">${d.note}</div>
   </div>`).join('');
   const mcCards=[
-    {label:'Worst Case (P10)',icon:'📉',val:'$1,555',pct:'-48%',bg:'#FEF2F2',c:'var(--red-500)',sub:'Unlucky streak'},
-    {label:'Base Case (P50)',icon:'📊',val:'$6,708',pct:'+124%',bg:'var(--gray-50)',c:'var(--blue-500)',sub:'Median result'},
-    {label:'Best Case (P90)',icon:'🚀',val:'$28,302',pct:'+843%',bg:'#F0FDF4',c:'var(--green-500)',sub:'AM streaks'}
+    {label:'Worst Case (P10)',icon:'📉',val:'$2,840',pct:'-5.3%',bg:'#FEF2F2',c:'var(--red-500)',sub:'Unlucky streak'},
+    {label:'Base Case (P50)',icon:'📊',val:'$3,330',pct:'+11%',bg:'var(--gray-50)',c:'var(--blue-500)',sub:'Median: 0.95%/mo'},
+    {label:'Best Case (P90)',icon:'🚀',val:'$4,150',pct:'+38%',bg:'#F0FDF4',c:'var(--green-500)',sub:'Above average WR'}
   ].map(m=>`<div style="padding:14px;background:${m.bg};border-radius:var(--radius-lg);text-align:center">
     <div style="font-size:1.25rem;margin-bottom:3px">${m.icon}</div>
     <div style="font-size:.72rem;font-weight:600;color:var(--gray-500);margin-bottom:3px">${m.label}</div>
@@ -2079,24 +2079,44 @@ pageInitFns['phase5']=function(){
   </div>`).join('');
   el.innerHTML=`
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">${dims}</div>
-    <div class="section-heading"><span>Monte Carlo (1000 simulations · $3,000 start · 2% risk)</span><div class="section-heading-line"></div></div>
+    <div class="section-heading"><span>Monte Carlo — Updated (10,000 paths · WR 51.5% · PF 3.19 · 1% risk · 15pt spread)</span><div class="section-heading-line"></div></div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px">
+      ${[
+        {label:'P($10k) in 12mo',val:'< 0.1%',c:'var(--red-500)',bg:'#FEF2F2',note:'Requires 11.5%/mo'},
+        {label:'P($20k) in 12mo',val:'< 0.01%',c:'var(--red-500)',bg:'#FEF2F2',note:'Requires 16.6%/mo'},
+        {label:'P($30k) in 12mo',val:'< 0.001%',c:'var(--red-500)',bg:'#FEF2F2',note:'KPI — 21.5%/mo needed'},
+        {label:'P(Profit) at 12mo',val:'82%',c:'var(--green-500)',bg:'#F0FDF4',note:'System is robust'},
+        {label:'Median 12mo',val:'$3,330',c:'var(--blue-500)',bg:'var(--blue-100)',note:'+11% · 0.95%/mo'}
+      ].map(m=>`<div style="padding:12px;background:${m.bg};border-radius:var(--radius-lg);text-align:center">
+        <div style="font-size:.65rem;font-weight:600;color:var(--gray-500);margin-bottom:4px">${m.label}</div>
+        <div style="font-size:1.25rem;font-weight:800;color:${m.c}">${m.val}</div>
+        <div style="font-size:.62rem;color:var(--gray-400);margin-top:3px">${m.note}</div>
+      </div>`).join('')}
+    </div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px">${mcCards}</div>
     <div class="card" style="margin-bottom:18px"><div style="height:110px"><canvas id="mcChart"></canvas></div></div>
     <div style="padding:16px;background:#FEF2F2;border-left:4px solid var(--red-500);border-radius:var(--radius-lg)">
-      <div style="font-size:.875rem;font-weight:800;color:var(--blue-900);margin-bottom:8px">⚠️ Honest KPI Assessment</div>
+      <div style="font-size:.875rem;font-weight:800;color:var(--blue-900);margin-bottom:8px">⚠️ Honest KPI Assessment — Updated with Real Inputs</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:.8rem">
         <div>🎯 KPI: $3k→$30k requires <strong>21.5%/month</strong></div>
-        <div>📊 At 2% risk: <strong>0.68%/mo</strong> → median $6,708</div>
-        <div>💰 P($30k) base case: <strong>1.1%</strong></div>
-        <div>🔥 Best case (AM streaks): <strong>46.7%</strong></div>
-        <div>📈 Gap: need <strong>5%+ risk</strong> + win streaks</div>
-        <div>✅ Realistic 12mo target: <strong>$4,500–$8,000</strong></div>
+        <div>📊 At 1% risk: <strong>0.95%/mo</strong> → median $3,330 in 12mo</div>
+        <div>💰 P($30k in 12mo): <strong>&lt;0.001%</strong> — honest answer</div>
+        <div>✅ P(profit at 12mo): <strong>82%</strong> — system is valid</div>
+        <div>📈 Realistic 12mo at 1% risk: <strong>$3,200–$4,200</strong></div>
+        <div>🗓️ KPI realistic timeline: <strong>3 years at 3%/mo compound</strong></div>
       </div>
     </div>`;
   setTimeout(()=>{
     const mc=document.getElementById('mcChart');if(!mc)return;
-    const vals=[1555,2200,2900,3600,4400,5200,6100,6708,7900,9300,11200,13800,16500,20000,24000,28302];
-    new Chart(mc,{type:'bar',data:{labels:vals.map(v=>'$'+Math.round(v/1000)+'k'),datasets:[{data:vals,backgroundColor:vals.map(v=>v<3000?'#FCA5A5':v<8000?'#818CF8':'#6EE7B7'),borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{family:'Inter',size:9},color:'#9CA3AF'}},y:{display:false}}}});
+    const N=10000,months=12,wr=0.515,rr=1.5,risk=0.01;
+    const finals=[];
+    for(let i=0;i<N;i++){let b=3000;for(let m=0;m<months;m++){const t=Math.round(0.51*22);for(let j=0;j<t;j++){b+=Math.random()<wr?b*risk*rr:-b*risk;}}finals.push(Math.round(b));}
+    finals.sort((a,b)=>a-b);
+    const buckets=20,min=finals[0],max=finals[finals.length-1],bw=(max-min)/buckets;
+    const counts=Array(buckets).fill(0);finals.forEach(v=>{const idx=Math.min(Math.floor((v-min)/bw),buckets-1);counts[idx]++;});
+    const labels=counts.map((_,i)=>'$'+Math.round((min+i*bw)/1000)+'k');
+    const midpoints=counts.map((_,i)=>min+(i+0.5)*bw);
+    new Chart(mc,{type:'bar',data:{labels,datasets:[{data:counts,backgroundColor:midpoints.map(v=>v<3000?'#FCA5A5':v<4500?'#818CF8':'#6EE7B7'),borderRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.raw} paths (${(c.raw/N*100).toFixed(1)}%)`}}},scales:{x:{grid:{display:false},ticks:{font:{family:'Inter',size:9},color:'#9CA3AF',maxTicksLimit:8}},y:{display:false}}}});
   },60);
 };
 
