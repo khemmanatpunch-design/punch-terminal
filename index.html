@@ -1073,43 +1073,10 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
     </div>
   </div>
 
-<!-- SECTION 3 — ITERATION RESULTS TABLE -->
+<!-- SECTION 3 — ITERATION RESULTS TABLE (click-to-expand deep dive) -->
   <div class="card card-sm" style="margin-bottom:20px">
-    <div style="font-weight:700;color:var(--blue-900);margin-bottom:12px;font-size:.9rem">All 20 Iterations — Full Results</div>
-    <div style="overflow-x:auto">
-    <table style="width:100%;border-collapse:collapse;font-size:.77rem">
-      <thead><tr style="background:var(--gray-50)">
-        <th style="padding:7px 10px;text-align:left;color:var(--gray-500);font-weight:600;border-bottom:1px solid var(--gray-200)">Iter</th>
-        <th style="padding:7px 10px;text-align:left;color:var(--gray-500);font-weight:600;border-bottom:1px solid var(--gray-200)">Strategy</th>
-        <th style="padding:7px 10px;text-align:right;color:var(--gray-500);font-weight:600;border-bottom:1px solid var(--gray-200)">Monthly</th>
-        <th style="padding:7px 10px;text-align:right;color:var(--gray-500);font-weight:600;border-bottom:1px solid var(--gray-200)">Final 12mo</th>
-        <th style="padding:7px 10px;text-align:center;color:var(--gray-500);font-weight:600;border-bottom:1px solid var(--gray-200)">Max DD</th>
-        <th style="padding:7px 10px;text-align:center;color:var(--gray-500);font-weight:600;border-bottom:1px solid var(--gray-200)">Status</th>
-      </tr></thead>
-      <tbody style="font-size:.77rem">
-        <tr style="background:#FFF7ED"><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100);font-weight:700">1</td><td>Champion DynRisk 3% + Anti-Martingale</td><td style="text-align:right;color:var(--orange-500);font-weight:700">3.22%</td><td style="text-align:right">$4,388</td><td style="text-align:center">24.6%</td><td style="text-align:center"><span style="background:#FEF3C7;color:#D97706;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">🔄 Building</span></td></tr>
-        <tr><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100)">2</td><td>5-Market Portfolio (BTC+Gold+Oil+GBPJPY+NAS100)</td><td style="text-align:right;color:var(--orange-500);font-weight:700">7.59%</td><td style="text-align:right">$7,215</td><td style="text-align:center">37.3%</td><td style="text-align:center"><span style="background:#DBEAFE;color:#1D4ED8;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">🔄 Good</span></td></tr>
-        <tr><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100)">3</td><td>Bitcoin + Gold Combined</td><td style="text-align:right;color:var(--orange-500);font-weight:700">7.78%</td><td style="text-align:right">$7,372</td><td style="text-align:center">86.1%</td><td style="text-align:center"><span style="background:#DBEAFE;color:#1D4ED8;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">🔄 Good</span></td></tr>
-        <tr><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100)">4</td><td>Crypto Portfolio Monte Carlo</td><td style="text-align:right;color:var(--orange-500);font-weight:700">10.75%</td><td style="text-align:right">$10,287</td><td style="text-align:center">~30%</td><td style="text-align:center"><span style="background:#DBEAFE;color:#1D4ED8;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">🔄 Good</span></td></tr>
-        <tr><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100)">5</td><td>HF M15 + H1 Trend Filter</td><td style="text-align:right;color:var(--gray-400)">2.24%</td><td style="text-align:right;color:var(--gray-400)">$3,913</td><td style="text-align:center">16.4%</td><td style="text-align:center"><span style="background:#F3F4F6;color:#6B7280;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">❌ Low</span></td></tr>
-        <tr><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100)">6</td><td>News Events — NFP+CPI+FOMC+GDP+PPI+PMI+Claims</td><td style="text-align:right;color:var(--green-500);font-weight:700">11.25%</td><td style="text-align:right;font-weight:600">$10,784</td><td style="text-align:center">~20%</td><td style="text-align:center"><span style="background:#DCFCE7;color:#15803D;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">✅ Strong</span></td></tr>
-        <tr><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100)">7</td><td>D1 Trend Following + HF</td><td style="text-align:right;color:var(--gray-400)">2.64%</td><td style="text-align:right;color:var(--gray-400)">$4,101</td><td style="text-align:center">~15%</td><td style="text-align:center"><span style="background:#F3F4F6;color:#6B7280;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">❌ Low</span></td></tr>
-        <tr><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100)">8</td><td>Pattern Recognition WR=65% (London 8-10+NY 13-15)</td><td style="text-align:right;color:var(--orange-500);font-weight:700">4.97%</td><td style="text-align:right">$5,368</td><td style="text-align:center">24.6%</td><td style="text-align:center"><span style="background:#FEF3C7;color:#D97706;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">🔄 Building</span></td></tr>
-        <tr style="background:linear-gradient(90deg,rgba(16,185,129,.08),transparent)"><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100);font-weight:800">9</td><td><b>APEX MAXIMUM — All Combined</b></td><td style="text-align:right;color:var(--green-500);font-weight:900">24.34%</td><td style="text-align:right;font-weight:800">$43,864</td><td style="text-align:center">~35%</td><td style="text-align:center"><span style="background:#DCFCE7;color:#15803D;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:700">✅ KPI ✓</span></td></tr>
-        <tr><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100)">10</td><td>V10 MaxRisk 5% + AM + 5 markets</td><td style="text-align:right;color:var(--orange-500)">14.17%</td><td style="text-align:right">$14,711</td><td style="text-align:center">91.7%</td><td style="text-align:center"><span style="background:#DBEAFE;color:#1D4ED8;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">🔄 High DD</span></td></tr>
-        <tr><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100)">11</td><td>V11 BTC 5% + Anti-Martingale</td><td style="text-align:right;color:var(--orange-500)">7.51%</td><td style="text-align:right">$7,155</td><td style="text-align:center">57.4%</td><td style="text-align:center"><span style="background:#FEF3C7;color:#D97706;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">🔄 High DD</span></td></tr>
-        <tr><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100)">12</td><td>V12 Portfolio + Pattern Filter</td><td style="text-align:right;color:var(--orange-500)">10.46%</td><td style="text-align:right">$9,903</td><td style="text-align:center">49.2%</td><td style="text-align:center"><span style="background:#DBEAFE;color:#1D4ED8;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">🔄 Good</span></td></tr>
-        <tr><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100)">13</td><td>V13 HF M5 + Trend</td><td style="text-align:right;color:var(--gray-400)">6.44%</td><td style="text-align:right">$6,344</td><td style="text-align:center">16.4%</td><td style="text-align:center"><span style="background:#F3F4F6;color:#6B7280;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">❌ Low</span></td></tr>
-        <tr><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100)">14</td><td>V14 All 8 Assets</td><td style="text-align:right;color:var(--orange-500)">10.55%</td><td style="text-align:right">$9,997</td><td style="text-align:center">55.7%</td><td style="text-align:center"><span style="background:#DBEAFE;color:#1D4ED8;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">🔄 Good</span></td></tr>
-        <tr><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100)">15</td><td>V15 Crypto + HF + News</td><td style="text-align:right;color:var(--green-500);font-weight:700">19.32%</td><td style="text-align:right;font-weight:600">$24,978</td><td style="text-align:center">63.9%</td><td style="text-align:center"><span style="background:#DCFCE7;color:#15803D;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">✅ Strong</span></td></tr>
-        <tr><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100)">16</td><td>V16 Max Aggression 10 markets</td><td style="text-align:right;color:var(--green-500);font-weight:700">22.61%</td><td style="text-align:right;font-weight:600">$34,635</td><td style="text-align:center">129.7%</td><td style="text-align:center"><span style="background:#FEE2E2;color:#DC2626;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">⚠️ DD Too High</span></td></tr>
-        <tr style="background:rgba(245,158,11,.07)"><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100);font-weight:700">17</td><td><b>V17 BTC+ETH+Gold HF</b></td><td style="text-align:right;color:var(--green-500);font-weight:800">21.46%</td><td style="text-align:right;font-weight:700">$30,937</td><td style="text-align:center">71.0%</td><td style="text-align:center"><span style="background:#DCFCE7;color:#15803D;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:700">✅ KPI ✓</span></td></tr>
-        <tr><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100)">18</td><td>V18 Sessions 24/7</td><td style="text-align:right;color:var(--orange-500)">8.05%</td><td style="text-align:right">$7,596</td><td style="text-align:center">24.6%</td><td style="text-align:center"><span style="background:#DBEAFE;color:#1D4ED8;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">🔄 Good</span></td></tr>
-        <tr><td style="padding:6px 10px;border-bottom:1px solid var(--gray-100)">19</td><td>V19 Reinforced Kelly 4% + 5mkt + 1.5× vol</td><td style="text-align:right;color:var(--green-500);font-weight:700">25.00%</td><td style="text-align:right;font-weight:600">$43,656</td><td style="text-align:center">110%</td><td style="text-align:center"><span style="background:#FEE2E2;color:#DC2626;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">⚠️ DD Too High</span></td></tr>
-        <tr><td style="padding:6px 10px">20</td><td>V20 Portfolio Ultimate 3.5% + 8mkt</td><td style="text-align:right;color:var(--green-500);font-weight:700">23.09%</td><td style="text-align:right;font-weight:600">$36,308</td><td style="text-align:center">105.5%</td><td style="text-align:center"><span style="background:#FEE2E2;color:#DC2626;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:600">⚠️ DD Too High</span></td></tr>
-      </tbody>
-    </table>
-    </div>
+    <div style="font-weight:700;color:var(--blue-900);margin-bottom:12px;font-size:.9rem">All 20 Iterations — Click Any Row for Deep Dive</div>
+    <div id="iter-table-wrap"></div>
     <div style="margin-top:8px;font-size:.72rem;color:var(--gray-500);display:flex;gap:16px;flex-wrap:wrap">
       <span>✅ KPI ✓ = exceeds 21.5%/mo with manageable DD</span>
       <span>🔄 = below KPI but useful as portfolio component</span>
@@ -3222,6 +3189,7 @@ function p8DeleteTrade(id){
   pageInited['phase8']=true;
 }
 pageInitFns['kpihunt']=function(){
+  renderIterTable();
   // MC Distribution Chart
   const mcCtx=document.getElementById('kpi-mc-chart');
   if(mcCtx&&!mcCtx._chart){
@@ -4671,6 +4639,115 @@ function renderDDCards(){
     </div>`;
   }).join('');
 }
+
+// ===== SAVE C: Click-expand iteration table =====
+let iterOpenRow=-1;
+function toggleIterRow(n){
+  if(iterOpenRow!==-1&&iterOpenRow!==n){
+    const prev=document.getElementById('iter-expand-'+iterOpenRow);
+    if(prev)prev.style.display='none';
+    const prevRow=document.getElementById('iter-row-'+iterOpenRow);
+    if(prevRow){const arr=prevRow.querySelector('.iter-arrow');if(arr)arr.textContent='▶';}
+  }
+  const panel=document.getElementById('iter-expand-'+n);
+  const row=document.getElementById('iter-row-'+n);
+  if(!panel||!row)return;
+  const isOpen=panel.style.display==='block';
+  if(isOpen){panel.style.display='none';const arr=row.querySelector('.iter-arrow');if(arr)arr.textContent='▶';iterOpenRow=-1;}
+  else{panel.style.display='block';const arr=row.querySelector('.iter-arrow');if(arr)arr.textContent='▼';iterOpenRow=n;initIterChart(n);setTimeout(()=>panel.scrollIntoView({behavior:'smooth',block:'nearest'}),50);}
+}
+function initIterChart(n){
+  const d=DD_ITERS.find(x=>x.n===n);if(!d)return;
+  const canvas=document.getElementById('iter-chart-'+n);if(!canvas||canvas._chart)return;
+  const months=['M1','M2','M3','M4','M5','M6','M7','M8','M9','M10','M11','M12'];
+  function eq(mo){let v=3000;return months.map(()=>{v*=(1+mo/100);return Math.round(v);});}
+  canvas._chart=new Chart(canvas,{type:'line',data:{labels:months,datasets:[
+    {label:'Conservative',data:eq(d.monthly*0.5),borderColor:'#94A3B8',borderWidth:1.5,fill:false,pointRadius:0,tension:.3},
+    {label:'Target',data:eq(d.monthly),borderColor:'#4F46E5',borderWidth:2.5,fill:false,pointRadius:2,tension:.3},
+    {label:'Aggressive',data:eq(d.monthly*1.5),borderColor:'#10B981',borderWidth:1.5,fill:false,pointRadius:0,tension:.3}
+  ]},options:{plugins:{legend:{position:'top',labels:{font:{size:9},boxWidth:10}},tooltip:{callbacks:{label:ctx=>'$'+ctx.raw.toLocaleString()}}},scales:{y:{ticks:{callback:v=>'$'+(v>=1000?(v/1000).toFixed(0)+'k':v),font:{size:9}},grid:{color:'rgba(0,0,0,.05)'}},x:{ticks:{font:{size:9}},grid:{display:false}}},animation:{duration:400}}});
+}
+function updateIterSlider(n){
+  const d=DD_ITERS.find(x=>x.n===n);if(!d)return;
+  const slider=document.getElementById('iter-slider-'+n);if(!slider)return;
+  const mult=parseFloat(slider.value);
+  const mo=(d.monthly*mult);
+  const p30k=Math.min(95,Math.max(2,d.status==='kpi'?65.5*Math.pow(mult,1.3):Math.min(60,d.monthly*mult*2.5)));
+  const bl=Math.min(95,Math.round(d.dd*mult*0.7));
+  const dd=Math.min(200,Math.round(d.dd*mult));
+  document.getElementById('iter-mo-'+n).textContent=mo.toFixed(2)+'%';
+  document.getElementById('iter-p30k-'+n).textContent=p30k.toFixed(0)+'%';
+  document.getElementById('iter-bl-'+n).textContent=bl+'%';
+  document.getElementById('iter-dd-'+n).textContent=dd+'%';
+  const canvas=document.getElementById('iter-chart-'+n);
+  if(canvas&&canvas._chart){
+    function eq(m){let v=3000;return[1,2,3,4,5,6,7,8,9,10,11,12].map(()=>{v*=(1+m/100);return Math.round(v);});}
+    canvas._chart.data.datasets[0].data=eq(mo*0.5);
+    canvas._chart.data.datasets[1].data=eq(mo);
+    canvas._chart.data.datasets[2].data=eq(mo*1.5);
+    canvas._chart.update('none');
+  }
+}
+function renderIterTable(){
+  const wrap=document.getElementById('iter-table-wrap');if(!wrap)return;
+  const SC={kpi:['#D1FAE5','#065F46','✅ KPI ✓'],strong:['#DBEAFE','#1D4ED8','💪 Strong'],good:['#EDE9FE','#5B21B6','🔄 Good'],building:['#FEF3C7','#D97706','🔄 Building'],low:['#F3F4F6','#6B7280','❌ Low'],'high-dd':['#FEE2E2','#DC2626','⚠️ High DD'],'dd-high':['#FEE2E2','#DC2626','⚠️ DD Too High']};
+  wrap.innerHTML='<div style="display:grid;grid-template-columns:28px 1fr 68px 78px 58px 88px 22px;gap:0;font-size:.71rem;font-weight:600;color:var(--gray-500);padding:6px 10px;background:var(--gray-50);border-radius:6px 6px 0 0;border:1px solid var(--gray-200)">'
+    +'<span>#</span><span>Strategy</span><span style="text-align:right">Monthly</span><span style="text-align:right">Final 12mo</span><span style="text-align:center">Max DD</span><span style="text-align:center">Status</span><span></span></div>'
+    +DD_ITERS.map(d=>{
+      const[sbg,scl,slabel]=SC[d.status]||['#F3F4F6','#6B7280','—'];
+      const moColor=d.monthly>=21.5?'var(--green-500)':d.monthly>=10?'var(--blue-500)':'var(--gray-400)';
+      const rowBg=d.status==='kpi'?'rgba(16,185,129,.06)':d.n%2===0?'#fff':'var(--gray-50)';
+      const ddColor=d.dd>70?'#DC2626':d.dd>35?'#D97706':'#10B981';
+      const isKpi=d.monthly>=21.5&&d.dd<=80;
+      const p30kDefault=Math.min(95,Math.max(2,d.status==='kpi'?65:Math.min(60,d.monthly*2.5))).toFixed(0);
+      const codeHtml=d.code.split('\n').map(l=>{
+        const t=l.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        return'<div class="code-ln"><span class="code-txt">'+t
+          .replace(/(\/\/[^\n]*)/g,'<span class="cc">$1</span>')
+          .replace(/\b(input|void|double|int|string|bool|if|return|else|const|let)\b/g,'<span class="ck">$1</span>')
+          .replace(/"([^"]*)"/g,'"<span class="cs">$1</span>"')
+          .replace(/([0-9]+\.?[0-9]*)/g,'<span class="cn2">$1</span>')
+          +'</span></div>';
+      }).join('');
+      return'<div id="iter-row-'+d.n+'" onclick="toggleIterRow('+d.n+')" style="display:grid;grid-template-columns:28px 1fr 68px 78px 58px 88px 22px;gap:0;align-items:center;padding:7px 10px;border:1px solid var(--gray-200);border-top:none;cursor:pointer;background:'+rowBg+';font-size:.77rem;transition:background .12s" onmouseover="this.style.background='rgba(79,70,229,.06)'" onmouseout="this.style.background=''+rowBg+''">'
+        +'<span style="font-weight:700;color:var(--blue-700)">'+d.n+'</span>'
+        +'<span style="font-weight:'+(d.status==='kpi'?'700':'400')+';color:var(--blue-900)">'+d.name+'</span>'
+        +'<span style="text-align:right;font-weight:700;color:'+moColor+'">'+d.monthly.toFixed(2)+'%</span>'
+        +'<span style="text-align:right;color:var(--gray-600)">$'+d.final.toLocaleString()+'</span>'
+        +'<span style="text-align:center;color:'+ddColor+'">'+d.dd+'%</span>'
+        +'<span style="text-align:center"><span style="background:'+sbg+';color:'+scl+';padding:2px 6px;border-radius:999px;font-size:.67rem;font-weight:600;white-space:nowrap">'+slabel+'</span></span>'
+        +'<span class="iter-arrow" style="color:var(--gray-400);font-size:.68rem;pointer-events:none">▶</span>'
+        +'</div>'
+        +'<div id="iter-expand-'+d.n+'" style="display:none;border:1px solid var(--blue-200);border-top:none;background:#F8FAFF;padding:16px">'
+          +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">'
+            +'<div><div style="font-size:.75rem;font-weight:700;color:var(--blue-700);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em">Strategy Formula</div>'
+            +'<div style="font-size:.78rem;color:var(--gray-700);line-height:1.7;background:#fff;border:1px solid var(--gray-200);border-radius:8px;padding:12px">'+d.desc+'</div></div>'
+            +'<div><div style="font-size:.75rem;font-weight:700;color:var(--blue-700);margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;text-transform:uppercase;letter-spacing:.04em">'
+            +'<span>MQL5 Code</span>'
+            +'<button onclick="event.stopPropagation();if(navigator.clipboard){navigator.clipboard.writeText(DD_ITERS.find(x=>x.n==='+d.n+').code).then(()=>{this.textContent='✓ Copied';setTimeout(()=>this.textContent='Copy',1500)})}" style="font-size:.67rem;padding:2px 8px;background:#374151;color:#fff;border:none;border-radius:4px;cursor:pointer">Copy</button></div>'
+            +'<div class="code-viewer" style="max-height:130px;overflow-y:auto">'+codeHtml+'</div></div>'
+          +'</div>'
+          +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">'
+            +'<div><div style="font-size:.75rem;font-weight:700;color:var(--blue-700);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em">Risk Adjuster</div>'
+            +'<div style="background:#fff;border:1px solid var(--gray-200);border-radius:8px;padding:12px">'
+            +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="font-size:.73rem;color:var(--gray-500)">0.5×</span><input type="range" id="iter-slider-'+d.n+'" min="0.5" max="2" step="0.05" value="1" oninput="updateIterSlider('+d.n+')" onclick="event.stopPropagation()" style="flex:1;accent-color:var(--blue-500)"><span style="font-size:.73rem;color:var(--gray-500)">2×</span></div>'
+            +'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;font-size:.73rem;text-align:center">'
+            +'<div style="background:var(--gray-50);border-radius:6px;padding:6px"><div style="color:var(--gray-500);font-weight:600;font-size:.66rem">MONTHLY</div><div id="iter-mo-'+d.n+'" style="font-weight:800;color:var(--green-500)">'+d.monthly.toFixed(2)+'%</div></div>'
+            +'<div style="background:var(--gray-50);border-radius:6px;padding:6px"><div style="color:var(--gray-500);font-weight:600;font-size:.66rem">P($30k)</div><div id="iter-p30k-'+d.n+'" style="font-weight:800;color:var(--blue-500)">'+p30kDefault+'%</div></div>'
+            +'<div style="background:var(--gray-50);border-radius:6px;padding:6px"><div style="color:var(--gray-500);font-weight:600;font-size:.66rem">MAX DD</div><div id="iter-dd-'+d.n+'" style="font-weight:800;color:'+ddColor+'">'+d.dd+'%</div></div>'
+            +'<div style="background:var(--gray-50);border-radius:6px;padding:6px"><div style="color:var(--gray-500);font-weight:600;font-size:.66rem">BLOWUP</div><div id="iter-bl-'+d.n+'" style="font-weight:800;color:#DC2626">'+Math.round(d.dd*0.7)+'%</div></div>'
+            +'</div></div>'
+            +'<div style="margin-top:10px;padding:10px;border-radius:8px;border:2px solid '+(isKpi?'#10B981':'#EF4444')+';background:'+(isKpi?'#F0FDF4':'#FEF2F2')+'">'
+            +'<div style="font-size:.85rem;font-weight:800;color:'+(isKpi?'#065F46':'#991B1B')+';margin-bottom:3px">'+(isKpi?'✅ KPI PASSED':'❌ KPI NOT MET')+'</div>'
+            +'<div style="font-size:.72rem;color:'+(isKpi?'#047857':'#DC2626')+'">'+( isKpi?d.monthly.toFixed(2)+'%/mo ≥ 21.5% target · DD '+d.dd+'% manageable':d.monthly.toFixed(2)+'%/mo < 21.5% target'+(d.dd>80?' · DD too high at '+d.dd+'%':'')+' · Use as portfolio component')+'</div>'
+            +'</div></div>'
+            +'<div><div style="font-size:.75rem;font-weight:700;color:var(--blue-700);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em">12-Month Equity Projection</div>'
+            +'<canvas id="iter-chart-'+d.n+'" height="180" style="max-width:100%"></canvas></div>'
+          +'</div>'
+        +'</div>';
+    }).join('');
+}
+
 
 pageInitFns['deepdives']=function(){
   renderDDCards();
