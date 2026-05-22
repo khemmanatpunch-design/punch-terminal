@@ -387,6 +387,12 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
 ::-webkit-scrollbar-thumb{background:var(--gray-200);border-radius:3px;}
 ::-webkit-scrollbar-thumb:hover{background:var(--gray-300);}
 
+/* ── RESEARCH LOG ACCORDION ─────────────────────── */
+.rl-accordion{border:1px solid var(--gray-200);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:10px;}
+.rl-acc-hdr{padding:14px 18px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:background .15s;user-select:none;background:#fff;}
+.rl-acc-hdr:hover{background:var(--gray-50);}
+.rl-acc-body{padding:16px 18px;border-top:1px solid var(--gray-200);background:var(--bg-secondary);}
+
 /* ── MOBILE ──────────────────────────────────────── */
 @media(max-width:768px){
   .sidebar{transform:translateX(-100%);transition:transform .2s;}
@@ -556,57 +562,69 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
   </div>
 
   <div class="sidebar-nav">
-    <!-- CORE -->
+    <!-- OVERVIEW -->
     <div class="sidebar-section">
-      <div class="sidebar-section-label">Core</div>
+      <div class="sidebar-section-label">Overview</div>
       <div class="sidebar-section-items">
         <div class="nav-item active" onclick="showPage('home')" id="nav-home">
-          <span class="nav-item-icon">🏠</span>Home Dashboard
-        </div>
-        <div class="nav-item" onclick="showPage('executive')" id="nav-executive">
-          <span class="nav-item-icon">📊</span>Executive Summary
-          <span class="nav-item-badge pink">New</span>
-        </div>
-        <div class="nav-item" onclick="showPage('kpihunt')" id="nav-kpihunt" style="background:linear-gradient(90deg,rgba(255,165,0,.15),transparent)">
-          <span class="nav-item-icon">🎯</span>KPI Hunt — 1000%
-          <span class="nav-item-badge" style="background:#FEF3C7;color:#D97706;font-weight:700">HOT</span>
-        </div>
-        <div class="nav-item" onclick="showPage('phase9')" id="nav-phase9" style="background:linear-gradient(90deg,rgba(139,92,246,.1),transparent)">
-          <span class="nav-item-icon">⚡</span>Phase 9 — Evolution
-          <span class="nav-item-badge" style="background:#EDE9FE;color:#7C3AED;font-weight:700">Done</span>
-        </div>
-        <div class="nav-item" onclick="showPage('ddopt')" id="nav-ddopt" style="background:linear-gradient(90deg,rgba(220,38,38,.1),transparent)">
-          <span class="nav-item-icon">🛡</span>DD Optimization
-          <span class="nav-item-badge" style="background:#FEE2E2;color:#DC2626;font-weight:700">NEW</span>
-        </div>
-        <div class="nav-item" onclick="showPage('deepdives')" id="nav-deepdives">
-          <span class="nav-item-icon">🔬</span>Iteration Deep Dives
-          <span class="nav-item-badge">20</span>
+          <span class="nav-item-icon">🏠</span>Executive Summary
         </div>
         <div class="nav-item" onclick="showPage('roadmap')" id="nav-roadmap">
           <span class="nav-item-icon">🗺️</span>KPI Roadmap
         </div>
       </div>
     </div>
-
-    <!-- LIVE & RESEARCH -->
+    <!-- STRATEGIES -->
     <div class="sidebar-section">
-      <div class="sidebar-section-label">Live &amp; Research</div>
+      <div class="sidebar-section-label">Strategies</div>
       <div class="sidebar-section-items">
         <div class="nav-item" onclick="showPage('strategies')" id="nav-strategies">
-          <span class="nav-item-icon">📋</span>All Strategies
+          <span class="nav-item-icon">🏆</span>Tournament + DNA
           <span class="nav-item-badge green">A+</span>
         </div>
-        <div class="nav-item" onclick="showPage('phase8')" id="nav-phase8">
-          <span class="nav-item-icon">📈</span>Phase 8 — Live Demo
-          <span class="nav-item-badge green">Demo</span>
+        <div class="nav-item" onclick="showPage('market')" id="nav-market">
+          <span class="nav-item-icon">🌍</span>Market Analysis
         </div>
+      </div>
+    </div>
+    <!-- OPTIMIZATION -->
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Optimization</div>
+      <div class="sidebar-section-items">
+        <div class="nav-item" onclick="showPage('researchlog')" id="nav-researchlog">
+          <span class="nav-item-icon">📊</span>Research Log
+          <span class="nav-item-badge green">4 Phases</span>
+        </div>
+        <div class="nav-item" onclick="showPage('kpihunt')" id="nav-kpihunt" style="background:linear-gradient(90deg,rgba(255,165,0,.15),transparent)">
+          <span class="nav-item-icon">🎯</span>KPI Hunt
+          <span class="nav-item-badge" style="background:#FEF3C7;color:#D97706;font-weight:700">HOT</span>
+        </div>
+      </div>
+    </div>
+    <!-- LIVE SYSTEM -->
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Live System</div>
+      <div class="sidebar-section-items">
         <div class="nav-item" onclick="showPage('pepperstone')" id="nav-pepperstone">
           <span class="nav-item-icon">🟢</span>Pepperstone Setup
           <span class="nav-item-badge green">Ready</span>
         </div>
-        <div class="nav-item" onclick="showPage('risk')" id="nav-risk">
-          <span class="nav-item-icon">🎯</span>Risk Manager
+        <div class="nav-item" onclick="showPage('phase8')" id="nav-phase8">
+          <span class="nav-item-icon">📈</span>Phase 8 — Demo
+          <span class="nav-item-badge green">Demo</span>
+        </div>
+        <div class="nav-item" onclick="showPage('phase9')" id="nav-phase9" style="background:linear-gradient(90deg,rgba(139,92,246,.1),transparent)">
+          <span class="nav-item-icon">⚡</span>Phase 9 — Evolution
+          <span class="nav-item-badge" style="background:#EDE9FE;color:#7C3AED;font-weight:700">Done</span>
+        </div>
+      </div>
+    </div>
+    <!-- TOOLS -->
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Tools</div>
+      <div class="sidebar-section-items">
+        <div class="nav-item" onclick="showPage('tools')" id="nav-tools">
+          <span class="nav-item-icon">🧮</span>Risk &amp; Calculator
         </div>
       </div>
     </div>
@@ -966,45 +984,32 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
 
 <!-- ══════ STUB PAGES (filled in later saves) ══════ -->
 
-<div class="page" id="page-bracket">
-<div class="page-inner">
-  <div class="breadcrumb"><a href="#" onclick="showPage('home');return false;">Home</a><span class="breadcrumb-sep">/</span>Research</div>
-  <div class="page-title">Tournament Bracket</div>
-  <div class="page-subtitle">8-Round Elimination · 100 strategies · Champion: F01_SMC_Session_v2</div>
-  <div class="page-divider"></div>
-  <div id="bracket-content">
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px" id="bracketPills">
-      <span class="spill gy">100 Strategies</span>
-      <span class="spill gn">43 Profitable</span>
-      <span class="spill bl">8 Rounds</span>
-      <span class="spill gd">👑 Champion: F01_SMC_Session_v2</span>
-    </div>
-    <div class="bracket-wrap"><div id="bracketGrid"></div></div>
-    <div class="slide-backdrop" id="panelBackdrop" onclick="closePanel()"></div>
-    <div class="slide-panel" id="slidePanel">
-      <div class="spanel-hdr" id="panelHdr" style="background:var(--gray-50)">
-        <div><div id="panelTitle" style="font-size:.9375rem;font-weight:800;color:var(--blue-900)"></div><div id="panelSub" style="font-size:.75rem;color:var(--gray-500);margin-top:2px"></div></div>
-        <button class="spanel-close" onclick="closePanel()">✕</button>
-      </div>
-      <div class="spanel-body" id="panelBody"></div>
-    </div>
-  </div>
-</div>
-</div>
+<!-- page-bracket and page-dna redirect to strategies hub -->
+<div class="page" id="page-bracket" style="display:none"></div>
+<div class="page" id="page-dna" style="display:none"></div>
 
+<!-- ══════ STRATEGIES HUB (Tournament + All 100 + DNA) ══════ -->
 <div class="page" id="page-strategies">
 <div class="page-inner">
-  <div class="breadcrumb"><a href="#" onclick="showPage('home');return false;">Home</a><span class="breadcrumb-sep">/</span>Research</div>
-  <div class="page-title">Strategy Database</div>
-  <div class="page-subtitle">All 100 strategies tested in tournament · Sortable · Filterable · <span style="color:var(--green-600);font-weight:700">⭐ Grade A+ filter available</span></div>
+  <div class="breadcrumb"><a href="#" onclick="showPage('home');return false;">Home</a><span class="breadcrumb-sep">/</span>Strategies</div>
+  <div class="page-title">Strategies &amp; Research</div>
+  <div class="page-subtitle">Tournament Bracket · All 100 strategies · Strategy DNA — all in one place</div>
   <div class="page-divider"></div>
-  <div id="strategies-content">
-    <!-- GRADE A+ BANNER -->
-    <div id="aplus-banner" style="display:none;padding:10px 14px;background:linear-gradient(135deg,#D1FAE5,#ECFDF5);border:1.5px solid #6EE7B7;border-radius:var(--radius-md);margin-bottom:10px;display:none;align-items:center;gap:12px;flex-wrap:wrap">
+
+  <!-- MERGED TAB BAR -->
+  <div class="dna-tab-bar" style="margin-bottom:16px" id="strat-tabbar">
+    <button class="dna-tab on" id="strat-tab-all100" onclick="switchStratTab('all100')">📋 All 100</button>
+    <button class="dna-tab" id="strat-tab-bracket" onclick="switchStratTab('bracket')">🏆 Tournament</button>
+    <button class="dna-tab" id="strat-tab-dna" onclick="switchStratTab('dna')">🧬 Strategy DNA</button>
+  </div>
+
+  <!-- TAB: ALL 100 -->
+  <div id="strats-tab-all100">
+    <div id="aplus-banner" style="display:none;padding:10px 14px;background:linear-gradient(135deg,#D1FAE5,#ECFDF5);border:1.5px solid #6EE7B7;border-radius:var(--radius-md);margin-bottom:10px;align-items:center;gap:12px;flex-wrap:wrap">
       <span style="font-size:1rem">⭐</span>
       <div style="flex:1;min-width:160px">
         <div style="font-size:.8rem;font-weight:700;color:var(--green-600)">GRADE A+ FILTER ACTIVE — PF ≥ 2.0 strategies only</div>
-        <div style="font-size:.75rem;color:var(--gray-600);margin-top:2px">These are the elite strategies with Profit Factor above 2.0. High confidence in statistical edge.</div>
+        <div style="font-size:.75rem;color:var(--gray-600);margin-top:2px">Elite strategies with Profit Factor above 2.0. High confidence in statistical edge.</div>
       </div>
       <button class="btn btn-secondary btn-sm" onclick="clearAplusFilter()">Clear Filter ✕</button>
     </div>
@@ -1039,82 +1044,147 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
       <div class="pager" id="stratPager"></div>
     </div>
   </div>
+
+  <!-- TAB: TOURNAMENT BRACKET -->
+  <div id="strats-tab-bracket" style="display:none">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+      <span class="spill gy">100 Strategies</span>
+      <span class="spill gn">43 Profitable</span>
+      <span class="spill bl">8 Rounds</span>
+      <span class="spill gd">👑 Champion: F01_SMC_Session_v2</span>
+    </div>
+    <div class="bracket-wrap"><div id="bracketGrid"></div></div>
+    <div class="slide-backdrop" id="panelBackdrop" onclick="closePanel()"></div>
+    <div class="slide-panel" id="slidePanel">
+      <div class="spanel-hdr" id="panelHdr" style="background:var(--gray-50)">
+        <div><div id="panelTitle" style="font-size:.9375rem;font-weight:800;color:var(--blue-900)"></div><div id="panelSub" style="font-size:.75rem;color:var(--gray-500);margin-top:2px"></div></div>
+        <button class="spanel-close" onclick="closePanel()">✕</button>
+      </div>
+      <div class="spanel-body" id="panelBody"></div>
+    </div>
+  </div>
+
+  <!-- TAB: STRATEGY DNA -->
+  <div id="strats-tab-dna" style="display:none">
+    <div id="dna-content"></div>
+  </div>
 </div>
 </div>
 
-<div class="page" id="page-dna">
+<!-- page-stress and page-multimarket redirect to market hub -->
+<div class="page" id="page-stress" style="display:none"></div>
+<div class="page" id="page-multimarket" style="display:none"></div>
+<!-- phase pages redirect to researchlog -->
+<div class="page" id="page-phase4" style="display:none"></div>
+<div class="page" id="page-phase5" style="display:none"></div>
+<div class="page" id="page-phase6" style="display:none"></div>
+
+<!-- ══════ MARKET ANALYSIS HUB ══════ -->
+<div class="page" id="page-market">
 <div class="page-inner">
-  <div class="breadcrumb"><a href="#" onclick="showPage('home');return false;">Home</a><span class="breadcrumb-sep">/</span>Analysis</div>
-  <div class="page-title">Strategy DNA Analysis</div>
-  <div class="page-subtitle">Deep dive into logic, code, and performance of each strategy</div>
+  <div class="breadcrumb"><a href="#" onclick="showPage('home');return false;">Home</a><span class="breadcrumb-sep">/</span>Strategies</div>
+  <div class="page-title">Market Analysis</div>
+  <div class="page-subtitle">Multi-Market Results · Stress Tests · Forward 2026 — champion performance across conditions</div>
   <div class="page-divider"></div>
-  <div id="dna-content"></div>
+  <div class="dna-tab-bar" style="margin-bottom:16px">
+    <button class="dna-tab on" id="mkt-tab-multimarket" onclick="switchMarketTab('multimarket')">🌍 Multi-Market</button>
+    <button class="dna-tab" id="mkt-tab-stress" onclick="switchMarketTab('stress')">📈 Stress Tests</button>
+    <button class="dna-tab" id="mkt-tab-forward" onclick="switchMarketTab('forward')">🔮 Forward 2026</button>
+  </div>
+  <div id="mkt-tab-content-multimarket">
+    <div id="multimarket-content"></div>
+  </div>
+  <div id="mkt-tab-content-stress" style="display:none">
+    <div id="stress-content"></div>
+  </div>
+  <div id="mkt-tab-content-forward" style="display:none">
+    <div class="stub-page" style="min-height:300px"><div class="stub-icon">🔮</div><div class="stub-title">Forward 2026 Analysis</div><div class="stub-text">Out-of-sample 2026 data · Results updated as year progresses</div></div>
+  </div>
 </div>
 </div>
 
-<div class="page" id="page-stress">
+<!-- ══════ RESEARCH LOG HUB (Phase 4-7 Accordion) ══════ -->
+<div class="page" id="page-researchlog">
 <div class="page-inner">
-  <div class="breadcrumb"><a href="#" onclick="showPage('home');return false;">Home</a><span class="breadcrumb-sep">/</span>Analysis</div>
-  <div class="page-title">Stress Test Analysis</div>
-  <div class="page-subtitle">Champion performance during COVID, Fed Hikes, Gold Bull, and 2026 Forward</div>
+  <div class="breadcrumb"><a href="#" onclick="showPage('home');return false;">Home</a><span class="breadcrumb-sep">/</span>Optimization</div>
+  <div class="page-title">Research Log</div>
+  <div class="page-subtitle">Phases 4–7 — root cause → aggression → broker → validation accordion</div>
   <div class="page-divider"></div>
-  <div id="stress-content"></div>
+  <div id="researchlog-content">
+    <!-- PHASE 4 -->
+    <div class="rl-accordion" id="rl-acc-4">
+      <div class="rl-acc-hdr" onclick="toggleRLPhase(4)">
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:1.1rem">▼</span>
+          <div>
+            <div style="font-size:.875rem;font-weight:700;color:var(--blue-900)">Phase 4 — Root Cause Analysis</div>
+            <div style="font-size:.75rem;color:var(--gray-500)">Why PF was 1.03 and exactly what to fix</div>
+          </div>
+        </div>
+        <span class="badge badge-green">Done</span>
+      </div>
+      <div class="rl-acc-body" id="rl-body-4">
+        <div id="phase4-content"></div>
+      </div>
+    </div>
+    <!-- PHASE 5 -->
+    <div class="rl-accordion" id="rl-acc-5">
+      <div class="rl-acc-hdr" onclick="toggleRLPhase(5)" style="background:var(--gray-50)">
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:1.1rem" id="rl-arrow-5">▶</span>
+          <div>
+            <div style="font-size:.875rem;font-weight:700;color:var(--blue-900)">Phase 5 — Maximum Aggression</div>
+            <div style="font-size:.75rem;color:var(--gray-500)">8 dimensions tested · PF 3.19 · WR 51.5% achieved</div>
+          </div>
+        </div>
+        <span class="badge badge-green">Done</span>
+      </div>
+      <div class="rl-acc-body" id="rl-body-5" style="display:none">
+        <div id="phase5-content"></div>
+      </div>
+    </div>
+    <!-- PHASE 6 -->
+    <div class="rl-accordion" id="rl-acc-6">
+      <div class="rl-acc-hdr" onclick="toggleRLPhase(6)" style="background:var(--gray-50)">
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:1.1rem" id="rl-arrow-6">▶</span>
+          <div>
+            <div style="font-size:.875rem;font-weight:700;color:var(--blue-900)">Phase 6 — Broker Optimization</div>
+            <div style="font-size:.75rem;color:var(--gray-500)">H4 test + Spread impact · Pepperstone wins · H1 confirmed best</div>
+          </div>
+        </div>
+        <span class="badge badge-green">Done</span>
+      </div>
+      <div class="rl-acc-body" id="rl-body-6" style="display:none">
+        <div id="phase6-content"></div>
+      </div>
+    </div>
+    <!-- PHASE 7 -->
+    <div class="rl-accordion" id="rl-acc-7">
+      <div class="rl-acc-hdr" onclick="toggleRLPhase(7)" style="background:var(--gray-50)">
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:1.1rem" id="rl-arrow-7">▶</span>
+          <div>
+            <div style="font-size:.875rem;font-weight:700;color:var(--blue-900)">Phase 7 — Final Validation</div>
+            <div style="font-size:.75rem;color:var(--gray-500)">Walk-forward ROBUST · WF ratio 1.00 · Monte Carlo confirmed</div>
+          </div>
+        </div>
+        <span class="badge badge-green">Done</span>
+      </div>
+      <div class="rl-acc-body" id="rl-body-7" style="display:none">
+        <div id="phase7-content"></div>
+      </div>
+    </div>
+  </div>
 </div>
 </div>
 
-<div class="page" id="page-multimarket">
-<div class="page-inner">
-  <div class="breadcrumb"><a href="#" onclick="showPage('home');return false;">Home</a><span class="breadcrumb-sep">/</span>Analysis</div>
-  <div class="page-title">Multi-Market Results</div>
-  <div class="page-subtitle">Champion tested across Gold, NAS100, GBPJPY, BTC, and more</div>
-  <div class="page-divider"></div>
-  <div id="multimarket-content"></div>
-</div>
-</div>
-
-<div class="page" id="page-phase4">
-<div class="page-inner">
-  <div class="breadcrumb"><a href="#" onclick="showPage('home');return false;">Home</a><span class="breadcrumb-sep">/</span>Phases</div>
-  <div class="page-title">Phase 4 — Root Cause Analysis</div>
-  <div class="page-subtitle">Why results were low and exactly what to fix</div>
-  <div class="page-divider"></div>
-  <div id="phase4-content"></div>
-</div>
-</div>
-
-<div class="page" id="page-phase5">
-<div class="page-inner">
-  <div class="breadcrumb"><a href="#" onclick="showPage('home');return false;">Home</a><span class="breadcrumb-sep">/</span>Phases</div>
-  <div class="page-title">Phase 5 — Maximum Aggression</div>
-  <div class="page-subtitle">8 dimensions tested · Win rate revolution · PF 3.19 achieved</div>
-  <div class="page-divider"></div>
-  <div id="phase5-content"></div>
-</div>
-</div>
-
-<div class="page" id="page-phase6">
-<div class="page-inner">
-  <div class="breadcrumb"><a href="#" onclick="showPage('home');return false;">Home</a><span class="breadcrumb-sep">/</span>Phases</div>
-  <div class="page-title">Phase 6 — Broker Optimization</div>
-  <div class="page-subtitle">H4 timeframe test + Spread impact analysis · Pepperstone wins</div>
-  <div class="page-divider"></div>
-  <div id="phase6-content"></div>
-</div>
-</div>
-
-<div class="page" id="page-phase7">
-<div class="page-inner">
-  <div class="breadcrumb"><a href="#" onclick="showPage('home');return false;">Home</a><span class="breadcrumb-sep">/</span>Phases</div>
-  <div class="page-title">Phase 7 — Final Validation</div>
-  <div class="page-subtitle">Walk-forward ROBUST · Pepperstone simulation · Monte Carlo</div>
-  <div class="page-divider"></div>
-  <div id="phase7-content"></div>
-</div>
-</div>
+<!-- phase7 redirect stub -->
+<div class="page" id="page-phase7" style="display:none"></div>
 
 <div class="page" id="page-pepperstone">
 <div class="page-inner">
-  <div class="breadcrumb"><a href="#" onclick="showPage('home');return false;">Home</a><span class="breadcrumb-sep">/</span>Live Trading</div>
+  <div class="breadcrumb"><a href="#" onclick="showPage('home');return false;">Home</a><span class="breadcrumb-sep">/</span>Live System</div>
   <div class="page-title">Pepperstone Razor — Live Setup</div>
   <div class="page-subtitle">Account 51489276 · XAUUSD · APEX_Pepperstone_v1 · Walk-Forward ROBUST</div>
   <div class="page-divider"></div>
@@ -1122,53 +1192,29 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
 </div>
 </div>
 
-<div class="page" id="page-risk">
-<div class="page-inner">
-  <div class="breadcrumb"><a href="#" onclick="showPage('home');return false;">Home</a><span class="breadcrumb-sep">/</span>Live Trading</div>
-  <div class="page-title">Risk Manager</div>
-  <div class="page-subtitle">Position sizing, drawdown limits, and risk at each level</div>
-  <div class="page-divider"></div>
-  <div id="risk-content"></div>
-</div>
-</div>
+<!-- demolplan + risk + calculator + compound + claude redirect to tools -->
+<div class="page" id="page-demolplan" style="display:none"></div>
+<div class="page" id="page-calculator" style="display:none"></div>
+<div class="page" id="page-compound" style="display:none"></div>
+<div class="page" id="page-claude" style="display:none"></div>
 
-<div class="page" id="page-demolplan">
-<div class="page-inner">
-  <div class="breadcrumb"><a href="#" onclick="showPage('home');return false;">Home</a><span class="breadcrumb-sep">/</span>Live Trading</div>
-  <div class="page-title">Demo Plan Timeline</div>
-  <div class="page-subtitle">3-month demo schedule before going live</div>
-  <div class="page-divider"></div>
-  <div id="demolplan-content"></div>
-</div>
-</div>
-
-<div class="page" id="page-calculator">
+<!-- ══════ TOOLS HUB (Risk + Calculator + Compounding) ══════ -->
+<div class="page" id="page-tools">
 <div class="page-inner">
   <div class="breadcrumb"><a href="#" onclick="showPage('home');return false;">Home</a><span class="breadcrumb-sep">/</span>Tools</div>
-  <div class="page-title">Risk Calculator</div>
-  <div class="page-subtitle">Lot size, compounding, risk of ruin, and target calculator</div>
+  <div class="page-title">Risk &amp; Calculator</div>
+  <div class="page-subtitle">Lot Calculator · Compounding Projector · Risk of Ruin — all in one place</div>
   <div class="page-divider"></div>
-  <div id="calculator-content"></div>
-</div>
-</div>
-
-<div class="page" id="page-compound">
-<div class="page-inner">
-  <div class="breadcrumb"><a href="#" onclick="showPage('home');return false;">Home</a><span class="breadcrumb-sep">/</span>Tools</div>
-  <div class="page-title">Compounding Projector</div>
-  <div class="page-subtitle">Project account growth from $3,000 → $30,000</div>
-  <div class="page-divider"></div>
-  <div id="compound-content"></div>
-</div>
-</div>
-
-<div class="page" id="page-claude">
-<div class="page-inner">
-  <div class="breadcrumb"><a href="#" onclick="showPage('home');return false;">Home</a><span class="breadcrumb-sep">/</span>Tools</div>
-  <div class="page-title">Claude AI Strategy Advisor</div>
-  <div class="page-subtitle">Ask Claude anything about your trading system</div>
-  <div class="page-divider"></div>
-  <div id="claude-content"></div>
+  <div class="dna-tab-bar" style="margin-bottom:16px">
+    <button class="dna-tab on" id="tools-tab-risk" onclick="switchToolsTab('risk')">🎯 Risk Manager</button>
+    <button class="dna-tab" id="tools-tab-calculator" onclick="switchToolsTab('calculator')">🧮 Lot Calculator</button>
+    <button class="dna-tab" id="tools-tab-compound" onclick="switchToolsTab('compound')">📈 Compounding</button>
+    <button class="dna-tab" id="tools-tab-claude" onclick="switchToolsTab('claude')">🤖 Claude AI</button>
+  </div>
+  <div id="tools-tab-content-risk"><div id="risk-content"></div></div>
+  <div id="tools-tab-content-calculator" style="display:none"><div id="calculator-content"></div></div>
+  <div id="tools-tab-content-compound" style="display:none"><div id="compound-content"></div></div>
+  <div id="tools-tab-content-claude" style="display:none"><div id="claude-content"></div></div>
 </div>
 </div>
 
@@ -1757,7 +1803,32 @@ const MONTHLY_RETURNS_CHAMP = [1.2,17.0,16.9,-0.5,0.8,1.1,2.3,1.9,-0.3,0.7,0.4,1
 const pageInitFns = {};
 const pageInited = {};
 
+/* ── PAGE MERGE REDIRECTS ─────────────────────── */
+const PAGE_REDIRECTS={
+  bracket:{page:'strategies',tab:()=>switchStratTab('bracket')},
+  dna:{page:'strategies',tab:()=>switchStratTab('dna')},
+  multimarket:{page:'market',tab:()=>switchMarketTab('multimarket')},
+  stress:{page:'market',tab:()=>switchMarketTab('stress')},
+  phase4:{page:'researchlog',tab:()=>toggleRLPhase(4,true)},
+  phase5:{page:'researchlog',tab:()=>toggleRLPhase(5,true)},
+  phase6:{page:'researchlog',tab:()=>toggleRLPhase(6,true)},
+  phase7:{page:'researchlog',tab:()=>toggleRLPhase(7,true)},
+  risk:{page:'tools',tab:()=>switchToolsTab('risk')},
+  calculator:{page:'tools',tab:()=>switchToolsTab('calculator')},
+  compound:{page:'tools',tab:()=>switchToolsTab('compound')},
+  claude:{page:'tools',tab:()=>switchToolsTab('claude')},
+  demolplan:{page:'tools',tab:()=>switchToolsTab('risk')},
+};
+
 function showPage(id) {
+  // Handle merged page redirects
+  if(PAGE_REDIRECTS[id]){
+    const r=PAGE_REDIRECTS[id];
+    showPage(r.page);
+    setTimeout(r.tab,50);
+    return;
+  }
+
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   const target = document.getElementById('page-' + id);
   if(target) target.classList.add('active');
@@ -1776,6 +1847,67 @@ function showPage(id) {
   // Scroll to top
   document.querySelector('.main-content').scrollTo(0, 0);
 }
+
+/* ── TAB SWITCHERS ────────────────────────────── */
+function switchStratTab(tab){
+  ['all100','bracket','dna'].forEach(t=>{
+    const el=document.getElementById('strats-tab-'+t);
+    if(el)el.style.display=t===tab?'block':'none';
+    const btn=document.getElementById('strat-tab-'+t);
+    if(btn)btn.classList.toggle('on',t===tab);
+  });
+  if(tab==='bracket'&&!pageInited['bracket']&&pageInitFns['bracket']){pageInitFns['bracket']();pageInited['bracket']=true;}
+  if(tab==='dna'&&!pageInited['dna']&&pageInitFns['dna']){pageInitFns['dna']();pageInited['dna']=true;}
+}
+
+function switchMarketTab(tab){
+  ['multimarket','stress','forward'].forEach(t=>{
+    const el=document.getElementById('mkt-tab-content-'+t);
+    if(el)el.style.display=t===tab?'block':'none';
+    const btn=document.getElementById('mkt-tab-'+t);
+    if(btn)btn.classList.toggle('on',t===tab);
+  });
+  if(tab==='multimarket'&&!pageInited['multimarket']&&pageInitFns['multimarket']){pageInitFns['multimarket']();pageInited['multimarket']=true;}
+  if(tab==='stress'&&!pageInited['stress']&&pageInitFns['stress']){pageInitFns['stress']();pageInited['stress']=true;}
+}
+
+function switchToolsTab(tab){
+  ['risk','calculator','compound','claude'].forEach(t=>{
+    const el=document.getElementById('tools-tab-content-'+t);
+    if(el)el.style.display=t===tab?'block':'none';
+    const btn=document.getElementById('tools-tab-'+t);
+    if(btn)btn.classList.toggle('on',t===tab);
+  });
+  const inits={risk:'risk',calculator:'calculator',compound:'compound',claude:'claude'};
+  const key=inits[tab];
+  if(key&&!pageInited[key]&&pageInitFns[key]){pageInitFns[key]();pageInited[key]=true;}
+}
+
+let rlOpenPhase=4;
+function toggleRLPhase(n,forceOpen){
+  const isOpen=document.getElementById('rl-body-'+n)?.style.display!=='none';
+  if(forceOpen&&isOpen)return;
+  [4,5,6,7].forEach(p=>{
+    const body=document.getElementById('rl-body-'+p);
+    const arrow=document.getElementById('rl-arrow-'+p);
+    const hdr=document.querySelector('#rl-acc-'+p+' .rl-acc-hdr');
+    const open=p===n&&(!isOpen||forceOpen);
+    if(body)body.style.display=open?'block':'none';
+    if(arrow)arrow.textContent=open?'▼':'▶';
+    if(p===4){const a=document.querySelector('#rl-acc-4 .rl-acc-hdr span');if(a)a.textContent=open?'▼':'▶';}
+    if(open&&!pageInited['phase'+p]&&pageInitFns['phase'+p]){pageInitFns['phase'+p]();pageInited['phase'+p]=true;}
+  });
+}
+
+pageInitFns['researchlog']=function(){toggleRLPhase(4,true);};
+pageInitFns['market']=function(){
+  switchMarketTab('multimarket');
+  if(!pageInited['multimarket']&&pageInitFns['multimarket']){pageInitFns['multimarket']();pageInited['multimarket']=true;}
+};
+pageInitFns['tools']=function(){
+  switchToolsTab('risk');
+  if(!pageInited['risk']&&pageInitFns['risk']){pageInitFns['risk']();pageInited['risk']=true;}
+};
 
 /* ══════════════════════════════════════════════════
    HOME DASHBOARD INIT
