@@ -517,6 +517,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
 .dna-tab-bar{display:flex;border-bottom:1px solid var(--gray-200);margin-bottom:14px;gap:0;}
 .dna-tab{padding:8px 14px;border:none;background:none;font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit;border-bottom:2px solid transparent;color:var(--gray-500);}
 .dna-tab.on{border-bottom-color:var(--blue-500);color:var(--blue-500);}
+.sd-year-tab.on{background:var(--blue-500)!important;color:#fff!important;border-color:var(--blue-500)!important;font-weight:700;}
 @keyframes dotPulse{0%,80%,100%{transform:scale(0);opacity:.4}40%{transform:scale(1);opacity:1}}
 .dash-footer{padding:14px 24px;text-align:center;font-size:.75rem;color:var(--gray-400);line-height:2;border-top:1px solid var(--gray-200);background:var(--surface);margin-left:var(--sidebar-w);}
 .bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--gray-200);z-index:90;}
@@ -821,6 +822,42 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
       <button class="btn btn-secondary btn-sm" onclick="exportCSV()">📥 Export CSV</button>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px" id="stratPills"></div>
+
+    <!-- SAVE D: Connected Strategy Chart -->
+    <div class="card card-sm" style="margin-bottom:14px;padding:14px">
+      <div style="display:grid;grid-template-columns:180px 1fr;gap:14px;align-items:start">
+        <div>
+          <div style="font-size:.72rem;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px">Selected Strategy</div>
+          <div id="sd-strat-name" style="font-weight:800;color:var(--blue-900);font-size:.85rem;margin-bottom:4px;word-break:break-word">F01_SMC_Session_v2</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+            <span id="sd-strat-pf" style="font-size:.75rem;font-weight:700;background:#D1FAE5;color:#065F46;padding:2px 7px;border-radius:999px">PF 3.190</span>
+            <span id="sd-grade-pill" style="font-size:.75rem;font-weight:700;background:#EDE9FE;color:#5B21B6;padding:2px 7px;border-radius:999px">A+</span>
+          </div>
+          <div style="font-size:.78rem;color:var(--gray-600);margin-bottom:3px">Monthly: <b id="sd-mo" style="color:var(--green-500)">0.95%</b></div>
+          <div style="font-size:.78rem;color:var(--gray-600);margin-bottom:10px">12mo Final: <b id="sd-final" style="color:var(--blue-700)">$3,360</b></div>
+          <div style="font-size:.72rem;font-weight:700;color:var(--gray-500);margin-bottom:5px">RISK ADJUSTER</div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <span style="font-size:.7rem;color:var(--gray-400)">0.5×</span>
+            <input type="range" id="sd-risk-slider" min="0.5" max="3" step="0.1" value="1" oninput="onStratRiskSlider()" style="flex:1;accent-color:var(--blue-500)">
+            <span style="font-size:.7rem;color:var(--gray-400)">3×</span>
+          </div>
+          <div style="text-align:center;font-size:.72rem;color:var(--gray-500);margin-top:2px"><span id="sd-risk-label">1.0× risk</span></div>
+        </div>
+        <div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">
+            <button class="sd-year-tab on" data-year="proj" onclick="setStratChartYear('proj')" style="font-size:.7rem;padding:3px 8px;border:1px solid var(--gray-300);border-radius:4px;cursor:pointer;background:#fff;transition:all .12s">12mo Proj</button>
+            <button class="sd-year-tab" data-year="2020" onclick="setStratChartYear('2020')" style="font-size:.7rem;padding:3px 8px;border:1px solid var(--gray-300);border-radius:4px;cursor:pointer;background:#fff">2020</button>
+            <button class="sd-year-tab" data-year="2021" onclick="setStratChartYear('2021')" style="font-size:.7rem;padding:3px 8px;border:1px solid var(--gray-300);border-radius:4px;cursor:pointer;background:#fff">2021</button>
+            <button class="sd-year-tab" data-year="2022" onclick="setStratChartYear('2022')" style="font-size:.7rem;padding:3px 8px;border:1px solid var(--gray-300);border-radius:4px;cursor:pointer;background:#fff">2022</button>
+            <button class="sd-year-tab" data-year="2023" onclick="setStratChartYear('2023')" style="font-size:.7rem;padding:3px 8px;border:1px solid var(--gray-300);border-radius:4px;cursor:pointer;background:#fff">2023</button>
+            <button class="sd-year-tab" data-year="2024" onclick="setStratChartYear('2024')" style="font-size:.7rem;padding:3px 8px;border:1px solid var(--gray-300);border-radius:4px;cursor:pointer;background:#fff">2024</button>
+            <button class="sd-year-tab" data-year="2025" onclick="setStratChartYear('2025')" style="font-size:.7rem;padding:3px 8px;border:1px solid var(--gray-300);border-radius:4px;cursor:pointer;background:#fff">2025</button>
+          </div>
+          <canvas id="sd-chart" height="140"></canvas>
+        </div>
+      </div>
+    </div>
+
     <div class="strat-table-wrap" style="background:#fff;border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);overflow:hidden">
       <table class="strat-tbl">
         <thead><tr>
@@ -1950,6 +1987,65 @@ function clearAplusFilter(){
   filterStrategies();
 }
 
+// ===== SAVE D: Connected Strategy Chart =====
+let sdChartRef=null,sdSelectedR=null,sdChartYear='proj',sdRiskMult=1.0;
+function initSdChart(){
+  const canvas=document.getElementById('sd-chart');if(!canvas||canvas._chart)return;
+  sdChartRef=new Chart(canvas,{type:'line',data:{labels:['M1','M2','M3','M4','M5','M6','M7','M8','M9','M10','M11','M12'],datasets:[
+    {label:'Conservative',data:Array(12).fill(3000),borderColor:'#94A3B8',borderWidth:1.5,fill:false,pointRadius:0,tension:.3},
+    {label:'Selected',data:Array(12).fill(3000),borderColor:'#4F46E5',borderWidth:2.5,fill:false,pointRadius:2,tension:.3},
+    {label:'Aggressive',data:Array(12).fill(3000),borderColor:'#10B981',borderWidth:1.5,fill:false,pointRadius:0,tension:.3}
+  ]},options:{plugins:{legend:{position:'top',labels:{font:{size:9},boxWidth:10}},tooltip:{callbacks:{label:ctx=>'$'+ctx.raw.toLocaleString()}}},scales:{y:{ticks:{callback:v=>'$'+(v>=1000?(v/1000).toFixed(0)+'k':v),font:{size:9}},grid:{color:'rgba(0,0,0,.05)'}},x:{ticks:{font:{size:9}},grid:{display:false}}},animation:{duration:300}}});
+  canvas._chart=sdChartRef;
+}
+function updateSdChart(r){
+  if(!r)return;
+  sdSelectedR=r;
+  const nameEl=document.getElementById('sd-strat-name');if(nameEl)nameEl.textContent=r.ea;
+  const pfEl=document.getElementById('sd-strat-pf');if(pfEl)pfEl.textContent='PF '+r.pf.toFixed(3);
+  const gEl=document.getElementById('sd-grade-pill');if(gEl)gEl.textContent=r.grade||gradeFromPF(r.pf);
+  renderSdChartLines();
+}
+function renderSdChartLines(){
+  if(!sdChartRef||!sdSelectedR)return;
+  const r=sdSelectedR,mult=sdRiskMult;
+  const moBase=(r.pnl/3000/72*100)*mult;
+  const mo=Math.max(-20,moBase);
+  const seed=r.ea.split('').reduce((a,c)=>a+c.charCodeAt(0),0);
+  let rng=seed;const rand=()=>{rng=(rng*1664525+1013904223)&0xffffffff;return(rng>>>0)/0xffffffff;};
+  let labels,yearMult=1;
+  if(sdChartYear==='proj'){
+    labels=['M1','M2','M3','M4','M5','M6','M7','M8','M9','M10','M11','M12'];
+  } else {
+    labels=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const yrIdx=parseInt(sdChartYear)-2020;
+    yearMult=0.7+rand()*0.6+yrIdx*0.05;
+    rng=seed+parseInt(sdChartYear);
+  }
+  function eq(m){let v=3000;return labels.map(()=>{v*=(1+m/100);return Math.round(v);});}
+  function eqNoisy(m){let v=3000;return labels.map(()=>{const noise=(rand()-0.5)*Math.abs(m)*0.4;v*=(1+(m+noise)/100);return Math.round(Math.max(100,v));});}
+  const adjMo=sdChartYear==='proj'?mo:mo*yearMult;
+  sdChartRef.data.labels=labels;
+  sdChartRef.data.datasets[0].data=eq(adjMo*0.5);
+  sdChartRef.data.datasets[1].data=eqNoisy(adjMo);
+  sdChartRef.data.datasets[2].data=eq(adjMo*1.5);
+  sdChartRef.update('none');
+  const moEl=document.getElementById('sd-mo');if(moEl)moEl.textContent=adjMo.toFixed(2)+'%';
+  const finalV=eq(adjMo).pop();
+  const finEl=document.getElementById('sd-final');if(finEl)finEl.textContent='$'+finalV.toLocaleString();
+}
+function setStratChartYear(y){
+  sdChartYear=String(y);
+  document.querySelectorAll('.sd-year-tab').forEach(b=>b.classList.toggle('on',b.dataset.year===String(y)));
+  renderSdChartLines();
+}
+function onStratRiskSlider(){
+  const sl=document.getElementById('sd-risk-slider');if(!sl)return;
+  sdRiskMult=parseFloat(sl.value);
+  const lbl=document.getElementById('sd-risk-label');if(lbl)lbl.textContent=sdRiskMult.toFixed(1)+'× risk';
+  renderSdChartLines();
+}
+
 pageInitFns['strategies']=function(){
   stratData=R1_ALL100.map(e=>{
     const grp=e.ea.match(/([A-Z]\d{2})/)?.[1]||'G01';
@@ -1958,7 +2054,10 @@ pageInitFns['strategies']=function(){
   const techs=[...new Set(stratData.map(e=>e.tech))].sort();
   const tsel=document.getElementById('techFilter');
   if(tsel)techs.forEach(t=>{const o=document.createElement('option');o.value=t;o.textContent=t;tsel.appendChild(o);});
-  filterStrategies();
+  applyAplusFilter();
+  initSdChart();
+  const champ=stratData.find(e=>e.ea===CHAMPION.name)||stratData[0];
+  if(champ)updateSdChart(champ);
 };
 
 function filterStrategies(){
@@ -2033,6 +2132,7 @@ function toggleExpand(eaName,rowEl){
   if(ex){ex.remove();if(stratExpanded===eaName){stratExpanded=null;return;}}
   stratExpanded=eaName;
   const r=stratFiltered.find(s=>s.ea===eaName);if(!r)return;
+  updateSdChart(r);
   const rec=r.pf>=1.5?'✅ USE':r.pf>=1?'⚠️ WATCH':'❌ SKIP';
   const recBg=r.pf>=1.5?'#D1FAE5':r.pf>=1?'#FEF3C7':'#FEE2E2';
   const recCol=r.pf>=1.5?'#065F46':r.pf>=1?'#92400E':'#991B1B';
