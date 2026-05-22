@@ -481,7 +481,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
 .bracket-card.advancing{border-left-color:var(--green-500);}
 .bracket-card.eliminated{background:var(--gray-100);opacity:.5;border-left-color:var(--gray-300);cursor:default;}
 .bracket-card.eliminated:hover{transform:none;box-shadow:none;}
-.bracket-card.champion{background:linear-gradient(135deg,#4F46E5,#EC4899);border:none;border-radius:10px;padding:10px 12px;animation:champGlow 2s ease-in-out infinite;}
+.bracket-card.champion{background:linear-gradient(135deg,#567C8D,#EC4899);border:none;border-radius:10px;padding:10px 12px;animation:champGlow 2s ease-in-out infinite;}
 @keyframes champGlow{0%,100%{box-shadow:0 0 12px rgba(79,70,229,.4);}50%{box-shadow:0 0 24px rgba(236,72,153,.6);}}
 .bracket-card-name{font-size:.75rem;font-weight:600;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:145px;}
 .bracket-card.champion .bracket-card-name{color:#fff;font-size:.8rem;}
@@ -722,7 +722,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
   </div>
   <div class="topbar-right">
     <span class="topbar-badge" style="background:linear-gradient(90deg,var(--mauve),var(--teal))">HG Hunt ⚡</span>
-    <span class="topbar-badge" style="background:linear-gradient(90deg,#7C3AED,#4F46E5)">Phase 9 ⚡</span>
+    <span class="topbar-badge" style="background:linear-gradient(90deg,#7C3AED,#567C8D)">Phase 9 ⚡</span>
     <span class="topbar-badge live">🟢 Demo Mode</span>
     <button class="topbar-icon-btn" title="Notifications" onclick="toggleNotif()">🔔</button>
     <button class="topbar-icon-btn" id="sidebarToggle" title="Toggle sidebar" onclick="toggleSidebar()">☰</button>
@@ -957,9 +957,6 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
 <!-- ══════ STUB PAGES (filled in later saves) ══════ -->
 
 <!-- page-bracket and page-dna redirect to strategies hub -->
-<div class="page" id="page-bracket" style="display:none"></div>
-<div class="page" id="page-dna" style="display:none"></div>
-
 <!-- ══════ STRATEGIES HUB (Tournament + All 100 + DNA) ══════ -->
 <div class="page" id="page-strategies">
 <div class="page-inner">
@@ -1080,13 +1077,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
 </div>
 
 <!-- page-stress and page-multimarket redirect to market hub -->
-<div class="page" id="page-stress" style="display:none"></div>
-<div class="page" id="page-multimarket" style="display:none"></div>
 <!-- phase pages redirect to researchlog -->
-<div class="page" id="page-phase4" style="display:none"></div>
-<div class="page" id="page-phase5" style="display:none"></div>
-<div class="page" id="page-phase6" style="display:none"></div>
-
 <!-- ══════ MARKET ANALYSIS HUB ══════ -->
 <div class="page" id="page-market">
 <div class="page-inner">
@@ -1188,8 +1179,6 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
 </div>
 
 <!-- phase7 redirect stub -->
-<div class="page" id="page-phase7" style="display:none"></div>
-
 <div class="page" id="page-pepperstone">
 <div class="page-inner">
   <div class="breadcrumb"><a href="#" onclick="showPage('home');return false;">Home</a><span class="breadcrumb-sep">/</span>Live System</div>
@@ -1201,11 +1190,6 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
 </div>
 
 <!-- demolplan + risk + calculator + compound + claude redirect to tools -->
-<div class="page" id="page-demolplan" style="display:none"></div>
-<div class="page" id="page-calculator" style="display:none"></div>
-<div class="page" id="page-compound" style="display:none"></div>
-<div class="page" id="page-claude" style="display:none"></div>
-
 <!-- ══════ TOOLS HUB (Risk + Calculator + Compounding) ══════ -->
 <div class="page" id="page-tools">
 <div class="page-inner">
@@ -1972,7 +1956,7 @@ pageInitFns['home']=function(){
     labels:['Start','1','2','3','4','5','6','7','8','9','10','11','12'],
     datasets:[
       {label:'Conservative',data:[],borderColor:'#10B981',backgroundColor:'rgba(16,185,129,.06)',fill:true,tension:.4,borderWidth:2,pointRadius:0},
-      {label:'Base',data:[],borderColor:'#4F46E5',backgroundColor:'rgba(79,70,229,.08)',fill:true,tension:.4,borderWidth:2.5,pointRadius:3,pointBackgroundColor:'#4F46E5'},
+      {label:'Base',data:[],borderColor:'#567C8D',backgroundColor:'rgba(79,70,229,.08)',fill:true,tension:.4,borderWidth:2.5,pointRadius:3,pointBackgroundColor:'#567C8D'},
       {label:'Aggressive',data:[],borderColor:'#EC4899',backgroundColor:'rgba(236,72,153,.05)',fill:true,tension:.4,borderWidth:2,pointRadius:0},
     ]},options:{responsive:true,maintainAspectRatio:false,
     plugins:{legend:{display:true,position:'bottom',labels:{font:{family:'Inter',size:11},boxWidth:10,color:'#6B7280',usePointStyle:true}},
@@ -2123,7 +2107,7 @@ function openPanel(eaName,roundIdx){
     const rc=document.getElementById('radarCvs');
     if(!rc)return;
     const rv=[isChamp?51.5:Math.min(65,35+pf*10),Math.min(100,pf*28),isChamp?9.5:Math.min(10,monthly*8),isChamp?85:65,Math.min(100,trades/1500*100),isChamp?75:60,isChamp?90:Math.min(85,50+pf*15),isChamp?88:Math.min(80,40+pf*20)];
-    new Chart(rc,{type:'radar',data:{labels:['WR','PF','Monthly','Low DD','Freq','RR','Consist.','Stress'],datasets:[{data:rv,borderColor:'#4F46E5',backgroundColor:'rgba(79,70,229,.12)',borderWidth:2,pointBackgroundColor:'#4F46E5',pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,scales:{r:{min:0,max:100,grid:{color:'#E5E7EB'},pointLabels:{font:{family:'Inter',size:10},color:'#6B7280'},ticks:{display:false}}},plugins:{legend:{display:false}}}});
+    new Chart(rc,{type:'radar',data:{labels:['WR','PF','Monthly','Low DD','Freq','RR','Consist.','Stress'],datasets:[{data:rv,borderColor:'#567C8D',backgroundColor:'rgba(79,70,229,.12)',borderWidth:2,pointBackgroundColor:'#567C8D',pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,scales:{r:{min:0,max:100,grid:{color:'#E5E7EB'},pointLabels:{font:{family:'Inter',size:10},color:'#6B7280'},ticks:{display:false}}},plugins:{legend:{display:false}}}});
   },80);
   document.getElementById('panelBackdrop').classList.add('open');
   document.getElementById('slidePanel').classList.add('open');
@@ -2161,7 +2145,7 @@ function initSdChart(){
   const canvas=document.getElementById('sd-chart');if(!canvas||canvas._chart)return;
   sdChartRef=new Chart(canvas,{type:'line',data:{labels:['M1','M2','M3','M4','M5','M6','M7','M8','M9','M10','M11','M12'],datasets:[
     {label:'Conservative',data:Array(12).fill(3000),borderColor:'#94A3B8',borderWidth:1.5,fill:false,pointRadius:0,tension:.3},
-    {label:'Selected',data:Array(12).fill(3000),borderColor:'#4F46E5',borderWidth:2.5,fill:false,pointRadius:2,tension:.3},
+    {label:'Selected',data:Array(12).fill(3000),borderColor:'#567C8D',borderWidth:2.5,fill:false,pointRadius:2,tension:.3},
     {label:'Aggressive',data:Array(12).fill(3000),borderColor:'#10B981',borderWidth:1.5,fill:false,pointRadius:0,tension:.3}
   ]},options:{plugins:{legend:{position:'top',labels:{font:{size:9},boxWidth:10}},tooltip:{callbacks:{label:ctx=>'$'+ctx.raw.toLocaleString()}}},scales:{y:{ticks:{callback:v=>'$'+(v>=1000?(v/1000).toFixed(0)+'k':v),font:{size:9}},grid:{color:'rgba(0,0,0,.05)'}},x:{ticks:{font:{size:9}},grid:{display:false}}},animation:{duration:300}}});
   canvas._chart=sdChartRef;
@@ -2500,7 +2484,7 @@ function renderDNATab(){
       const rc=document.getElementById('dnaRadar');if(!rc)return;
       const rv=v=>[v.wr/60*100,v.pf*25,v.monthly/0.6*55,100-v.maxdd,Math.min(100,v.trades/1500*100),60,70,75];
       new Chart(rc,{type:'radar',data:{labels:['Win Rate','PF','Monthly','Low DD','Trade Freq','RR','Consist','Stress'],datasets:[
-        {label:s.id,data:rv(s),borderColor:'#4F46E5',backgroundColor:'rgba(79,70,229,.12)',borderWidth:2,pointBackgroundColor:'#4F46E5',pointRadius:3},
+        {label:s.id,data:rv(s),borderColor:'#567C8D',backgroundColor:'rgba(79,70,229,.12)',borderWidth:2,pointBackgroundColor:'#567C8D',pointRadius:3},
         ...(curDnaIdx===0?[]:[{label:champ.id,data:rv(champ),borderColor:'#EC4899',backgroundColor:'rgba(236,72,153,.07)',borderWidth:2,pointBackgroundColor:'#EC4899',pointRadius:3,borderDash:[4,2]}])
       ]},options:{responsive:true,maintainAspectRatio:false,scales:{r:{min:0,max:100,grid:{color:'#E5E7EB'},pointLabels:{font:{family:'Inter',size:10},color:'#6B7280'},ticks:{display:false}}},plugins:{legend:{position:'bottom',labels:{font:{family:'Inter',size:10},boxWidth:8}}}}});
     },60);
@@ -2697,7 +2681,7 @@ function updateRisk(i){
   }
   if(riskCurveMiniInst&&riskCurveMiniInst.data){
     riskCurveMiniInst.data.datasets[0].pointRadius=RISK_DATA.map((_,j)=>j===idx?5:2);
-    riskCurveMiniInst.data.datasets[0].pointBackgroundColor=RISK_DATA.map((_,j)=>j===idx?'#4F46E5':'rgba(79,70,229,.4)');
+    riskCurveMiniInst.data.datasets[0].pointBackgroundColor=RISK_DATA.map((_,j)=>j===idx?'#567C8D':'rgba(79,70,229,.4)');
     riskCurveMiniInst.data.datasets[1].pointRadius=RISK_DATA.map((_,j)=>j===idx?5:2);
     riskCurveMiniInst.data.datasets[1].pointBackgroundColor=RISK_DATA.map((_,j)=>j===idx?'#EF4444':'rgba(239,68,68,.4)');
     riskCurveMiniInst.update('none');
@@ -2988,7 +2972,7 @@ pageInitFns['kpihunt']=function(){
       labels:['Monthly','P($30k)','Max DD','Blowup'],
       datasets:[{
         data:[(24.34*initR),(65.5),(35),(20)],
-        backgroundColor:['#10B981','#4F46E5','#F59E0B','#EF4444'],
+        backgroundColor:['#10B981','#567C8D','#F59E0B','#EF4444'],
         borderRadius:5,borderSkipped:false
       }]
     },options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.raw.toFixed(1)}%`}}},scales:{y:{ticks:{callback:v=>v+'%',font:{size:9}},grid:{color:'rgba(0,0,0,.05)'}},x:{grid:{display:false},ticks:{font:{size:10}}}},animation:{duration:0}}});
@@ -3012,7 +2996,7 @@ pageInitFns['kpihunt']=function(){
       }
       // BUG 6: update mini bars in KPI slider result
       const kpiIds=['kpi-sl-monthly','kpi-sl-p30k','kpi-sl-dd','kpi-sl-blowup'];
-      const kpiVals=[mo,p,dd,bl];const kpiMaxes=[24.34*1.5,95,35*1.5,90];const kpiCols=['#10B981','#4F46E5','#F59E0B','#EF4444'];
+      const kpiVals=[mo,p,dd,bl];const kpiMaxes=[24.34*1.5,95,35*1.5,90];const kpiCols=['#10B981','#567C8D','#F59E0B','#EF4444'];
       kpiIds.forEach((id,ki)=>{
         const el=document.getElementById(id);if(!el)return;
         let bar=document.getElementById(id+'-bar');
@@ -3733,7 +3717,7 @@ pageInitFns['roadmap']=function(){
     const compound=(start,mo,n)=>Array.from({length:n+1},(_,i)=>+(start*Math.pow(1+mo/100,i)).toFixed(0));
     roadmapChartInst=new Chart(ctx,{type:'line',data:{labels:months,datasets:[
       {label:'Conservative 0.95%/mo',data:compound(3000,0.95,36),borderColor:'#10B981',backgroundColor:'rgba(16,185,129,.08)',tension:.4,borderWidth:1.5,pointRadius:0},
-      {label:'Moderate 3%/mo',data:compound(3000,3,36),borderColor:'#4F46E5',backgroundColor:'rgba(79,70,229,.08)',tension:.4,borderWidth:2,pointRadius:0},
+      {label:'Moderate 3%/mo',data:compound(3000,3,36),borderColor:'#567C8D',backgroundColor:'rgba(79,70,229,.08)',tension:.4,borderWidth:2,pointRadius:0},
       {label:'Aggressive 7%/mo',data:compound(3000,7,36),borderColor:'#F97316',backgroundColor:'rgba(249,115,22,.08)',tension:.4,borderWidth:2,pointRadius:0},
       {label:'KPI Target $30k',data:Array(37).fill(30000),borderColor:'#EF4444',borderDash:[5,4],borderWidth:1,pointRadius:0,fill:false},
       {label:'Your Scenario',data:compound(3000,0.95,36),borderColor:'#EC4899',backgroundColor:'rgba(236,72,153,.08)',tension:.4,borderWidth:2,pointRadius:0,borderDash:[6,3],fill:false}
@@ -3776,7 +3760,7 @@ function rmCalc(){
       const months=Array.from({length:37},(_,i)=>i===0?'Start':i%6===0?`Mo ${i}`:'');
       roadmapChartInst=new Chart(ctx,{type:'line',data:{labels:months,datasets:[
         {label:'Conservative 0.95%/mo',data:_c(3000,0.95,36),borderColor:'#10B981',backgroundColor:'rgba(16,185,129,.08)',tension:.4,borderWidth:1.5,pointRadius:0},
-        {label:'Moderate 3%/mo',data:_c(3000,3,36),borderColor:'#4F46E5',backgroundColor:'rgba(79,70,229,.08)',tension:.4,borderWidth:2,pointRadius:0},
+        {label:'Moderate 3%/mo',data:_c(3000,3,36),borderColor:'#567C8D',backgroundColor:'rgba(79,70,229,.08)',tension:.4,borderWidth:2,pointRadius:0},
         {label:'Aggressive 7%/mo',data:_c(3000,7,36),borderColor:'#F97316',backgroundColor:'rgba(249,115,22,.08)',tension:.4,borderWidth:2,pointRadius:0},
         {label:'KPI Target $30k',data:Array(37).fill(30000),borderColor:'#EF4444',borderDash:[5,4],borderWidth:1,pointRadius:0,fill:false},
         {label:'Your Scenario ('+mo+'%/mo)',data:_c(3000,mo,36),borderColor:'#EC4899',backgroundColor:'rgba(236,72,153,.08)',tension:.4,borderWidth:2,pointRadius:0,borderDash:[6,3],fill:false}
@@ -4599,7 +4583,7 @@ function initIterChart(n){
   function eq(mo){let v=3000;return months.map(()=>{v*=(1+mo/100);return Math.round(v);});}
   canvas._chart=new Chart(canvas,{type:'line',data:{labels:months,datasets:[
     {label:'Conservative',data:eq(d.monthly*0.5),borderColor:'#94A3B8',borderWidth:1.5,fill:false,pointRadius:0,tension:.3},
-    {label:'Target',data:eq(d.monthly),borderColor:'#4F46E5',borderWidth:2.5,fill:false,pointRadius:2,tension:.3},
+    {label:'Target',data:eq(d.monthly),borderColor:'#567C8D',borderWidth:2.5,fill:false,pointRadius:2,tension:.3},
     {label:'Aggressive',data:eq(d.monthly*1.5),borderColor:'#10B981',borderWidth:1.5,fill:false,pointRadius:0,tension:.3}
   ]},options:{plugins:{legend:{position:'top',labels:{font:{size:9},boxWidth:10}},tooltip:{callbacks:{label:ctx=>'$'+ctx.raw.toLocaleString()}}},scales:{y:{ticks:{callback:v=>'$'+(v>=1000?(v/1000).toFixed(0)+'k':v),font:{size:9}},grid:{color:'rgba(0,0,0,.05)'}},x:{ticks:{font:{size:9}},grid:{display:false}}},animation:{duration:400}}});
 }
