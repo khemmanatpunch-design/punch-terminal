@@ -21,7 +21,7 @@
         +'<div style="width:56px;height:56px;background:linear-gradient(135deg,#2F4156,#567C8D);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:1.5rem">📊</div>'
         +'<div style="font-size:1.375rem;font-weight:800;color:#2F4156;margin-bottom:4px">PUNCH TERMINAL</div>'
         +'<div style="font-size:.875rem;color:#6B7280;margin-bottom:28px">Trading Research Platform</div>'
-        +'<input id="pw-in" type="password" placeholder="Enter password" style="width:100%;padding:12px 16px;border:1.5px solid #D1D5DB;border-radius:10px;font-size:1rem;font-family:Inter,sans-serif;outline:none;box-sizing:border-box;margin-bottom:12px;color:#111827">'
+        +'<input id="pw-in" type="password" placeholder="Enter password" style="width:100%;padding:12px 16px;border:1.5px solid #91AEC4;border-radius:10px;font-size:1rem;font-family:Inter,sans-serif;outline:none;box-sizing:border-box;margin-bottom:12px;color:#111827">'
         +'<button id="pw-btn" style="width:100%;padding:12px;background:linear-gradient(135deg,#2F4156,#567C8D);border:none;border-radius:10px;color:#fff;font-size:1rem;font-weight:600;cursor:pointer;font-family:Inter,sans-serif">Unlock</button>'
         +'<div id="pw-err" style="color:#EF4444;font-size:.875rem;margin-top:10px;min-height:20px"></div>'
         +'<div style="margin-top:20px;font-size:.75rem;color:#9CA3AF">Demo Only — No Real Trades</div>'
@@ -195,7 +195,7 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
 .nav-item-icon{font-size:1rem;width:20px;text-align:center;flex-shrink:0;}
 .nav-item-badge{
   margin-left:auto;padding:2px 7px;border-radius:var(--radius-full);
-  font-size:.7rem;font-weight:600;background:rgba(86,124,141,0.3);color:var(--pale-sky);
+  font-size:.75rem;font-weight:600;background:rgba(86,124,141,0.3);color:var(--pale-sky);
 }
 .nav-item-badge.green{background:rgba(16,185,129,0.2);color:#6EE7B7;}
 .nav-item-badge.pink{background:rgba(234,199,195,0.2);color:var(--blush);}
@@ -545,7 +545,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
 .code-ln{display:flex;gap:10px;}
 .code-num{color:#4B5563;flex-shrink:0;width:26px;text-align:right;user-select:none;}
 .code-txt{color:#E5E7EB;white-space:pre;}
-.ck{color:#818CF8;}.ct{color:#60A5FA;}.cs{color:#34D399;}.cn2{color:#FB923C;}.cc{color:#6B7280;font-style:italic;}
+.ck{color:#91AEC4;}.ct{color:#60A5FA;}.cs{color:#34D399;}.cn2{color:#FB923C;}.cc{color:#6B7280;font-style:italic;}
 .hm-grid{display:grid;gap:2px;}
 .hm-cell{border-radius:3px;cursor:pointer;transition:transform .1s;font-size:.75rem;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.85);font-weight:600;}
 .hm-cell:hover{transform:scale(1.15);z-index:2;position:relative;}
@@ -918,10 +918,10 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
     </div>
     <!-- Result row -->
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px" id="kb-result-row">
-      <div style="padding:10px;background:var(--green-100);border-radius:8px;text-align:center"><div style="font-size:.7rem;font-weight:600;color:var(--gray-500);text-transform:uppercase">Monthly</div><div id="kb-monthly" style="font-size:1.25rem;font-weight:800;color:var(--green-600)">9.5%</div></div>
-      <div style="padding:10px;background:rgba(145,174,196,0.15);border-radius:8px;text-align:center"><div style="font-size:.7rem;font-weight:600;color:var(--gray-500);text-transform:uppercase">P($30k)</div><div id="kb-p30k" style="font-size:1.25rem;font-weight:800;color:var(--navy)">28%</div></div>
-      <div style="padding:10px;background:var(--orange-100);border-radius:8px;text-align:center"><div style="font-size:.7rem;font-weight:600;color:var(--gray-500);text-transform:uppercase">Max DD</div><div id="kb-dd" style="font-size:1.25rem;font-weight:800;color:var(--orange-600)">24%</div></div>
-      <div style="padding:10px;background:var(--red-100);border-radius:8px;text-align:center"><div style="font-size:.7rem;font-weight:600;color:var(--gray-500);text-transform:uppercase">Blowup</div><div id="kb-blowup" style="font-size:1.25rem;font-weight:800;color:var(--red-500)">8%</div></div>
+      <div style="padding:10px;background:var(--green-100);border-radius:8px;text-align:center"><div style="font-size:.75rem;font-weight:600;color:var(--gray-500);text-transform:uppercase">Monthly</div><div id="kb-monthly" style="font-size:1.25rem;font-weight:800;color:var(--green-600)">9.5%</div></div>
+      <div style="padding:10px;background:rgba(145,174,196,0.15);border-radius:8px;text-align:center"><div style="font-size:.75rem;font-weight:600;color:var(--gray-500);text-transform:uppercase">P($30k)</div><div id="kb-p30k" style="font-size:1.25rem;font-weight:800;color:var(--navy)">28%</div></div>
+      <div style="padding:10px;background:var(--orange-100);border-radius:8px;text-align:center"><div style="font-size:.75rem;font-weight:600;color:var(--gray-500);text-transform:uppercase">Max DD</div><div id="kb-dd" style="font-size:1.25rem;font-weight:800;color:var(--orange-600)">24%</div></div>
+      <div style="padding:10px;background:var(--red-100);border-radius:8px;text-align:center"><div style="font-size:.75rem;font-weight:600;color:var(--gray-500);text-transform:uppercase">Blowup</div><div id="kb-blowup" style="font-size:1.25rem;font-weight:800;color:var(--red-500)">8%</div></div>
     </div>
     <div style="height:200px"><canvas id="kb-equity-chart"></canvas></div>
     <div style="display:flex;gap:16px;margin-top:8px;flex-wrap:wrap;font-size:.75rem;color:var(--gray-500)">
@@ -1014,21 +1014,21 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
           <div style="font-size:.78rem;color:var(--gray-600);margin-bottom:10px">12mo Final: <b id="sd-final" style="color:var(--navy)">$3,360</b></div>
           <div style="font-size:.75rem;font-weight:700;color:var(--gray-500);margin-bottom:5px">RISK ADJUSTER</div>
           <div style="display:flex;align-items:center;gap:6px">
-            <span style="font-size:.7rem;color:var(--gray-400)">0.5×</span>
+            <span style="font-size:.75rem;color:var(--gray-400)">0.5×</span>
             <input type="range" id="sd-risk-slider" min="0.5" max="3" step="0.1" value="1" oninput="onStratRiskSlider()" style="flex:1;accent-color:var(--teal)">
-            <span style="font-size:.7rem;color:var(--gray-400)">3×</span>
+            <span style="font-size:.75rem;color:var(--gray-400)">3×</span>
           </div>
           <div style="text-align:center;font-size:.75rem;color:var(--gray-500);margin-top:2px"><span id="sd-risk-label">1.0× risk</span></div>
         </div>
         <div>
           <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">
-            <button class="sd-year-tab on" data-year="proj" onclick="setStratChartYear('proj')" style="font-size:.7rem;padding:3px 8px;border:1px solid var(--gray-300);border-radius:4px;cursor:pointer;background:#fff;transition:all .12s">12mo Proj</button>
-            <button class="sd-year-tab" data-year="2020" onclick="setStratChartYear('2020')" style="font-size:.7rem;padding:3px 8px;border:1px solid var(--gray-300);border-radius:4px;cursor:pointer;background:#fff">2020</button>
-            <button class="sd-year-tab" data-year="2021" onclick="setStratChartYear('2021')" style="font-size:.7rem;padding:3px 8px;border:1px solid var(--gray-300);border-radius:4px;cursor:pointer;background:#fff">2021</button>
-            <button class="sd-year-tab" data-year="2022" onclick="setStratChartYear('2022')" style="font-size:.7rem;padding:3px 8px;border:1px solid var(--gray-300);border-radius:4px;cursor:pointer;background:#fff">2022</button>
-            <button class="sd-year-tab" data-year="2023" onclick="setStratChartYear('2023')" style="font-size:.7rem;padding:3px 8px;border:1px solid var(--gray-300);border-radius:4px;cursor:pointer;background:#fff">2023</button>
-            <button class="sd-year-tab" data-year="2024" onclick="setStratChartYear('2024')" style="font-size:.7rem;padding:3px 8px;border:1px solid var(--gray-300);border-radius:4px;cursor:pointer;background:#fff">2024</button>
-            <button class="sd-year-tab" data-year="2025" onclick="setStratChartYear('2025')" style="font-size:.7rem;padding:3px 8px;border:1px solid var(--gray-300);border-radius:4px;cursor:pointer;background:#fff">2025</button>
+            <button class="sd-year-tab on" data-year="proj" onclick="setStratChartYear('proj')" style="font-size:.75rem;padding:3px 8px;border:1px solid var(--gray-300);border-radius:4px;cursor:pointer;background:#fff;transition:all .12s">12mo Proj</button>
+            <button class="sd-year-tab" data-year="2020" onclick="setStratChartYear('2020')" style="font-size:.75rem;padding:3px 8px;border:1px solid var(--gray-300);border-radius:4px;cursor:pointer;background:#fff">2020</button>
+            <button class="sd-year-tab" data-year="2021" onclick="setStratChartYear('2021')" style="font-size:.75rem;padding:3px 8px;border:1px solid var(--gray-300);border-radius:4px;cursor:pointer;background:#fff">2021</button>
+            <button class="sd-year-tab" data-year="2022" onclick="setStratChartYear('2022')" style="font-size:.75rem;padding:3px 8px;border:1px solid var(--gray-300);border-radius:4px;cursor:pointer;background:#fff">2022</button>
+            <button class="sd-year-tab" data-year="2023" onclick="setStratChartYear('2023')" style="font-size:.75rem;padding:3px 8px;border:1px solid var(--gray-300);border-radius:4px;cursor:pointer;background:#fff">2023</button>
+            <button class="sd-year-tab" data-year="2024" onclick="setStratChartYear('2024')" style="font-size:.75rem;padding:3px 8px;border:1px solid var(--gray-300);border-radius:4px;cursor:pointer;background:#fff">2024</button>
+            <button class="sd-year-tab" data-year="2025" onclick="setStratChartYear('2025')" style="font-size:.75rem;padding:3px 8px;border:1px solid var(--gray-300);border-radius:4px;cursor:pointer;background:#fff">2025</button>
           </div>
           <canvas id="sd-chart" height="140"></canvas>
         </div>
@@ -1295,31 +1295,31 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
         <div style="font-size:1.5rem;margin-bottom:4px">🏆</div>
         <div style="font-weight:700;color:var(--navy);font-size:.8rem">Champion XAUUSD</div>
         <div style="color:var(--green-500);font-weight:800;font-size:1rem;margin:6px 0">3.22%/mo</div>
-        <div style="color:var(--gray-400);font-size:.7rem">F01_SMC_v2 · 3% risk · Anti-M</div>
+        <div style="color:var(--gray-400);font-size:.75rem">F01_SMC_v2 · 3% risk · Anti-M</div>
       </div>
       <div style="padding:12px;background:var(--gray-50);border-radius:8px;border-top:3px solid var(--orange-500);text-align:center">
         <div style="font-size:1.5rem;margin-bottom:4px">🌍</div>
         <div style="font-weight:700;color:var(--navy);font-size:.8rem">Multi-Market</div>
         <div style="color:var(--green-500);font-weight:800;font-size:1rem;margin:6px 0">7.59%/mo</div>
-        <div style="color:var(--gray-400);font-size:.7rem">BTC+Gold+Oil+GJ+NAS · 1-2% ea</div>
+        <div style="color:var(--gray-400);font-size:.75rem">BTC+Gold+Oil+GJ+NAS · 1-2% ea</div>
       </div>
       <div style="padding:12px;background:var(--gray-50);border-radius:8px;border-top:3px solid var(--pink-400);text-align:center">
         <div style="font-size:1.5rem;margin-bottom:4px">📰</div>
         <div style="font-weight:700;color:var(--navy);font-size:.8rem">News Trading</div>
         <div style="color:var(--green-500);font-weight:800;font-size:1rem;margin:6px 0">11.25%/mo</div>
-        <div style="color:var(--gray-400);font-size:.7rem">7 event types · 120/yr · RR 3.5</div>
+        <div style="color:var(--gray-400);font-size:.75rem">7 event types · 120/yr · RR 3.5</div>
       </div>
       <div style="padding:12px;background:var(--gray-50);border-radius:8px;border-top:3px solid #7C3AED;text-align:center">
         <div style="font-size:1.5rem;margin-bottom:4px">⚡</div>
         <div style="font-weight:700;color:var(--navy);font-size:.8rem">HF M15</div>
         <div style="color:var(--orange-500);font-weight:800;font-size:1rem;margin:6px 0">2.64%/mo</div>
-        <div style="color:var(--gray-400);font-size:.7rem">3 trades/day · WR=51% · H1 filter</div>
+        <div style="color:var(--gray-400);font-size:.75rem">3 trades/day · WR=51% · H1 filter</div>
       </div>
       <div style="padding:12px;background:var(--gray-50);border-radius:8px;border-top:3px solid var(--green-500);text-align:center">
         <div style="font-size:1.5rem;margin-bottom:4px">🔍</div>
         <div style="font-weight:700;color:var(--navy);font-size:.8rem">Pattern System</div>
         <div style="color:var(--orange-500);font-weight:800;font-size:1rem;margin:6px 0">4.97%/mo</div>
-        <div style="color:var(--gray-400);font-size:.7rem">WR=65% · Best hours · 3% risk</div>
+        <div style="color:var(--gray-400);font-size:.75rem">WR=65% · Best hours · 3% risk</div>
       </div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:center">
@@ -1348,7 +1348,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
         <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #BFDBFE"><span>P($30k)</span><b>~35%</b></div>
         <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #BFDBFE"><span>Max DD</span><b>~18%</b></div>
         <div style="display:flex;justify-content:space-between;padding:3px 0"><span>Blowup risk</span><b style="color:var(--green-500)">&lt;5%</b></div>
-        <div style="margin-top:8px;font-size:.7rem;color:var(--blue-600)">Best for: First 3 months demo</div>
+        <div style="margin-top:8px;font-size:.75rem;color:var(--blue-600)">Best for: First 3 months demo</div>
       </div>
       <div style="padding:14px;background:#F0FDF4;border-radius:8px;border:1.5px solid var(--green-400)">
         <div style="font-weight:700;color:var(--green-700);margin-bottom:8px">Target (Full Portfolio)</div>
@@ -1356,7 +1356,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
         <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #BBF7D0"><span>P($30k)</span><b style="color:var(--green-500)">65.5%</b></div>
         <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #BBF7D0"><span>Max DD</span><b>~35%</b></div>
         <div style="display:flex;justify-content:space-between;padding:3px 0"><span>Blowup risk</span><b style="color:var(--orange-500)">~20%</b></div>
-        <div style="margin-top:8px;font-size:.7rem;color:var(--green-700)">Best for: After demo validation ✓</div>
+        <div style="margin-top:8px;font-size:.75rem;color:var(--green-700)">Best for: After demo validation ✓</div>
       </div>
       <div style="padding:14px;background:#FFF7ED;border-radius:8px;border:1.5px solid var(--orange-400)">
         <div style="font-weight:700;color:var(--orange-700);margin-bottom:8px">Aggressive (+20% risk)</div>
@@ -1364,7 +1364,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
         <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #FED7AA"><span>P($30k)</span><b>~72%</b></div>
         <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #FED7AA"><span>Max DD</span><b>~45%</b></div>
         <div style="display:flex;justify-content:space-between;padding:3px 0"><span>Blowup risk</span><b style="color:var(--red-500)">~35%</b></div>
-        <div style="margin-top:8px;font-size:.7rem;color:var(--orange-700)">High risk — not recommended</div>
+        <div style="margin-top:8px;font-size:.75rem;color:var(--orange-700)">High risk — not recommended</div>
       </div>
     </div>
     <div style="padding:12px;background:var(--gray-50);border-radius:8px">
@@ -1572,21 +1572,21 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
         <div style="font-size:.8rem;color:var(--gray-700);margin-top:4px">APEX_Pepperstone_v1 — Asian Session Breakout + Order Block</div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:.8rem">
-        <div style="padding:8px;background:var(--gray-50);border-radius:6px"><div style="font-size:.7rem;color:var(--gray-500);font-weight:600">TIMEFRAME</div><div style="font-weight:700;color:var(--navy)">H1</div></div>
-        <div style="padding:8px;background:var(--gray-50);border-radius:6px"><div style="font-size:.7rem;color:var(--gray-500);font-weight:600">SYMBOL</div><div style="font-weight:700;color:var(--navy)">XAUUSD</div></div>
-        <div style="padding:8px;background:var(--gray-50);border-radius:6px"><div style="font-size:.7rem;color:var(--gray-500);font-weight:600">SESSION</div><div style="font-weight:700;color:var(--navy)">Asian+London</div></div>
-        <div style="padding:8px;background:var(--gray-50);border-radius:6px"><div style="font-size:.7rem;color:var(--gray-500);font-weight:600">BROKER</div><div style="font-weight:700;color:var(--navy)">Pepperstone Razor</div></div>
-        <div style="padding:8px;background:var(--gray-50);border-radius:6px"><div style="font-size:.7rem;color:var(--gray-500);font-weight:600">ACCOUNT</div><div style="font-weight:700;color:var(--navy)">51489276</div></div>
-        <div style="padding:8px;background:var(--gray-50);border-radius:6px"><div style="font-size:.7rem;color:var(--gray-500);font-weight:600">RISK/TRADE</div><div style="font-weight:700;color:var(--navy)">1% (demo 0.5%)</div></div>
+        <div style="padding:8px;background:var(--gray-50);border-radius:6px"><div style="font-size:.75rem;color:var(--gray-500);font-weight:600">TIMEFRAME</div><div style="font-weight:700;color:var(--navy)">H1</div></div>
+        <div style="padding:8px;background:var(--gray-50);border-radius:6px"><div style="font-size:.75rem;color:var(--gray-500);font-weight:600">SYMBOL</div><div style="font-weight:700;color:var(--navy)">XAUUSD</div></div>
+        <div style="padding:8px;background:var(--gray-50);border-radius:6px"><div style="font-size:.75rem;color:var(--gray-500);font-weight:600">SESSION</div><div style="font-weight:700;color:var(--navy)">Asian+London</div></div>
+        <div style="padding:8px;background:var(--gray-50);border-radius:6px"><div style="font-size:.75rem;color:var(--gray-500);font-weight:600">BROKER</div><div style="font-weight:700;color:var(--navy)">Pepperstone Razor</div></div>
+        <div style="padding:8px;background:var(--gray-50);border-radius:6px"><div style="font-size:.75rem;color:var(--gray-500);font-weight:600">ACCOUNT</div><div style="font-weight:700;color:var(--navy)">51489276</div></div>
+        <div style="padding:8px;background:var(--gray-50);border-radius:6px"><div style="font-size:.75rem;color:var(--gray-500);font-weight:600">RISK/TRADE</div><div style="font-weight:700;color:var(--navy)">1% (demo 0.5%)</div></div>
       </div>
       <div style="margin-top:14px;font-size:.8rem">
         <div style="font-weight:700;color:var(--gray-600);margin-bottom:6px">5 Entry Conditions (all must pass):</div>
         <div style="display:flex;flex-direction:column;gap:4px">
-          <div style="display:flex;gap:6px;align-items:flex-start"><span style="width:18px;height:18px;background:rgba(145,174,196,0.15);color:var(--navy);border-radius:50%;font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</span><span>D1 EMA(200) trend direction filter</span></div>
-          <div style="display:flex;gap:6px;align-items:flex-start"><span style="width:18px;height:18px;background:rgba(145,174,196,0.15);color:var(--navy);border-radius:50%;font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</span><span>H4 momentum near 20-bar high/low</span></div>
-          <div style="display:flex;gap:6px;align-items:flex-start"><span style="width:18px;height:18px;background:rgba(145,174,196,0.15);color:var(--navy);border-radius:50%;font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</span><span>H1 Fair Value Gap in trend direction</span></div>
-          <div style="display:flex;gap:6px;align-items:flex-start"><span style="width:18px;height:18px;background:rgba(145,174,196,0.15);color:var(--navy);border-radius:50%;font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">4</span><span>H1 Order Block — price inside OB</span></div>
-          <div style="display:flex;gap:6px;align-items:flex-start"><span style="width:18px;height:18px;background:rgba(145,174,196,0.15);color:var(--navy);border-radius:50%;font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">5</span><span>ATR regime filter: ATR(14)/ATR(100) = 0.5–1.5×</span></div>
+          <div style="display:flex;gap:6px;align-items:flex-start"><span style="width:18px;height:18px;background:rgba(145,174,196,0.15);color:var(--navy);border-radius:50%;font-size:.75rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</span><span>D1 EMA(200) trend direction filter</span></div>
+          <div style="display:flex;gap:6px;align-items:flex-start"><span style="width:18px;height:18px;background:rgba(145,174,196,0.15);color:var(--navy);border-radius:50%;font-size:.75rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</span><span>H4 momentum near 20-bar high/low</span></div>
+          <div style="display:flex;gap:6px;align-items:flex-start"><span style="width:18px;height:18px;background:rgba(145,174,196,0.15);color:var(--navy);border-radius:50%;font-size:.75rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</span><span>H1 Fair Value Gap in trend direction</span></div>
+          <div style="display:flex;gap:6px;align-items:flex-start"><span style="width:18px;height:18px;background:rgba(145,174,196,0.15);color:var(--navy);border-radius:50%;font-size:.75rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">4</span><span>H1 Order Block — price inside OB</span></div>
+          <div style="display:flex;gap:6px;align-items:flex-start"><span style="width:18px;height:18px;background:rgba(145,174,196,0.15);color:var(--navy);border-radius:50%;font-size:.75rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">5</span><span>ATR regime filter: ATR(14)/ATR(100) = 0.5–1.5×</span></div>
         </div>
       </div>
     </div>
@@ -1963,7 +1963,7 @@ pageInitFns['home']=function(){
       {label:'Aggressive',data:[],borderColor:'#EAC7C3',backgroundColor:'rgba(236,72,153,.05)',fill:true,tension:.4,borderWidth:2,pointRadius:0},
     ]},options:{responsive:true,maintainAspectRatio:false,
     plugins:{legend:{display:true,position:'bottom',labels:{font:{family:'Inter',size:11},boxWidth:10,color:'#6B7280',usePointStyle:true}},
-    tooltip:{backgroundColor:'#fff',titleColor:'#1E1B4B',bodyColor:'#374151',borderColor:'#E5E7EB',borderWidth:1,cornerRadius:8,padding:10,callbacks:{label:c=>'$'+c.parsed.y.toLocaleString()}}},
+    tooltip:{backgroundColor:'#fff',titleColor:'#2F4156',bodyColor:'#4A5568',borderColor:'#E5E7EB',borderWidth:1,cornerRadius:8,padding:10,callbacks:{label:c=>'$'+c.parsed.y.toLocaleString()}}},
     scales:{x:{grid:{display:false},ticks:{font:{size:10},color:'#9CA3AF'}},y:{grid:{color:'#F3F4F6'},ticks:{font:{size:10},color:'#9CA3AF',callback:v=>'$'+v.toLocaleString()}}}}});
   updateKpiBuilder();
 };
@@ -2626,7 +2626,7 @@ function showMkt(sym){
     const ctx=document.getElementById(cid);if(!ctx)return;
     new Chart(ctx,{type:'bar',data:{
       labels:['Asian','London','NY'],
-      datasets:[{data:[sd.asian,sd.london,sd.ny],backgroundColor:['#818CF8','#10B981','#F97316'],borderRadius:4}]
+      datasets:[{data:[sd.asian,sd.london,sd.ny],backgroundColor:['#91AEC4','#10B981','#F97316'],borderRadius:4}]
     },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y.toFixed(3)+'%/mo'}}},scales:{y:{title:{display:true,text:'Monthly %',font:{size:10}},ticks:{font:{size:10},callback:v=>v+'%'}},x:{ticks:{font:{size:10}}}}}});
   },80);
 }
@@ -2784,7 +2784,7 @@ pageInitFns['pepperstone']=function(){
       <div style="font-weight:700;font-size:.875rem">EA Input Parameters — Copy Exactly</div>
       <button onclick="navigator.clipboard.writeText(document.getElementById('pep-code').textContent)" style="padding:4px 12px;background:var(--teal);color:#fff;border:none;border-radius:6px;font-size:.75rem;cursor:pointer">Copy</button>
     </div>
-    <pre id="pep-code" style="background:#1E1B4B;color:#A5B4FC;padding:14px;border-radius:8px;font-size:.78rem;line-height:1.7;overflow-x:auto;margin:0">${eaCode}</pre>
+    <pre id="pep-code" style="background:#2F4156;color:#A5B4FC;padding:14px;border-radius:8px;font-size:.78rem;line-height:1.7;overflow-x:auto;margin:0">${eaCode}</pre>
   </div>
 
   <div class="section-heading" style="margin-bottom:12px;margin-top:18px"><span>Spread Timing Guide — Bangkok (UTC+7)</span><div class="section-heading-line"></div><span class="badge badge-green">Check before trading</span></div>
@@ -2802,7 +2802,7 @@ pageInitFns['pepperstone']=function(){
         {h:'17',w:2,c:'#FDE68A',t:'NY Open'},
         {h:'19',w:3,c:'#FCA5A5',t:'NY KZ'},
         {h:'22',w:2,c:'#E5E7EB',t:'Close'}
-      ].map(s=>`<div style="flex:${s.w};background:${s.c};display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:${s.c==='#10B981'?'#fff':'#374151'};overflow:hidden;white-space:nowrap">${s.t||''}</div>`).join('')}
+      ].map(s=>`<div style="flex:${s.w};background:${s.c};display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:${s.c==='#10B981'?'#fff':'#4A5568'};overflow:hidden;white-space:nowrap">${s.t||''}</div>`).join('')}
     </div>
     <div style="display:flex;gap:0;margin-bottom:12px">
       ${[0,3,6,9,12,14,15,17,19,22].map(h=>`<div style="font-size:.75rem;color:var(--gray-400);text-align:left">${h}:00</div>`).join('<div style="flex:1"></div>')}
@@ -3064,25 +3064,25 @@ pageInitFns['phase9']=function(){
       <div style="font-size:.75rem;color:var(--gray-500);margin-bottom:4px">Track 1 — Filters</div>
       <div style="font-size:1.6rem;font-weight:800;color:#DC2626">0/5</div>
       <div style="font-size:.75rem;color:var(--gray-400)">passed 0.2/day threshold</div>
-      <div style="font-size:.7rem;color:var(--gray-400);margin-top:4px">tap for insight ↓</div>
+      <div style="font-size:.75rem;color:var(--gray-400);margin-top:4px">tap for insight ↓</div>
     </div>
     <div id="p9ov1" style="background:var(--surface);border-radius:var(--radius-lg);padding:14px;text-align:center;border:1px solid var(--gray-200);cursor:pointer;transition:box-shadow .15s" onclick="p9Toggle(1)">
       <div style="font-size:.75rem;color:var(--gray-500);margin-bottom:4px">Track 2 — News</div>
       <div style="font-size:1.6rem;font-weight:800;color:var(--green-500)">+17%</div>
       <div style="font-size:.75rem;color:var(--gray-400)">8 trades/yr · PF 2.04</div>
-      <div style="font-size:.7rem;color:var(--gray-400);margin-top:4px">tap for insight ↓</div>
+      <div style="font-size:.75rem;color:var(--gray-400);margin-top:4px">tap for insight ↓</div>
     </div>
     <div id="p9ov2" style="background:var(--surface);border-radius:var(--radius-lg);padding:14px;text-align:center;border:1px solid var(--gray-200);cursor:pointer;transition:box-shadow .15s" onclick="p9Toggle(2)">
       <div style="font-size:.75rem;color:var(--gray-500);margin-bottom:4px">Track 3 — Markets</div>
       <div style="font-size:1.6rem;font-weight:800;color:var(--teal)">2/4</div>
       <div style="font-size:.75rem;color:var(--gray-400)">XAUUSD + USDJPY ✓</div>
-      <div style="font-size:.7rem;color:var(--gray-400);margin-top:4px">tap for insight ↓</div>
+      <div style="font-size:.75rem;color:var(--gray-400);margin-top:4px">tap for insight ↓</div>
     </div>
     <div id="p9ov3" style="background:var(--surface);border-radius:var(--radius-lg);padding:14px;text-align:center;border:1px solid var(--gray-200);cursor:pointer;transition:box-shadow .15s" onclick="p9Toggle(3)">
       <div style="font-size:.75rem;color:var(--gray-500);margin-bottom:4px">Track 4 — $30k ETA</div>
       <div style="font-size:1.6rem;font-weight:800;color:#7C3AED">4.6yr</div>
       <div style="font-size:.75rem;color:var(--gray-400)">at 2.5% risk, 1.71%/mo</div>
-      <div style="font-size:.7rem;color:var(--gray-400);margin-top:4px">tap for insight ↓</div>
+      <div style="font-size:.75rem;color:var(--gray-400);margin-top:4px">tap for insight ↓</div>
     </div>
   </div>
   <div id="p9detail" style="display:none;margin-bottom:16px;padding:14px;border-radius:var(--radius-lg);border:1px solid var(--gray-200);font-size:.78rem;line-height:1.6;color:var(--gray-700);background:var(--gray-50)"></div>
@@ -3196,11 +3196,11 @@ pageInitFns['phase9']=function(){
   </div>
 
   <!-- PHASE 10 PREVIEW -->
-  <div style="background:linear-gradient(135deg,#1E1B4B,#312E81);border-radius:var(--radius-lg);padding:20px;color:white">
+  <div style="background:linear-gradient(135deg,#2F4156,#312E81);border-radius:var(--radius-lg);padding:20px;color:white">
     <div style="font-weight:700;font-size:.875rem;margin-bottom:10px;color:#C7D2FE">Phase 10 Preview — What Comes Next</div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
       ${[['USDJPY Tuning','Adapt OB parameters for JPY pairs, rerun 2-yr test. Target: PF>2.5, monthly>1.5%'],['Capital Ramp','Monthly additions plan: +$200/mo from income. Compound at 2% risk after 6mo profit proof.'],['Phase 10 Live','Move to real micro account (Exness Standard Cent). Start 0.01 lots. $100 start. Prove real execution.']].map(([t,d])=>`<div style="background:rgba(255,255,255,.08);border-radius:8px;padding:12px">
-        <div style="font-weight:600;font-size:.8rem;color:#E0E7FF;margin-bottom:6px">${t}</div>
+        <div style="font-weight:600;font-size:.8rem;color:#C8D9E6;margin-bottom:6px">${t}</div>
         <div style="font-size:.75rem;color:#A5B4FC;line-height:1.5">${d}</div>
       </div>`).join('')}
     </div>
@@ -3827,14 +3827,14 @@ pageInitFns['ddopt']=function(){
     <div style="font-size:.75rem;font-weight:700;letter-spacing:.1em;opacity:.7;margin-bottom:8px">DD OPTIMIZATION RESULT</div>
     <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center">
       <div>
-        <div style="font-size:.7rem;opacity:.7;margin-bottom:4px">BEFORE</div>
+        <div style="font-size:.75rem;opacity:.7;margin-bottom:4px">BEFORE</div>
         <div style="font-size:1.4rem;font-weight:800">24.34%/mo</div>
         <div style="font-size:.8rem;color:#FCA5A5;margin-top:2px">MaxDD 35% — Blowup 20%</div>
         <div style="font-size:.75rem;opacity:.6;margin-top:2px">P($30k): 65.5%</div>
       </div>
       <div style="font-size:1.5rem;opacity:.5">→</div>
       <div>
-        <div style="font-size:.7rem;opacity:.7;margin-bottom:4px">AFTER (Time Stops)</div>
+        <div style="font-size:.75rem;opacity:.7;margin-bottom:4px">AFTER (Time Stops)</div>
         <div style="font-size:1.4rem;font-weight:800;color:#6EE7B7">28.46%/mo</div>
         <div style="font-size:.8rem;color:#6EE7B7;margin-top:2px">MaxDD 12.2% — Blowup 0%</div>
         <div style="font-size:.75rem;color:#6EE7B7;margin-top:2px">P($30k): 64.0%</div>
@@ -3848,24 +3848,24 @@ pageInitFns['ddopt']=function(){
   <!-- 4 METRIC WINNERS -->
   <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px">
     <div style="background:#ECFDF5;border-radius:12px;padding:12px;text-align:center;border:1px solid #A7F3D0">
-      <div style="font-size:.7rem;color:#065F46;font-weight:600;margin-bottom:4px">MONTHLY</div>
+      <div style="font-size:.75rem;color:#065F46;font-weight:600;margin-bottom:4px">MONTHLY</div>
       <div style="font-size:1.6rem;font-weight:800;color:#10B981">28.46%</div>
-      <div style="font-size:.7rem;color:#6EE7B7">+17% vs baseline</div>
+      <div style="font-size:.75rem;color:#6EE7B7">+17% vs baseline</div>
     </div>
     <div style="background:#ECFDF5;border-radius:12px;padding:12px;text-align:center;border:1px solid #A7F3D0">
-      <div style="font-size:.7rem;color:#065F46;font-weight:600;margin-bottom:4px">MAX DD</div>
+      <div style="font-size:.75rem;color:#065F46;font-weight:600;margin-bottom:4px">MAX DD</div>
       <div style="font-size:1.6rem;font-weight:800;color:#10B981">12.2%</div>
-      <div style="font-size:.7rem;color:#6EE7B7">-65% from 35%</div>
+      <div style="font-size:.75rem;color:#6EE7B7">-65% from 35%</div>
     </div>
     <div style="background:#ECFDF5;border-radius:12px;padding:12px;text-align:center;border:1px solid #A7F3D0">
-      <div style="font-size:.7rem;color:#065F46;font-weight:600;margin-bottom:4px">P($30k)</div>
+      <div style="font-size:.75rem;color:#065F46;font-weight:600;margin-bottom:4px">P($30k)</div>
       <div style="font-size:1.6rem;font-weight:800;color:#10B981">64%</div>
-      <div style="font-size:.7rem;color:#6EE7B7">vs 65.5% before</div>
+      <div style="font-size:.75rem;color:#6EE7B7">vs 65.5% before</div>
     </div>
     <div style="background:#ECFDF5;border-radius:12px;padding:12px;text-align:center;border:1px solid #A7F3D0">
-      <div style="font-size:.7rem;color:#065F46;font-weight:600;margin-bottom:4px">BLOWUP</div>
+      <div style="font-size:.75rem;color:#065F46;font-weight:600;margin-bottom:4px">BLOWUP</div>
       <div style="font-size:1.6rem;font-weight:800;color:#10B981">0%</div>
-      <div style="font-size:.7rem;color:#6EE7B7">from 20% before</div>
+      <div style="font-size:.75rem;color:#6EE7B7">from 20% before</div>
     </div>
   </div>
 
@@ -3873,17 +3873,17 @@ pageInitFns['ddopt']=function(){
   <div style="background:#fff;border-radius:14px;border:1px solid #E5E7EB;overflow:hidden;margin-bottom:20px">
     <div style="padding:14px 16px;background:#F9FAFB;border-bottom:1px solid #E5E7EB;display:flex;justify-content:space-between;align-items:center">
       <div style="font-weight:700;font-size:.85rem;color:#1F2937">All 5 Approaches — Monte Carlo Results</div>
-      <div style="font-size:.7rem;color:#6B7280">10,000 paths × 12 months · $3,000 start</div>
+      <div style="font-size:.75rem;color:#6B7280">10,000 paths × 12 months · $3,000 start</div>
     </div>
     <div style="overflow-x:auto">
     <table style="width:100%;border-collapse:collapse;font-size:.78rem">
       <thead><tr style="background:#F3F4F6">
-        <th style="padding:8px 12px;text-align:left;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Approach</th>
-        <th style="padding:8px 12px;text-align:right;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Monthly</th>
-        <th style="padding:8px 12px;text-align:right;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Max DD</th>
-        <th style="padding:8px 12px;text-align:right;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Blowup</th>
-        <th style="padding:8px 12px;text-align:right;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">P($30k)</th>
-        <th style="padding:8px 12px;text-align:center;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Status</th>
+        <th style="padding:8px 12px;text-align:left;font-weight:600;color:#4A5568;border-bottom:1px solid #E5E7EB">Approach</th>
+        <th style="padding:8px 12px;text-align:right;font-weight:600;color:#4A5568;border-bottom:1px solid #E5E7EB">Monthly</th>
+        <th style="padding:8px 12px;text-align:right;font-weight:600;color:#4A5568;border-bottom:1px solid #E5E7EB">Max DD</th>
+        <th style="padding:8px 12px;text-align:right;font-weight:600;color:#4A5568;border-bottom:1px solid #E5E7EB">Blowup</th>
+        <th style="padding:8px 12px;text-align:right;font-weight:600;color:#4A5568;border-bottom:1px solid #E5E7EB">P($30k)</th>
+        <th style="padding:8px 12px;text-align:center;font-weight:600;color:#4A5568;border-bottom:1px solid #E5E7EB">Status</th>
       </tr></thead>
       <tbody>
       ${approaches.map((a,i)=>`
@@ -3943,22 +3943,22 @@ pageInitFns['ddopt']=function(){
   <div style="background:#fff;border-radius:14px;border:1px solid #E5E7EB;margin-bottom:20px">
     <div style="padding:12px 16px;background:#F9FAFB;border-bottom:1px solid #E5E7EB">
       <div style="font-weight:700;font-size:.85rem;color:#1F2937">New Strategies Found — All 4 Qualify</div>
-      <div style="font-size:.7rem;color:#6B7280;margin-top:2px">Threshold: standalone monthly ≥ 5%</div>
+      <div style="font-size:.75rem;color:#6B7280;margin-top:2px">Threshold: standalone monthly ≥ 5%</div>
     </div>
     <div style="overflow-x:auto">
     <table style="width:100%;border-collapse:collapse;font-size:.78rem">
       <thead><tr style="background:#F3F4F6">
-        <th style="padding:8px 12px;text-align:left;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Strategy</th>
-        <th style="padding:8px 12px;text-align:left;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Asset</th>
-        <th style="padding:8px 12px;text-align:right;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Monthly</th>
-        <th style="padding:8px 12px;text-align:right;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Solo DD</th>
-        <th style="padding:8px 12px;text-align:center;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Qualifies</th>
+        <th style="padding:8px 12px;text-align:left;font-weight:600;color:#4A5568;border-bottom:1px solid #E5E7EB">Strategy</th>
+        <th style="padding:8px 12px;text-align:left;font-weight:600;color:#4A5568;border-bottom:1px solid #E5E7EB">Asset</th>
+        <th style="padding:8px 12px;text-align:right;font-weight:600;color:#4A5568;border-bottom:1px solid #E5E7EB">Monthly</th>
+        <th style="padding:8px 12px;text-align:right;font-weight:600;color:#4A5568;border-bottom:1px solid #E5E7EB">Solo DD</th>
+        <th style="padding:8px 12px;text-align:center;font-weight:600;color:#4A5568;border-bottom:1px solid #E5E7EB">Qualifies</th>
       </tr></thead>
       <tbody>
       ${newStrats.map(s=>`
         <tr style="border-bottom:1px solid #F9FAFB">
           <td style="padding:8px 12px;font-weight:600;color:#1F2937">${s.name}</td>
-          <td style="padding:8px 12px;color:#6B7280;font-size:.74rem">${s.asset}</td>
+          <td style="padding:8px 12px;color:#6B7280;font-size:.75rem">${s.asset}</td>
           <td style="padding:8px 12px;text-align:right;font-weight:700;color:#3B82F6">${s.monthly.toFixed(2)}%</td>
           <td style="padding:8px 12px;text-align:right;color:${s.dd<20?'#10B981':s.dd<40?'#F97316':'#DC2626'}">${s.dd.toFixed(1)}%</td>
           <td style="padding:8px 12px;text-align:center"><span style="background:#D1FAE5;color:#065F46;padding:2px 8px;border-radius:999px;font-size:.75rem;font-weight:700">${s.qual}</span></td>
@@ -3999,7 +3999,7 @@ pageInitFns['ddopt']=function(){
     <div style="padding:8px 12px;background:rgba(110,231,183,.12);border-radius:8px;font-size:.75rem;color:#6EE7B7;line-height:1.6">
       All 4 targets met: Monthly &gt;18% ✓ · MaxDD &lt;15% ✓ · Blowup &lt;10% ✓ · P($30k) &gt;60% ✓
     </div>
-    <div style="margin-top:8px;font-size:.7rem;opacity:.5;font-style:italic">
+    <div style="margin-top:8px;font-size:.75rem;opacity:.5;font-style:italic">
       Monte Carlo simulation only — Demo validate before live trading. Regime Filter + Time Stops must be coded into EA logic.
     </div>
   </div>
@@ -4102,13 +4102,13 @@ pageInitFns['holygrail']=function(){
     <div style="overflow-x:auto">
     <table style="width:100%;border-collapse:collapse;font-size:.75rem">
       <thead><tr style="background:#F3F4F6">
-        <th style="padding:7px 10px;text-align:left;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB;white-space:nowrap">Approach</th>
-        <th style="padding:7px 10px;text-align:right;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Monthly</th>
-        <th style="padding:7px 10px;text-align:right;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">MaxDD</th>
-        <th style="padding:7px 10px;text-align:right;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">P($30k)</th>
-        <th style="padding:7px 10px;text-align:center;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Fwd</th>
-        <th style="padding:7px 10px;text-align:center;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Score</th>
-        <th style="padding:7px 10px;text-align:center;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Result</th>
+        <th style="padding:7px 10px;text-align:left;font-weight:600;color:#4A5568;border-bottom:1px solid #E5E7EB;white-space:nowrap">Approach</th>
+        <th style="padding:7px 10px;text-align:right;font-weight:600;color:#4A5568;border-bottom:1px solid #E5E7EB">Monthly</th>
+        <th style="padding:7px 10px;text-align:right;font-weight:600;color:#4A5568;border-bottom:1px solid #E5E7EB">MaxDD</th>
+        <th style="padding:7px 10px;text-align:right;font-weight:600;color:#4A5568;border-bottom:1px solid #E5E7EB">P($30k)</th>
+        <th style="padding:7px 10px;text-align:center;font-weight:600;color:#4A5568;border-bottom:1px solid #E5E7EB">Fwd</th>
+        <th style="padding:7px 10px;text-align:center;font-weight:600;color:#4A5568;border-bottom:1px solid #E5E7EB">Score</th>
+        <th style="padding:7px 10px;text-align:center;font-weight:600;color:#4A5568;border-bottom:1px solid #E5E7EB">Result</th>
       </tr></thead>
       <tbody>
       ${approaches.map((a,i)=>`
@@ -4118,7 +4118,7 @@ pageInitFns['holygrail']=function(){
           <td style="padding:7px 10px;text-align:right;font-weight:600;color:${a.bt_maxdd<=10?GREEN:a.bt_maxdd<=15?ORANGE:RED}">${a.bt_maxdd.toFixed(1)}%</td>
           <td style="padding:7px 10px;text-align:right;color:${a.mc_p30k>=40?GREEN:a.mc_p30k>=20?ORANGE:RED}">${a.mc_p30k.toFixed(1)}%</td>
           <td style="padding:7px 10px;text-align:center"><span style="font-size:.75rem;font-weight:600;color:${a.fwd_pass==='PASS'?GREEN:RED}">${a.fwd_pass}</span></td>
-          <td style="padding:7px 10px;text-align:right;color:#6B7280;font-size:.7rem">${a.score.toFixed(2)}</td>
+          <td style="padding:7px 10px;text-align:right;color:#6B7280;font-size:.75rem">${a.score.toFixed(2)}</td>
           <td style="padding:7px 10px;text-align:center"><span style="background:${a.holy?'#D1FAE5':a.all_pass.includes('NO')?'#FEF2F2':'#FEF3C7'};color:${a.holy?'#065F46':a.all_pass.includes('NO')?'#DC2626':'#92400E'};padding:2px 6px;border-radius:999px;font-size:.75rem;font-weight:700">${a.all_pass}</span></td>
         </tr>`).join('')}
       </tbody>
@@ -4130,16 +4130,16 @@ pageInitFns['holygrail']=function(){
   <div style="background:#fff;border-radius:14px;border:1px solid #E5E7EB;overflow:hidden;margin-bottom:20px">
     <div style="padding:12px 16px;background:#F9FAFB;border-bottom:1px solid #E5E7EB">
       <div style="font-weight:700;font-size:.85rem;color:#1F2937">Time Stop Threshold Scan — Finding MaxDD &lt;10% Sweet Spot</div>
-      <div style="font-size:.7rem;color:#6B7280;margin-top:2px">Full portfolio + Regime Filter · varying monthly floor</div>
+      <div style="font-size:.75rem;color:#6B7280;margin-top:2px">Full portfolio + Regime Filter · varying monthly floor</div>
     </div>
     <div style="overflow-x:auto">
     <table style="width:100%;border-collapse:collapse;font-size:.78rem">
       <thead><tr style="background:#F3F4F6">
-        <th style="padding:8px 12px;text-align:center;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Monthly Floor</th>
-        <th style="padding:8px 12px;text-align:right;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Monthly</th>
-        <th style="padding:8px 12px;text-align:right;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Max DD</th>
-        <th style="padding:8px 12px;text-align:right;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">P($30k)</th>
-        <th style="padding:8px 12px;text-align:center;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Both Targets</th>
+        <th style="padding:8px 12px;text-align:center;font-weight:600;color:#4A5568;border-bottom:1px solid #E5E7EB">Monthly Floor</th>
+        <th style="padding:8px 12px;text-align:right;font-weight:600;color:#4A5568;border-bottom:1px solid #E5E7EB">Monthly</th>
+        <th style="padding:8px 12px;text-align:right;font-weight:600;color:#4A5568;border-bottom:1px solid #E5E7EB">Max DD</th>
+        <th style="padding:8px 12px;text-align:right;font-weight:600;color:#4A5568;border-bottom:1px solid #E5E7EB">P($30k)</th>
+        <th style="padding:8px 12px;text-align:center;font-weight:600;color:#4A5568;border-bottom:1px solid #E5E7EB">Both Targets</th>
       </tr></thead>
       <tbody>
       ${tts.map(t=>`
@@ -4209,7 +4209,7 @@ function toggleNotif(){
   if(p){p.remove();return;}
   p=document.createElement('div');p.id='notif-popup';
   p.style.cssText='position:fixed;top:68px;right:16px;width:300px;background:#fff;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.15);z-index:500;font-family:Inter,sans-serif;overflow:hidden;border:1px solid #E5E7EB';
-  p.innerHTML='<div style="padding:14px 16px;border-bottom:1px solid #E5E7EB;display:flex;justify-content:space-between;align-items:center"><span style="font-weight:700;font-size:.9rem;color:#1E1B4B">Notifications</span><button onclick="document.getElementById(\'notif-popup\').remove()" style="border:none;background:none;cursor:pointer;color:#6B7280;font-size:1rem">✕</button></div>'
+  p.innerHTML='<div style="padding:14px 16px;border-bottom:1px solid #E5E7EB;display:flex;justify-content:space-between;align-items:center"><span style="font-weight:700;font-size:.9rem;color:#2F4156">Notifications</span><button onclick="document.getElementById(\'notif-popup\').remove()" style="border:none;background:none;cursor:pointer;color:#6B7280;font-size:1rem">✕</button></div>'
     +'<div style="padding:8px 0">'
     +'<div style="padding:10px 16px;border-bottom:1px solid #F3F4F6"><div style="font-size:.8rem;font-weight:600;color:#111827">🟢 Demo Mode Active</div><div style="font-size:.75rem;color:#6B7280;margin-top:2px">Phase 8 — Pepperstone account 51489276 monitoring on</div></div>'
     +'<div style="padding:10px 16px;border-bottom:1px solid #F3F4F6"><div style="font-size:.8rem;font-weight:600;color:#111827">📊 Phase 9 Complete</div><div style="font-size:.75rem;color:#6B7280;margin-top:2px">Strategy evolution — all tracks validated</div></div>'
@@ -4243,9 +4243,9 @@ pageInitFns['risk']=function(){
     </div>
     <div class="card">
       <div class="section-heading">Position Sizer <span class="section-heading-line"></span></div>
-      <div style="margin-bottom:10px"><label style="font-size:.75rem;font-weight:600;color:var(--gray-500)">Account Balance ($)</label><input id="rp-bal" type="number" value="3000" oninput="calcRiskPage()" style="width:100%;padding:8px 12px;border:1.5px solid #D1D5DB;border-radius:8px;font-size:.875rem;font-family:inherit;margin-top:4px;outline:none"></div>
+      <div style="margin-bottom:10px"><label style="font-size:.75rem;font-weight:600;color:var(--gray-500)">Account Balance ($)</label><input id="rp-bal" type="number" value="3000" oninput="calcRiskPage()" style="width:100%;padding:8px 12px;border:1.5px solid #91AEC4;border-radius:8px;font-size:.875rem;font-family:inherit;margin-top:4px;outline:none"></div>
       <div style="margin-bottom:10px"><label style="font-size:.75rem;font-weight:600;color:var(--gray-500)">Risk % per Trade: <span id="rp-rpct-lbl" style="color:var(--teal)">1.0%</span></label><input id="rp-rpct" type="range" min="0.5" max="5" step="0.5" value="1" oninput="calcRiskPage()" style="width:100%;margin-top:6px;accent-color:var(--teal)"></div>
-      <div style="margin-bottom:12px"><label style="font-size:.75rem;font-weight:600;color:var(--gray-500)">Stop Loss (points)</label><input id="rp-sl" type="number" value="15" oninput="calcRiskPage()" style="width:100%;padding:8px 12px;border:1.5px solid #D1D5DB;border-radius:8px;font-size:.875rem;font-family:inherit;margin-top:4px;outline:none"></div>
+      <div style="margin-bottom:12px"><label style="font-size:.75rem;font-weight:600;color:var(--gray-500)">Stop Loss (points)</label><input id="rp-sl" type="number" value="15" oninput="calcRiskPage()" style="width:100%;padding:8px 12px;border:1.5px solid #91AEC4;border-radius:8px;font-size:.875rem;font-family:inherit;margin-top:4px;outline:none"></div>
       <div style="background:rgba(145,174,196,0.15);border-radius:10px;padding:12px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center">
         <div><div style="font-size:1.2rem;font-weight:800;color:var(--teal)" id="rp-lots">0.02</div><div style="font-size:.75rem;color:var(--gray-500)">Lot Size</div></div>
         <div><div style="font-size:1.2rem;font-weight:800;color:var(--green-500)" id="rp-dolrisk">$30</div><div style="font-size:.75rem;color:var(--gray-500)">$ at Risk</div></div>
@@ -4552,9 +4552,9 @@ function renderDDCards(){
         <div>
           <div style="font-size:.78rem;color:var(--gray-600);margin-bottom:8px;line-height:1.6">${d.desc}</div>
           <div style="display:flex;gap:12px">
-            <div style="padding:8px;background:var(--gray-50);border-radius:6px;text-align:center;flex:1"><div style="font-size:.7rem;color:var(--gray-500);font-weight:600">MONTHLY</div><div style="font-size:1rem;font-weight:800;color:${d.monthly>=21.5?'var(--green-500)':d.monthly>=10?'var(--blue-500)':'var(--gray-600)'}">${d.monthly}%</div></div>
-            <div style="padding:8px;background:var(--gray-50);border-radius:6px;text-align:center;flex:1"><div style="font-size:.7rem;color:var(--gray-500);font-weight:600">12MO FINAL</div><div style="font-size:1rem;font-weight:800;color:var(--navy)">$${d.final.toLocaleString()}</div></div>
-            <div style="padding:8px;background:var(--gray-50);border-radius:6px;text-align:center;flex:1"><div style="font-size:.7rem;color:var(--gray-500);font-weight:600">MAX DD</div><div style="font-size:1rem;font-weight:800;color:${d.dd>50?'var(--red-500)':d.dd>25?'var(--orange-500)':'var(--green-500)'}">${d.dd}%</div></div>
+            <div style="padding:8px;background:var(--gray-50);border-radius:6px;text-align:center;flex:1"><div style="font-size:.75rem;color:var(--gray-500);font-weight:600">MONTHLY</div><div style="font-size:1rem;font-weight:800;color:${d.monthly>=21.5?'var(--green-500)':d.monthly>=10?'var(--blue-500)':'var(--gray-600)'}">${d.monthly}%</div></div>
+            <div style="padding:8px;background:var(--gray-50);border-radius:6px;text-align:center;flex:1"><div style="font-size:.75rem;color:var(--gray-500);font-weight:600">12MO FINAL</div><div style="font-size:1rem;font-weight:800;color:var(--navy)">$${d.final.toLocaleString()}</div></div>
+            <div style="padding:8px;background:var(--gray-50);border-radius:6px;text-align:center;flex:1"><div style="font-size:.75rem;color:var(--gray-500);font-weight:600">MAX DD</div><div style="font-size:1rem;font-weight:800;color:${d.dd>50?'var(--red-500)':d.dd>25?'var(--orange-500)':'var(--green-500)'}">${d.dd}%</div></div>
           </div>
         </div>
         <div class="code-viewer" style="max-height:160px">${codeHtml}</div>
@@ -4614,7 +4614,7 @@ function updateIterSlider(n){
 function renderIterTable(){
   const wrap=document.getElementById('iter-table-wrap');if(!wrap)return;
   const SC={kpi:['#D1FAE5','#065F46','✅ KPI ✓'],strong:['#DBEAFE','#1D4ED8','💪 Strong'],good:['#EDE9FE','#5B21B6','🔄 Good'],building:['#FEF3C7','#D97706','🔄 Building'],low:['#F3F4F6','#6B7280','❌ Low'],'high-dd':['#FEE2E2','#DC2626','⚠️ High DD'],'dd-high':['#FEE2E2','#DC2626','⚠️ DD Too High']};
-  wrap.innerHTML='<div style="display:grid;grid-template-columns:28px 1fr 68px 78px 58px 88px 22px;gap:0;font-size:.71rem;font-weight:600;color:var(--gray-500);padding:6px 10px;background:var(--gray-50);border-radius:6px 6px 0 0;border:1px solid var(--gray-200)">'
+  wrap.innerHTML='<div style="display:grid;grid-template-columns:28px 1fr 68px 78px 58px 88px 22px;gap:0;font-size:.75rem;font-weight:600;color:var(--gray-500);padding:6px 10px;background:var(--gray-50);border-radius:6px 6px 0 0;border:1px solid var(--gray-200)">'
     +'<span>#</span><span>Strategy</span><span style="text-align:right">Monthly</span><span style="text-align:right">Final 12mo</span><span style="text-align:center">Max DD</span><span style="text-align:center">Status</span><span></span></div>'
     +DD_ITERS.map(d=>{
       const[sbg,scl,slabel]=SC[d.status]||['#F3F4F6','#6B7280','—'];
@@ -4638,7 +4638,7 @@ function renderIterTable(){
         +'<span style="text-align:right;font-weight:700;color:'+moColor+'">'+d.monthly.toFixed(2)+'%</span>'
         +'<span style="text-align:right;color:var(--gray-600)">$'+d.final.toLocaleString()+'</span>'
         +'<span style="text-align:center;color:'+ddColor+'">'+d.dd+'%</span>'
-        +'<span style="text-align:center"><span style="background:'+sbg+';color:'+scl+';padding:2px 6px;border-radius:999px;font-size:.67rem;font-weight:600;white-space:nowrap">'+slabel+'</span></span>'
+        +'<span style="text-align:center"><span style="background:'+sbg+';color:'+scl+';padding:2px 6px;border-radius:999px;font-size:.75rem;font-weight:600;white-space:nowrap">'+slabel+'</span></span>'
         +'<span class="iter-arrow" style="color:var(--gray-400);font-size:.75rem;pointer-events:none">▶</span>'
         +'</div>'
         +'<div id="iter-expand-'+d.n+'" style="display:none;border:1px solid var(--blue-200);border-top:none;background:#F8FAFF;padding:16px">'
@@ -4647,18 +4647,18 @@ function renderIterTable(){
             +'<div style="font-size:.78rem;color:var(--gray-700);line-height:1.7;background:#fff;border:1px solid var(--gray-200);border-radius:8px;padding:12px">'+d.desc+'</div></div>'
             +'<div><div style="font-size:.75rem;font-weight:700;color:var(--navy);margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;text-transform:uppercase;letter-spacing:.04em">'
             +'<span>MQL5 Code</span>'
-            +'<button onclick="event.stopPropagation();if(navigator.clipboard){navigator.clipboard.writeText(DD_ITERS.find(x=>x.n==='+d.n+').code).then(()=>{this.textContent='✓ Copied';setTimeout(()=>this.textContent='Copy',1500)})}" style="font-size:.67rem;padding:2px 8px;background:#374151;color:#fff;border:none;border-radius:4px;cursor:pointer">Copy</button></div>'
+            +'<button onclick="event.stopPropagation();if(navigator.clipboard){navigator.clipboard.writeText(DD_ITERS.find(x=>x.n==='+d.n+').code).then(()=>{this.textContent='✓ Copied';setTimeout(()=>this.textContent='Copy',1500)})}" style="font-size:.75rem;padding:2px 8px;background:#4A5568;color:#fff;border:none;border-radius:4px;cursor:pointer">Copy</button></div>'
             +'<div class="code-viewer" style="max-height:130px;overflow-y:auto">'+codeHtml+'</div></div>'
           +'</div>'
           +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">'
             +'<div><div style="font-size:.75rem;font-weight:700;color:var(--navy);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em">Risk Adjuster</div>'
             +'<div style="background:#fff;border:1px solid var(--gray-200);border-radius:8px;padding:12px">'
-            +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="font-size:.73rem;color:var(--gray-500)">0.5×</span><input type="range" id="iter-slider-'+d.n+'" min="0.5" max="2" step="0.05" value="1" oninput="updateIterSlider('+d.n+')" onclick="event.stopPropagation()" style="flex:1;accent-color:var(--teal)"><span style="font-size:.73rem;color:var(--gray-500)">2×</span></div>'
-            +'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;font-size:.73rem;text-align:center">'
-            +'<div style="background:var(--gray-50);border-radius:6px;padding:6px"><div style="color:var(--gray-500);font-weight:600;font-size:.66rem">MONTHLY</div><div id="iter-mo-'+d.n+'" style="font-weight:800;color:var(--green-500)">'+d.monthly.toFixed(2)+'%</div></div>'
-            +'<div style="background:var(--gray-50);border-radius:6px;padding:6px"><div style="color:var(--gray-500);font-weight:600;font-size:.66rem">P($30k)</div><div id="iter-p30k-'+d.n+'" style="font-weight:800;color:var(--teal)">'+p30kDefault+'%</div></div>'
-            +'<div style="background:var(--gray-50);border-radius:6px;padding:6px"><div style="color:var(--gray-500);font-weight:600;font-size:.66rem">MAX DD</div><div id="iter-dd-'+d.n+'" style="font-weight:800;color:'+ddColor+'">'+d.dd+'%</div></div>'
-            +'<div style="background:var(--gray-50);border-radius:6px;padding:6px"><div style="color:var(--gray-500);font-weight:600;font-size:.66rem">BLOWUP</div><div id="iter-bl-'+d.n+'" style="font-weight:800;color:#DC2626">'+Math.round(d.dd*0.7)+'%</div></div>'
+            +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="font-size:.75rem;color:var(--gray-500)">0.5×</span><input type="range" id="iter-slider-'+d.n+'" min="0.5" max="2" step="0.05" value="1" oninput="updateIterSlider('+d.n+')" onclick="event.stopPropagation()" style="flex:1;accent-color:var(--teal)"><span style="font-size:.75rem;color:var(--gray-500)">2×</span></div>'
+            +'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;font-size:.75rem;text-align:center">'
+            +'<div style="background:var(--gray-50);border-radius:6px;padding:6px"><div style="color:var(--gray-500);font-weight:600;font-size:.75rem">MONTHLY</div><div id="iter-mo-'+d.n+'" style="font-weight:800;color:var(--green-500)">'+d.monthly.toFixed(2)+'%</div></div>'
+            +'<div style="background:var(--gray-50);border-radius:6px;padding:6px"><div style="color:var(--gray-500);font-weight:600;font-size:.75rem">P($30k)</div><div id="iter-p30k-'+d.n+'" style="font-weight:800;color:var(--teal)">'+p30kDefault+'%</div></div>'
+            +'<div style="background:var(--gray-50);border-radius:6px;padding:6px"><div style="color:var(--gray-500);font-weight:600;font-size:.75rem">MAX DD</div><div id="iter-dd-'+d.n+'" style="font-weight:800;color:'+ddColor+'">'+d.dd+'%</div></div>'
+            +'<div style="background:var(--gray-50);border-radius:6px;padding:6px"><div style="color:var(--gray-500);font-weight:600;font-size:.75rem">BLOWUP</div><div id="iter-bl-'+d.n+'" style="font-weight:800;color:#DC2626">'+Math.round(d.dd*0.7)+'%</div></div>'
             +'</div></div>'
             +'<div style="margin-top:10px;padding:10px;border-radius:8px;border:2px solid '+(isKpi?'#10B981':'#EF4444')+';background:'+(isKpi?'#F0FDF4':'#FEF2F2')+'">'
             +'<div style="font-size:.85rem;font-weight:800;color:'+(isKpi?'#065F46':'#991B1B')+';margin-bottom:3px">'+(isKpi?'✅ KPI PASSED':'❌ KPI NOT MET')+'</div>'
