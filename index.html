@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>APEX GREATEST — Trading Research Platform</title>
+<title>PUNCH TERMINAL — Trading Research Platform</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -19,7 +19,7 @@
       o.style.cssText='position:fixed;inset:0;background:#EEF2FF;display:flex;align-items:center;justify-content:center;z-index:99999;font-family:Inter,sans-serif;visibility:visible';
       o.innerHTML='<div style="background:#fff;border-radius:20px;padding:40px;max-width:360px;width:90%;box-shadow:0 16px 48px rgba(0,0,0,.12);text-align:center">'
         +'<div style="width:56px;height:56px;background:linear-gradient(135deg,#4F46E5,#EC4899);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:1.5rem">📊</div>'
-        +'<div style="font-size:1.375rem;font-weight:800;color:#1E1B4B;margin-bottom:4px">APEX GREATEST</div>'
+        +'<div style="font-size:1.375rem;font-weight:800;color:#1E1B4B;margin-bottom:4px">PUNCH TERMINAL</div>'
         +'<div style="font-size:.875rem;color:#6B7280;margin-bottom:28px">Trading Research Platform</div>'
         +'<input id="pw-in" type="password" placeholder="Enter password" style="width:100%;padding:12px 16px;border:1.5px solid #D1D5DB;border-radius:10px;font-size:1rem;font-family:Inter,sans-serif;outline:none;box-sizing:border-box;margin-bottom:12px;color:#111827">'
         +'<button id="pw-btn" style="width:100%;padding:12px;background:linear-gradient(135deg,#4F46E5,#3730A3);border:none;border-radius:10px;color:#fff;font-size:1rem;font-weight:600;cursor:pointer;font-family:Inter,sans-serif">Unlock</button>'
@@ -42,7 +42,7 @@
 </script>
 <style>
 /* ══════════════════════════════════════════════════
-   DESIGN SYSTEM — APEX GREATEST
+   DESIGN SYSTEM — PUNCH TERMINAL
    ══════════════════════════════════════════════════ */
 :root {
   --bg-primary:#F8F9FF; --bg-secondary:#F1F3FB; --bg-tertiary:#E8ECF8;
@@ -527,7 +527,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
 <header class="topbar">
   <a class="topbar-logo" href="#" onclick="showPage('home');return false;">
     <div class="topbar-logo-icon">📊</div>
-    <span class="topbar-logo-text">APEX GREATEST</span>
+    <span class="topbar-logo-text">PUNCH TERMINAL</span>
   </a>
   <div class="topbar-search">
     <span class="topbar-search-icon">🔍</span>
@@ -544,7 +544,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
 <!-- ═══════════════ SIDEBAR ═══════════════ -->
 <nav class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <div class="sidebar-wordmark">APEX GREATEST</div>
+    <div class="sidebar-wordmark">PUNCH TERMINAL</div>
     <div class="sidebar-subtitle">Trading Research Platform</div>
     <div class="sidebar-progress">
       <div class="sidebar-progress-label">
@@ -555,78 +555,17 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
   </div>
 
   <div class="sidebar-nav">
-    <!-- OVERVIEW -->
+    <!-- CORE -->
     <div class="sidebar-section">
-      <div class="sidebar-section-label">Overview</div>
+      <div class="sidebar-section-label">Core</div>
       <div class="sidebar-section-items">
         <div class="nav-item active" onclick="showPage('home')" id="nav-home">
           <span class="nav-item-icon">🏠</span>Home Dashboard
         </div>
-        <div class="nav-item" onclick="showPage('roadmap')" id="nav-roadmap">
-          <span class="nav-item-icon">🗺️</span>KPI Roadmap
-          <span class="nav-item-badge orange">New</span>
+        <div class="nav-item" onclick="showPage('executive')" id="nav-executive">
+          <span class="nav-item-icon">📊</span>Executive Summary
+          <span class="nav-item-badge pink">New</span>
         </div>
-      </div>
-    </div>
-
-    <!-- RESEARCH -->
-    <div class="sidebar-section">
-      <div class="sidebar-section-label">Research</div>
-      <div class="sidebar-section-items">
-        <div class="nav-item" onclick="showPage('bracket')" id="nav-bracket">
-          <span class="nav-item-icon">🏆</span>Tournament Bracket
-          <span class="nav-item-badge pink">8 Rounds</span>
-        </div>
-        <div class="nav-item" onclick="showPage('strategies')" id="nav-strategies">
-          <span class="nav-item-icon">📋</span>All Strategies
-          <span class="nav-item-badge">100</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- STRATEGY ANALYSIS -->
-    <div class="sidebar-section">
-      <div class="sidebar-section-label">Strategy Analysis</div>
-      <div class="sidebar-section-items">
-        <div class="nav-item" onclick="showPage('dna')" id="nav-dna">
-          <span class="nav-item-icon">🧬</span>Strategy DNA
-        </div>
-        <div class="nav-item" onclick="showPage('stress')" id="nav-stress">
-          <span class="nav-item-icon">📈</span>Stress Tests
-        </div>
-        <div class="nav-item" onclick="showPage('multimarket')" id="nav-multimarket">
-          <span class="nav-item-icon">🌍</span>Multi-Market Results
-        </div>
-      </div>
-    </div>
-
-    <!-- OPTIMIZATION PHASES -->
-    <div class="sidebar-section">
-      <div class="sidebar-section-label">Optimization Phases</div>
-      <div class="sidebar-section-items">
-        <div class="nav-item" onclick="showPage('phase4')" id="nav-phase4">
-          <span class="nav-item-icon">🔍</span>Phase 4 — Root Cause
-          <span class="nav-item-badge green">Done</span>
-        </div>
-        <div class="nav-item" onclick="showPage('phase5')" id="nav-phase5">
-          <span class="nav-item-icon">🚀</span>Phase 5 — Max Aggression
-          <span class="nav-item-badge green">Done</span>
-        </div>
-        <div class="nav-item" onclick="showPage('phase6')" id="nav-phase6">
-          <span class="nav-item-icon">⚡</span>Phase 6 — Broker Switch
-          <span class="nav-item-badge green">Done</span>
-        </div>
-        <div class="nav-item" onclick="showPage('phase7')" id="nav-phase7">
-          <span class="nav-item-icon">✅</span>Phase 7 — Validation
-          <span class="nav-item-badge green">Done</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- LIVE TRADING -->
-    <div class="sidebar-section">
-      <div class="sidebar-section-label">Live Trading</div>
-      <div class="sidebar-section-items">
         <div class="nav-item" onclick="showPage('kpihunt')" id="nav-kpihunt" style="background:linear-gradient(90deg,rgba(255,165,0,.15),transparent)">
           <span class="nav-item-icon">🎯</span>KPI Hunt — 1000%
           <span class="nav-item-badge" style="background:#FEF3C7;color:#D97706;font-weight:700">HOT</span>
@@ -635,8 +574,26 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
           <span class="nav-item-icon">⚡</span>Phase 9 — Evolution
           <span class="nav-item-badge" style="background:#EDE9FE;color:#7C3AED;font-weight:700">NEW</span>
         </div>
+        <div class="nav-item" onclick="showPage('deepdives')" id="nav-deepdives">
+          <span class="nav-item-icon">🔬</span>Iteration Deep Dives
+          <span class="nav-item-badge">20</span>
+        </div>
+        <div class="nav-item" onclick="showPage('roadmap')" id="nav-roadmap">
+          <span class="nav-item-icon">🗺️</span>KPI Roadmap
+        </div>
+      </div>
+    </div>
+
+    <!-- LIVE & RESEARCH -->
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Live &amp; Research</div>
+      <div class="sidebar-section-items">
+        <div class="nav-item" onclick="showPage('strategies')" id="nav-strategies">
+          <span class="nav-item-icon">📋</span>All Strategies
+          <span class="nav-item-badge green">A+</span>
+        </div>
         <div class="nav-item" onclick="showPage('phase8')" id="nav-phase8">
-          <span class="nav-item-icon">📊</span>Phase 8 — Live Demo
+          <span class="nav-item-icon">📈</span>Phase 8 — Live Demo
           <span class="nav-item-badge green">Demo</span>
         </div>
         <div class="nav-item" onclick="showPage('pepperstone')" id="nav-pepperstone">
@@ -645,25 +602,6 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
         </div>
         <div class="nav-item" onclick="showPage('risk')" id="nav-risk">
           <span class="nav-item-icon">🎯</span>Risk Manager
-        </div>
-        <div class="nav-item" onclick="showPage('demolplan')" id="nav-demolplan">
-          <span class="nav-item-icon">📅</span>Demo Plan Timeline
-        </div>
-      </div>
-    </div>
-
-    <!-- TOOLS -->
-    <div class="sidebar-section">
-      <div class="sidebar-section-label">Tools</div>
-      <div class="sidebar-section-items">
-        <div class="nav-item" onclick="showPage('calculator')" id="nav-calculator">
-          <span class="nav-item-icon">🧮</span>Calculators
-        </div>
-        <div class="nav-item" onclick="showPage('compound')" id="nav-compound">
-          <span class="nav-item-icon">📉</span>Compounding
-        </div>
-        <div class="nav-item" onclick="showPage('claude')" id="nav-claude">
-          <span class="nav-item-icon">🤖</span>Claude AI Advisor
         </div>
       </div>
     </div>
@@ -1479,12 +1417,34 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
 </div><!-- close padding div -->
 </div><!-- /page-kpihunt -->
 
+<!-- ══════ PAGE: EXECUTIVE SUMMARY ══════ -->
+<div class="page" id="page-executive">
+<div class="page-inner">
+  <div class="breadcrumb"><a href="#" onclick="showPage('home');return false;">Home</a><span class="breadcrumb-sep">/</span>Executive Summary</div>
+  <div class="page-title">Executive Summary</div>
+  <div class="page-subtitle">APEX GREATEST — Full system overview · $3k→$30k · Phase 1–9 complete</div>
+  <div class="page-divider"></div>
+  <div id="executive-content"><div class="stub-page"><div class="stub-icon">📊</div><div class="stub-title">Loading Executive Summary…</div></div></div>
+</div>
+</div>
+
+<!-- ══════ PAGE: ITERATION DEEP DIVES ══════ -->
+<div class="page" id="page-deepdives">
+<div class="page-inner">
+  <div class="breadcrumb"><a href="#" onclick="showPage('home');return false;">Home</a><span class="breadcrumb-sep">/</span>Iteration Deep Dives</div>
+  <div class="page-title">Iteration Deep Dives</div>
+  <div class="page-subtitle">All 20 KPI Hunt iterations · Code · Charts · Full breakdown</div>
+  <div class="page-divider"></div>
+  <div id="deepdives-content"><div class="stub-page"><div class="stub-icon">🔬</div><div class="stub-title">Loading Deep Dives…</div></div></div>
+</div>
+</div>
+
 </main><!-- /main-content -->
 
 <!-- ══════ FOOTER ══════ -->
 <footer class="dash-footer">
   <div style="display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;margin-bottom:6px">
-    <span style="font-weight:800;color:var(--blue-900);font-size:.8rem">APEX GREATEST</span>
+    <span style="font-weight:800;color:var(--blue-900);font-size:.8rem">PUNCH TERMINAL</span>
     <span style="color:var(--gray-300)">|</span>
     <span>Trading Research Platform</span>
     <span style="color:var(--gray-300)">|</span>
@@ -3510,7 +3470,7 @@ function p8Check(i,v){
 /* ══════════════════════════════════════════════════
    SAVE 6 — CLAUDE AI ADVISOR
    ══════════════════════════════════════════════════ */
-const APEX_SYS=`You are an expert trading analyst for the APEX GREATEST project. Be concise, honest, specific. Never inflate numbers. Respond in plain text with light markdown (**bold**, numbered lists). Keep answers under 280 words unless asked for more detail.
+const APEX_SYS=`You are an expert trading analyst for the PUNCH TERMINAL project. Be concise, honest, specific. Never inflate numbers. Respond in plain text with light markdown (**bold**, numbered lists). Keep answers under 280 words unless asked for more detail.
 
 KEY DATA:
 Champion EA: APEX_Pepperstone_v1 (SMC Order Blocks + FVG, XAUUSD H1)
@@ -3571,7 +3531,7 @@ function renderClaudeChat(c){
       <button onclick="sendClaudeMsg()" style="padding:10px 18px;background:var(--blue-500);color:#fff;border:none;border-radius:10px;font-size:.875rem;font-weight:700;cursor:pointer;font-family:inherit">Send</button>
     </div>
   </div>`;
-  setTimeout(()=>appendClaudeMsg('assistant',`I can see your **APEX GREATEST** system data. Here are the top 3 areas I'd focus on:\n\n1. **Monthly return gap**: 0.75–0.95%/mo actual vs 21.5% KPI needed → ~23× improvement still required\n\n2. **Only gold contributing positively** → Other markets near breakeven — concentration risk\n\n3. **Demo phase just starting** → 50+ trades needed before any live capital decision\n\nWhat would you like to explore first?`),120);
+  setTimeout(()=>appendClaudeMsg('assistant',`I can see your **PUNCH TERMINAL** system data. Here are the top 3 areas I'd focus on:\n\n1. **Monthly return gap**: 0.75–0.95%/mo actual vs 21.5% KPI needed → ~23× improvement still required\n\n2. **Only gold contributing positively** → Other markets near breakeven — concentration risk\n\n3. **Demo phase just starting** → 50+ trades needed before any live capital decision\n\nWhat would you like to explore first?`),120);
 }
 
 pageInitFns['claude']=function(){
