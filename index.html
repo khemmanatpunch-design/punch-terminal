@@ -174,7 +174,7 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
 .sidebar-nav{flex:1;padding:8px 0;}
 .sidebar-section{margin-bottom:4px;}
 .sidebar-section-label{
-  padding:8px 16px 4px;font-size:.72rem;font-weight:600;
+  padding:8px 16px 4px;font-size:.75rem;font-weight:600;
   color:var(--sky);letter-spacing:.08em;text-transform:uppercase;
   display:flex;align-items:center;justify-content:space-between;cursor:pointer;
   user-select:none;opacity:.75;
@@ -239,28 +239,28 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
 
 /* ── CARDS ───────────────────────────────────────── */
 .card{
-  background:var(--warm-white);border:1px solid rgba(145,174,196,0.35);
+  background:var(--white);border:1px solid rgba(145,174,196,0.35);
   border-radius:14px;padding:24px;
   box-shadow:0 2px 8px rgba(47,65,86,0.06);transition:box-shadow .3s,transform .2s;
 }
-.card:hover{box-shadow:var(--glow-teal);transform:translateY(-2px);}
+.card:hover{box-shadow:var(--glow-teal);transform:translateY(-1px);}
 .card-sm{padding:16px;}
 .card-xs{padding:12px;}
 
 /* Metric card with colored left border */
 .metric-card{
-  background:var(--warm-white);border:1px solid rgba(145,174,196,0.35);
+  background:var(--white);border:1px solid rgba(145,174,196,0.35);
   border-radius:14px;padding:20px 20px 20px 24px;
   box-shadow:0 2px 8px rgba(47,65,86,0.06);border-left:4px solid var(--teal);
   transition:all 0.3s ease;
 }
-.metric-card:hover{border-left-color:var(--blush);box-shadow:var(--glow-teal);transform:translateY(-2px);}
+.metric-card:hover{border-left-color:var(--blush);box-shadow:var(--glow-teal);transform:translateY(-1px);}
 .metric-card.green{border-left-color:var(--green);}
 .metric-card.red{border-left-color:var(--red);}
 .metric-card.pink{border-left-color:var(--blush);}
 .metric-card.orange{border-left-color:var(--orange);}
 .metric-card.amber{border-left-color:var(--amber);}
-.metric-label{font-size:.72rem;font-weight:600;color:var(--stone);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;}
+.metric-label{font-size:.75rem;font-weight:600;color:#5F6B7A;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;}
 .metric-value{font-size:1.875rem;font-weight:800;color:var(--navy);line-height:1;}
 .metric-value.green{color:var(--green-500);}
 .metric-value.pink{color:var(--pink-600);}
@@ -269,8 +269,8 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
 .metric-delta.up{color:var(--green-500);}
 .metric-delta.down{color:var(--red-500);}
 .metric-value.red{color:var(--red-500);}
-.kpi-card{background:var(--warm-white);border:1px solid rgba(145,174,196,0.35);border-radius:14px;padding:20px;box-shadow:0 2px 8px rgba(47,65,86,0.06);}
-.kpi-label{font-size:.75rem;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;}
+.kpi-card{background:var(--white);border:1px solid rgba(145,174,196,0.35);border-radius:14px;padding:20px;box-shadow:0 2px 8px rgba(47,65,86,0.06);}
+.kpi-label{font-size:.75rem;font-weight:600;color:#5F6B7A;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;}
 .kpi-value{font-size:1.5rem;font-weight:800;color:var(--navy);line-height:1;}
 
 /* ── GRID HELPERS ────────────────────────────────── */
@@ -301,7 +301,7 @@ html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--
 }
 .btn-primary{background:var(--teal);color:#fff;}
 .btn-primary:hover{background:var(--navy);}
-.btn-secondary{background:var(--warm-white);color:var(--teal);border:1.5px solid var(--sky);}
+.btn-secondary{background:var(--white);color:var(--teal);border:1.5px solid var(--sky);}
 .btn-secondary:hover{background:var(--mist);}
 .btn-ghost{background:transparent;color:var(--gray-700);}
 .btn-ghost:hover{background:var(--gray-100);}
@@ -324,7 +324,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
 /* ── HERO GRADIENT ───────────────────────────────── */
 .hero-gradient{
   background:linear-gradient(135deg,var(--navy) 0%,var(--teal) 60%,var(--steel) 100%);
-  border-radius:var(--radius-xl);padding:32px;color:#fff;
+  border-radius:var(--radius-xl);padding:32px;color:#ffffff;
   position:relative;overflow:hidden;margin-bottom:24px;
 }
 .hero-gradient::before{
@@ -481,7 +481,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
 .bracket-card.advancing{border-left-color:var(--green-500);}
 .bracket-card.eliminated{background:var(--gray-100);opacity:.5;border-left-color:var(--gray-300);cursor:default;}
 .bracket-card.eliminated:hover{transform:none;box-shadow:none;}
-.bracket-card.champion{background:linear-gradient(135deg,#567C8D,#EC4899);border:none;border-radius:10px;padding:10px 12px;animation:champGlow 2s ease-in-out infinite;}
+.bracket-card.champion{background:linear-gradient(135deg,#567C8D,#EAC7C3);border:none;border-radius:10px;padding:10px 12px;animation:champGlow 2s ease-in-out infinite;}
 @keyframes champGlow{0%,100%{box-shadow:0 0 12px rgba(79,70,229,.4);}50%{box-shadow:0 0 24px rgba(236,72,153,.6);}}
 .bracket-card-name{font-size:.75rem;font-weight:600;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:145px;}
 .bracket-card.champion .bracket-card-name{color:#fff;font-size:.8rem;}
@@ -613,7 +613,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
 .pt-bar-fill.kpi{background:linear-gradient(90deg,#10B981,#34D399);}
 
 /* ── Chart defaults (teal palette) ──────────────── */
-.chart-wrap{background:var(--warm-white);border-radius:12px;padding:16px;
+.chart-wrap{background:var(--white);border-radius:12px;padding:16px;
   border:1px solid rgba(145,174,196,0.3);box-shadow:0 2px 8px rgba(47,65,86,0.05);}
 
 /* ── Iteration table rows (futuristic hover) ─────── */
@@ -658,7 +658,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
 }
 
 /* ── Strat table hover (teal-tinted) ─────────────── */
-.strat-tbl tbody tr:hover{background:rgba(145,174,196,0.12)!important;}
+.strat-tbl tbody tr:hover{background:rgba(86,124,141,0.10)!important;}
 .srow.pfa{background:rgba(86,124,141,0.05);}
 
 /* ── Dna-tab (pill tabs) ─────────────────────────── */
@@ -671,7 +671,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
 .dna-tab.on{background:var(--teal);border-color:var(--teal);color:#fff;}
 
 /* ── RL accordion (Research Log) ─────────────────── */
-.rl-acc-hdr{background:var(--warm-white)!important;}
+.rl-acc-hdr{background:var(--white)!important;}
 .rl-acc-hdr:hover{background:var(--mist)!important;}
 .rl-acc-body{background:var(--cream)!important;}
 
@@ -682,7 +682,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
 .page-divider{height:1px;background:linear-gradient(90deg,var(--sky),transparent);margin-bottom:24px;opacity:.5;}
 
 /* ── Breadcrumb ──────────────────────────────────── */
-.breadcrumb a{color:var(--stone);text-decoration:none;}
+.breadcrumb a{color:#6B7280;text-decoration:none;}
 .breadcrumb a:hover{color:var(--teal);}
 
 /* ── Badges (update blue → teal) ─────────────────── */
@@ -721,8 +721,8 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
     <input type="text" placeholder="Search strategies, phases, metrics..." id="globalSearch" onclick="openSearch()" readonly>
   </div>
   <div class="topbar-right">
-    <span class="topbar-badge" style="background:linear-gradient(90deg,var(--mauve),var(--teal))">HG Hunt ⚡</span>
-    <span class="topbar-badge" style="background:linear-gradient(90deg,#7C3AED,#567C8D)">Phase 9 ⚡</span>
+    <span class="topbar-badge" onclick="showPage('holygrail')" style="background:linear-gradient(90deg,var(--mauve),var(--teal));cursor:pointer" title="Holy Grail Hunt">HG Hunt ⚡</span>
+    <span class="topbar-badge" onclick="showPage('phase9')" style="background:linear-gradient(90deg,#7C3AED,#567C8D);cursor:pointer" title="Phase 9 Evolution">Phase 9 ⚡</span>
     <span class="topbar-badge live">🟢 Demo Mode</span>
     <button class="topbar-icon-btn" title="Notifications" onclick="toggleNotif()">🔔</button>
     <button class="topbar-icon-btn" id="sidebarToggle" title="Toggle sidebar" onclick="toggleSidebar()">☰</button>
@@ -802,7 +802,10 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
       <div class="sidebar-section-label">Tools</div>
       <div class="sidebar-section-items">
         <div class="nav-item" onclick="showPage('tools')" id="nav-tools">
-          <span class="nav-item-icon">🧮</span>Tools + Claude AI
+          <span class="nav-item-icon">🧮</span>Risk &amp; Calculator
+        </div>
+        <div class="nav-item" onclick="showPage('claude')" id="nav-claude">
+          <span class="nav-item-icon">🤖</span>Claude AI
         </div>
       </div>
     </div>
@@ -835,7 +838,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
       <div style="font-size:.875rem;opacity:.85;margin-bottom:18px">Required: <b>21.5%/month</b> &nbsp;|&nbsp; Found: <b style="color:#4ADE80">24.34%/month</b> &nbsp;|&nbsp; Exceeded by: <b style="color:#4ADE80">+13%</b></div>
       <div style="background:rgba(255,255,255,.15);border-radius:999px;height:12px;overflow:hidden;max-width:560px">
         <div style="height:100%;width:100%;background:linear-gradient(90deg,#4ADE80,#22C55E);border-radius:999px;position:relative">
-          <div style="position:absolute;right:4px;top:50%;transform:translateY(-50%);font-size:.65rem;font-weight:700;color:#052e16">113% ✓</div>
+          <div style="position:absolute;right:4px;top:50%;transform:translateY(-50%);font-size:.75rem;font-weight:700;color:#052e16">113% ✓</div>
         </div>
       </div>
       <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
@@ -921,7 +924,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
       <div style="padding:10px;background:var(--red-100);border-radius:8px;text-align:center"><div style="font-size:.7rem;font-weight:600;color:var(--gray-500);text-transform:uppercase">Blowup</div><div id="kb-blowup" style="font-size:1.25rem;font-weight:800;color:var(--red-500)">8%</div></div>
     </div>
     <div style="height:200px"><canvas id="kb-equity-chart"></canvas></div>
-    <div style="display:flex;gap:16px;margin-top:8px;flex-wrap:wrap;font-size:.72rem;color:var(--gray-500)">
+    <div style="display:flex;gap:16px;margin-top:8px;flex-wrap:wrap;font-size:.75rem;color:var(--gray-500)">
       <span style="display:flex;align-items:center;gap:4px"><span style="width:12px;height:2px;background:var(--green-500);display:inline-block"></span>Conservative (50% risk)</span>
       <span style="display:flex;align-items:center;gap:4px"><span style="width:12px;height:2px;background:var(--teal);display:inline-block"></span>Base (your settings)</span>
       <span style="display:flex;align-items:center;gap:4px"><span style="width:12px;height:2px;background:var(--pink-400);display:inline-block"></span>Aggressive (+50% risk)</span>
@@ -1001,7 +1004,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
     <div class="card card-sm" style="margin-bottom:14px;padding:14px">
       <div style="display:grid;grid-template-columns:180px 1fr;gap:14px;align-items:start">
         <div>
-          <div style="font-size:.72rem;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px">Selected Strategy</div>
+          <div style="font-size:.75rem;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px">Selected Strategy</div>
           <div id="sd-strat-name" style="font-weight:800;color:var(--navy);font-size:.85rem;margin-bottom:4px;word-break:break-word">F01_SMC_Session_v2</div>
           <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
             <span id="sd-strat-pf" style="font-size:.75rem;font-weight:700;background:#D1FAE5;color:#065F46;padding:2px 7px;border-radius:999px">PF 3.190</span>
@@ -1009,13 +1012,13 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
           </div>
           <div style="font-size:.78rem;color:var(--gray-600);margin-bottom:3px">Monthly: <b id="sd-mo" style="color:var(--green-500)">0.95%</b></div>
           <div style="font-size:.78rem;color:var(--gray-600);margin-bottom:10px">12mo Final: <b id="sd-final" style="color:var(--navy)">$3,360</b></div>
-          <div style="font-size:.72rem;font-weight:700;color:var(--gray-500);margin-bottom:5px">RISK ADJUSTER</div>
+          <div style="font-size:.75rem;font-weight:700;color:var(--gray-500);margin-bottom:5px">RISK ADJUSTER</div>
           <div style="display:flex;align-items:center;gap:6px">
             <span style="font-size:.7rem;color:var(--gray-400)">0.5×</span>
             <input type="range" id="sd-risk-slider" min="0.5" max="3" step="0.1" value="1" oninput="onStratRiskSlider()" style="flex:1;accent-color:var(--teal)">
             <span style="font-size:.7rem;color:var(--gray-400)">3×</span>
           </div>
-          <div style="text-align:center;font-size:.72rem;color:var(--gray-500);margin-top:2px"><span id="sd-risk-label">1.0× risk</span></div>
+          <div style="text-align:center;font-size:.75rem;color:var(--gray-500);margin-top:2px"><span id="sd-risk-label">1.0× risk</span></div>
         </div>
         <div>
           <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">
@@ -1263,7 +1266,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
   <div class="card card-sm" style="margin-bottom:20px">
     <div style="font-weight:700;color:var(--navy);margin-bottom:12px;font-size:.9rem">Monte Carlo — Final Balance Distribution (10,000 paths · 12 months · APEX Maximum 24.34%/mo)</div>
     <canvas id="kpi-mc-chart" height="130"></canvas>
-    <div style="display:flex;gap:16px;margin-top:8px;flex-wrap:wrap;font-size:.72rem">
+    <div style="display:flex;gap:16px;margin-top:8px;flex-wrap:wrap;font-size:.75rem">
       <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:#EF4444;border-radius:2px;display:inline-block"></span>Below $3k (loss)</span>
       <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:#60A5FA;border-radius:2px;display:inline-block"></span>$3k–$10k</span>
       <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:#34D399;border-radius:2px;display:inline-block"></span>$10k–$30k</span>
@@ -1275,7 +1278,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
   <div class="card card-sm" style="margin-bottom:20px">
     <div style="font-weight:700;color:var(--navy);margin-bottom:12px;font-size:.9rem">All 20 Iterations — Click Any Row for Deep Dive</div>
     <div id="iter-table-wrap"></div>
-    <div style="margin-top:8px;font-size:.72rem;color:var(--gray-500);display:flex;gap:16px;flex-wrap:wrap">
+    <div style="margin-top:8px;font-size:.75rem;color:var(--gray-500);display:flex;gap:16px;flex-wrap:wrap">
       <span>✅ KPI ✓ = exceeds 21.5%/mo with manageable DD</span>
       <span>🔄 = below KPI but useful as portfolio component</span>
       <span>❌ = too low contribution alone</span>
@@ -1385,12 +1388,12 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
         <div style="font-size:.78rem;font-weight:600;color:var(--gray-600);margin-bottom:8px">Compilation Result</div>
         <div style="padding:10px;background:#F0FDF4;border-radius:8px;border-left:3px solid var(--green-500);font-size:.78rem">
           <div style="color:var(--green-600);font-weight:700">✓ Compiled Successfully</div>
-          <div style="color:var(--gray-600);margin-top:4px;font-family:monospace;font-size:.72rem">0 errors, 0 warnings</div>
-          <div style="color:var(--gray-600);font-family:monospace;font-size:.72rem">KPI_Iter1_DynRisk.ex5 ready</div>
-          <div style="color:var(--gray-500);margin-top:6px;font-size:.72rem">6 dynamic risk rules implemented<br>Anti-martingale compounding active<br>ATR-based SL/TP (no fixed points)</div>
+          <div style="color:var(--gray-600);margin-top:4px;font-family:monospace;font-size:.75rem">0 errors, 0 warnings</div>
+          <div style="color:var(--gray-600);font-family:monospace;font-size:.75rem">KPI_Iter1_DynRisk.ex5 ready</div>
+          <div style="color:var(--gray-500);margin-top:6px;font-size:.75rem">6 dynamic risk rules implemented<br>Anti-martingale compounding active<br>ATR-based SL/TP (no fixed points)</div>
         </div>
         <div style="margin-top:10px;font-size:.78rem;font-weight:600;color:var(--gray-600);margin-bottom:6px">Phase 7 Walk-Forward (Real MT5 Data)</div>
-        <table style="width:100%;border-collapse:collapse;font-size:.72rem">
+        <table style="width:100%;border-collapse:collapse;font-size:.75rem">
           <tr style="background:var(--gray-50)"><th style="padding:4px 6px;text-align:left;border-bottom:1px solid var(--gray-200)">Period</th><th style="padding:4px 6px;text-align:right;border-bottom:1px solid var(--gray-200)">PF</th><th style="padding:4px 6px;text-align:right;border-bottom:1px solid var(--gray-200)">Monthly</th><th style="padding:4px 6px;text-align:center;border-bottom:1px solid var(--gray-200)">Verdict</th></tr>
           <tr><td style="padding:4px 6px;border-bottom:1px solid var(--gray-100)">2020-22→2023</td><td style="text-align:right">3.19</td><td style="text-align:right;color:var(--green-500);font-weight:700">14.54%</td><td style="text-align:center"><span style="color:var(--green-500)">ROBUST</span></td></tr>
           <tr><td style="padding:4px 6px">2020-23→2024-26</td><td style="text-align:right">3.19</td><td style="text-align:right;color:var(--orange-500);font-weight:700">5.71%</td><td style="text-align:center"><span style="color:var(--green-500)">ROBUST</span></td></tr>
@@ -1402,7 +1405,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
         <div style="padding:10px;background:#FFF7ED;border-radius:8px;border-left:3px solid var(--orange-500);font-size:.78rem">
           <div style="color:var(--orange-700);font-weight:700">⚠️ Awaiting Historical Data</div>
           <div style="color:var(--gray-600);margin-top:6px;line-height:1.6">MT5 backtest returned 0 trades — historical tick data for XAUUSDm 2020-2026 must be pre-fetched via Strategy Tester GUI (standard MT5 behavior on first run).</div>
-          <div style="color:var(--gray-500);margin-top:6px;font-size:.72rem;line-height:1.6"><b>To fix:</b> Open MT5 → Strategy Tester → select XAUUSDm → run any EA once → data downloads automatically → re-run KPI Iter1 backtest</div>
+          <div style="color:var(--gray-500);margin-top:6px;font-size:.75rem;line-height:1.6"><b>To fix:</b> Open MT5 → Strategy Tester → select XAUUSDm → run any EA once → data downloads automatically → re-run KPI Iter1 backtest</div>
         </div>
         <div style="margin-top:10px;padding:10px;background:var(--gray-50);border-radius:8px;font-size:.75rem;color:var(--gray-600);line-height:1.7">
           <b>Expected results</b> when data available:<br>
@@ -1666,7 +1669,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
   <div class="card card-sm" style="margin-bottom:20px">
     <div style="font-weight:700;color:var(--navy);margin-bottom:12px;font-size:.9rem">All 20 Iterations — Monthly Return Progression</div>
     <canvas id="dd-progress-chart" height="120"></canvas>
-    <div style="margin-top:8px;display:flex;gap:16px;flex-wrap:wrap;font-size:.72rem;color:var(--gray-500)">
+    <div style="margin-top:8px;display:flex;gap:16px;flex-wrap:wrap;font-size:.75rem;color:var(--gray-500)">
       <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:3px;background:var(--green-500);border-radius:2px;display:inline-block"></span>KPI threshold 21.5%</span>
       <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:var(--teal);border-radius:2px;display:inline-block"></span>Monthly return per iteration</span>
     </div>
@@ -1703,7 +1706,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
   <div class="bottom-nav-items">
     <button class="bottom-nav-btn" onclick="showPage('home');setBnav('home')" id="bn-home"><span class="bottom-nav-btn-icon">🏠</span>Home</button>
     <button class="bottom-nav-btn" onclick="showPage('strategies');setBnav('strategies')" id="bn-strategies"><span class="bottom-nav-btn-icon">🏆</span>Research</button>
-    <button class="bottom-nav-btn" onclick="showPage('phase7');setBnav('phase7')" id="bn-phase7"><span class="bottom-nav-btn-icon">📊</span>Analysis</button>
+    <button class="bottom-nav-btn" onclick="showPage('kpihunt');setBnav('kpihunt')" id="bn-kpihunt"><span class="bottom-nav-btn-icon">🎯</span>KPI</button>
     <button class="bottom-nav-btn" onclick="showPage('pepperstone');setBnav('pepperstone')" id="bn-pepperstone"><span class="bottom-nav-btn-icon">🟢</span>Live</button>
     <button class="bottom-nav-btn" onclick="showPage('claude');setBnav('claude')" id="bn-claude"><span class="bottom-nav-btn-icon">🤖</span>Claude</button>
   </div>
@@ -1957,7 +1960,7 @@ pageInitFns['home']=function(){
     datasets:[
       {label:'Conservative',data:[],borderColor:'#10B981',backgroundColor:'rgba(16,185,129,.06)',fill:true,tension:.4,borderWidth:2,pointRadius:0},
       {label:'Base',data:[],borderColor:'#567C8D',backgroundColor:'rgba(79,70,229,.08)',fill:true,tension:.4,borderWidth:2.5,pointRadius:3,pointBackgroundColor:'#567C8D'},
-      {label:'Aggressive',data:[],borderColor:'#EC4899',backgroundColor:'rgba(236,72,153,.05)',fill:true,tension:.4,borderWidth:2,pointRadius:0},
+      {label:'Aggressive',data:[],borderColor:'#EAC7C3',backgroundColor:'rgba(236,72,153,.05)',fill:true,tension:.4,borderWidth:2,pointRadius:0},
     ]},options:{responsive:true,maintainAspectRatio:false,
     plugins:{legend:{display:true,position:'bottom',labels:{font:{family:'Inter',size:11},boxWidth:10,color:'#6B7280',usePointStyle:true}},
     tooltip:{backgroundColor:'#fff',titleColor:'#1E1B4B',bodyColor:'#374151',borderColor:'#E5E7EB',borderWidth:1,cornerRadius:8,padding:10,callbacks:{label:c=>'$'+c.parsed.y.toLocaleString()}}},
@@ -2485,7 +2488,7 @@ function renderDNATab(){
       const rv=v=>[v.wr/60*100,v.pf*25,v.monthly/0.6*55,100-v.maxdd,Math.min(100,v.trades/1500*100),60,70,75];
       new Chart(rc,{type:'radar',data:{labels:['Win Rate','PF','Monthly','Low DD','Trade Freq','RR','Consist','Stress'],datasets:[
         {label:s.id,data:rv(s),borderColor:'#567C8D',backgroundColor:'rgba(79,70,229,.12)',borderWidth:2,pointBackgroundColor:'#567C8D',pointRadius:3},
-        ...(curDnaIdx===0?[]:[{label:champ.id,data:rv(champ),borderColor:'#EC4899',backgroundColor:'rgba(236,72,153,.07)',borderWidth:2,pointBackgroundColor:'#EC4899',pointRadius:3,borderDash:[4,2]}])
+        ...(curDnaIdx===0?[]:[{label:champ.id,data:rv(champ),borderColor:'#EAC7C3',backgroundColor:'rgba(236,72,153,.07)',borderWidth:2,pointBackgroundColor:'#EAC7C3',pointRadius:3,borderDash:[4,2]}])
       ]},options:{responsive:true,maintainAspectRatio:false,scales:{r:{min:0,max:100,grid:{color:'#E5E7EB'},pointLabels:{font:{family:'Inter',size:10},color:'#6B7280'},ticks:{display:false}}},plugins:{legend:{position:'bottom',labels:{font:{family:'Inter',size:10},boxWidth:8}}}}});
     },60);
   } else if(curDnaTab==='code'){
@@ -3720,7 +3723,7 @@ pageInitFns['roadmap']=function(){
       {label:'Moderate 3%/mo',data:compound(3000,3,36),borderColor:'#567C8D',backgroundColor:'rgba(79,70,229,.08)',tension:.4,borderWidth:2,pointRadius:0},
       {label:'Aggressive 7%/mo',data:compound(3000,7,36),borderColor:'#F97316',backgroundColor:'rgba(249,115,22,.08)',tension:.4,borderWidth:2,pointRadius:0},
       {label:'KPI Target $30k',data:Array(37).fill(30000),borderColor:'#EF4444',borderDash:[5,4],borderWidth:1,pointRadius:0,fill:false},
-      {label:'Your Scenario',data:compound(3000,0.95,36),borderColor:'#EC4899',backgroundColor:'rgba(236,72,153,.08)',tension:.4,borderWidth:2,pointRadius:0,borderDash:[6,3],fill:false}
+      {label:'Your Scenario',data:compound(3000,0.95,36),borderColor:'#EAC7C3',backgroundColor:'rgba(236,72,153,.08)',tension:.4,borderWidth:2,pointRadius:0,borderDash:[6,3],fill:false}
     ]},options:{plugins:{legend:{labels:{font:{size:10},boxWidth:12}}},scales:{y:{title:{display:true,text:'Balance ($)',font:{size:10}},ticks:{font:{size:10},callback:v=>'$'+v.toLocaleString()}},x:{ticks:{font:{size:9},maxTicksLimit:7}}}}});
     rmCalc();
   },80);
@@ -3763,7 +3766,7 @@ function rmCalc(){
         {label:'Moderate 3%/mo',data:_c(3000,3,36),borderColor:'#567C8D',backgroundColor:'rgba(79,70,229,.08)',tension:.4,borderWidth:2,pointRadius:0},
         {label:'Aggressive 7%/mo',data:_c(3000,7,36),borderColor:'#F97316',backgroundColor:'rgba(249,115,22,.08)',tension:.4,borderWidth:2,pointRadius:0},
         {label:'KPI Target $30k',data:Array(37).fill(30000),borderColor:'#EF4444',borderDash:[5,4],borderWidth:1,pointRadius:0,fill:false},
-        {label:'Your Scenario ('+mo+'%/mo)',data:_c(3000,mo,36),borderColor:'#EC4899',backgroundColor:'rgba(236,72,153,.08)',tension:.4,borderWidth:2,pointRadius:0,borderDash:[6,3],fill:false}
+        {label:'Your Scenario ('+mo+'%/mo)',data:_c(3000,mo,36),borderColor:'#EAC7C3',backgroundColor:'rgba(236,72,153,.08)',tension:.4,borderWidth:2,pointRadius:0,borderDash:[6,3],fill:false}
       ]},options:{plugins:{legend:{labels:{font:{size:10},boxWidth:12}}},scales:{y:{title:{display:true,text:'Balance ($)',font:{size:10}},ticks:{font:{size:10},callback:v=>'$'+v.toLocaleString()}},x:{ticks:{font:{size:9},maxTicksLimit:7}}}}});
     }
   }
@@ -3891,7 +3894,7 @@ pageInitFns['ddopt']=function(){
           <td style="padding:9px 12px;text-align:right;color:${a.blowup===0?'#10B981':a.blowup<5?'#F97316':'#DC2626'}">${a.blowup.toFixed(1)}%</td>
           <td style="padding:9px 12px;text-align:right;color:${a.p30k>60?'#10B981':a.p30k>40?'#F97316':'#DC2626'}">${a.p30k.toFixed(1)}%</td>
           <td style="padding:9px 12px;text-align:center">
-            <span style="background:${bgs[a.cls]};color:${colors[a.cls]};padding:2px 8px;border-radius:999px;font-size:.68rem;font-weight:700">${a.badge}</span>
+            <span style="background:${bgs[a.cls]};color:${colors[a.cls]};padding:2px 8px;border-radius:999px;font-size:.75rem;font-weight:700">${a.badge}</span>
           </td>
         </tr>`).join('')}
       </tbody>
@@ -3914,24 +3917,24 @@ pageInitFns['ddopt']=function(){
     </div>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px">
       <div style="background:rgba(255,255,255,.6);border-radius:8px;padding:8px;text-align:center">
-        <div style="font-size:.65rem;color:#065F46;margin-bottom:2px">MONTHLY</div>
+        <div style="font-size:.75rem;color:#065F46;margin-bottom:2px">MONTHLY</div>
         <div style="font-weight:800;color:#10B981">28.46%</div>
-        <div style="font-size:.65rem;color:#6EE7B7">+17% vs base</div>
+        <div style="font-size:.75rem;color:#6EE7B7">+17% vs base</div>
       </div>
       <div style="background:rgba(255,255,255,.6);border-radius:8px;padding:8px;text-align:center">
-        <div style="font-size:.65rem;color:#065F46;margin-bottom:2px">MAX DD</div>
+        <div style="font-size:.75rem;color:#065F46;margin-bottom:2px">MAX DD</div>
         <div style="font-weight:800;color:#10B981">12.2%</div>
-        <div style="font-size:.65rem;color:#6EE7B7">below 15% target</div>
+        <div style="font-size:.75rem;color:#6EE7B7">below 15% target</div>
       </div>
       <div style="background:rgba(255,255,255,.6);border-radius:8px;padding:8px;text-align:center">
-        <div style="font-size:.65rem;color:#065F46;margin-bottom:2px">BLOWUP</div>
+        <div style="font-size:.75rem;color:#065F46;margin-bottom:2px">BLOWUP</div>
         <div style="font-weight:800;color:#10B981">0%</div>
-        <div style="font-size:.65rem;color:#6EE7B7">from 20% before</div>
+        <div style="font-size:.75rem;color:#6EE7B7">from 20% before</div>
       </div>
       <div style="background:rgba(255,255,255,.6);border-radius:8px;padding:8px;text-align:center">
-        <div style="font-size:.65rem;color:#065F46;margin-bottom:2px">P($30k)</div>
+        <div style="font-size:.75rem;color:#065F46;margin-bottom:2px">P($30k)</div>
         <div style="font-weight:800;color:#10B981">64%</div>
-        <div style="font-size:.65rem;color:#6EE7B7">maintained</div>
+        <div style="font-size:.75rem;color:#6EE7B7">maintained</div>
       </div>
     </div>
   </div>
@@ -3958,7 +3961,7 @@ pageInitFns['ddopt']=function(){
           <td style="padding:8px 12px;color:#6B7280;font-size:.74rem">${s.asset}</td>
           <td style="padding:8px 12px;text-align:right;font-weight:700;color:#3B82F6">${s.monthly.toFixed(2)}%</td>
           <td style="padding:8px 12px;text-align:right;color:${s.dd<20?'#10B981':s.dd<40?'#F97316':'#DC2626'}">${s.dd.toFixed(1)}%</td>
-          <td style="padding:8px 12px;text-align:center"><span style="background:#D1FAE5;color:#065F46;padding:2px 8px;border-radius:999px;font-size:.68rem;font-weight:700">${s.qual}</span></td>
+          <td style="padding:8px 12px;text-align:center"><span style="background:#D1FAE5;color:#065F46;padding:2px 8px;border-radius:999px;font-size:.75rem;font-weight:700">${s.qual}</span></td>
         </tr>`).join('')}
       </tbody>
     </table>
@@ -3977,19 +3980,19 @@ pageInitFns['ddopt']=function(){
     </div>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px">
       <div style="text-align:center">
-        <div style="font-size:.65rem;opacity:.7">MONTHLY</div>
+        <div style="font-size:.75rem;opacity:.7">MONTHLY</div>
         <div style="font-size:1.4rem;font-weight:800;color:#6EE7B7">34.74%</div>
       </div>
       <div style="text-align:center">
-        <div style="font-size:.65rem;opacity:.7">MAX DD</div>
+        <div style="font-size:.75rem;opacity:.7">MAX DD</div>
         <div style="font-size:1.4rem;font-weight:800;color:#6EE7B7">12.0%</div>
       </div>
       <div style="text-align:center">
-        <div style="font-size:.65rem;opacity:.7">BLOWUP</div>
+        <div style="font-size:.75rem;opacity:.7">BLOWUP</div>
         <div style="font-size:1.4rem;font-weight:800;color:#6EE7B7">0%</div>
       </div>
       <div style="text-align:center">
-        <div style="font-size:.65rem;opacity:.7">P($30k)</div>
+        <div style="font-size:.75rem;opacity:.7">P($30k)</div>
         <div style="font-size:1.4rem;font-weight:800;color:#6EE7B7">90.9%</div>
       </div>
     </div>
@@ -4081,10 +4084,10 @@ pageInitFns['holygrail']=function(){
     </div>
     <div style="font-size:1.1rem;font-weight:800;margin-bottom:4px">${BEST_NAME.replace(/_/g,' ')}</div>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px">
-      <div><div style="font-size:.65rem;opacity:.7">MONTHLY</div><div style="font-size:1.3rem;font-weight:800;color:${BEST_MONTHLY>=21.5?'#6EE7B7':'#FCA5A5'}">${BEST_MONTHLY.toFixed(2)}%</div></div>
-      <div><div style="font-size:.65rem;opacity:.7">MAX DD</div><div style="font-size:1.3rem;font-weight:800;color:${BEST_MAXDD<=10?'#6EE7B7':'#FCA5A5'}">${BEST_MAXDD.toFixed(1)}%</div></div>
-      <div><div style="font-size:.65rem;opacity:.7">P($30k)</div><div style="font-size:1.3rem;font-weight:800;color:${BEST_P30K>=40?'#6EE7B7':'#FCA5A5'}">${BEST_P30K.toFixed(1)}%</div></div>
-      <div><div style="font-size:.65rem;opacity:.7">FWD TEST</div><div style="font-size:1.3rem;font-weight:800;color:${BEST_FWD==='PASS'?'#6EE7B7':'#FCA5A5'}">${BEST_FWD}</div></div>
+      <div><div style="font-size:.75rem;opacity:.7">MONTHLY</div><div style="font-size:1.3rem;font-weight:800;color:${BEST_MONTHLY>=21.5?'#6EE7B7':'#FCA5A5'}">${BEST_MONTHLY.toFixed(2)}%</div></div>
+      <div><div style="font-size:.75rem;opacity:.7">MAX DD</div><div style="font-size:1.3rem;font-weight:800;color:${BEST_MAXDD<=10?'#6EE7B7':'#FCA5A5'}">${BEST_MAXDD.toFixed(1)}%</div></div>
+      <div><div style="font-size:.75rem;opacity:.7">P($30k)</div><div style="font-size:1.3rem;font-weight:800;color:${BEST_P30K>=40?'#6EE7B7':'#FCA5A5'}">${BEST_P30K.toFixed(1)}%</div></div>
+      <div><div style="font-size:.75rem;opacity:.7">FWD TEST</div><div style="font-size:1.3rem;font-weight:800;color:${BEST_FWD==='PASS'?'#6EE7B7':'#FCA5A5'}">${BEST_FWD}</div></div>
     </div>
     <div style="margin-top:10px;padding:8px 12px;background:rgba(255,255,255,.1);border-radius:8px;font-size:.75rem;opacity:.85">
       Constraints: Monthly ≥21.5% · MaxDD ≤10% · Blowup ≤8% · P($30k) ≥40% · Forward test PASS
@@ -4110,13 +4113,13 @@ pageInitFns['holygrail']=function(){
       <tbody>
       ${approaches.map((a,i)=>`
         <tr style="border-bottom:1px solid #F9FAFB;${a.holy?'background:#F0FDF4;font-weight:700':''}">
-          <td style="padding:7px 10px;color:#1F2937;font-size:.72rem">${a.name.replace(/_/g,' ')}</td>
+          <td style="padding:7px 10px;color:#1F2937;font-size:.75rem">${a.name.replace(/_/g,' ')}</td>
           <td style="padding:7px 10px;text-align:right;font-weight:600;color:${a.bt_monthly>=21.5?GREEN:a.bt_monthly>=18?ORANGE:RED}">${a.bt_monthly.toFixed(2)}%</td>
           <td style="padding:7px 10px;text-align:right;font-weight:600;color:${a.bt_maxdd<=10?GREEN:a.bt_maxdd<=15?ORANGE:RED}">${a.bt_maxdd.toFixed(1)}%</td>
           <td style="padding:7px 10px;text-align:right;color:${a.mc_p30k>=40?GREEN:a.mc_p30k>=20?ORANGE:RED}">${a.mc_p30k.toFixed(1)}%</td>
-          <td style="padding:7px 10px;text-align:center"><span style="font-size:.68rem;font-weight:600;color:${a.fwd_pass==='PASS'?GREEN:RED}">${a.fwd_pass}</span></td>
+          <td style="padding:7px 10px;text-align:center"><span style="font-size:.75rem;font-weight:600;color:${a.fwd_pass==='PASS'?GREEN:RED}">${a.fwd_pass}</span></td>
           <td style="padding:7px 10px;text-align:right;color:#6B7280;font-size:.7rem">${a.score.toFixed(2)}</td>
-          <td style="padding:7px 10px;text-align:center"><span style="background:${a.holy?'#D1FAE5':a.all_pass.includes('NO')?'#FEF2F2':'#FEF3C7'};color:${a.holy?'#065F46':a.all_pass.includes('NO')?'#DC2626':'#92400E'};padding:2px 6px;border-radius:999px;font-size:.65rem;font-weight:700">${a.all_pass}</span></td>
+          <td style="padding:7px 10px;text-align:center"><span style="background:${a.holy?'#D1FAE5':a.all_pass.includes('NO')?'#FEF2F2':'#FEF3C7'};color:${a.holy?'#065F46':a.all_pass.includes('NO')?'#DC2626':'#92400E'};padding:2px 6px;border-radius:999px;font-size:.75rem;font-weight:700">${a.all_pass}</span></td>
         </tr>`).join('')}
       </tbody>
     </table>
@@ -4145,7 +4148,7 @@ pageInitFns['holygrail']=function(){
           <td style="padding:8px 12px;text-align:right;font-weight:700;color:${t.monthly>=21.5?GREEN:t.monthly>=18?ORANGE:RED}">${t.monthly.toFixed(2)}%</td>
           <td style="padding:8px 12px;text-align:right;font-weight:700;color:${t.maxdd<=10?GREEN:t.maxdd<=15?ORANGE:RED}">${t.maxdd.toFixed(1)}%</td>
           <td style="padding:8px 12px;text-align:right;color:${t.p30k>=40?GREEN:ORANGE}">${t.p30k.toFixed(1)}%</td>
-          <td style="padding:8px 12px;text-align:center"><span style="background:${t.holy?'#D1FAE5':'#FEF2F2'};color:${t.holy?'#065F46':'#DC2626'};padding:2px 8px;border-radius:999px;font-size:.68rem;font-weight:700">${t.holy?'HOLY GRAIL':'NO'}</span></td>
+          <td style="padding:8px 12px;text-align:center"><span style="background:${t.holy?'#D1FAE5':'#FEF2F2'};color:${t.holy?'#065F46':'#DC2626'};padding:2px 8px;border-radius:999px;font-size:.75rem;font-weight:700">${t.holy?'HOLY GRAIL':'NO'}</span></td>
         </tr>`).join('')}
       </tbody>
     </table>
@@ -4282,7 +4285,7 @@ pageInitFns['risk']=function(){
     const ctx2=document.getElementById('rp-dd-chart');
     if(ctx2){new Chart(ctx2,{type:'bar',data:{labels:['Normal','Yellow Alert','Orange Alert','Red Stop'],datasets:[{label:'Drawdown %',data:[5,10,15,20],backgroundColor:['#10B981','#F59E0B','#F97316','#EF4444'],borderRadius:4}]},options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{title:{display:true,text:'Drawdown %',font:{size:10}},ticks:{font:{size:10},callback:v=>v+'%'}},y:{ticks:{font:{size:10}}}}}});}
     const ctx3=document.getElementById('rp-ruin-chart');
-    if(ctx3){new Chart(ctx3,{type:'line',data:{labels:['0.5%','1%','2%','3%','4%','5%'],datasets:[{label:'Ruin Probability',data:[0.5,3,8,15,25,38],borderColor:'#EC4899',backgroundColor:'rgba(236,72,153,.1)',tension:.4,pointRadius:4,fill:true}]},options:{plugins:{legend:{labels:{font:{size:10},boxWidth:12}}},scales:{y:{title:{display:true,text:'Ruin %',font:{size:10}},ticks:{font:{size:10},callback:v=>v+'%'}},x:{ticks:{font:{size:10}}}}}});}
+    if(ctx3){new Chart(ctx3,{type:'line',data:{labels:['0.5%','1%','2%','3%','4%','5%'],datasets:[{label:'Ruin Probability',data:[0.5,3,8,15,25,38],borderColor:'#EAC7C3',backgroundColor:'rgba(236,72,153,.1)',tension:.4,pointRadius:4,fill:true}]},options:{plugins:{legend:{labels:{font:{size:10},boxWidth:12}}},scales:{y:{title:{display:true,text:'Ruin %',font:{size:10}},ticks:{font:{size:10},callback:v=>v+'%'}},x:{ticks:{font:{size:10}}}}}});}
     calcRiskPage();
   },80);
 };
@@ -4636,7 +4639,7 @@ function renderIterTable(){
         +'<span style="text-align:right;color:var(--gray-600)">$'+d.final.toLocaleString()+'</span>'
         +'<span style="text-align:center;color:'+ddColor+'">'+d.dd+'%</span>'
         +'<span style="text-align:center"><span style="background:'+sbg+';color:'+scl+';padding:2px 6px;border-radius:999px;font-size:.67rem;font-weight:600;white-space:nowrap">'+slabel+'</span></span>'
-        +'<span class="iter-arrow" style="color:var(--gray-400);font-size:.68rem;pointer-events:none">▶</span>'
+        +'<span class="iter-arrow" style="color:var(--gray-400);font-size:.75rem;pointer-events:none">▶</span>'
         +'</div>'
         +'<div id="iter-expand-'+d.n+'" style="display:none;border:1px solid var(--blue-200);border-top:none;background:#F8FAFF;padding:16px">'
           +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">'
@@ -4659,7 +4662,7 @@ function renderIterTable(){
             +'</div></div>'
             +'<div style="margin-top:10px;padding:10px;border-radius:8px;border:2px solid '+(isKpi?'#10B981':'#EF4444')+';background:'+(isKpi?'#F0FDF4':'#FEF2F2')+'">'
             +'<div style="font-size:.85rem;font-weight:800;color:'+(isKpi?'#065F46':'#991B1B')+';margin-bottom:3px">'+(isKpi?'✅ KPI PASSED':'❌ KPI NOT MET')+'</div>'
-            +'<div style="font-size:.72rem;color:'+(isKpi?'#047857':'#DC2626')+'">'+( isKpi?d.monthly.toFixed(2)+'%/mo ≥ 21.5% target · DD '+d.dd+'% manageable':d.monthly.toFixed(2)+'%/mo < 21.5% target'+(d.dd>80?' · DD too high at '+d.dd+'%':'')+' · Use as portfolio component')+'</div>'
+            +'<div style="font-size:.75rem;color:'+(isKpi?'#047857':'#DC2626')+'">'+( isKpi?d.monthly.toFixed(2)+'%/mo ≥ 21.5% target · DD '+d.dd+'% manageable':d.monthly.toFixed(2)+'%/mo < 21.5% target'+(d.dd>80?' · DD too high at '+d.dd+'%':'')+' · Use as portfolio component')+'</div>'
             +'</div></div>'
             +'<div><div style="font-size:.75rem;font-weight:700;color:var(--navy);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em">12-Month Equity Projection</div>'
             +'<canvas id="iter-chart-'+d.n+'" height="180" style="max-width:100%"></canvas></div>'
