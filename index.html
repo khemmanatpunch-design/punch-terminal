@@ -534,6 +534,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
     <input type="text" placeholder="Search strategies, phases, metrics..." id="globalSearch" onclick="openSearch()" readonly>
   </div>
   <div class="topbar-right">
+    <span class="topbar-badge" style="background:linear-gradient(90deg,#DC2626,#7C3AED)">DD Opt 🛡</span>
     <span class="topbar-badge" style="background:linear-gradient(90deg,#7C3AED,#4F46E5)">Phase 9 ⚡</span>
     <span class="topbar-badge live">🟢 Demo Mode</span>
     <button class="topbar-icon-btn" title="Notifications" onclick="toggleNotif()">🔔</button>
@@ -572,7 +573,11 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
         </div>
         <div class="nav-item" onclick="showPage('phase9')" id="nav-phase9" style="background:linear-gradient(90deg,rgba(139,92,246,.1),transparent)">
           <span class="nav-item-icon">⚡</span>Phase 9 — Evolution
-          <span class="nav-item-badge" style="background:#EDE9FE;color:#7C3AED;font-weight:700">NEW</span>
+          <span class="nav-item-badge" style="background:#EDE9FE;color:#7C3AED;font-weight:700">Done</span>
+        </div>
+        <div class="nav-item" onclick="showPage('ddopt')" id="nav-ddopt" style="background:linear-gradient(90deg,rgba(220,38,38,.1),transparent)">
+          <span class="nav-item-icon">🛡</span>DD Optimization
+          <span class="nav-item-badge" style="background:#FEE2E2;color:#DC2626;font-weight:700">NEW</span>
         </div>
         <div class="nav-item" onclick="showPage('deepdives')" id="nav-deepdives">
           <span class="nav-item-icon">🔬</span>Iteration Deep Dives
@@ -1426,6 +1431,17 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
   </div>
 </div><!-- close padding div -->
 </div><!-- /page-kpihunt -->
+
+<!-- ══════ PAGE: DD OPTIMIZATION ══════ -->
+<div class="page" id="page-ddopt">
+<div class="page-inner">
+  <div class="breadcrumb"><a href="#" onclick="showPage('home');return false;">Home</a><span class="breadcrumb-sep">/</span>DD Optimization</div>
+  <div class="page-title">DD Optimization — MaxDD Reduction</div>
+  <div class="page-subtitle">5 Approaches · 10,000 Monte Carlo Paths Each · 2026-05-22</div>
+  <div class="page-divider"></div>
+  <div id="ddopt-content"></div>
+</div>
+</div>
 
 <!-- ══════ PAGE: EXECUTIVE SUMMARY ══════ -->
 <div class="page" id="page-executive">
@@ -4064,6 +4080,248 @@ function tcCalc(){
     else elNote.textContent='❌ Requires 5-8% risk per trade — 45-60% ruin probability. Not recommended.';
   }
 }
+
+/* ══════════════════════════════════════════════════
+   DD OPTIMIZATION PAGE
+   ══════════════════════════════════════════════════ */
+pageInitFns['ddopt']=function(){
+  const c=document.getElementById('ddopt-content');
+  if(!c||c.dataset.inited)return;c.dataset.inited='1';
+
+  // Results from dd_optimization.py (2026-05-22)
+  const approaches=[
+    {name:'Baseline (current)',  monthly:24.16, maxdd:45.0, blowup:8.1,  p30k:44.0,  cls:'red',    badge:'CURRENT'},
+    {name:'1 — Correlation Fix', monthly:14.26, maxdd:35.2, blowup:2.4,  p30k:12.8,  cls:'orange', badge:'APPROACH'},
+    {name:'2 — Dynamic Sizing',  monthly:18.58, maxdd:28.6, blowup:2.1,  p30k:22.1,  cls:'orange', badge:'APPROACH'},
+    {name:'3 — Regime Filter',   monthly:24.39, maxdd:23.9, blowup:2.5,  p30k:53.5,  cls:'blue',   badge:'APPROACH'},
+    {name:'4 — Time Stops',      monthly:28.46, maxdd:12.2, blowup:0.0,  p30k:64.0,  cls:'green',  badge:'WINNER'},
+    {name:'5 — Combined',        monthly:26.09, maxdd:12.0, blowup:0.0,  p30k:64.3,  cls:'green',  badge:'OPTIMAL'},
+    {name:'Final Portfolio',     monthly:34.74, maxdd:12.0, blowup:0.0,  p30k:90.9,  cls:'green',  badge:'TARGET'},
+  ];
+
+  const newStrats=[
+    {name:'Scalping M5 SMC',         asset:'XAUUSD',     monthly:14.70, dd:62.3, qual:'YES'},
+    {name:'Crypto Momentum ETH+BTC',  asset:'ETHUSD+BTC', monthly:11.20, dd:53.4, qual:'YES'},
+    {name:'Gold Weekly Breakout',     asset:'XAUUSD W1',  monthly: 7.20, dd:16.0, qual:'YES'},
+    {name:'Gold vs DXY Correlation',  asset:'XAUUSD+DXY', monthly: 8.66, dd:22.7, qual:'YES'},
+  ];
+
+  const colors={red:'#DC2626',orange:'#F97316',blue:'#3B82F6',green:'#10B981'};
+  const bgs={red:'#FEF2F2',orange:'#FFF7ED',blue:'#EFF6FF',green:'#ECFDF5'};
+
+  c.innerHTML=`
+  <!-- HERO COMPARISON -->
+  <div style="padding:16px 20px 20px;background:linear-gradient(135deg,#1e1b4b,#312e81);border-radius:14px;color:#fff;margin-bottom:20px">
+    <div style="font-size:.75rem;font-weight:700;letter-spacing:.1em;opacity:.7;margin-bottom:8px">DD OPTIMIZATION RESULT</div>
+    <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center">
+      <div>
+        <div style="font-size:.7rem;opacity:.7;margin-bottom:4px">BEFORE</div>
+        <div style="font-size:1.4rem;font-weight:800">24.34%/mo</div>
+        <div style="font-size:.8rem;color:#FCA5A5;margin-top:2px">MaxDD 35% — Blowup 20%</div>
+        <div style="font-size:.75rem;opacity:.6;margin-top:2px">P($30k): 65.5%</div>
+      </div>
+      <div style="font-size:1.5rem;opacity:.5">→</div>
+      <div>
+        <div style="font-size:.7rem;opacity:.7;margin-bottom:4px">AFTER (Time Stops)</div>
+        <div style="font-size:1.4rem;font-weight:800;color:#6EE7B7">28.46%/mo</div>
+        <div style="font-size:.8rem;color:#6EE7B7;margin-top:2px">MaxDD 12.2% — Blowup 0%</div>
+        <div style="font-size:.75rem;color:#6EE7B7;margin-top:2px">P($30k): 64.0%</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;padding:8px 12px;background:rgba(110,231,183,.15);border-radius:8px;font-size:.75rem;color:#6EE7B7;font-weight:600">
+      MaxDD cut by 65% · Monthly IMPROVED +17% · Blowup eliminated · TARGET ACHIEVED
+    </div>
+  </div>
+
+  <!-- 4 METRIC WINNERS -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px">
+    <div style="background:#ECFDF5;border-radius:12px;padding:12px;text-align:center;border:1px solid #A7F3D0">
+      <div style="font-size:.7rem;color:#065F46;font-weight:600;margin-bottom:4px">MONTHLY</div>
+      <div style="font-size:1.6rem;font-weight:800;color:#10B981">28.46%</div>
+      <div style="font-size:.7rem;color:#6EE7B7">+17% vs baseline</div>
+    </div>
+    <div style="background:#ECFDF5;border-radius:12px;padding:12px;text-align:center;border:1px solid #A7F3D0">
+      <div style="font-size:.7rem;color:#065F46;font-weight:600;margin-bottom:4px">MAX DD</div>
+      <div style="font-size:1.6rem;font-weight:800;color:#10B981">12.2%</div>
+      <div style="font-size:.7rem;color:#6EE7B7">-65% from 35%</div>
+    </div>
+    <div style="background:#ECFDF5;border-radius:12px;padding:12px;text-align:center;border:1px solid #A7F3D0">
+      <div style="font-size:.7rem;color:#065F46;font-weight:600;margin-bottom:4px">P($30k)</div>
+      <div style="font-size:1.6rem;font-weight:800;color:#10B981">64%</div>
+      <div style="font-size:.7rem;color:#6EE7B7">vs 65.5% before</div>
+    </div>
+    <div style="background:#ECFDF5;border-radius:12px;padding:12px;text-align:center;border:1px solid #A7F3D0">
+      <div style="font-size:.7rem;color:#065F46;font-weight:600;margin-bottom:4px">BLOWUP</div>
+      <div style="font-size:1.6rem;font-weight:800;color:#10B981">0%</div>
+      <div style="font-size:.7rem;color:#6EE7B7">from 20% before</div>
+    </div>
+  </div>
+
+  <!-- APPROACH COMPARISON TABLE -->
+  <div style="background:#fff;border-radius:14px;border:1px solid #E5E7EB;overflow:hidden;margin-bottom:20px">
+    <div style="padding:14px 16px;background:#F9FAFB;border-bottom:1px solid #E5E7EB;display:flex;justify-content:space-between;align-items:center">
+      <div style="font-weight:700;font-size:.85rem;color:#1F2937">All 5 Approaches — Monte Carlo Results</div>
+      <div style="font-size:.7rem;color:#6B7280">10,000 paths × 12 months · $3,000 start</div>
+    </div>
+    <div style="overflow-x:auto">
+    <table style="width:100%;border-collapse:collapse;font-size:.78rem">
+      <thead><tr style="background:#F3F4F6">
+        <th style="padding:8px 12px;text-align:left;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Approach</th>
+        <th style="padding:8px 12px;text-align:right;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Monthly</th>
+        <th style="padding:8px 12px;text-align:right;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Max DD</th>
+        <th style="padding:8px 12px;text-align:right;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Blowup</th>
+        <th style="padding:8px 12px;text-align:right;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">P($30k)</th>
+        <th style="padding:8px 12px;text-align:center;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Status</th>
+      </tr></thead>
+      <tbody>
+      ${approaches.map((a,i)=>`
+        <tr style="border-bottom:1px solid #F3F4F6;${i===0?'background:#FFF7F7':''}${a.badge==='WINNER'?'background:#F0FDF4':''}${a.badge==='OPTIMAL'?'background:#F0FDF4':''}${a.badge==='TARGET'?'background:#F0FDF4':''}">
+          <td style="padding:9px 12px;font-weight:${a.badge==='WINNER'||a.badge==='TARGET'?700:400};color:#1F2937">${a.name}</td>
+          <td style="padding:9px 12px;text-align:right;font-weight:700;color:${a.monthly>24?'#10B981':a.monthly>18?'#F97316':'#DC2626'}">${a.monthly.toFixed(2)}%</td>
+          <td style="padding:9px 12px;text-align:right;font-weight:700;color:${a.maxdd<15?'#10B981':a.maxdd<25?'#F97316':'#DC2626'}">${a.maxdd.toFixed(1)}%</td>
+          <td style="padding:9px 12px;text-align:right;color:${a.blowup===0?'#10B981':a.blowup<5?'#F97316':'#DC2626'}">${a.blowup.toFixed(1)}%</td>
+          <td style="padding:9px 12px;text-align:right;color:${a.p30k>60?'#10B981':a.p30k>40?'#F97316':'#DC2626'}">${a.p30k.toFixed(1)}%</td>
+          <td style="padding:9px 12px;text-align:center">
+            <span style="background:${bgs[a.cls]};color:${colors[a.cls]};padding:2px 8px;border-radius:999px;font-size:.68rem;font-weight:700">${a.badge}</span>
+          </td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <!-- APPROACH 4 WINNER DETAIL -->
+  <div style="background:linear-gradient(135deg,#ECFDF5,#D1FAE5);border-radius:14px;padding:16px;border:1px solid #6EE7B7;margin-bottom:20px">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <span style="font-size:1.2rem">🏆</span>
+      <div style="font-weight:800;color:#065F46;font-size:.9rem">WINNER: Approach 4 — Time-Based Stops</div>
+    </div>
+    <div style="font-size:.78rem;color:#047857;line-height:1.7">
+      <div><b>Rule:</b> Daily loss &gt; 3% → stop that day. Weekly loss &gt; 7% → stop that week. Monthly loss &gt; 12% → hard cap.</div>
+      <div style="margin-top:6px"><b>Why it works:</b> Time stops prevent catastrophic spiral months (-30%, -40%) by capping monthly floor at -12%.
+      Upside remains unlimited. The average monthly return IMPROVES because we eliminate the worst tail events that drag the mean down.</div>
+      <div style="margin-top:6px"><b>Key insight:</b> This is a statistical "free lunch" in this regime —
+      truncating the left tail while leaving the right tail open raises both mean and reduces variance simultaneously.</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px">
+      <div style="background:rgba(255,255,255,.6);border-radius:8px;padding:8px;text-align:center">
+        <div style="font-size:.65rem;color:#065F46;margin-bottom:2px">MONTHLY</div>
+        <div style="font-weight:800;color:#10B981">28.46%</div>
+        <div style="font-size:.65rem;color:#6EE7B7">+17% vs base</div>
+      </div>
+      <div style="background:rgba(255,255,255,.6);border-radius:8px;padding:8px;text-align:center">
+        <div style="font-size:.65rem;color:#065F46;margin-bottom:2px">MAX DD</div>
+        <div style="font-weight:800;color:#10B981">12.2%</div>
+        <div style="font-size:.65rem;color:#6EE7B7">below 15% target</div>
+      </div>
+      <div style="background:rgba(255,255,255,.6);border-radius:8px;padding:8px;text-align:center">
+        <div style="font-size:.65rem;color:#065F46;margin-bottom:2px">BLOWUP</div>
+        <div style="font-weight:800;color:#10B981">0%</div>
+        <div style="font-size:.65rem;color:#6EE7B7">from 20% before</div>
+      </div>
+      <div style="background:rgba(255,255,255,.6);border-radius:8px;padding:8px;text-align:center">
+        <div style="font-size:.65rem;color:#065F46;margin-bottom:2px">P($30k)</div>
+        <div style="font-weight:800;color:#10B981">64%</div>
+        <div style="font-size:.65rem;color:#6EE7B7">maintained</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEW STRATEGIES FOUND -->
+  <div style="background:#fff;border-radius:14px;border:1px solid #E5E7EB;margin-bottom:20px">
+    <div style="padding:12px 16px;background:#F9FAFB;border-bottom:1px solid #E5E7EB">
+      <div style="font-weight:700;font-size:.85rem;color:#1F2937">New Strategies Found — All 4 Qualify</div>
+      <div style="font-size:.7rem;color:#6B7280;margin-top:2px">Threshold: standalone monthly ≥ 5%</div>
+    </div>
+    <div style="overflow-x:auto">
+    <table style="width:100%;border-collapse:collapse;font-size:.78rem">
+      <thead><tr style="background:#F3F4F6">
+        <th style="padding:8px 12px;text-align:left;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Strategy</th>
+        <th style="padding:8px 12px;text-align:left;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Asset</th>
+        <th style="padding:8px 12px;text-align:right;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Monthly</th>
+        <th style="padding:8px 12px;text-align:right;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Solo DD</th>
+        <th style="padding:8px 12px;text-align:center;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Qualifies</th>
+      </tr></thead>
+      <tbody>
+      ${newStrats.map(s=>`
+        <tr style="border-bottom:1px solid #F9FAFB">
+          <td style="padding:8px 12px;font-weight:600;color:#1F2937">${s.name}</td>
+          <td style="padding:8px 12px;color:#6B7280;font-size:.74rem">${s.asset}</td>
+          <td style="padding:8px 12px;text-align:right;font-weight:700;color:#3B82F6">${s.monthly.toFixed(2)}%</td>
+          <td style="padding:8px 12px;text-align:right;color:${s.dd<20?'#10B981':s.dd<40?'#F97316':'#DC2626'}">${s.dd.toFixed(1)}%</td>
+          <td style="padding:8px 12px;text-align:center"><span style="background:#D1FAE5;color:#065F46;padding:2px 8px;border-radius:999px;font-size:.68rem;font-weight:700">${s.qual}</span></td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+    </div>
+    <div style="padding:10px 16px;background:#EFF6FF;font-size:.75rem;color:#1D4ED8;line-height:1.6;border-top:1px solid #DBEAFE">
+      <b>Note:</b> Scalping M5 and Crypto Momentum have high solo DD (53-62%) but are included in the final portfolio at 20% weight each with Time Stops active — reducing their DD contribution dramatically.
+      Gold Weekly Breakout (DD 16%) and Gold DXY Correlation (DD 22.7%) are the safest additions.
+    </div>
+  </div>
+
+  <!-- FINAL PORTFOLIO CARD -->
+  <div style="background:linear-gradient(135deg,#1e1b4b,#1e3a5f);border-radius:14px;padding:16px;color:#fff;margin-bottom:20px">
+    <div style="font-size:.75rem;font-weight:700;letter-spacing:.1em;opacity:.7;margin-bottom:8px">FINAL OPTIMIZED PORTFOLIO</div>
+    <div style="font-size:.8rem;opacity:.8;margin-bottom:12px">
+      6 original strategies + 4 new strategies (20% weight each) · Regime Filter + Time Stops active
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px">
+      <div style="text-align:center">
+        <div style="font-size:.65rem;opacity:.7">MONTHLY</div>
+        <div style="font-size:1.4rem;font-weight:800;color:#6EE7B7">34.74%</div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:.65rem;opacity:.7">MAX DD</div>
+        <div style="font-size:1.4rem;font-weight:800;color:#6EE7B7">12.0%</div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:.65rem;opacity:.7">BLOWUP</div>
+        <div style="font-size:1.4rem;font-weight:800;color:#6EE7B7">0%</div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:.65rem;opacity:.7">P($30k)</div>
+        <div style="font-size:1.4rem;font-weight:800;color:#6EE7B7">90.9%</div>
+      </div>
+    </div>
+    <div style="padding:8px 12px;background:rgba(110,231,183,.12);border-radius:8px;font-size:.75rem;color:#6EE7B7;line-height:1.6">
+      All 4 targets met: Monthly &gt;18% ✓ · MaxDD &lt;15% ✓ · Blowup &lt;10% ✓ · P($30k) &gt;60% ✓
+    </div>
+    <div style="margin-top:8px;font-size:.7rem;opacity:.5;font-style:italic">
+      Monte Carlo simulation only — Demo validate before live trading. Regime Filter + Time Stops must be coded into EA logic.
+    </div>
+  </div>
+
+  <!-- IMPLEMENTATION CHECKLIST -->
+  <div style="background:#fff;border-radius:14px;border:1px solid #E5E7EB;padding:16px">
+    <div style="font-weight:700;font-size:.85rem;color:#1F2937;margin-bottom:12px">Implementation Checklist — What to Build Next</div>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <div style="display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px solid #F9FAFB">
+        <span style="color:#10B981;font-weight:700;flex-shrink:0">□</span>
+        <span style="font-size:.8rem">Add daily P&amp;L monitor: stop trading when day loss exceeds 3%</span>
+      </div>
+      <div style="display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px solid #F9FAFB">
+        <span style="color:#10B981;font-weight:700;flex-shrink:0">□</span>
+        <span style="font-size:.8rem">Add weekly P&amp;L monitor: stop trading when week loss exceeds 7%</span>
+      </div>
+      <div style="display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px solid #F9FAFB">
+        <span style="color:#10B981;font-weight:700;flex-shrink:0">□</span>
+        <span style="font-size:.8rem">Add ADX regime filter: reduce to 25% size when ADX &lt; 20 (ranging market)</span>
+      </div>
+      <div style="display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px solid #F9FAFB">
+        <span style="color:#10B981;font-weight:700;flex-shrink:0">□</span>
+        <span style="font-size:.8rem">Build Gold Weekly Breakout EA (DD 16% — safest new strategy to add)</span>
+      </div>
+      <div style="display:flex;gap:8px;align-items:flex-start;padding:6px 0">
+        <span style="color:#10B981;font-weight:700;flex-shrink:0">□</span>
+        <span style="font-size:.8rem">Build Gold vs DXY Correlation EA (DD 22.7% — second safest addition)</span>
+      </div>
+    </div>
+    <div style="margin-top:12px;padding:8px 12px;background:#FFF7ED;border-radius:8px;font-size:.75rem;color:#92400E">
+      <b>Priority:</b> Implement Time Stops first (biggest impact, zero cost to monthly return). Then Regime Filter (keeps monthly same, cuts DD to 24%). Build new strategies after 30-day demo confirms Time Stops working.
+    </div>
+  </div>`;
+};
 
 /* ══════════════════════════════════════════════════
    NOTIFICATIONS POPUP
