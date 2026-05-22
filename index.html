@@ -7,39 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script>
-/* ── PASSWORD GATE ─────────────────────────────────────────────── */
-(function(){
-  var PASS='P6665', KEY='apex_auth_v2';
-  if(sessionStorage.getItem(KEY)!==PASS){
-    document.addEventListener('DOMContentLoaded',function(){
-      document.body.style.visibility='hidden';
-      var o=document.createElement('div');
-      o.id='auth-overlay';
-      o.style.cssText='position:fixed;inset:0;background:#F5EFEB;display:flex;align-items:center;justify-content:center;z-index:99999;font-family:Inter,sans-serif;visibility:visible';
-      o.innerHTML='<div style="background:#fff;border-radius:20px;padding:40px;max-width:360px;width:90%;box-shadow:0 16px 48px rgba(0,0,0,.12);text-align:center">'
-        +'<div style="width:56px;height:56px;background:linear-gradient(135deg,#2F4156,#567C8D);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:1.5rem">📊</div>'
-        +'<div style="font-size:1.375rem;font-weight:800;color:#2F4156;margin-bottom:4px">PUNCH TERMINAL</div>'
-        +'<div style="font-size:.875rem;color:#6B7280;margin-bottom:28px">Trading Research Platform</div>'
-        +'<input id="pw-in" type="password" placeholder="Enter password" style="width:100%;padding:12px 16px;border:1.5px solid #91AEC4;border-radius:10px;font-size:1rem;font-family:Inter,sans-serif;outline:none;box-sizing:border-box;margin-bottom:12px;color:#111827">'
-        +'<button id="pw-btn" style="width:100%;padding:12px;background:linear-gradient(135deg,#2F4156,#567C8D);border:none;border-radius:10px;color:#fff;font-size:1rem;font-weight:600;cursor:pointer;font-family:Inter,sans-serif">Unlock</button>'
-        +'<div id="pw-err" style="color:#EF4444;font-size:.875rem;margin-top:10px;min-height:20px"></div>'
-        +'<div style="margin-top:20px;font-size:.75rem;color:#9CA3AF">Demo Only — No Real Trades</div>'
-        +'</div>';
-      document.body.appendChild(o);
-      document.body.style.visibility='';
-      function attempt(){
-        var v=document.getElementById('pw-in').value;
-        if(v===PASS){sessionStorage.setItem(KEY,PASS);o.remove();}
-        else{document.getElementById('pw-err').textContent='Incorrect password.';document.getElementById('pw-in').value='';document.getElementById('pw-in').focus();}
-      }
-      document.getElementById('pw-btn').onclick=attempt;
-      document.getElementById('pw-in').addEventListener('keydown',function(e){if(e.key==='Enter')attempt();});
-      document.getElementById('pw-in').focus();
-    });
-  }
-})();
-</script>
+
 <style>
 /* ══════════════════════════════════════════════════
    DESIGN SYSTEM — PUNCH TERMINAL
@@ -709,6 +677,33 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
 </style>
 </head>
 <body>
+<div id="auth-overlay" style="display:none;position:fixed;inset:0;background:#F5EFEB;z-index:99999;font-family:Inter,sans-serif;align-items:center;justify-content:center">
+  <div style="background:#fff;border-radius:20px;padding:40px;max-width:360px;width:90%;box-shadow:0 16px 48px rgba(0,0,0,.12);text-align:center">
+    <div style="width:56px;height:56px;background:linear-gradient(135deg,#2F4156,#567C8D);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:1.5rem">📊</div>
+    <div style="font-size:1.375rem;font-weight:800;color:#2F4156;margin-bottom:4px">PUNCH TERMINAL</div>
+    <div style="font-size:.875rem;color:#6B7280;margin-bottom:28px">Trading Research Platform</div>
+    <input id="pw-in" type="password" placeholder="Enter password" style="width:100%;padding:12px 16px;border:1.5px solid #91AEC4;border-radius:10px;font-size:1rem;font-family:Inter,sans-serif;outline:none;box-sizing:border-box;margin-bottom:12px;color:#111827">
+    <button id="pw-btn" style="width:100%;padding:12px;background:linear-gradient(135deg,#2F4156,#567C8D);border:none;border-radius:10px;color:#fff;font-size:1rem;font-weight:600;cursor:pointer">Unlock</button>
+    <div id="pw-err" style="color:#EF4444;font-size:.875rem;margin-top:10px;min-height:20px"></div>
+    <div style="margin-top:20px;font-size:.75rem;color:#9CA3AF">Demo Only — No Real Trades</div>
+  </div>
+</div>
+<script>
+(function(){
+  var PASS='P6665', KEY='apex_auth_v2';
+  var overlay=document.getElementById('auth-overlay');
+  if(sessionStorage.getItem(KEY)===PASS){overlay.style.display='none';return;}
+  overlay.style.display='flex';
+  document.getElementById('pw-btn').onclick=function(){
+    var v=document.getElementById('pw-in').value;
+    if(v===PASS){sessionStorage.setItem(KEY,PASS);overlay.style.display='none';}
+    else{document.getElementById('pw-err').textContent='Incorrect password.';document.getElementById('pw-in').value='';document.getElementById('pw-in').focus();}
+  };
+  document.getElementById('pw-in').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('pw-btn').click();});
+  document.getElementById('pw-in').focus();
+})();
+</script>
+
 
 <!-- ═══════════════ TOPBAR ═══════════════ -->
 <header class="topbar">
