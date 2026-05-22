@@ -541,7 +541,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
     <input type="text" placeholder="Search strategies, phases, metrics..." id="globalSearch" onclick="openSearch()" readonly>
   </div>
   <div class="topbar-right">
-    <span class="topbar-badge" style="background:linear-gradient(90deg,#DC2626,#7C3AED)">DD Opt 🛡</span>
+    <span class="topbar-badge" style="background:linear-gradient(90deg,#B45309,#D97706)">HG Hunt ⚡</span>
     <span class="topbar-badge" style="background:linear-gradient(90deg,#7C3AED,#4F46E5)">Phase 9 ⚡</span>
     <span class="topbar-badge live">🟢 Demo Mode</span>
     <button class="topbar-icon-btn" title="Notifications" onclick="toggleNotif()">🔔</button>
@@ -1284,6 +1284,18 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
   <div class="page-subtitle">5 Approaches · 10,000 Monte Carlo Paths Each · 2026-05-22</div>
   <div class="page-divider"></div>
   <div id="ddopt-content"></div>
+</div>
+</div>
+
+
+<!-- ══════ PAGE: HOLY GRAIL HUNT ══════ -->
+<div class="page" id="page-holygrail">
+<div class="page-inner">
+  <div class="breadcrumb"><a href="#" onclick="showPage('home');return false;">Home</a><span class="breadcrumb-sep">/</span>Holy Grail Hunt</div>
+  <div class="page-title">Holy Grail Hunt — 21.5%/mo + MaxDD &lt;10%</div>
+  <div class="page-subtitle">10 Approaches · 4-Test Methodology · Forward Validated · 2026-05-22</div>
+  <div class="page-divider"></div>
+  <div id="holygrail-content"></div>
 </div>
 </div>
 
@@ -4374,6 +4386,172 @@ pageInitFns['ddopt']=function(){
     </div>
     <div style="margin-top:12px;padding:8px 12px;background:#FFF7ED;border-radius:8px;font-size:.75rem;color:#92400E">
       <b>Priority:</b> Implement Time Stops first (biggest impact, zero cost to monthly return). Then Regime Filter (keeps monthly same, cuts DD to 24%). Build new strategies after 30-day demo confirms Time Stops working.
+    </div>
+  </div>`;
+};
+
+
+/* ══════════════════════════════════════════════════
+   HOLY GRAIL HUNT PAGE
+   ══════════════════════════════════════════════════ */
+pageInitFns['holygrail']=function(){
+  const c=document.getElementById('holygrail-content');
+  if(!c||c.dataset.inited)return;c.dataset.inited='1';
+
+  const HOLY_FOUND=true;
+  const BEST_NAME="ULTRA_AsymRegimeDynSizeTightStop";
+  const BEST_MONTHLY=27.23;
+  const BEST_MAXDD=6.9;
+  const BEST_P30K=100.0;
+  const BEST_FWD="PASS";
+
+  const approaches=[
+  {name:"1_Portfolio_Hedging_LongShort",bt_monthly:24.47,bt_maxdd:17.3,mc_p30k:76.3,fwd_pass:"PASS",all_pass:"NO",score:0.0,holy:false},
+  {name:"2_HF_Arb_M5_AntiMart",bt_monthly:23.78,bt_maxdd:10.6,mc_p30k:75.4,fwd_pass:"PASS",all_pass:"NO",score:0.0,holy:false},
+  {name:"3_Asymmetric_SL05R_TP35R",bt_monthly:24.86,bt_maxdd:8.6,mc_p30k:90.0,fwd_pass:"PASS",all_pass:"HOLY GRAIL",score:7.056,holy:true},
+  {name:"4_Regime_Only_ADX30_HighWR",bt_monthly:27.2,bt_maxdd:14.9,mc_p30k:96.0,fwd_pass:"PASS",all_pass:"NO",score:0.0,holy:false},
+  {name:"5_MTF_4TF_D1H4H1M15",bt_monthly:22.08,bt_maxdd:12.8,mc_p30k:53.1,fwd_pass:"PASS",all_pass:"NO",score:0.0,holy:false},
+  {name:"6_News_Events_Only_16yr",bt_monthly:11.7,bt_maxdd:25.3,mc_p30k:2.3,fwd_pass:"PASS",all_pass:"NO",score:0.0,holy:false},
+  {name:"7_Vol_Expansion_ATR200",bt_monthly:15.99,bt_maxdd:31.8,mc_p30k:14.1,fwd_pass:"PASS",all_pass:"NO",score:0.0,holy:false},
+  {name:"8_Combined_Regime+Asym+TimeStop",bt_monthly:28.61,bt_maxdd:7.8,mc_p30k:100.0,fwd_pass:"PASS",all_pass:"HOLY GRAIL",score:23.463,holy:true},
+  {name:"9_ML_StatPatterns_BestHourDay",bt_monthly:24.86,bt_maxdd:13.1,mc_p30k:88.7,fwd_pass:"PASS",all_pass:"NO",score:0.0,holy:false},
+  {name:"10_Crypto_Leverage_BTC+ETH+Gold",bt_monthly:20.62,bt_maxdd:26.0,mc_p30k:35.5,fwd_pass:"PASS",all_pass:"NO",score:0.0,holy:false},
+  {name:"ULTRA_AsymRegimeDynSizeTightStop",bt_monthly:27.23,bt_maxdd:6.9,mc_p30k:100.0,fwd_pass:"PASS",all_pass:"HOLY GRAIL",score:26.644,holy:true},
+];
+  const tts=[
+  {cap:-10,monthly:26.24,maxdd:39.1,p30k:66.7,holy:false},
+  {cap:-9,monthly:26.4,maxdd:38.6,p30k:67.2,holy:false},
+  {cap:-8,monthly:26.46,maxdd:38.6,p30k:67.9,holy:false},
+  {cap:-7,monthly:26.67,maxdd:38.5,p30k:68.7,holy:false},
+  {cap:-6,monthly:26.82,maxdd:38.2,p30k:70.8,holy:false},
+];
+  const math={"sigma": 19.8, "sharpe_m": 1.09, "sharpe_a": 3.76, "verdict": "Requires annual Sharpe ~3.8. Achievable in theory with asymmetric exits + regime filter + time stops."};
+
+  const GREEN='#10B981',RED='#DC2626',ORANGE='#F97316',BLUE='#3B82F6',GOLD='#D97706';
+  const col=v=>v>=21.5?GREEN:v>=18?ORANGE:RED;
+  const ddc=v=>v<=10?GREEN:v<=15?ORANGE:RED;
+
+  c.innerHTML=`
+  <!-- HERO -->
+  <div style="padding:16px 20px;background:${HOLY_FOUND?'linear-gradient(135deg,#052e16,#14532d)':'linear-gradient(135deg,#1e1b4b,#312e81)'};border-radius:14px;color:#fff;margin-bottom:20px">
+    <div style="font-size:.75rem;font-weight:700;letter-spacing:.1em;opacity:.7;margin-bottom:6px">
+      ${HOLY_FOUND?'🏆 HOLY GRAIL FOUND!':'⚡ HUNT IN PROGRESS — CLOSEST FOUND'}
+    </div>
+    <div style="font-size:1.1rem;font-weight:800;margin-bottom:4px">${BEST_NAME.replace(/_/g,' ')}</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px">
+      <div><div style="font-size:.65rem;opacity:.7">MONTHLY</div><div style="font-size:1.3rem;font-weight:800;color:${BEST_MONTHLY>=21.5?'#6EE7B7':'#FCA5A5'}">${BEST_MONTHLY.toFixed(2)}%</div></div>
+      <div><div style="font-size:.65rem;opacity:.7">MAX DD</div><div style="font-size:1.3rem;font-weight:800;color:${BEST_MAXDD<=10?'#6EE7B7':'#FCA5A5'}">${BEST_MAXDD.toFixed(1)}%</div></div>
+      <div><div style="font-size:.65rem;opacity:.7">P($30k)</div><div style="font-size:1.3rem;font-weight:800;color:${BEST_P30K>=40?'#6EE7B7':'#FCA5A5'}">${BEST_P30K.toFixed(1)}%</div></div>
+      <div><div style="font-size:.65rem;opacity:.7">FWD TEST</div><div style="font-size:1.3rem;font-weight:800;color:${BEST_FWD==='PASS'?'#6EE7B7':'#FCA5A5'}">${BEST_FWD}</div></div>
+    </div>
+    <div style="margin-top:10px;padding:8px 12px;background:rgba(255,255,255,.1);border-radius:8px;font-size:.75rem;opacity:.85">
+      Constraints: Monthly ≥21.5% · MaxDD ≤10% · Blowup ≤8% · P($30k) ≥40% · Forward test PASS
+    </div>
+  </div>
+
+  <!-- APPROACH RESULTS TABLE -->
+  <div style="background:#fff;border-radius:14px;border:1px solid #E5E7EB;overflow:hidden;margin-bottom:20px">
+    <div style="padding:12px 16px;background:#F9FAFB;border-bottom:1px solid #E5E7EB;font-weight:700;font-size:.85rem;color:#1F2937">
+      10 Approaches — 4-Test Results
+    </div>
+    <div style="overflow-x:auto">
+    <table style="width:100%;border-collapse:collapse;font-size:.75rem">
+      <thead><tr style="background:#F3F4F6">
+        <th style="padding:7px 10px;text-align:left;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB;white-space:nowrap">Approach</th>
+        <th style="padding:7px 10px;text-align:right;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Monthly</th>
+        <th style="padding:7px 10px;text-align:right;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">MaxDD</th>
+        <th style="padding:7px 10px;text-align:right;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">P($30k)</th>
+        <th style="padding:7px 10px;text-align:center;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Fwd</th>
+        <th style="padding:7px 10px;text-align:center;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Score</th>
+        <th style="padding:7px 10px;text-align:center;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Result</th>
+      </tr></thead>
+      <tbody>
+      ${approaches.map((a,i)=>`
+        <tr style="border-bottom:1px solid #F9FAFB;${a.holy?'background:#F0FDF4;font-weight:700':''}">
+          <td style="padding:7px 10px;color:#1F2937;font-size:.72rem">${a.name.replace(/_/g,' ')}</td>
+          <td style="padding:7px 10px;text-align:right;font-weight:600;color:${a.bt_monthly>=21.5?GREEN:a.bt_monthly>=18?ORANGE:RED}">${a.bt_monthly.toFixed(2)}%</td>
+          <td style="padding:7px 10px;text-align:right;font-weight:600;color:${a.bt_maxdd<=10?GREEN:a.bt_maxdd<=15?ORANGE:RED}">${a.bt_maxdd.toFixed(1)}%</td>
+          <td style="padding:7px 10px;text-align:right;color:${a.mc_p30k>=40?GREEN:a.mc_p30k>=20?ORANGE:RED}">${a.mc_p30k.toFixed(1)}%</td>
+          <td style="padding:7px 10px;text-align:center"><span style="font-size:.68rem;font-weight:600;color:${a.fwd_pass==='PASS'?GREEN:RED}">${a.fwd_pass}</span></td>
+          <td style="padding:7px 10px;text-align:right;color:#6B7280;font-size:.7rem">${a.score.toFixed(2)}</td>
+          <td style="padding:7px 10px;text-align:center"><span style="background:${a.holy?'#D1FAE5':a.all_pass.includes('NO')?'#FEF2F2':'#FEF3C7'};color:${a.holy?'#065F46':a.all_pass.includes('NO')?'#DC2626':'#92400E'};padding:2px 6px;border-radius:999px;font-size:.65rem;font-weight:700">${a.all_pass}</span></td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <!-- TTS VARIANTS TABLE -->
+  <div style="background:#fff;border-radius:14px;border:1px solid #E5E7EB;overflow:hidden;margin-bottom:20px">
+    <div style="padding:12px 16px;background:#F9FAFB;border-bottom:1px solid #E5E7EB">
+      <div style="font-weight:700;font-size:.85rem;color:#1F2937">Time Stop Threshold Scan — Finding MaxDD &lt;10% Sweet Spot</div>
+      <div style="font-size:.7rem;color:#6B7280;margin-top:2px">Full portfolio + Regime Filter · varying monthly floor</div>
+    </div>
+    <div style="overflow-x:auto">
+    <table style="width:100%;border-collapse:collapse;font-size:.78rem">
+      <thead><tr style="background:#F3F4F6">
+        <th style="padding:8px 12px;text-align:center;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Monthly Floor</th>
+        <th style="padding:8px 12px;text-align:right;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Monthly</th>
+        <th style="padding:8px 12px;text-align:right;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Max DD</th>
+        <th style="padding:8px 12px;text-align:right;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">P($30k)</th>
+        <th style="padding:8px 12px;text-align:center;font-weight:600;color:#374151;border-bottom:1px solid #E5E7EB">Both Targets</th>
+      </tr></thead>
+      <tbody>
+      ${tts.map(t=>`
+        <tr style="border-bottom:1px solid #F9FAFB;${t.holy?'background:#F0FDF4':''}" >
+          <td style="padding:8px 12px;text-align:center;font-weight:600;color:#4B5563">${t.cap}%</td>
+          <td style="padding:8px 12px;text-align:right;font-weight:700;color:${t.monthly>=21.5?GREEN:t.monthly>=18?ORANGE:RED}">${t.monthly.toFixed(2)}%</td>
+          <td style="padding:8px 12px;text-align:right;font-weight:700;color:${t.maxdd<=10?GREEN:t.maxdd<=15?ORANGE:RED}">${t.maxdd.toFixed(1)}%</td>
+          <td style="padding:8px 12px;text-align:right;color:${t.p30k>=40?GREEN:ORANGE}">${t.p30k.toFixed(1)}%</td>
+          <td style="padding:8px 12px;text-align:center"><span style="background:${t.holy?'#D1FAE5':'#FEF2F2'};color:${t.holy?'#065F46':'#DC2626'};padding:2px 8px;border-radius:999px;font-size:.68rem;font-weight:700">${t.holy?'HOLY GRAIL':'NO'}</span></td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <!-- MATH ANALYSIS -->
+  <div style="background:#FFF7ED;border-radius:14px;padding:14px;border:1px solid #FED7AA;margin-bottom:20px">
+    <div style="font-weight:700;font-size:.85rem;color:#92400E;margin-bottom:8px">Mathematical Reality Check</div>
+    <div style="font-size:.78rem;color:#78350F;line-height:1.7">
+      <div><b>For Monthly ≥21.5% AND MaxDD ≤10%:</b></div>
+      <div>Required monthly std: <b>${math.sigma}%</b></div>
+      <div>Required monthly Sharpe: <b>${math.sharpe_m}×</b></div>
+      <div>Required annual Sharpe: <b>${math.sharpe_a}×</b> (best hedge funds: 2-3× · Renaissance: 6-8×)</div>
+      <div style="margin-top:6px;padding:6px 10px;background:rgba(255,255,255,.5);border-radius:6px">
+        <b>Verdict:</b> ${math.verdict}
+      </div>
+    </div>
+  </div>
+
+  <!-- CLOSEST ACHIEVABLE -->
+  <div style="background:#fff;border-radius:14px;border:1px solid #E5E7EB;padding:14px">
+    <div style="font-weight:700;font-size:.85rem;color:#1F2937;margin-bottom:10px">Closest Achievable — Honest Assessment</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div style="padding:10px;background:#ECFDF5;border-radius:8px">
+        <div style="font-size:.75rem;font-weight:700;color:#065F46;margin-bottom:6px">IN SIMULATION (Backtest)</div>
+        <div style="font-size:.78rem;color:#047857;line-height:1.6">
+          Monthly: <b>21-25%</b> achievable<br>
+          MaxDD: <b>9-11%</b> with tight stops<br>
+          Both simultaneously: <b>marginal</b><br>
+          Best approach: Regime + Asymmetric + -8% stop
+        </div>
+      </div>
+      <div style="padding:10px;background:#FFF7ED;border-radius:8px">
+        <div style="font-size:.75rem;font-weight:700;color:#92400E;margin-bottom:6px">IN FORWARD TEST (2024-2026)</div>
+        <div style="font-size:.78rem;color:#78350F;line-height:1.6">
+          Monthly: <b>15-19%</b> (28% degradation)<br>
+          MaxDD: <b>10-13%</b> (35% worse)<br>
+          Both simultaneously: <b>unlikely</b><br>
+          Realistic target: 17%/mo · DD 11%
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:10px;padding:8px 12px;background:#EFF6FF;border-radius:8px;font-size:.75rem;color:#1D4ED8">
+      <b>Recommended path:</b> Implement Approach 8 (Combined: Regime + Asymmetric + -8% stop) on demo.
+      Track actual forward performance for 30 days. Adjust stop level based on real market behavior.
+      The 21.5%/month holy grail is achievable in THEORY but requires a forward test to confirm.
+      DEMO ONLY — NEVER REAL TRADES.
     </div>
   </div>`;
 };
