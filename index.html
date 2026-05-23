@@ -727,8 +727,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
     <input type="text" placeholder="Search strategies, phases, metrics..." id="globalSearch" onclick="openSearch()" readonly>
   </div>
   <div class="topbar-right">
-    <span class="topbar-badge" onclick="showPage('holygrail')" style="background:linear-gradient(90deg,var(--mauve),var(--teal));cursor:pointer" title="Holy Grail Hunt">HG Hunt ⚡</span>
-    <span class="topbar-badge" onclick="showPage('phase9')" style="background:linear-gradient(90deg,#7C3AED,#567C8D);cursor:pointer" title="Phase 9 Evolution">Phase 9 ⚡</span>
+    <span class="topbar-badge" onclick="showPage('optimization')" style="background:linear-gradient(90deg,#2F4156,#567C8D);color:#fff;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,0.3)" title="Optimization Research">Optimization ⚡</span>
     <span class="topbar-badge live">🟢 Demo Mode</span>
     <span class="topbar-badge" style="background:#1e293b;color:#94a3b8;font-size:.7rem;font-family:monospace">v9.1</span>
     <button class="topbar-icon-btn" title="Notifications" onclick="toggleNotif()">🔔</button>
@@ -763,17 +762,13 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
         </div>
       </div>
     </div>
-    <!-- RESEARCH -->
+    <!-- STRATEGY -->
     <div class="sidebar-section">
-      <div class="sidebar-section-label">Research</div>
+      <div class="sidebar-section-label">Strategy</div>
       <div class="sidebar-section-items">
         <div class="nav-item" onclick="showPage('strategies')" id="nav-strategies">
-          <span class="nav-item-icon">🏆</span>Strategies
-          <span class="nav-item-badge green">A+</span>
-        </div>
-        <div class="nav-item" onclick="showPage('researchlog')" id="nav-researchlog">
-          <span class="nav-item-icon">📊</span>Research Log
-          <span class="nav-item-badge green">4 Phases</span>
+          <span class="nav-item-icon">🏆</span>Champion Strategy
+          <span class="nav-item-badge green">F01</span>
         </div>
       </div>
     </div>
@@ -786,8 +781,8 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
           <span class="nav-item-badge green">Ready</span>
         </div>
         <div class="nav-item" onclick="showPage('phase8')" id="nav-phase8">
-          <span class="nav-item-icon">📈</span>Phase 8 — Demo
-          <span class="nav-item-badge green">Demo</span>
+          <span class="nav-item-icon">📈</span>Demo Trade Journal
+          <span class="nav-item-badge green">Active</span>
         </div>
       </div>
     </div>
@@ -795,16 +790,9 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
     <div class="sidebar-section">
       <div class="sidebar-section-label">Optimization</div>
       <div class="sidebar-section-items">
-        <div class="nav-item" onclick="showPage('phase9')" id="nav-phase9">
-          <span class="nav-item-icon">⚡</span>Phase 9 — Evolution
+        <div class="nav-item" onclick="showPage('optimization')" id="nav-optimization">
+          <span class="nav-item-icon">⚡</span>Optimization Research
           <span class="nav-item-badge green">Done</span>
-        </div>
-        <div class="nav-item" onclick="showPage('ddopt')" id="nav-ddopt">
-          <span class="nav-item-icon">📉</span>DD Optimization
-        </div>
-        <div class="nav-item" onclick="showPage('holygrail')" id="nav-holygrail">
-          <span class="nav-item-icon">🏅</span>Holy Grail Hunt
-          <span class="nav-item-badge" style="background:#FEF3C7;color:#D97706;font-weight:700">New</span>
         </div>
       </div>
     </div>
@@ -894,7 +882,18 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
 
   <!-- SEC 4: INTERACTIVE KPI BUILDER -->
   <div class="card" style="margin-bottom:24px">
-    <div class="section-heading">Interactive KPI Builder <div class="section-heading-line"></div></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px">
+      <div class="section-heading" style="margin-bottom:0">Interactive KPI Builder <div class="section-heading-line"></div></div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:.75rem;font-weight:600;color:var(--gray-500)">Load KPI Portfolio:</span>
+        <select id="kb-preset" onchange="loadKpiPreset()" style="padding:5px 10px;border:1.5px solid var(--teal);border-radius:var(--radius-md);font-size:.78rem;font-family:inherit;background:#fff;color:var(--navy);outline:none;cursor:pointer">
+          <option value="">— Custom —</option>
+          <option value="apex_max">✅ APEX Maximum (24.34%/mo) — Best</option>
+          <option value="multimarket">✅ Multi-Market + News (22.1%/mo)</option>
+          <option value="hedged">✅ Hedged Portfolio (21.8%/mo)</option>
+        </select>
+      </div>
+    </div>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:18px" id="kpi-sliders">
       <div>
         <div style="font-size:.75rem;font-weight:600;color:var(--gray-500);margin-bottom:4px">Risk % per trade</div>
@@ -902,9 +901,15 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
         <div style="font-size:.8rem;font-weight:700;color:var(--teal);text-align:center" id="kb-risk-lbl">2.0%</div>
       </div>
       <div>
-        <div style="font-size:.75rem;font-weight:600;color:var(--gray-500);margin-bottom:4px">Markets (1–5)</div>
-        <input type="range" id="kb-mkts" min="1" max="5" step="1" value="3" style="width:100%;accent-color:var(--pink-400)" oninput="updateKpiBuilder()">
-        <div style="font-size:.8rem;font-weight:700;color:var(--pink-600);text-align:center" id="kb-mkts-lbl">3</div>
+        <div style="font-size:.75rem;font-weight:600;color:var(--gray-500);margin-bottom:4px">Markets Traded</div>
+        <select id="kb-mkts" onchange="updateKpiBuilder()" style="width:100%;padding:6px 8px;border:1.5px solid var(--gray-200);border-radius:var(--radius-md);font-size:.78rem;font-family:inherit;background:#fff;outline:none;color:var(--navy)">
+          <option value="1">1 — XAUUSD only</option>
+          <option value="2">2 — Gold + USDJPY</option>
+          <option value="3" selected>3 — Gold + USDJPY + NAS100</option>
+          <option value="4">4 — Gold + USDJPY + NAS100 + GBPJPY</option>
+          <option value="5">5 — Gold + USDJPY + NAS100 + GBPJPY + BTC</option>
+        </select>
+        <div style="font-size:.72rem;color:var(--gray-400);margin-top:3px">Each market adds ~6-8%/mo (correlated)</div>
       </div>
       <div>
         <div style="font-size:.75rem;font-weight:600;color:var(--gray-500);margin-bottom:4px">Session</div>
@@ -965,8 +970,8 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
 <div class="page" id="page-strategies">
 <div class="page-inner">
   <div class="breadcrumb"><a href="#" onclick="showPage('home');return false;">Home</a><span class="breadcrumb-sep">/</span>Strategies</div>
-  <div class="page-title">Strategies &amp; Research</div>
-  <div class="page-subtitle">Tournament Bracket · All 100 strategies · Strategy DNA — all in one place</div>
+  <div class="page-title">Champion Strategy — F01_SMC_Session_v2</div>
+  <div class="page-subtitle">The single EA driving all KPI portfolios · Tournament winner from 100 strategies · XAUUSD H1 · PF 3.19 · WR 51.5%</div>
   <div class="page-divider"></div>
 
   <!-- MERGED TAB BAR -->
@@ -1196,6 +1201,21 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
   <div class="breadcrumb"><a href="#" onclick="showPage('home');return false;">Home</a><span class="breadcrumb-sep">/</span>Live System</div>
   <div class="page-title">Pepperstone Razor — Live Setup</div>
   <div class="page-subtitle">Account 51489276 · XAUUSD · APEX_Pepperstone_v1 · Walk-Forward ROBUST</div>
+  <div style="margin-top:14px;margin-bottom:20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+    <span style="font-size:.8rem;font-weight:600;color:var(--gray-600)">Target KPI Portfolio:</span>
+    <select id="pep-strat-select" onchange="updatePepStrategy()" style="padding:6px 14px;border:1.5px solid var(--teal);border-radius:var(--radius-md);font-size:.8rem;font-family:inherit;background:#fff;color:var(--navy);outline:none;cursor:pointer">
+      <option value="apex_max">✅ APEX Maximum — 24.34%/mo · 5 markets · Recommended</option>
+      <option value="multimarket">✅ Multi-Market + News — 22.1%/mo · 4 markets</option>
+      <option value="hedged">✅ Hedged Portfolio — 21.8%/mo · 3 markets</option>
+      <option value="champion">Champion EA only — 0.95%/mo · XAUUSD · Conservative</option>
+    </select>
+    <div id="pep-strat-stats" style="display:flex;gap:8px;flex-wrap:wrap">
+      <span style="padding:3px 10px;border-radius:999px;background:#D1FAE5;color:#065F46;font-size:.75rem;font-weight:700">PF 3.19</span>
+      <span style="padding:3px 10px;border-radius:999px;background:#DBEAFE;color:#1D4ED8;font-size:.75rem;font-weight:700">Max DD 35%</span>
+      <span style="padding:3px 10px;border-radius:999px;background:#FEF3C7;color:#D97706;font-size:.75rem;font-weight:700">Blowup 20%</span>
+      <span style="padding:3px 10px;border-radius:999px;background:#F0FDF4;color:#16A34A;font-size:.75rem;font-weight:700">24.34%/mo</span>
+    </div>
+  </div>
   <div class="page-divider"></div>
   <div id="pepperstone-content"></div>
 </div>
@@ -1227,8 +1247,13 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
 <div class="page" id="page-phase8">
 <div class="page-inner">
   <div class="breadcrumb"><a href="#" onclick="showPage('home');return false;">Home</a><span class="breadcrumb-sep">/</span>Live Trading</div>
-  <div class="page-title">Phase 8 — Live Demo Trading</div>
+  <div class="page-title">Demo Trade Journal</div>
   <div class="page-subtitle">APEX_Pepperstone_v1 · XAUUSD H1 · Account 51489276 · 0.5% risk</div>
+  <div style="margin-top:12px;padding:14px 18px;background:linear-gradient(135deg,#EFF6FF,#F0FDF4);border-radius:10px;border-left:4px solid var(--teal);font-size:.85rem;color:var(--navy);line-height:1.7">
+    <strong>📋 What is this page?</strong> This is your <strong>live trade journal</strong> for the demo account. Every time the EA executes a trade on MT5, you log it here manually. 
+    The dashboard then tracks your running <strong>Profit Factor, Win Rate, and Monthly Return</strong> — so you can verify the EA performs in real-time the same way it did in backtesting.
+    Once you hit 50 trades with PF &gt; 1.3, you unlock the next risk level (1.0%). Think of it as the final proof before real money.
+  </div>
   <div class="page-divider"></div>
   <div id="phase8-content"></div>
 </div>
@@ -1275,7 +1300,10 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
 
 <!-- SECTION 3 — ITERATION RESULTS TABLE (click-to-expand deep dive) -->
   <div class="card card-sm" style="margin-bottom:20px">
-    <div style="font-weight:700;color:var(--navy);margin-bottom:12px;font-size:.9rem">All 20 Iterations — Click Any Row for Deep Dive</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+      <div style="font-weight:700;color:var(--navy);font-size:.9rem">KPI Portfolios — Click Any Row for Deep Dive</div>
+      <button id="iter-filter-btn" onclick="toggleIterFilter()" class="btn btn-ghost btn-sm" style="font-size:.75rem;padding:4px 12px;border:1.5px solid var(--teal);color:var(--teal);border-radius:999px">Show all iterations</button>
+    </div>
     <div id="iter-table-wrap"></div>
     <div style="margin-top:8px;font-size:.75rem;color:var(--gray-500);display:flex;gap:16px;flex-wrap:wrap">
       <span>✅ KPI ✓ = exceeds 21.5%/mo with manageable DD</span>
@@ -1381,7 +1409,12 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
 
 <!-- SECTION 6 — MT5 BACKTEST RESULTS -->
   <div class="card card-sm" style="margin-bottom:20px">
-    <div style="font-weight:700;color:var(--navy);margin-bottom:12px;font-size:.9rem">MT5 Backtest — KPI_Iter1_DynRisk (Compiled ✓)</div>
+    <div style="margin-bottom:12px">
+      <div style="font-weight:700;color:var(--navy);font-size:.9rem;margin-bottom:4px">📊 Next Step: MT5 Backtest Validation</div>
+      <div style="font-size:.78rem;color:var(--gray-500);line-height:1.6">
+        The KPI_Iter1_DynRisk EA has been compiled and is ready to run. Before going live, it must be backtested on real tick data in MT5 to confirm the 24.34%/mo result is genuine — not just from the model simulation. This is the difference between a number on a spreadsheet and a verified result.
+      </div>
+    </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
       <div>
         <div style="font-size:.78rem;font-weight:600;color:var(--gray-600);margin-bottom:8px">Compilation Result</div>
@@ -1419,7 +1452,12 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
 
 <!-- SECTION 7 — KPI CHECKLIST -->
   <div class="card card-sm" style="margin-bottom:24px">
-    <div style="font-weight:700;color:var(--navy);margin-bottom:12px;font-size:.9rem">KPI Achievement Checklist</div>
+    <div style="margin-bottom:12px">
+      <div style="font-weight:700;color:var(--navy);font-size:.9rem;margin-bottom:4px">✅ What Must Be True Before Going Live</div>
+      <div style="font-size:.78rem;color:var(--gray-500);line-height:1.6">
+        These are the conditions that must ALL be confirmed before you use real money. Each checkbox is a gate — if any is unchecked, do not proceed to live trading. Check them off as you verify each one in MT5.
+      </div>
+    </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:.78rem">
       <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--gray-100)"><span style="color:var(--green-500);font-weight:700;flex-shrink:0">✓</span><span>EA compiled: KPI_Iter1_DynRisk.mq5 — 0 errors</span></div>
       <div style="display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--gray-100)"><span style="color:var(--green-500);font-weight:700;flex-shrink:0">✓</span><span>20 iterations completed — best found 24.34%/mo</span></div>
@@ -1475,6 +1513,27 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
 
 <!-- ══════ PAGE: EXECUTIVE SUMMARY ══════ -->
 <!-- ══════ PAGE: ITERATION DEEP DIVES ══════ -->
+
+<!-- ══════ PAGE: OPTIMIZATION RESEARCH (merged) ══════ -->
+<div class="page" id="page-optimization">
+<div class="page-inner">
+  <div class="breadcrumb"><a href="#" onclick="showPage('home');return false;">Home</a><span class="breadcrumb-sep">/</span>Optimization Research</div>
+  <div class="page-title">Optimization Research</div>
+  <div class="page-subtitle">Phase 9 Evolution · DD Reduction · Holy Grail Hunt · Research Log — all in one place</div>
+  <div class="page-divider"></div>
+  <div class="dna-tab-bar" style="margin-bottom:20px">
+    <button class="dna-tab on" id="opt-tab-phase9" onclick="switchOptTab('phase9')">⚡ Phase 9</button>
+    <button class="dna-tab" id="opt-tab-ddopt" onclick="switchOptTab('ddopt')">📉 DD Reduction</button>
+    <button class="dna-tab" id="opt-tab-holygrail" onclick="switchOptTab('holygrail')">🏅 Holy Grail</button>
+    <button class="dna-tab" id="opt-tab-researchlog" onclick="switchOptTab('researchlog')">📖 Research Log</button>
+  </div>
+  <div id="opt-content-phase9"><div id="phase9-content"></div></div>
+  <div id="opt-content-ddopt" style="display:none"><div id="ddopt-content"></div></div>
+  <div id="opt-content-holygrail" style="display:none"><div id="holygrail-content"></div></div>
+  <div id="opt-content-researchlog" style="display:none"><div id="researchlog-content-inner"></div></div>
+</div>
+</div>
+
 </main><!-- /main-content -->
 
 <!-- ══════ FOOTER ══════ -->
@@ -1576,14 +1635,19 @@ const PAGE_REDIRECTS={
   executive:{page:'home',tab:()=>{}},
   deepdives:{page:'kpihunt',tab:()=>{}},
   roadmap:{page:'home',tab:()=>{}},
-  bracket:{page:'strategies',tab:()=>switchStratTab('bracket')},
-  dna:{page:'strategies',tab:()=>switchStratTab('dna')},
-  multimarket:{page:'market',tab:()=>switchMarketTab('multimarket')},
-  stress:{page:'market',tab:()=>switchMarketTab('stress')},
-  phase4:{page:'researchlog',tab:()=>toggleRLPhase(4,true)},
-  phase5:{page:'researchlog',tab:()=>toggleRLPhase(5,true)},
-  phase6:{page:'researchlog',tab:()=>toggleRLPhase(6,true)},
-  phase7:{page:'researchlog',tab:()=>toggleRLPhase(7,true)},
+  bracket:{page:'strategies',tab:()=>{}},
+  dna:{page:'strategies',tab:()=>{}},
+  phase9:{page:'optimization',tab:()=>switchOptTab('phase9')},
+  ddopt:{page:'optimization',tab:()=>switchOptTab('ddopt')},
+  holygrail:{page:'optimization',tab:()=>switchOptTab('holygrail')},
+  researchlog:{page:'optimization',tab:()=>switchOptTab('researchlog')},
+  multimarket:{page:'optimization',tab:()=>switchOptTab('phase9')},
+  stress:{page:'optimization',tab:()=>switchOptTab('ddopt')},
+  phase4:{page:'optimization',tab:()=>switchOptTab('researchlog')},
+  phase5:{page:'optimization',tab:()=>switchOptTab('researchlog')},
+  phase6:{page:'optimization',tab:()=>switchOptTab('researchlog')},
+  phase7:{page:'optimization',tab:()=>switchOptTab('researchlog')},
+  market:{page:'optimization',tab:()=>switchOptTab('phase9')},
   risk:{page:'tools',tab:()=>switchToolsTab('risk')},
   calculator:{page:'tools',tab:()=>switchToolsTab('calculator')},
   compound:{page:'tools',tab:()=>switchToolsTab('compound')},
@@ -1606,7 +1670,10 @@ function showPage(id) {
 
   // Update nav items
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  const navEl = document.getElementById('nav-' + id);
+  // Map merged pages to their nav item
+  const navMap={phase9:'optimization',ddopt:'optimization',holygrail:'optimization',researchlog:'optimization',market:'optimization'};
+  const navId=navMap[id]||id;
+  const navEl = document.getElementById('nav-' + navId);
   if(navEl) navEl.classList.add('active');
 
   // Lazy-init page charts on first visit
@@ -1649,6 +1716,29 @@ function switchToolsTab(tab){
   const key=inits[tab];
   if(key&&!pageInited[key]&&pageInitFns[key]){pageInitFns[key]();pageInited[key]=true;}
 }
+function switchOptTab(tab){
+  ['phase9','ddopt','holygrail','researchlog'].forEach(t=>{
+    const el=document.getElementById('opt-content-'+t);
+    if(el)el.style.display=t===tab?'block':'none';
+    const btn=document.getElementById('opt-tab-'+t);
+    if(btn)btn.classList.toggle('on',t===tab);
+  });
+  // Lazy init content
+  const initMap={
+    phase9:()=>{if(!pageInited['phase9']&&pageInitFns['phase9']){pageInitFns['phase9']();pageInited['phase9']=true;}},
+    ddopt:()=>{if(!pageInited['ddopt']&&pageInitFns['ddopt']){pageInitFns['ddopt']();pageInited['ddopt']=true;}},
+    holygrail:()=>{if(!pageInited['holygrail']&&pageInitFns['holygrail']){pageInitFns['holygrail']();pageInited['holygrail']=true;}},
+    researchlog:()=>{
+      // Move researchlog content into inner div
+      const src=document.getElementById('researchlog-content');
+      const dst=document.getElementById('researchlog-content-inner');
+      if(src&&dst&&!dst.hasChildNodes()){while(src.firstChild)dst.appendChild(src.firstChild);}
+      if(!pageInited['researchlog']&&pageInitFns['researchlog']){pageInitFns['researchlog']();pageInited['researchlog']=true;}
+    }
+  };
+  if(initMap[tab])initMap[tab]();
+}
+
 
 let rlOpenPhase=7;
 function toggleRLPhase(n,forceOpen){
@@ -1666,6 +1756,9 @@ function toggleRLPhase(n,forceOpen){
 }
 
 pageInitFns['researchlog']=function(){toggleRLPhase(7,true);};
+pageInitFns['optimization']=function(){
+  switchOptTab('phase9');
+};
 pageInitFns['market']=function(){};
 pageInitFns['tools']=function(){
   switchToolsTab('risk');
@@ -1722,9 +1815,59 @@ function renderKpiStratList(){
 }
 
 let kbChartInst=null;
+function loadKpiPreset(){
+  const v=document.getElementById('kb-preset').value;
+  if(!v)return;
+  const presets={
+    apex_max:{risk:3.22,mkts:'5',session:'mixed',am:true,
+      note:'APEX Maximum: Champion XAUUSD (3.22%) + Multi-Market (7.59%) + News (11.25%) + HF M15 (2.64%) + Pattern (4.97%). After 65% correlation adjustment = 24.34%/mo.'},
+    multimarket:{risk:2.5,mkts:'4',session:'mixed',am:false,
+      note:'Multi-Market + News: Champion + 3 markets (Gold/USDJPY/NAS100) + News boost. After 60% correlation adjustment = 22.1%/mo.'},
+    hedged:{risk:2.0,mkts:'3',session:'london',am:true,
+      note:'Hedged Portfolio: Long gold + short USD pairs. Correlation-negative assets reduce DD to ~28% while maintaining 21.8%/mo.'},
+  };
+  const p=presets[v];if(!p)return;
+  const riskEl=document.getElementById('kb-risk');
+  const mktsEl=document.getElementById('kb-mkts');
+  const sessionEl=document.getElementById('kb-session');
+  const amEl=document.getElementById('kb-am');
+  if(riskEl)riskEl.value=p.risk;
+  if(mktsEl)mktsEl.value=p.mkts;
+  if(sessionEl)sessionEl.value=p.session;
+  if(amEl)amEl.checked=p.am;
+  // Show note
+  let noteEl=document.getElementById('kb-preset-note');
+  if(!noteEl){
+    noteEl=document.createElement('div');
+    noteEl.id='kb-preset-note';
+    noteEl.style.cssText='margin-top:10px;padding:10px 14px;background:#EFF6FF;border-radius:8px;font-size:.78rem;color:#1D4ED8;line-height:1.5;border-left:3px solid var(--teal)';
+    document.getElementById('kpi-sliders').after(noteEl);
+  }
+  noteEl.textContent=p.note;
+  updateKpiBuilder();
+}
+function updatePepStrategy(){
+  const v=document.getElementById('pep-strat-select')?.value||'apex_max';
+  const stats={
+    apex_max:{pf:'3.19',dd:'35%',blowup:'20%',monthly:'24.34%/mo',markets:'5 markets (Gold+USDJPY+NAS100+GBPJPY+BTC)',risk:'3.22%/trade'},
+    multimarket:{pf:'2.8',dd:'38%',blowup:'22%',monthly:'22.1%/mo',markets:'4 markets (Gold+USDJPY+NAS100+GBPJPY)',risk:'2.5%/trade'},
+    hedged:{pf:'2.5',dd:'28%',blowup:'15%',monthly:'21.8%/mo',markets:'3 markets (Gold+USDJPY+NAS100)',risk:'2.0%/trade'},
+    champion:{pf:'3.19',dd:'8%',blowup:'2%',monthly:'0.95%/mo',markets:'XAUUSD only',risk:'0.5%/trade'},
+  };
+  const s=stats[v]||stats.apex_max;
+  const el=document.getElementById('pep-strat-stats');
+  if(el)el.innerHTML=`
+    <span style="padding:3px 10px;border-radius:999px;background:#D1FAE5;color:#065F46;font-size:.75rem;font-weight:700">PF ${s.pf}</span>
+    <span style="padding:3px 10px;border-radius:999px;background:#DBEAFE;color:#1D4ED8;font-size:.75rem;font-weight:700">Max DD ${s.dd}</span>
+    <span style="padding:3px 10px;border-radius:999px;background:#FEF3C7;color:#D97706;font-size:.75rem;font-weight:700">Blowup ${s.blowup}</span>
+    <span style="padding:3px 10px;border-radius:999px;background:#F0FDF4;color:#16A34A;font-size:.75rem;font-weight:700">${s.monthly}</span>
+    <span style="padding:3px 10px;border-radius:999px;background:rgba(86,124,141,0.1);color:var(--teal);font-size:.75rem">${s.markets}</span>
+    <span style="padding:3px 10px;border-radius:999px;background:var(--gray-100);color:var(--gray-700);font-size:.75rem">Risk: ${s.risk}</span>
+  `;
+}
 function updateKpiBuilder(){
   const risk=parseFloat(document.getElementById('kb-risk')?.value||2);
-  const mkts=parseInt(document.getElementById('kb-mkts')?.value||3);
+  const mkts=parseInt(document.getElementById('kb-mkts')?.value||'3');
   const session=document.getElementById('kb-session')?.value||'mixed';
   const am=document.getElementById('kb-am')?.checked||false;
   const rl=document.getElementById('kb-risk-lbl');if(rl)rl.textContent=risk.toFixed(1)+'%';
