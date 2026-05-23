@@ -33,7 +33,7 @@
       document.body.style.visibility='';
       function attempt(){
         var v=document.getElementById('pw-in').value;
-        if(v===PASS){sessionStorage.setItem(KEY,PASS);o.remove();}
+        if(v===PASS){sessionStorage.setItem(KEY,PASS);o.remove();document.body.style.visibility='visible';setTimeout(function(){if(pageInitFns['optimization']&&!pageInited['optimization']){pageInitFns['optimization']();pageInited['optimization']=true;}},300);}
         else{document.getElementById('pw-err').textContent='Incorrect password.';document.getElementById('pw-in').value='';document.getElementById('pw-in').focus();}
       }
       document.getElementById('pw-btn').onclick=attempt;
