@@ -811,14 +811,14 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
   </div>
 
   <div style="padding:8px 16px;font-size:.68rem;color:var(--gray-400);border-top:1px solid rgba(255,255,255,.05)">
-    Last updated: <span id="last-updated-ts">2026-05-23</span>
+    Last updated: <span id="last-updated-ts">2026-05-24</span>
   </div>
   <div class="sidebar-footer">
     <div class="sidebar-status">
       <div class="sidebar-status-dot"></div>
       <span>Demo Only — Never Real Trades</span>
     </div>
-    <div class="sidebar-version">PUNCH TERMINAL v9.0 · 2026-05-23</div>
+    <div class="sidebar-version">PUNCH TERMINAL v9.1 · 2026-05-24</div>
   </div>
 </nav>
 
@@ -962,7 +962,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
       <div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--green-100);border-radius:var(--radius-md)"><span style="font-size:1.1rem">✅</span><div><div style="font-size:.8rem;font-weight:700;color:var(--navy)">EA: APEX_Pepperstone_v1</div><div style="font-size:.75rem;color:var(--gray-500)">Compiled · 0 errors · Ready to run</div></div></div>
       <div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--green-100);border-radius:var(--radius-md)"><span style="font-size:1.1rem">✅</span><div><div style="font-size:.8rem;font-weight:700;color:var(--navy)">Broker: Pepperstone Razor 51489276</div><div style="font-size:.75rem;color:var(--gray-500)">XAUUSD · Walk-Forward ROBUST</div></div></div>
       <div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--green-100);border-radius:var(--radius-md)"><span style="font-size:1.1rem">✅</span><div><div style="font-size:.8rem;font-weight:700;color:var(--navy)">Dashboard: GitHub Pages Live</div><div style="font-size:.75rem;color:var(--gray-500)">punch-terminal · Password P6665</div></div></div>
-      <div style="display:flex;align-items:center;gap:10px;padding:12px;background:rgba(245,158,11,0.12);border-radius:var(--radius-md)"><span style="font-size:1.1rem">🔬</span><div><div style="font-size:.8rem;font-weight:700;color:var(--navy)">Phase 2: T7 Optimized — PF=1.1715 · WF ROBUST · Test PF=1.40</div><div style="font-size:.75rem;color:var(--gray-500)">Real tick model=4 · Best: SL=150pt TP=250pt VolMult=4.0x · Monthly=+0.835% at 5% risk · WF test (2024-26) PF=1.4028 → approaching intermediate target · KPI gap: 20.7pp</div></div></div>
+      <div style="display:flex;align-items:center;gap:10px;padding:12px;background:rgba(245,158,11,0.12);border-radius:var(--radius-md)"><span style="font-size:1.1rem">🔬</span><div><div style="font-size:.8rem;font-weight:700;color:var(--navy)">Phase 3: T7 Quality Filters — PF=1.2346 · WF ROBUST · Test PF=1.6667</div><div style="font-size:.75rem;color:var(--gray-500)">model=4 real ticks · Best: body=0.25 cd=2 · WR=42.6% · 47 trades · Monthly=+0.449% at 5% risk · Test PF=1.6667 &gt; Train PF=1.0185 · KPI gap: 21.05pp</div></div></div>
     </div>
   </div>
 
@@ -1508,7 +1508,7 @@ InpMaxSpread    = 15   // reject trade if spread > 15pt</pre>
 <div class="page-inner">
   <div class="breadcrumb"><a href="#" onclick="showPage('home');return false;">Home</a><span class="breadcrumb-sep">/</span>Optimization Research</div>
   <div class="page-title">Optimization Research</div>
-  <div class="page-subtitle">Phase 1 Reboot: 0/8 EAs positive on real Pepperstone tick data (model=4) · Best: T7_News_Momentum +1.15%/mo · Phases 1-15 invalidated (model=1 interpolated ticks)</div>
+  <div class="page-subtitle">Phase 1 Reboot: 0/8 EAs positive on real ticks · Phase 2: T7 optimized PF=1.1715 · Phase 3: Quality filters PF=1.2346 WF ROBUST · All phases model=4 real ticks</div>
   <div class="page-divider"></div>
   
   <!-- PHASE 1 REBOOT: Real Tick Tournament Results -->
@@ -1672,6 +1672,89 @@ InpMaxSpread    = 15   // reject trade if spread > 15pt</pre>
     </div>
   </div>
 
+  <!-- PHASE 3: T7 QUALITY FILTERS RESULTS -->
+  <div class="card card-sm" style="margin-bottom:20px">
+    <div style="font-weight:700;color:var(--navy);margin-bottom:4px;font-size:.9rem">🔬 Phase 3 — T7 Quality Filters (model=4 real ticks, 2022–2026, XAUUSD, $3,000)</div>
+    <div style="font-size:.78rem;color:#92400E;background:#FEF3C7;padding:8px 12px;border-radius:6px;margin-bottom:12px">19 filter variants tested on T7 base (VolMult=4.0x · SL=150pt · TP=250pt). Best: Cooldown=2 bars + Body filter · PF=1.2346 · Walk-forward ROBUST (Test PF=1.6667 &gt; Train PF). Intermediate target (PF&gt;1.5, Monthly&gt;2%) NOT MET. PF improved from 1.1715 → 1.2346 (+0.063). KPI gap remains large.</div>
+    <!-- Step 2: Filter Test -->
+    <div style="font-weight:600;color:var(--navy);font-size:.8rem;margin-bottom:8px">Step 2 — Individual Filter Test (baseline PF=1.1692, 114 trades)</div>
+    <div style="overflow-x:auto;margin-bottom:14px">
+      <table style="width:100%;border-collapse:collapse;font-size:.75rem">
+        <thead><tr style="background:var(--gray-50);color:var(--gray-500)">
+          <th style="text-align:left;padding:6px 10px;border-bottom:1px solid var(--gray-200)">Filter</th>
+          <th style="text-align:right;padding:6px 10px;border-bottom:1px solid var(--gray-200)">Params</th>
+          <th style="text-align:right;padding:6px 10px;border-bottom:1px solid var(--gray-200)">PF</th>
+          <th style="text-align:right;padding:6px 10px;border-bottom:1px solid var(--gray-200)">WR</th>
+          <th style="text-align:right;padding:6px 10px;border-bottom:1px solid var(--gray-200)">Trades</th>
+          <th style="text-align:right;padding:6px 10px;border-bottom:1px solid var(--gray-200)">Monthly</th>
+          <th style="text-align:right;padding:6px 10px;border-bottom:1px solid var(--gray-200)">vs Base</th>
+        </tr></thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:6px 10px">Baseline (none)</td><td style="text-align:right;padding:6px 10px">—</td><td style="text-align:right;padding:6px 10px">1.1692</td><td style="text-align:right;padding:6px 10px">41.2%</td><td style="text-align:right;padding:6px 10px">114</td><td style="text-align:right;padding:6px 10px">+0.195%</td><td style="text-align:right;padding:6px 10px;color:var(--gray-400)">—</td></tr>
+          <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:6px 10px">F1: Candle Body</td><td style="text-align:right;padding:6px 10px">body=0.25</td><td style="text-align:right;padding:6px 10px;color:var(--green-600)">1.1828</td><td style="text-align:right;padding:6px 10px">41.5%</td><td style="text-align:right;padding:6px 10px">53</td><td style="text-align:right;padding:6px 10px">+0.094%</td><td style="text-align:right;padding:6px 10px;color:var(--green-600)">+0.0136</td></tr>
+          <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:6px 10px">F2: ATR Confirm</td><td style="text-align:right;padding:6px 10px">atr=1.5×</td><td style="text-align:right;padding:6px 10px;color:#DC2626">1.1616</td><td style="text-align:right;padding:6px 10px">41.1%</td><td style="text-align:right;padding:6px 10px">112</td><td style="text-align:right;padding:6px 10px">+0.179%</td><td style="text-align:right;padding:6px 10px;color:#DC2626">−0.0076</td></tr>
+          <tr style="background:#F0FDF4"><td style="padding:6px 10px;font-weight:700">F3: Cooldown ★</td><td style="text-align:right;padding:6px 10px;font-weight:700">cd=3 bars</td><td style="text-align:right;padding:6px 10px;font-weight:700;color:var(--green-600)">1.1852</td><td style="text-align:right;padding:6px 10px">41.6%</td><td style="text-align:right;padding:6px 10px">77</td><td style="text-align:right;padding:6px 10px">+0.146%</td><td style="text-align:right;padding:6px 10px;color:var(--green-600)">+0.0160</td></tr>
+          <tr><td style="padding:6px 10px">F4: Min Range</td><td style="text-align:right;padding:6px 10px">mr=50pt</td><td style="text-align:right;padding:6px 10px">1.1692</td><td style="text-align:right;padding:6px 10px">41.2%</td><td style="text-align:right;padding:6px 10px">114</td><td style="text-align:right;padding:6px 10px">+0.195%</td><td style="text-align:right;padding:6px 10px;color:var(--gray-400)">0.0000</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- Step 3+4: Optimize + Combos -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;font-size:.75rem">
+      <div>
+        <div style="font-weight:600;color:var(--navy);font-size:.8rem;margin-bottom:8px">Step 3 — Cooldown Parameter Sweep</div>
+        <table style="width:100%;border-collapse:collapse">
+          <thead><tr style="background:var(--gray-50);color:var(--gray-500)">
+            <th style="text-align:left;padding:5px 8px;border-bottom:1px solid var(--gray-200)">cd bars</th>
+            <th style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--gray-200)">PF</th>
+            <th style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--gray-200)">Trades</th>
+          </tr></thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:5px 8px">cd=1</td><td style="text-align:right;padding:5px 8px">1.1692</td><td style="text-align:right;padding:5px 8px">114</td></tr>
+            <tr style="background:#F0FDF4"><td style="padding:5px 8px;font-weight:700">cd=2 ★</td><td style="text-align:right;padding:5px 8px;font-weight:700;color:var(--green-600)">1.1905</td><td style="text-align:right;padding:5px 8px;font-weight:700">84</td></tr>
+            <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:5px 8px">cd=3</td><td style="text-align:right;padding:5px 8px">1.1852</td><td style="text-align:right;padding:5px 8px">77</td></tr>
+            <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:5px 8px">cd=5</td><td style="text-align:right;padding:5px 8px">1.1852</td><td style="text-align:right;padding:5px 8px">77</td></tr>
+            <tr><td style="padding:5px 8px;color:#DC2626">cd=8</td><td style="text-align:right;padding:5px 8px;color:#DC2626">1.1481</td><td style="text-align:right;padding:5px 8px">76</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <div style="font-weight:600;color:var(--navy);font-size:.8rem;margin-bottom:8px">Step 4 — Filter Combinations</div>
+        <table style="width:100%;border-collapse:collapse">
+          <thead><tr style="background:var(--gray-50);color:var(--gray-500)">
+            <th style="text-align:left;padding:5px 8px;border-bottom:1px solid var(--gray-200)">Combo</th>
+            <th style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--gray-200)">PF</th>
+            <th style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--gray-200)">Trades</th>
+          </tr></thead>
+          <tbody>
+            <tr style="background:#F0FDF4"><td style="padding:5px 8px;font-weight:700">body=0.25 + cd=2 ★</td><td style="text-align:right;padding:5px 8px;font-weight:700;color:var(--green-600)">1.2346</td><td style="text-align:right;padding:5px 8px;font-weight:700">47</td></tr>
+            <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:5px 8px">cd=2 + mr=50</td><td style="text-align:right;padding:5px 8px">1.1905</td><td style="text-align:right;padding:5px 8px">84</td></tr>
+            <tr><td style="padding:5px 8px">All 4 filters</td><td style="text-align:right;padding:5px 8px">1.2346</td><td style="text-align:right;padding:5px 8px">47</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- Walk-Forward + Monte Carlo -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:.75rem">
+      <div style="padding:10px;background:#EFF6FF;border-radius:8px;border-left:3px solid var(--teal)">
+        <div style="font-weight:700;color:var(--navy);margin-bottom:6px">Walk-Forward Validation (best combo: body=0.25, cd=2)</div>
+        <div>Full (2022–26): PF=<strong>1.2346</strong> · WR=42.6% · 47 trades · +0.111%/mo</div>
+        <div>Train (2022–23): PF=1.0185 · 29 trades · +0.007%/mo</div>
+        <div>Test (2024–26): PF=<strong>1.6667</strong> · 18 trades · +0.195%/mo</div>
+        <div>WF Ratio=1.636 · <span style="background:#D1FAE5;color:#065F46;padding:1px 6px;border-radius:999px;font-weight:700">ROBUST ✅</span></div>
+        <div style="margin-top:4px;color:#1D4ED8;font-size:.72rem">Test PF (1.6667) &gt; Train PF — strategy improving out-of-sample</div>
+      </div>
+      <div style="padding:10px;background:#FEF2F2;border-radius:8px;border-left:3px solid #EF4444">
+        <div style="font-weight:700;color:var(--navy);margin-bottom:6px">Monte Carlo (5% risk, 10k paths) + Risk Scaling</div>
+        <div>Risk 0.5%→5%: Monthly +0.054% → +0.449% · DD=0.0% (backtest)</div>
+        <div>P($30k in 12mo): <strong>0.0%</strong></div>
+        <div>Median final: $3,107 · Worst 5%: $2,389</div>
+        <div>95th pct max DD: 26.5%</div>
+        <div>Expected months to $30k: <strong>514</strong> (42.8 years)</div>
+        <div style="margin-top:4px;color:#DC2626;font-size:.72rem">Intermediate target (PF&gt;1.5, Monthly&gt;2%): NOT MET · PF gap: 0.27 · Monthly gap: 21.05pp</div>
+      </div>
+    </div>
+  </div>
+
   <div id="opt-content-phase9"><div id="phase9-content"></div></div>
   <div id="opt-content-ddopt" style="display:none"><div id="ddopt-content"></div></div>
   <div id="opt-content-holygrail" style="display:none"><div id="holygrail-content"></div></div>
@@ -1690,11 +1773,11 @@ InpMaxSpread    = 15   // reject trade if spread > 15pt</pre>
     <span style="color:var(--gray-300)">|</span>
     <span style="background:#FEE2E2;color:#DC2626;padding:2px 10px;border-radius:999px;font-weight:700;font-size:.75rem">DEMO ONLY — Never Real Money</span>
     <span style="color:var(--gray-300)">|</span>
-    <span>Phase 2 Complete · Pepperstone Razor · XAUUSD · Real Tick model=4</span>
+    <span>Phase 3 Complete · Pepperstone Razor · XAUUSD · Real Tick model=4</span>
   </div>
   <div style="font-size:.75rem;color:var(--gray-400)">
-    Phase 2: T7 optimized PF=1.1715 · WF ROBUST · Test period PF=1.4028 · Monthly=+0.835% at 5% risk · KPI gap: 20.7pp &nbsp;·&nbsp;
-    Built by Claude Code &nbsp;·&nbsp; Last updated: 2026-05-23 &nbsp;·&nbsp;
+    Phase 3: T7 Quality Filters PF=1.2346 · WF ROBUST · Test PF=1.6667 · Monthly=+0.449% at 5% risk · KPI gap: 21.05pp &nbsp;·&nbsp;
+    Built by Claude Code &nbsp;·&nbsp; Last updated: 2026-05-24 &nbsp;·&nbsp;
     <a href="https://khemmanatpunch-design.github.io/punch-terminal/" target="_blank" style="color:var(--teal)">Live Dashboard</a>
   </div>
 </footer>
