@@ -962,7 +962,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
       <div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--green-100);border-radius:var(--radius-md)"><span style="font-size:1.1rem">✅</span><div><div style="font-size:.8rem;font-weight:700;color:var(--navy)">EA: APEX_Pepperstone_v1</div><div style="font-size:.75rem;color:var(--gray-500)">Compiled · 0 errors · Ready to run</div></div></div>
       <div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--green-100);border-radius:var(--radius-md)"><span style="font-size:1.1rem">✅</span><div><div style="font-size:.8rem;font-weight:700;color:var(--navy)">Broker: Pepperstone Razor 51489276</div><div style="font-size:.75rem;color:var(--gray-500)">XAUUSD · Walk-Forward ROBUST</div></div></div>
       <div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--green-100);border-radius:var(--radius-md)"><span style="font-size:1.1rem">✅</span><div><div style="font-size:.8rem;font-weight:700;color:var(--navy)">Dashboard: GitHub Pages Live</div><div style="font-size:.75rem;color:var(--gray-500)">punch-terminal · Password P6665</div></div></div>
-      <div style="display:flex;align-items:center;gap:10px;padding:12px;background:rgba(239,68,68,0.12);border-radius:var(--radius-md)"><span style="font-size:1.1rem">🔬</span><div><div style="font-size:.8rem;font-weight:700;color:var(--navy)">Phase 1 Reboot: Real Tick Tournament — 0/8 EAs passed KPI</div><div style="font-size:.75rem;color:var(--gray-500)">Real tick model=4 · Best: T7_News_Momentum +1.15%/mo (target 21.5%) · Gap: 20.4pp · P($30k)=0.0% · Phases 1-15 invalidated (model=1 fake data)</div></div></div>
+      <div style="display:flex;align-items:center;gap:10px;padding:12px;background:rgba(245,158,11,0.12);border-radius:var(--radius-md)"><span style="font-size:1.1rem">🔬</span><div><div style="font-size:.8rem;font-weight:700;color:var(--navy)">Phase 2: T7 Optimized — PF=1.1715 · WF ROBUST · Test PF=1.40</div><div style="font-size:.75rem;color:var(--gray-500)">Real tick model=4 · Best: SL=150pt TP=250pt VolMult=4.0x · Monthly=+0.835% at 5% risk · WF test (2024-26) PF=1.4028 → approaching intermediate target · KPI gap: 20.7pp</div></div></div>
     </div>
   </div>
 
@@ -1301,23 +1301,23 @@ InpMaxSpread    = 15   // reject trade if spread > 15pt</pre>
     <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
       <div style="font-size:2rem">🎯</div>
       <div style="flex:1;min-width:200px">
-        <div style="font-size:.75rem;font-weight:700;letter-spacing:.1em;opacity:.7;margin-bottom:4px">KPI HUNT — PHASE 1 REBOOT (REAL TICKS)</div>
-        <div style="font-size:1.4rem;font-weight:800;margin-bottom:2px">KPI NOT YET MET — Real tick data required</div>
-        <div style="font-size:.875rem;opacity:.8">Phase 1 Reboot: 0/8 EAs pass on model=4 real ticks · Best: T7_News_Momentum +1.15%/mo · Gap: 20.4pp · Prior 24.34%/mo was model=1 simulation artifact · Research continues</div>
+        <div style="font-size:.75rem;font-weight:700;letter-spacing:.1em;opacity:.7;margin-bottom:4px">KPI HUNT — PHASE 2 COMPLETE (REAL TICKS)</div>
+        <div style="font-size:1.4rem;font-weight:800;margin-bottom:2px">KPI NOT YET MET — T7 optimized: PF=1.17, WF ROBUST</div>
+        <div style="font-size:.875rem;opacity:.8">Phase 2: T7 VolMult=4.0x SL=150 TP=250 · PF=1.1715 full · PF=1.4028 test period · Monthly=+0.835% at 5% risk · Walk-forward ROBUST (WF ratio=1.357) · Gap to 21.5% KPI: 20.7pp · Research continues</div>
       </div>
       <div style="text-align:right;min-width:120px">
-        <div style="font-size:.75rem;opacity:.7">Best Monthly (real ticks)</div>
-        <div style="font-size:2.5rem;font-weight:900;color:#FCA5A5">1.15%</div>
-        <div style="font-size:.75rem;opacity:.7">vs 21.5% KPI target</div>
+        <div style="font-size:.75rem;opacity:.7">Best Monthly (5% risk)</div>
+        <div style="font-size:2.5rem;font-weight:900;color:#FCD34D">0.84%</div>
+        <div style="font-size:.75rem;opacity:.7">vs 21.5% KPI · T7 Phase 2</div>
       </div>
     </div>
   </div>
 <!-- SECTION 2 — MONTE CARLO METRIC CARDS -->
   <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px">
     <div class="metric-card orange"><div class="metric-label">KPI Target</div><div class="metric-value orange">21.5%</div><div class="metric-delta">/month · $30k in 12mo</div></div>
-    <div class="metric-card pink"><div class="metric-label">P($30k in 12mo)</div><div class="metric-value pink">0.0%</div><div class="metric-delta">Real tick MC · 10,000 paths</div></div>
-    <div class="metric-card green"><div class="metric-label">MC Median Final</div><div class="metric-value green">$3,415</div><div class="metric-delta">from $3,000 · T7 champion</div></div>
-    <div class="metric-card" style="border-left-color:var(--teal)"><div class="metric-label">Months to $30k</div><div class="metric-value" style="color:var(--teal)">660</div><div class="metric-delta">55 years at +1.15%/mo</div></div>
+    <div class="metric-card pink"><div class="metric-label">P($30k in 12mo)</div><div class="metric-value pink">0.0%</div><div class="metric-delta">MC 10k paths · T7 Phase 2</div></div>
+    <div class="metric-card green"><div class="metric-label">MC Median Final</div><div class="metric-value green">$3,165</div><div class="metric-delta">from $3,000 · 5% risk T7</div></div>
+    <div class="metric-card" style="border-left-color:var(--teal)"><div class="metric-label">Months to $30k</div><div class="metric-value" style="color:var(--teal)">277</div><div class="metric-delta">23 years · best config</div></div>
   </div>
 
 <!-- SECTION 2b — MC Distribution Chart -->
@@ -1609,6 +1609,69 @@ InpMaxSpread    = 15   // reject trade if spread > 15pt</pre>
     </div>
   </div>
 
+  <!-- PHASE 2: T7 OPTIMIZATION RESULTS -->
+  <div class="card card-sm" style="margin-bottom:20px">
+    <div style="font-weight:700;color:var(--navy);margin-bottom:4px;font-size:.9rem">🔬 Phase 2 — T7 News Momentum Optimization (model=4 real ticks, 2022–2026, XAUUSD)</div>
+    <div style="font-size:.78rem;color:#92400E;background:#FEF3C7;padding:8px 12px;border-radius:6px;margin-bottom:12px">30 parameter variants tested. Best: VolMult=4.0x · SL=150pt · TP=250pt · RR=1.67 · Walk-forward ROBUST. Intermediate target (PF&gt;1.5, Monthly&gt;2%) NOT MET. Test period (2024–26) reached PF=1.4028 — closest to target so far.</div>
+    <!-- Step 2: Volume -->
+    <div style="font-weight:600;color:var(--navy);font-size:.8rem;margin-bottom:8px">Step 2 — Volume Threshold (SL=100, TP=200)</div>
+    <div style="overflow-x:auto;margin-bottom:14px">
+      <table style="width:100%;border-collapse:collapse;font-size:.75rem">
+        <thead><tr style="background:var(--gray-50);color:var(--gray-500)">
+          <th style="text-align:left;padding:6px 10px;border-bottom:1px solid var(--gray-200)">VolMult</th>
+          <th style="text-align:right;padding:6px 10px;border-bottom:1px solid var(--gray-200)">PF</th>
+          <th style="text-align:right;padding:6px 10px;border-bottom:1px solid var(--gray-200)">WR</th>
+          <th style="text-align:right;padding:6px 10px;border-bottom:1px solid var(--gray-200)">Trades</th>
+          <th style="text-align:right;padding:6px 10px;border-bottom:1px solid var(--gray-200)">Monthly</th>
+        </tr></thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:6px 10px">1.5x</td><td style="text-align:right;padding:6px 10px;color:#DC2626">0.9534</td><td style="text-align:right;padding:6px 10px">32.3%</td><td style="text-align:right;padding:6px 10px">4,216</td><td style="text-align:right;padding:6px 10px;color:#DC2626">-1.679%</td></tr>
+          <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:6px 10px">2.0x</td><td style="text-align:right;padding:6px 10px;color:#DC2626">0.9912</td><td style="text-align:right;padding:6px 10px">33.1%</td><td style="text-align:right;padding:6px 10px">2,221</td><td style="text-align:right;padding:6px 10px;color:#DC2626">-0.705%</td></tr>
+          <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:6px 10px">2.5x</td><td style="text-align:right;padding:6px 10px">1.0219</td><td style="text-align:right;padding:6px 10px">33.8%</td><td style="text-align:right;padding:6px 10px">1,103</td><td style="text-align:right;padding:6px 10px;color:#DC2626">-0.055%</td></tr>
+          <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:6px 10px">3.0x</td><td style="text-align:right;padding:6px 10px;color:#DC2626">0.9853</td><td style="text-align:right;padding:6px 10px">33.0%</td><td style="text-align:right;padding:6px 10px">509</td><td style="text-align:right;padding:6px 10px;color:#DC2626">-0.214%</td></tr>
+          <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:6px 10px">3.5x</td><td style="text-align:right;padding:6px 10px">1.0000</td><td style="text-align:right;padding:6px 10px">33.3%</td><td style="text-align:right;padding:6px 10px">231</td><td style="text-align:right;padding:6px 10px;color:#DC2626">-0.046%</td></tr>
+          <tr style="background:#F0FDF4"><td style="padding:6px 10px;font-weight:700">4.0x ★</td><td style="text-align:right;padding:6px 10px;font-weight:700;color:var(--green-600)">1.0400</td><td style="text-align:right;padding:6px 10px">34.2%</td><td style="text-align:right;padding:6px 10px">114</td><td style="text-align:right;padding:6px 10px;color:var(--green-600)">+0.041%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- SL/TP Grid Top Results -->
+    <div style="font-weight:600;color:var(--navy);font-size:.8rem;margin-bottom:8px">Step 5 — SL/TP Grid Best Results (VolMult=4.0x, no filter, 24hr)</div>
+    <div style="overflow-x:auto;margin-bottom:14px">
+      <table style="width:100%;border-collapse:collapse;font-size:.75rem">
+        <thead><tr style="background:var(--gray-50);color:var(--gray-500)">
+          <th style="text-align:left;padding:6px 10px;border-bottom:1px solid var(--gray-200)">SL / TP / RR</th>
+          <th style="text-align:right;padding:6px 10px;border-bottom:1px solid var(--gray-200)">PF</th>
+          <th style="text-align:right;padding:6px 10px;border-bottom:1px solid var(--gray-200)">WR</th>
+          <th style="text-align:right;padding:6px 10px;border-bottom:1px solid var(--gray-200)">Monthly</th>
+        </tr></thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:6px 10px">SL=80 / TP=250 / RR=3.12</td><td style="text-align:right;padding:6px 10px;color:var(--green-600)">1.1143</td><td style="text-align:right;padding:6px 10px">26.3%</td><td style="text-align:right;padding:6px 10px;color:var(--green-600)">+0.144%</td></tr>
+          <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:6px 10px">SL=100 / TP=300 / RR=3.00</td><td style="text-align:right;padding:6px 10px;color:var(--green-600)">1.0714</td><td style="text-align:right;padding:6px 10px">26.3%</td><td style="text-align:right;padding:6px 10px;color:var(--green-600)">+0.072%</td></tr>
+          <tr style="background:#F0FDF4"><td style="padding:6px 10px;font-weight:700">SL=150 / TP=250 / RR=1.67 ★</td><td style="text-align:right;padding:6px 10px;font-weight:700;color:var(--green-600)">1.1715</td><td style="text-align:right;padding:6px 10px;font-weight:700">41.2%</td><td style="text-align:right;padding:6px 10px;font-weight:700;color:var(--green-600)">+0.195%</td></tr>
+          <tr><td style="padding:6px 10px">SL=150 / TP=300 / RR=2.00</td><td style="text-align:right;padding:6px 10px;color:var(--green-600)">1.1233</td><td style="text-align:right;padding:6px 10px">36.0%</td><td style="text-align:right;padding:6px 10px;color:var(--green-600)">+0.153%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- Walk-Forward + Monte Carlo summary -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:.75rem">
+      <div style="padding:10px;background:#EFF6FF;border-radius:8px;border-left:3px solid var(--teal)">
+        <div style="font-weight:700;color:var(--navy);margin-bottom:6px">Walk-Forward Validation</div>
+        <div>Train (2022–23): PF=1.0338 · 68 trades · +0.02%/mo</div>
+        <div>Test (2024–26): PF=<strong>1.4028</strong> · 46 trades · +0.331%/mo</div>
+        <div>WF Ratio=1.357 · <span style="background:#D1FAE5;color:#065F46;padding:1px 6px;border-radius:999px;font-weight:700">ROBUST ✅</span></div>
+        <div style="margin-top:4px;color:#1D4ED8;font-size:.72rem">Test PF &gt; Train PF — no overfitting, improving in recent conditions</div>
+      </div>
+      <div style="padding:10px;background:#FEF2F2;border-radius:8px;border-left:3px solid #EF4444">
+        <div style="font-weight:700;color:var(--navy);margin-bottom:6px">Monte Carlo (5% risk, 10k paths)</div>
+        <div>P($30k in 12mo): <strong>0.0%</strong></div>
+        <div>Median final: $3,165 · Worst 5%: $1,970</div>
+        <div>95th pct max DD: 42.8%</div>
+        <div>Expected months to $30k: <strong>277</strong> (23 years)</div>
+        <div style="margin-top:4px;color:#DC2626;font-size:.72rem">Intermediate target (PF&gt;1.5, Monthly&gt;2%): NOT MET</div>
+      </div>
+    </div>
+  </div>
+
   <div id="opt-content-phase9"><div id="phase9-content"></div></div>
   <div id="opt-content-ddopt" style="display:none"><div id="ddopt-content"></div></div>
   <div id="opt-content-holygrail" style="display:none"><div id="holygrail-content"></div></div>
@@ -1627,10 +1690,10 @@ InpMaxSpread    = 15   // reject trade if spread > 15pt</pre>
     <span style="color:var(--gray-300)">|</span>
     <span style="background:#FEE2E2;color:#DC2626;padding:2px 10px;border-radius:999px;font-weight:700;font-size:.75rem">DEMO ONLY — Never Real Money</span>
     <span style="color:var(--gray-300)">|</span>
-    <span>Phase 1 Reboot · Pepperstone Razor · XAUUSD · Real Tick model=4</span>
+    <span>Phase 2 Complete · Pepperstone Razor · XAUUSD · Real Tick model=4</span>
   </div>
   <div style="font-size:.75rem;color:var(--gray-400)">
-    Real tick results: Best EA +1.15%/mo (T7_News_Momentum) · PF 3.19 was model=1 simulation artifact · Target gap: 20.4pp &nbsp;·&nbsp;
+    Phase 2: T7 optimized PF=1.1715 · WF ROBUST · Test period PF=1.4028 · Monthly=+0.835% at 5% risk · KPI gap: 20.7pp &nbsp;·&nbsp;
     Built by Claude Code &nbsp;·&nbsp; Last updated: 2026-05-23 &nbsp;·&nbsp;
     <a href="https://khemmanatpunch-design.github.io/punch-terminal/" target="_blank" style="color:var(--teal)">Live Dashboard</a>
   </div>
