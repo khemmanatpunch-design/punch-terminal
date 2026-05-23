@@ -962,7 +962,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
       <div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--green-100);border-radius:var(--radius-md)"><span style="font-size:1.1rem">✅</span><div><div style="font-size:.8rem;font-weight:700;color:var(--navy)">EA: APEX_Pepperstone_v1</div><div style="font-size:.75rem;color:var(--gray-500)">Compiled · 0 errors · Ready to run</div></div></div>
       <div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--green-100);border-radius:var(--radius-md)"><span style="font-size:1.1rem">✅</span><div><div style="font-size:.8rem;font-weight:700;color:var(--navy)">Broker: Pepperstone Razor 51489276</div><div style="font-size:.75rem;color:var(--gray-500)">XAUUSD · Walk-Forward ROBUST</div></div></div>
       <div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--green-100);border-radius:var(--radius-md)"><span style="font-size:1.1rem">✅</span><div><div style="font-size:.8rem;font-weight:700;color:var(--navy)">Dashboard: GitHub Pages Live</div><div style="font-size:.75rem;color:var(--gray-500)">punch-terminal · Password P6665</div></div></div>
-      <div style="display:flex;align-items:center;gap:10px;padding:12px;background:rgba(145,174,196,0.15);border-radius:var(--radius-md)"><span style="font-size:1.1rem">🔄</span><div><div style="font-size:.8rem;font-weight:700;color:var(--navy)">Phase: 9 Complete + Holy Grail Found</div><div style="font-size:.75rem;color:var(--gray-500)">Best: 27.23%/mo · APEX Max: 24.34%/mo · Needs MT5 validation</div></div></div>
+      <div style="display:flex;align-items:center;gap:10px;padding:12px;background:rgba(239,68,68,0.12);border-radius:var(--radius-md)"><span style="font-size:1.1rem">❌</span><div><div style="font-size:.8rem;font-weight:700;color:var(--navy)">Phase 10: Tick Validation — 0/3 Passed</div><div style="font-size:.75rem;color:var(--gray-500)">RR=3.5 not viable on XAUUSD H1 · Next: optimize RR 1.8-2.0 or add DD stops to champion</div></div></div>
     </div>
   </div>
 
@@ -1844,18 +1844,18 @@ pageInitFns['optimization']=function(){
      desc:'Long gold + short USD pairs. Negative correlation reduces DD significantly. 24.47%/mo with only 17.3% DD.'},
     {n:22,name:'2. HF Arb M5 Anti-Martingale',monthly:23.78,dd:10.6,p30k:75.4,status:'kpi',source:'Holy Grail',
      desc:'High-frequency M5 arbitrage with anti-martingale sizing. Low DD (10.6%) but failed forward test gate.'},
-    {n:23,name:'3. Asymmetric SL0.5R TP3.5R',monthly:24.86,dd:8.6,p30k:90.0,status:'holy',source:'Holy Grail ✅',
-     desc:'🏆 HOLY GRAIL #3 — F01 core + asymmetric RR (tight 0.5R stop, wide 3.5R target). DD 8.6%. P($30k)=90%. Status: ✅ Backtest ✅ Walk-forward ❌ MT5 tick test ❌ Demo forward test'},
+    {n:23,name:'3. Asymmetric SL0.5R TP3.5R',monthly:24.86,dd:8.6,p30k:90.0,status:'kpi',source:'Holy Grail',
+     desc:'⚠️ FAILED MT5 TICK TEST — Simulation showed 24.86%/mo DD 8.6% but real tick: PF=0.41 WR=21.3% (breakeven needs 22.2%). XAUUSD H1 cannot sustain 3.5× ATR moves. Do not demo.'},
     {n:24,name:'4. Regime Only ADX>30 High WR',monthly:27.2,dd:14.9,p30k:96.0,status:'kpi',source:'Holy Grail',
      desc:'Trades only in strong trend regime (ADX>30). Very high win rate. 27.2%/mo but failed forward test gate.'},
     {n:25,name:'5. MTF 4-Timeframe D1/H4/H1/M15',monthly:22.08,dd:12.8,p30k:53.1,status:'kpi',source:'Holy Grail',
      desc:'Multi-timeframe alignment across 4 charts. Conservative P($30k)=53% despite good monthly return.'},
-    {n:28,name:'8. Combined Regime+Asym+TimeStop',monthly:28.61,dd:7.8,p30k:100.0,status:'holy',source:'Holy Grail ✅',
-     desc:'🏆 HOLY GRAIL #8 — F01 core + regime filter (ADX) + asymmetric RR + time stop. Best DD 7.8%. P($30k)=100%. 28.61%/mo. Status: ✅ Backtest ✅ Walk-forward ❌ MT5 tick test ❌ Demo forward test'},
+    {n:28,name:'8. Combined Regime+Asym+TimeStop',monthly:28.61,dd:7.8,p30k:100.0,status:'kpi',source:'Holy Grail',
+     desc:'⚠️ FAILED MT5 TICK TEST — Simulation showed 28.61%/mo DD 7.8% but real tick: PF=0.14 WR=8.3% (worst result). ADX>30 filter + 8-bar time stop kill WR catastrophically. 9/108 trades hit TP. Do not demo.'},
     {n:29,name:'9. ML Statistical Patterns',monthly:24.86,dd:13.1,p30k:88.7,status:'kpi',source:'Holy Grail',
      desc:'Machine learning best hour/day patterns. 24.86%/mo, P($30k)=88.7% but needs tick data validation.'},
-    {n:30,name:'ULTRA: AsymRegime+DynSize+TightStop',monthly:27.23,dd:6.9,p30k:100.0,status:'holy',source:'Holy Grail ✅',
-     desc:'🏆 HOLY GRAIL ULTRA — F01 core + asymmetric regime + dynamic Kelly sizing + tight 40pt stop. DD 6.9%. P($30k)=100%. Best score (26.644). Status: ✅ Backtest ✅ Walk-forward ❌ MT5 tick test ❌ Demo forward test'},
+    {n:30,name:'ULTRA: AsymRegime+DynSize+TightStop',monthly:27.23,dd:6.9,p30k:100.0,status:'kpi',source:'Holy Grail',
+     desc:'⚠️ FAILED MT5 TICK TEST — Simulation showed 27.23%/mo DD 6.9% but real tick: PF=0.39 WR=20.8% (20/96 trades). Kelly+regime scaling cannot compensate for WR<22.2% breakeven at RR=3.5. Do not demo.'},
   ];
 
   // Merge: KPI Hunt iterations + Holy Grail KPI-passing approaches
@@ -1869,9 +1869,12 @@ pageInitFns['optimization']=function(){
   const statusTextColor={kpi:'#065F46',strong:'#1D4ED8',good:'#374151',building:'#D97706',low:'#DC2626',holy:'#7C3AED'};
 
   c.innerHTML='<div>'
+    +'<div style="padding:10px 14px;background:#FEE2E2;border-radius:10px;border-left:4px solid #DC2626;font-size:.78rem;color:var(--navy);line-height:1.6;margin-bottom:10px">'
+    +'<b>❌ Phase 10 Tick Validation: 0/3 Holy Grail variants passed on real MT5 tick data</b> · RR=3.5 not viable on XAUUSD H1 (WR 20-21%, needs 22.2% breakeven) · Next: optimize RR 1.8-2.0 or add DD stops at current RR=1.5'
+    +'</div>'
     +'<div style="padding:10px 14px;background:linear-gradient(135deg,#FEF3C7,#D1FAE5);border-radius:10px;border-left:4px solid #7C3AED;font-size:.78rem;color:var(--navy);line-height:1.6;margin-bottom:14px">'
-    +'<b>🏆 '+allResults.filter(r=>r.status==='holy').length+' Holy Grail strategies confirmed</b> (passed all gates including forward test) · '
-    +allResults.filter(r=>r.status==='kpi'||r.status==='holy').length+' total KPI-passing strategies · Click any row for details + EA code'
+    +'<b>🔬 '+allResults.filter(r=>r.status==='holy').length+' simulation Holy Grails</b> (all 3 failed real tick validation — simulation ≠ market reality) · '
+    +allResults.filter(r=>r.status==='kpi'||r.status==='holy').length+' total KPI-passing strategies in simulation · Click any row for details'
     +'</div>'
     +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px">'
     +'<div style="font-weight:700;color:var(--navy);font-size:.9rem">All '+allResults.length+' results ranked by monthly return</div>'
