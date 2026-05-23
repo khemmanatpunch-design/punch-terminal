@@ -962,7 +962,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
       <div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--green-100);border-radius:var(--radius-md)"><span style="font-size:1.1rem">✅</span><div><div style="font-size:.8rem;font-weight:700;color:var(--navy)">EA: APEX_Pepperstone_v1</div><div style="font-size:.75rem;color:var(--gray-500)">Compiled · 0 errors · Ready to run</div></div></div>
       <div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--green-100);border-radius:var(--radius-md)"><span style="font-size:1.1rem">✅</span><div><div style="font-size:.8rem;font-weight:700;color:var(--navy)">Broker: Pepperstone Razor 51489276</div><div style="font-size:.75rem;color:var(--gray-500)">XAUUSD · Walk-Forward ROBUST</div></div></div>
       <div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--green-100);border-radius:var(--radius-md)"><span style="font-size:1.1rem">✅</span><div><div style="font-size:.8rem;font-weight:700;color:var(--navy)">Dashboard: GitHub Pages Live</div><div style="font-size:.75rem;color:var(--gray-500)">punch-terminal · Password P6665</div></div></div>
-      <div style="display:flex;align-items:center;gap:10px;padding:12px;background:rgba(239,68,68,0.12);border-radius:var(--radius-md)"><span style="font-size:1.1rem">🔬</span><div><div style="font-size:.8rem;font-weight:700;color:var(--navy)">Phase 11: 7 new EAs tested — 0/7 passed</div><div style="font-size:.75rem;color:var(--gray-500)">Root cause: XAUUSD WR ceiling ~28-38% · Vol Momentum best PF=0.60 · Next: higher risk scaling on champion</div></div></div>
+      <div style="display:flex;align-items:center;gap:10px;padding:12px;background:rgba(239,68,68,0.12);border-radius:var(--radius-md)"><span style="font-size:1.1rem">🔬</span><div><div style="font-size:.8rem;font-weight:700;color:var(--navy)">Phase 1 Reboot: Real Tick Tournament — 0/8 EAs passed KPI</div><div style="font-size:.75rem;color:var(--gray-500)">Real tick model=4 · Best: T7_News_Momentum +1.15%/mo (target 21.5%) · Gap: 20.4pp · P($30k)=0.0% · Phases 1-15 invalidated (model=1 fake data)</div></div></div>
     </div>
   </div>
 
@@ -980,6 +980,9 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
   <div class="breadcrumb"><a href="#" onclick="showPage('home');return false;">Home</a><span class="breadcrumb-sep">/</span>Champion Strategy</div>
   <div class="page-title">Champion Strategy — F01_SMC_Session_v2</div>
   <div class="page-subtitle">Tournament winner from 100 strategies · Optimized from PF 1.03 → 3.19 · XAUUSD H1 · Pepperstone Razor</div>
+  <div style="margin-top:14px;margin-bottom:4px;padding:14px 18px;background:#FEF2F2;border-radius:10px;border-left:4px solid #EF4444;font-size:.82rem;color:#7F1D1D;line-height:1.7">
+    <strong>⚠️ Phase 1 Reboot (2026-05-23) — INVALIDATED by real tick validation:</strong> All Phases 1–15 used model=1 (interpolated ticks). On model=4 real ticks, F01_SMC_Session_v2 shows PF≈0.81 and Monthly≈+0.32% — below breakeven. PF 3.19 and 27.23%/mo were simulation artifacts of fake tick data. Phase 1 Reboot tested 8 fresh EAs on real ticks; best result: T7_News_Momentum +1.15%/mo (target gap: 20.4pp). No EA currently meets the 21.5%/mo KPI on real tick data.
+  </div>
   <div class="page-divider"></div>
 
   <!-- TAB BAR -->
@@ -1298,13 +1301,13 @@ InpMaxSpread    = 15   // reject trade if spread > 15pt</pre>
     <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
       <div style="font-size:2rem">🎯</div>
       <div style="flex:1;min-width:200px">
-        <div style="font-size:.75rem;font-weight:700;letter-spacing:.1em;opacity:.7;margin-bottom:4px">KPI HUNT — 20 ITERATIONS COMPLETE</div>
-        <div style="font-size:1.4rem;font-weight:800;margin-bottom:2px">KPI ACHIEVABLE — 24.34%/month found!</div>
-        <div style="font-size:.875rem;opacity:.8">APEX Maximum Portfolio exceeds 21.5% target · P($30k in 12mo) = 65.5% · Demo only · Never real trades</div>
+        <div style="font-size:.75rem;font-weight:700;letter-spacing:.1em;opacity:.7;margin-bottom:4px">KPI HUNT — PHASE 1 REBOOT (REAL TICKS)</div>
+        <div style="font-size:1.4rem;font-weight:800;margin-bottom:2px">KPI NOT YET MET — Real tick data required</div>
+        <div style="font-size:.875rem;opacity:.8">Phase 1 Reboot: 0/8 EAs pass on model=4 real ticks · Best: T7_News_Momentum +1.15%/mo · Gap: 20.4pp · Prior 24.34%/mo was model=1 simulation artifact · Research continues</div>
       </div>
       <div style="text-align:right;min-width:120px">
-        <div style="font-size:.75rem;opacity:.7">Best Monthly</div>
-        <div style="font-size:2.5rem;font-weight:900;color:#4ADE80">24.3%</div>
+        <div style="font-size:.75rem;opacity:.7">Best Monthly (real ticks)</div>
+        <div style="font-size:2.5rem;font-weight:900;color:#FCA5A5">1.15%</div>
         <div style="font-size:.75rem;opacity:.7">vs 21.5% KPI target</div>
       </div>
     </div>
@@ -1312,9 +1315,9 @@ InpMaxSpread    = 15   // reject trade if spread > 15pt</pre>
 <!-- SECTION 2 — MONTE CARLO METRIC CARDS -->
   <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px">
     <div class="metric-card orange"><div class="metric-label">KPI Target</div><div class="metric-value orange">21.5%</div><div class="metric-delta">/month · $30k in 12mo</div></div>
-    <div class="metric-card pink"><div class="metric-label">P($30k in 12mo)</div><div class="metric-value pink">65.5%</div><div class="metric-delta up">10,000 MC paths</div></div>
-    <div class="metric-card green"><div class="metric-label">MC Avg Final</div><div class="metric-value green">$43,864</div><div class="metric-delta up">from $3,000 start</div></div>
-    <div class="metric-card" style="border-left-color:var(--teal)"><div class="metric-label">MC Median Final</div><div class="metric-value" style="color:var(--teal)">$37,425</div><div class="metric-delta">Worst 10%: $17,825</div></div>
+    <div class="metric-card pink"><div class="metric-label">P($30k in 12mo)</div><div class="metric-value pink">0.0%</div><div class="metric-delta">Real tick MC · 10,000 paths</div></div>
+    <div class="metric-card green"><div class="metric-label">MC Median Final</div><div class="metric-value green">$3,415</div><div class="metric-delta">from $3,000 · T7 champion</div></div>
+    <div class="metric-card" style="border-left-color:var(--teal)"><div class="metric-label">Months to $30k</div><div class="metric-value" style="color:var(--teal)">660</div><div class="metric-delta">55 years at +1.15%/mo</div></div>
   </div>
 
 <!-- SECTION 2b — MC Distribution Chart -->
@@ -1505,9 +1508,107 @@ InpMaxSpread    = 15   // reject trade if spread > 15pt</pre>
 <div class="page-inner">
   <div class="breadcrumb"><a href="#" onclick="showPage('home');return false;">Home</a><span class="breadcrumb-sep">/</span>Optimization Research</div>
   <div class="page-title">Optimization Research</div>
-  <div class="page-subtitle">All 21 iterations ranked by monthly return · Click any row to see EA code · Holy Grail found: 27.23%/mo</div>
+  <div class="page-subtitle">Phase 1 Reboot: 0/8 EAs positive on real Pepperstone tick data (model=4) · Best: T7_News_Momentum +1.15%/mo · Phases 1-15 invalidated (model=1 interpolated ticks)</div>
   <div class="page-divider"></div>
   
+  <!-- PHASE 1 REBOOT: Real Tick Tournament Results -->
+  <div class="card card-sm" style="margin-bottom:20px">
+    <div style="font-weight:700;color:var(--navy);margin-bottom:4px;font-size:.9rem">🔬 Phase 1 Reboot — Real Tick Tournament (model=4, 2022–2026, XAUUSD, $3,000)</div>
+    <div style="font-size:.78rem;color:#7F1D1D;background:#FEF2F2;padding:8px 12px;border-radius:6px;margin-bottom:12px">All 8 EAs tested on real Pepperstone tick data (model=4). All failed the 21.5%/mo KPI. Phases 1–15 invalidated — prior results used model=1 interpolated (fake) ticks.</div>
+    <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:.78rem">
+        <thead>
+          <tr style="background:var(--gray-50);font-size:.72rem;color:var(--gray-500)">
+            <th style="text-align:left;padding:8px 10px;border-bottom:1px solid var(--gray-200)">EA</th>
+            <th style="text-align:right;padding:8px 10px;border-bottom:1px solid var(--gray-200)">Final Bal</th>
+            <th style="text-align:right;padding:8px 10px;border-bottom:1px solid var(--gray-200)">Monthly</th>
+            <th style="text-align:right;padding:8px 10px;border-bottom:1px solid var(--gray-200)">PF</th>
+            <th style="text-align:right;padding:8px 10px;border-bottom:1px solid var(--gray-200)">WR</th>
+            <th style="text-align:right;padding:8px 10px;border-bottom:1px solid var(--gray-200)">Trades</th>
+            <th style="text-align:center;padding:8px 10px;border-bottom:1px solid var(--gray-200)">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--gray-100)">
+            <td style="padding:8px 10px;font-weight:600;color:var(--navy)">T7_News_Momentum</td>
+            <td style="text-align:right;padding:8px 10px;color:var(--green-600)">$4,790</td>
+            <td style="text-align:right;padding:8px 10px;color:var(--green-600)">+1.15%</td>
+            <td style="text-align:right;padding:8px 10px">1.083</td>
+            <td style="text-align:right;padding:8px 10px">28.9%</td>
+            <td style="text-align:right;padding:8px 10px">1,295</td>
+            <td style="text-align:center;padding:8px 10px"><span style="background:#FEE2E2;color:#DC2626;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:700">FAIL (gap 20.4pp)</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--gray-100)">
+            <td style="padding:8px 10px;font-weight:600;color:var(--navy)">T5_RSI_Momentum</td>
+            <td style="text-align:right;padding:8px 10px;color:var(--green-600)">$3,425</td>
+            <td style="text-align:right;padding:8px 10px;color:var(--green-600)">+0.27%</td>
+            <td style="text-align:right;padding:8px 10px">1.090</td>
+            <td style="text-align:right;padding:8px 10px">33.1%</td>
+            <td style="text-align:right;padding:8px 10px">507</td>
+            <td style="text-align:center;padding:8px 10px"><span style="background:#FEE2E2;color:#DC2626;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:700">FAIL</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--gray-100)">
+            <td style="padding:8px 10px;font-weight:600;color:var(--navy)">T4_H4_SMC_Entry <span style="font-size:.7rem;color:var(--teal);font-weight:400">(WF champion)</span></td>
+            <td style="text-align:right;padding:8px 10px;color:var(--green-600)">$3,080</td>
+            <td style="text-align:right;padding:8px 10px;color:var(--green-600)">+0.05%</td>
+            <td style="text-align:right;padding:8px 10px">1.333</td>
+            <td style="text-align:right;padding:8px 10px">40.0%</td>
+            <td style="text-align:right;padding:8px 10px">20</td>
+            <td style="text-align:center;padding:8px 10px"><span style="background:#FEE2E2;color:#DC2626;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:700">FAIL (5 trades OOS)</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--gray-100)">
+            <td style="padding:8px 10px;color:var(--gray-600)">T3_ATR_Breakout</td>
+            <td style="text-align:right;padding:8px 10px;color:var(--gray-500)">$2,985</td>
+            <td style="text-align:right;padding:8px 10px;color:var(--gray-500)">-0.01%</td>
+            <td style="text-align:right;padding:8px 10px">1.000</td>
+            <td style="text-align:right;padding:8px 10px">33.3%</td>
+            <td style="text-align:right;padding:8px 10px">27</td>
+            <td style="text-align:center;padding:8px 10px"><span style="background:#FEE2E2;color:#DC2626;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:700">FAIL</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--gray-100)">
+            <td style="padding:8px 10px;color:var(--gray-600)">T2_EMA_Trend</td>
+            <td style="text-align:right;padding:8px 10px;color:#DC2626">$2,312</td>
+            <td style="text-align:right;padding:8px 10px;color:#DC2626">-0.44%</td>
+            <td style="text-align:right;padding:8px 10px">0.899</td>
+            <td style="text-align:right;padding:8px 10px">31.0%</td>
+            <td style="text-align:right;padding:8px 10px">287</td>
+            <td style="text-align:center;padding:8px 10px"><span style="background:#FEE2E2;color:#DC2626;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:700">FAIL</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--gray-100)">
+            <td style="padding:8px 10px;color:var(--gray-600)">T1_F01_Tuned <span style="font-size:.7rem;color:#DC2626;font-weight:400">(old champion — invalidated)</span></td>
+            <td style="text-align:right;padding:8px 10px;color:#DC2626">$1,975</td>
+            <td style="text-align:right;padding:8px 10px;color:#DC2626">-0.66%</td>
+            <td style="text-align:right;padding:8px 10px">0.962</td>
+            <td style="text-align:right;padding:8px 10px">30.4%</td>
+            <td style="text-align:right;padding:8px 10px">263</td>
+            <td style="text-align:center;padding:8px 10px"><span style="background:#FEE2E2;color:#DC2626;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:700">FAIL</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--gray-100)">
+            <td style="padding:8px 10px;color:var(--gray-600)">T8_H4_Mean_Revert</td>
+            <td style="text-align:right;padding:8px 10px;color:#DC2626">$1,160</td>
+            <td style="text-align:right;padding:8px 10px;color:#DC2626">-1.18%</td>
+            <td style="text-align:right;padding:8px 10px">0.827</td>
+            <td style="text-align:right;padding:8px 10px">35.5%</td>
+            <td style="text-align:right;padding:8px 10px">799</td>
+            <td style="text-align:center;padding:8px 10px"><span style="background:#FEE2E2;color:#DC2626;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:700">FAIL</span></td>
+          </tr>
+          <tr>
+            <td style="padding:8px 10px;color:var(--gray-600)">T6_London_Open</td>
+            <td style="text-align:right;padding:8px 10px;color:#DC2626">$1,050</td>
+            <td style="text-align:right;padding:8px 10px;color:#DC2626">-1.25%</td>
+            <td style="text-align:right;padding:8px 10px">0.906</td>
+            <td style="text-align:right;padding:8px 10px">26.6%</td>
+            <td style="text-align:right;padding:8px 10px">1,128</td>
+            <td style="text-align:center;padding:8px 10px"><span style="background:#FEE2E2;color:#DC2626;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:700">FAIL</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top:10px;font-size:.75rem;color:var(--gray-500)">
+      Monte Carlo (10,000 paths, 12mo, T7 champion): Median final $3,415 · P($30k) = 0.0% · Expected months to $30k = 660 (55 years) · KPI gap: need 20.4pp more monthly return
+    </div>
+  </div>
+
   <div id="opt-content-phase9"><div id="phase9-content"></div></div>
   <div id="opt-content-ddopt" style="display:none"><div id="ddopt-content"></div></div>
   <div id="opt-content-holygrail" style="display:none"><div id="holygrail-content"></div></div>
@@ -1526,10 +1627,10 @@ InpMaxSpread    = 15   // reject trade if spread > 15pt</pre>
     <span style="color:var(--gray-300)">|</span>
     <span style="background:#FEE2E2;color:#DC2626;padding:2px 10px;border-radius:999px;font-weight:700;font-size:.75rem">DEMO ONLY — Never Real Money</span>
     <span style="color:var(--gray-300)">|</span>
-    <span>Phase 9 of 9 · Pepperstone Razor · XAUUSD H1</span>
+    <span>Phase 1 Reboot · Pepperstone Razor · XAUUSD · Real Tick model=4</span>
   </div>
   <div style="font-size:.75rem;color:var(--gray-400)">
-    PF 3.19 (sim) / 0.95 (live BT) · WR 51.5% (sim) / 38.8% (live BT) · 6yr backtest 2020–2026 &nbsp;·&nbsp;
+    Real tick results: Best EA +1.15%/mo (T7_News_Momentum) · PF 3.19 was model=1 simulation artifact · Target gap: 20.4pp &nbsp;·&nbsp;
     Built by Claude Code &nbsp;·&nbsp; Last updated: 2026-05-23 &nbsp;·&nbsp;
     <a href="https://khemmanatpunch-design.github.io/punch-terminal/" target="_blank" style="color:var(--teal)">Live Dashboard</a>
   </div>
