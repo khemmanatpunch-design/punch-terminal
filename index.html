@@ -1484,7 +1484,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
   <div class="page-title">DD Optimization — MaxDD Reduction</div>
   <div class="page-subtitle">5 Approaches · 10,000 Monte Carlo Paths Each · 2026-05-22</div>
   <div class="page-divider"></div>
-  <div id="ddopt-content-old"></div>
+  <div id="ddopt-content"></div>
 </div>
 </div>
 
@@ -1496,7 +1496,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
   <div class="page-title">Phase 9 — Strategy Evolution</div>
   <div class="page-subtitle">4 Tracks · Filter Analysis · News Boost · Multi-Market · Compounding · $30k ETA</div>
   <div class="page-divider"></div>
-  <div id="phase9-content-old"></div>
+  <div id="phase9-content"></div>
 </div>
 </div>
 
@@ -1507,7 +1507,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
   <div class="page-title">Holy Grail Hunt — 21.5%/mo + MaxDD &lt;10%</div>
   <div class="page-subtitle">10 Approaches · 4-Test Methodology · Forward Validated · 2026-05-22</div>
   <div class="page-divider"></div>
-  <div id="holygrail-content-old"></div>
+  <div id="holygrail-content"></div>
 </div>
 </div>
 
@@ -1757,7 +1757,7 @@ function toggleRLPhase(n,forceOpen){
 
 pageInitFns['researchlog']=function(){toggleRLPhase(7,true);};
 pageInitFns['optimization']=function(){
-  setTimeout(()=>switchOptTab('phase9'),10);
+  switchOptTab('phase9');
 };
 pageInitFns['market']=function(){};
 pageInitFns['tools']=function(){
@@ -1887,133 +1887,6 @@ function updateKpiBuilder(){
   if(kbChartInst){kbChartInst.data.datasets[0].data=curve(cons);kbChartInst.data.datasets[1].data=curve(base);kbChartInst.data.datasets[2].data=curve(agg);kbChartInst.update('none');}
 }
 
-
-/* ── LOT CALCULATOR ────────────────────────────── */
-pageInitFns['calculator']=function(){
-  const c=document.getElementById('calculator-content');
-  if(!c||c.dataset.inited)return;c.dataset.inited='1';
-  c.innerHTML=`
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
-      <div>
-        <div style="font-size:.8rem;font-weight:600;color:var(--gray-600);margin-bottom:16px">Position Size Calculator</div>
-        <div style="display:flex;flex-direction:column;gap:12px">
-          <div>
-            <label style="font-size:.75rem;font-weight:600;color:var(--gray-500);display:block;margin-bottom:4px">Account Balance ($)</label>
-            <input type="number" id="lc-balance" value="3000" style="width:100%;padding:8px 12px;border:1.5px solid var(--gray-200);border-radius:8px;font-size:.875rem;font-family:inherit;outline:none;box-sizing:border-box" oninput="calcLotSize()">
-          </div>
-          <div>
-            <label style="font-size:.75rem;font-weight:600;color:var(--gray-500);display:block;margin-bottom:4px">Risk % per trade</label>
-            <input type="number" id="lc-risk" value="0.5" step="0.1" style="width:100%;padding:8px 12px;border:1.5px solid var(--gray-200);border-radius:8px;font-size:.875rem;font-family:inherit;outline:none;box-sizing:border-box" oninput="calcLotSize()">
-          </div>
-          <div>
-            <label style="font-size:.75rem;font-weight:600;color:var(--gray-500);display:block;margin-bottom:4px">Stop Loss (points)</label>
-            <input type="number" id="lc-sl" value="80" style="width:100%;padding:8px 12px;border:1.5px solid var(--gray-200);border-radius:8px;font-size:.875rem;font-family:inherit;outline:none;box-sizing:border-box" oninput="calcLotSize()">
-          </div>
-          <div>
-            <label style="font-size:.75rem;font-weight:600;color:var(--gray-500);display:block;margin-bottom:4px">Symbol</label>
-            <select id="lc-symbol" onchange="calcLotSize()" style="width:100%;padding:8px 12px;border:1.5px solid var(--gray-200);border-radius:8px;font-size:.875rem;font-family:inherit;outline:none;background:#fff">
-              <option value="10">XAUUSD (Gold) — $10/pip per lot</option>
-              <option value="10">USDJPY — $10/pip per lot</option>
-              <option value="10">NAS100 — $10/pip per lot</option>
-              <option value="10">GBPJPY — $10/pip per lot</option>
-            </select>
-          </div>
-        </div>
-      </div>
-      <div style="display:flex;flex-direction:column;justify-content:center;gap:12px">
-        <div style="padding:20px;background:linear-gradient(135deg,var(--navy),#1d3a4e);border-radius:12px;color:#fff;text-align:center">
-          <div style="font-size:.75rem;opacity:.7;margin-bottom:4px">Recommended Lot Size</div>
-          <div id="lc-result" style="font-size:2.5rem;font-weight:900;color:#4ADE80">0.01</div>
-          <div style="font-size:.75rem;opacity:.7">lots</div>
-        </div>
-        <div style="padding:12px;background:var(--gray-50);border-radius:8px;font-size:.78rem;color:var(--gray-700)">
-          <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid var(--gray-200)"><span>Risk amount</span><b id="lc-risk-amt">$15.00</b></div>
-          <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid var(--gray-200)"><span>SL in $</span><b id="lc-sl-dollar">$80.00</b></div>
-          <div style="display:flex;justify-content:space-between;padding:3px 0"><span>Pip value</span><b id="lc-pip-val">$1.00</b></div>
-        </div>
-        <div style="padding:10px 14px;background:#EFF6FF;border-radius:8px;font-size:.75rem;color:#1D4ED8;line-height:1.6">
-          <b>Formula:</b> Lot Size = (Balance × Risk%) ÷ (SL points × Pip value per lot)
-        </div>
-      </div>
-    </div>
-  `;
-  calcLotSize();
-};
-
-function calcLotSize(){
-  const bal=parseFloat(document.getElementById('lc-balance')?.value||3000);
-  const risk=parseFloat(document.getElementById('lc-risk')?.value||0.5)/100;
-  const sl=parseFloat(document.getElementById('lc-sl')?.value||80);
-  const pipVal=parseFloat(document.getElementById('lc-symbol')?.value||10);
-  const riskAmt=bal*risk;
-  const lotSize=Math.max(0.01,Math.round(riskAmt/(sl*pipVal/100)*100)/100);
-  const el=document.getElementById('lc-result');
-  if(el)el.textContent=lotSize.toFixed(2);
-  const ra=document.getElementById('lc-risk-amt');
-  if(ra)ra.textContent='$'+riskAmt.toFixed(2);
-  const sd=document.getElementById('lc-sl-dollar');
-  if(sd)sd.textContent='$'+(sl*pipVal/100*lotSize).toFixed(2);
-  const pv=document.getElementById('lc-pip-val');
-  if(pv)pv.textContent='$'+(pipVal/100).toFixed(2);
-}
-
-/* ── COMPOUNDING CALCULATOR ─────────────────────── */
-pageInitFns['compound']=function(){
-  const c=document.getElementById('compound-content');
-  if(!c||c.dataset.inited)return;c.dataset.inited='1';
-  c.innerHTML=`
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:16px">
-      <div style="display:flex;flex-direction:column;gap:10px">
-        <div style="font-size:.8rem;font-weight:600;color:var(--gray-600);margin-bottom:4px">Compounding Settings</div>
-        <div><label style="font-size:.75rem;font-weight:600;color:var(--gray-500);display:block;margin-bottom:3px">Starting Balance ($)</label>
-          <input type="number" id="cp-start" value="3000" style="width:100%;padding:7px 10px;border:1.5px solid var(--gray-200);border-radius:8px;font-size:.875rem;font-family:inherit;outline:none;box-sizing:border-box" oninput="calcCompound()"></div>
-        <div><label style="font-size:.75rem;font-weight:600;color:var(--gray-500);display:block;margin-bottom:3px">Monthly Return (%)</label>
-          <input type="number" id="cp-monthly" value="24.34" step="0.1" style="width:100%;padding:7px 10px;border:1.5px solid var(--gray-200);border-radius:8px;font-size:.875rem;font-family:inherit;outline:none;box-sizing:border-box" oninput="calcCompound()"></div>
-        <div><label style="font-size:.75rem;font-weight:600;color:var(--gray-500);display:block;margin-bottom:3px">Months</label>
-          <input type="number" id="cp-months" value="12" min="1" max="60" style="width:100%;padding:7px 10px;border:1.5px solid var(--gray-200);border-radius:8px;font-size:.875rem;font-family:inherit;outline:none;box-sizing:border-box" oninput="calcCompound()"></div>
-        <div style="padding:14px;background:linear-gradient(135deg,var(--navy),#1d3a4e);border-radius:10px;color:#fff;text-align:center">
-          <div style="font-size:.75rem;opacity:.7;margin-bottom:2px">Final Balance</div>
-          <div id="cp-final" style="font-size:2rem;font-weight:900;color:#4ADE80">$30,000</div>
-          <div id="cp-gain" style="font-size:.75rem;opacity:.7">+900% gain</div>
-        </div>
-      </div>
-      <div><canvas id="cp-chart" height="220"></canvas></div>
-    </div>
-    <div id="cp-table" style="font-size:.75rem"></div>
-  `;
-  calcCompound();
-};
-
-let cpChart=null;
-function calcCompound(){
-  const start=parseFloat(document.getElementById('cp-start')?.value||3000);
-  const monthly=parseFloat(document.getElementById('cp-monthly')?.value||24.34)/100;
-  const months=parseInt(document.getElementById('cp-months')?.value||12);
-  const labels=['Start'];const data=[start];
-  let bal=start;
-  for(let i=1;i<=months;i++){bal=bal*(1+monthly);labels.push('M'+i);data.push(Math.round(bal));}
-  const final=data[data.length-1];
-  const gain=((final-start)/start*100).toFixed(0);
-  const fe=document.getElementById('cp-final');if(fe)fe.textContent='$'+final.toLocaleString();
-  const ge=document.getElementById('cp-gain');if(ge)ge.textContent='+'+gain+'% gain';
-  const ctx=document.getElementById('cp-chart');
-  if(ctx){
-    if(cpChart)cpChart.destroy();
-    cpChart=new Chart(ctx,{type:'line',data:{labels,datasets:[{label:'Balance',data,borderColor:'var(--teal)',backgroundColor:'rgba(86,124,141,.1)',fill:true,tension:.4,pointRadius:2,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y.toLocaleString()}}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{ticks:{font:{size:10},callback:v=>'$'+v.toLocaleString()}}}}});
-  }
-  // Table
-  const tbl=document.getElementById('cp-table');
-  if(tbl){
-    let rows='<div style="display:grid;grid-template-columns:50px 1fr 1fr 1fr;gap:0;font-size:.72rem;font-weight:600;color:var(--gray-500);padding:4px 8px;background:var(--gray-50);border-radius:6px 6px 0 0;border:1px solid var(--gray-200)"><span>Month</span><span style="text-align:right">Balance</span><span style="text-align:right">Gain</span><span style="text-align:right">Monthly $</span></div>';
-    for(let i=1;i<=Math.min(months,12);i++){
-      const b=data[i];const g=((b-start)/start*100).toFixed(1);const m=(b-data[i-1]).toFixed(0);
-      const isKpi=b>=30000;
-      rows+=`<div style="display:grid;grid-template-columns:50px 1fr 1fr 1fr;gap:0;padding:3px 8px;border:1px solid var(--gray-100);border-top:none;background:${isKpi?'#F0FDF4':'#fff'}"><span style="color:var(--gray-500)">M${i}</span><span style="text-align:right;font-weight:${isKpi?'700':'400'};color:${isKpi?'var(--green-500)':'inherit'}">$${b.toLocaleString()}</span><span style="text-align:right">+${g}%</span><span style="text-align:right;color:var(--green-500)">+$${parseInt(m).toLocaleString()}</span></div>`;
-    }
-    if(months>12)rows+=`<div style="padding:6px 8px;font-size:.72rem;color:var(--gray-500);border:1px solid var(--gray-100);border-top:none">... ${months-12} more months not shown</div>`;
-    tbl.innerHTML=rows;
-  }
-}
 pageInitFns['home']=function(){
   renderKpiStratList();
   const ctx=document.getElementById('kb-equity-chart');
