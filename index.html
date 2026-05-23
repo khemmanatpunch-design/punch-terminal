@@ -1820,6 +1820,19 @@ function toggleRLPhase(n,forceOpen){
 }
 
 pageInitFns['researchlog']=function(){toggleRLPhase(7,true);};
+const DD_ITERS=[
+  {n:1,name:'Champion DynRisk 3%',monthly:3.22,dd:24.6,status:'building',source:'KPI Hunt',desc:'Champion F01 with dynamic risk scaling.',code:'// Iter 1'},
+  {n:2,name:'5-Market Portfolio',monthly:7.59,dd:32.1,status:'good',source:'KPI Hunt',desc:'Champion on 5 markets.',code:'// Iter 2'},
+  {n:5,name:'HF M15 + H1 Trend',monthly:2.64,dd:18.2,status:'low',source:'KPI Hunt',desc:'HF M15 scalper.',code:'// Iter 5'},
+  {n:6,name:'News Events 7 Types',monthly:11.25,dd:20.3,status:'strong',source:'KPI Hunt',desc:'NFP+CPI+FOMC+GDP+PPI+PMI+Claims.',code:'// Iter 6'},
+  {n:8,name:'Pattern Recognition WR=65%',monthly:4.97,dd:15.8,status:'building',source:'KPI Hunt',desc:'Inside bar + engulfing London/NY.',code:'// Iter 8'},
+  {n:9,name:'APEX MAXIMUM All Combined',monthly:24.34,dd:35.0,status:'kpi',source:'KPI Hunt',desc:'5 strategies combined. 24.34%/mo.',code:'// Iter 9'},
+  {n:10,name:'Multi-Market + News',monthly:22.1,dd:38.0,status:'strong',source:'KPI Hunt',desc:'Champion + 3 markets + News.',code:'// Iter 10'},
+  {n:11,name:'Hedged Portfolio',monthly:21.8,dd:28.0,status:'strong',source:'KPI Hunt',desc:'Long gold + short USD.',code:'// Iter 11'},
+  {n:15,name:'V15 Crypto + HF + News',monthly:19.32,dd:29.1,status:'strong',source:'KPI Hunt',desc:'Crypto + HF + news.',code:'// Iter 15'},
+  {n:16,name:'V16 Max Aggression',monthly:22.61,dd:48.2,status:'strong',source:'KPI Hunt',desc:'10 markets x 3% risk.',code:'// Iter 16'},
+];
+
 pageInitFns['optimization']=function(){
   const c=document.getElementById('phase9-content');
   if(!c)return;
