@@ -962,7 +962,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
       <div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--green-100);border-radius:var(--radius-md)"><span style="font-size:1.1rem">✅</span><div><div style="font-size:.8rem;font-weight:700;color:var(--navy)">EA: APEX_Pepperstone_v1</div><div style="font-size:.75rem;color:var(--gray-500)">Compiled · 0 errors · Ready to run</div></div></div>
       <div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--green-100);border-radius:var(--radius-md)"><span style="font-size:1.1rem">✅</span><div><div style="font-size:.8rem;font-weight:700;color:var(--navy)">Broker: Pepperstone Razor 51489276</div><div style="font-size:.75rem;color:var(--gray-500)">XAUUSD · Walk-Forward ROBUST</div></div></div>
       <div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--green-100);border-radius:var(--radius-md)"><span style="font-size:1.1rem">✅</span><div><div style="font-size:.8rem;font-weight:700;color:var(--navy)">Dashboard: GitHub Pages Live</div><div style="font-size:.75rem;color:var(--gray-500)">punch-terminal · Password P6665</div></div></div>
-      <div style="display:flex;align-items:center;gap:10px;padding:12px;background:rgba(239,68,68,0.12);border-radius:var(--radius-md)"><span style="font-size:1.1rem">❌</span><div><div style="font-size:.8rem;font-weight:700;color:var(--navy)">Phase 10: Tick Validation — 0/3 Passed</div><div style="font-size:.75rem;color:var(--gray-500)">RR=3.5 not viable on XAUUSD H1 · Next: optimize RR 1.8-2.0 or add DD stops to champion</div></div></div>
+      <div style="display:flex;align-items:center;gap:10px;padding:12px;background:rgba(239,68,68,0.12);border-radius:var(--radius-md)"><span style="font-size:1.1rem">🔬</span><div><div style="font-size:.8rem;font-weight:700;color:var(--navy)">Phase 11: 7 new EAs tested — 0/7 passed</div><div style="font-size:.75rem;color:var(--gray-500)">Root cause: XAUUSD WR ceiling ~28-38% · Vol Momentum best PF=0.60 · Next: higher risk scaling on champion</div></div></div>
     </div>
   </div>
 
@@ -1838,6 +1838,19 @@ pageInitFns['optimization']=function(){
   if(!c)return;
   c.innerHTML=''; // clear any previous content
 
+  // Phase 11 tick-tested EAs (0/7 passed all criteria)
+  const PH11_EAS=[
+    {n:31,name:'PH11-1: M5 London EMA Scalp',monthly:-0.19,dd:0.0,p30k:0,status:'low',source:'Phase 11 ❌',
+     desc:'❌ FAILED TICK — M5 EMA8/21 cross + RSI, London 08-11 UTC. PF=0.58 WR=28% (needs 40% for RR=1.5). Gold M5 mean-reverting, EMA signals unreliable.'},
+    {n:32,name:'PH11-4: D1 Trend + M5 Pullback',monthly:-0.16,dd:0.0,p30k:0,status:'low',source:'Phase 11 ❌',
+     desc:'❌ FAILED TICK — D1 EMA50 trend + M5 pullback entry, NY overlap. PF=0.56 WR=27.3%. M5 pullbacks in gold trend don\'t hold to TP (range too small vs spread+noise).'},
+    {n:33,name:'PH11-5: H1 Asian MeanRevert',monthly:-0.07,dd:0.0,p30k:0,status:'low',source:'Phase 11 ❌',
+     desc:'❌ FAILED TICK — H1 fade moves >1.5×ATR from Asian open. PF=0.36 WR=19.6%. Gold trended strongly 2020-2026, mean-reversion assumption invalid.'},
+    {n:34,name:'PH11-6: M5 Volume Surge Momentum',monthly:-0.20,dd:0.0,p30k:0,status:'low',source:'Phase 11 ❌',
+     desc:'❌ FAILED TICK — M5 volume >2.5× average, London. PF=0.60 WR=28.6% (best PF of 5 testable EAs). Volume surges do predict direction but WR too low for RR=2.'},
+    {n:35,name:'PH11-7: D1+H1+M5 Triple Confluence',monthly:0.04,dd:0.0,p30k:0,status:'low',source:'Phase 11 ❌',
+     desc:'❌ FAILED TICK — Triple MTF alignment (D1 EMA200 + H1 EMA8>21 + M5 RSI pullback). Only 19 trades in 6 yrs (over-filtered). PF=0.28.'},
+  ];
   // Holy Grail approaches — all 11 tested
   const HG_APPROACHES=[
     {n:21,name:'1. Portfolio Hedging Long/Short',monthly:24.47,dd:17.3,p30k:76.3,status:'kpi',source:'Holy Grail',
@@ -1858,10 +1871,11 @@ pageInitFns['optimization']=function(){
      desc:'⚠️ FAILED MT5 TICK TEST — Simulation showed 27.23%/mo DD 6.9% but real tick: PF=0.39 WR=20.8% (20/96 trades). Kelly+regime scaling cannot compensate for WR<22.2% breakeven at RR=3.5. Do not demo.'},
   ];
 
-  // Merge: KPI Hunt iterations + Holy Grail KPI-passing approaches
+  // Merge: KPI Hunt iterations + Holy Grail + Phase 11 tick tests
   const allResults=[
     ...DD_ITERS.map(d=>({...d,source:'KPI Hunt'})),
     ...HG_APPROACHES,
+    ...PH11_EAS,
   ].sort((a,b)=>b.monthly-a.monthly);
 
   const statusColor={kpi:'#D1FAE5',strong:'#DBEAFE',good:'#F3F4F6',building:'#FEF3C7',low:'#FFF1F2',holy:'linear-gradient(135deg,#FEF3C7,#D1FAE5)'};
@@ -1870,7 +1884,7 @@ pageInitFns['optimization']=function(){
 
   c.innerHTML='<div>'
     +'<div style="padding:10px 14px;background:#FEE2E2;border-radius:10px;border-left:4px solid #DC2626;font-size:.78rem;color:var(--navy);line-height:1.6;margin-bottom:10px">'
-    +'<b>❌ Phase 10 Tick Validation: 0/3 Holy Grail variants passed on real MT5 tick data</b> · RR=3.5 not viable on XAUUSD H1 (WR 20-21%, needs 22.2% breakeven) · Next: optimize RR 1.8-2.0 or add DD stops at current RR=1.5'
+    +'<b>❌ Phase 10+11 Tick Validation: 0/10 approaches passed on real MT5 data</b> · Root: XAUUSD WR ceiling is 28-38% regardless of timeframe/method · RR=3.5 needs 22.2% WR (only achieve 20-21%) · M5 EMA/Volume/Pullback all ~28% WR · Next: higher risk on champion or signal quality improvement'
     +'</div>'
     +'<div style="padding:10px 14px;background:linear-gradient(135deg,#FEF3C7,#D1FAE5);border-radius:10px;border-left:4px solid #7C3AED;font-size:.78rem;color:var(--navy);line-height:1.6;margin-bottom:14px">'
     +'<b>🔬 '+allResults.filter(r=>r.status==='holy').length+' simulation Holy Grails</b> (all 3 failed real tick validation — simulation ≠ market reality) · '
