@@ -963,6 +963,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
       <div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--green-100);border-radius:var(--radius-md)"><span style="font-size:1.1rem">✅</span><div><div style="font-size:.8rem;font-weight:700;color:var(--navy)">Broker: Pepperstone Razor 51489276</div><div style="font-size:.75rem;color:var(--gray-500)">XAUUSD · Walk-Forward ROBUST</div></div></div>
       <div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--green-100);border-radius:var(--radius-md)"><span style="font-size:1.1rem">✅</span><div><div style="font-size:.8rem;font-weight:700;color:var(--navy)">Dashboard: GitHub Pages Live</div><div style="font-size:.75rem;color:var(--gray-500)">punch-terminal · Password P6665</div></div></div>
       <div style="display:flex;align-items:center;gap:10px;padding:12px;background:rgba(16,185,129,0.1);border-radius:var(--radius-md)"><span style="font-size:1.1rem">📈</span><div><div style="font-size:.8rem;font-weight:700;color:var(--navy)">Phase 4: D1 Swing Breakout — PF=2.4706 · WF ROBUST · MET ✅ PF≥1.5 + Monthly≥5%</div><div style="font-size:.75rem;color:var(--gray-500)">model=4 real ticks · n=20 SL=1500 TP=2000 · WR=55.3% · 114 trades · 5% risk → +5.715%/mo · Test PF=2.6341 · MC Median=$6,340</div></div></div>
+      <div style="display:flex;align-items:center;gap:10px;padding:12px;background:#DBEAFE;border-radius:var(--radius-md)"><span style="font-size:1.1rem">🌐</span><div><div style="font-size:.8rem;font-weight:700;color:var(--navy)">Phase 5: Multi-pair D1 Swing Portfolio — KPI NOT MET ❌</div><div style="font-size:.75rem;color:var(--gray-500)">8 markets tested · Only XAUUSD profitable (real PF=1.647) · XAUUSD/USDJPY corr=−0.665 · Strategy does not transfer — WR&lt;43% breakeven on all other pairs</div></div></div>
     </div>
   </div>
 
@@ -1508,7 +1509,7 @@ InpMaxSpread    = 15   // reject trade if spread > 15pt</pre>
 <div class="page-inner">
   <div class="breadcrumb"><a href="#" onclick="showPage('home');return false;">Home</a><span class="breadcrumb-sep">/</span>Optimization Research</div>
   <div class="page-title">Optimization Research</div>
-  <div class="page-subtitle">Phase 1 Reboot: 0/8 EAs positive on real ticks · Phase 2: T7 optimized PF=1.1715 · Phase 3: Quality filters PF=1.2346 WF ROBUST · Phase 4: D1 Swing PF=2.4706 MET ✅ · All phases model=4 real ticks</div>
+  <div class="page-subtitle">Phase 1 Reboot: 0/8 EAs positive on real ticks · Phase 2: T7 PF=1.1715 · Phase 3: Quality PF=1.2346 WF ROBUST · Phase 4: D1 Swing PF=2.4706 MET ✅ · Phase 5: Multi-pair KPI NOT MET (XAUUSD-only edge) · All phases model=4 real ticks</div>
   <div class="page-divider"></div>
   
   <!-- PHASE 1 REBOOT: Real Tick Tournament Results -->
@@ -1832,6 +1833,81 @@ InpMaxSpread    = 15   // reject trade if spread > 15pt</pre>
     </div>
   </div>
 
+  <!-- PHASE 5: MULTI-PAIR D1 SWING PORTFOLIO -->
+  <div class="card card-sm" style="margin-bottom:20px">
+    <div style="font-weight:700;color:var(--navy);margin-bottom:4px;font-size:.9rem">🌐 Phase 5 — Multi-pair D1 Swing Portfolio (model=4 real ticks, 2022–2026, 8 markets)</div>
+    <div style="font-size:.78rem;color:#1E3A5F;background:#DBEAFE;padding:8px 12px;border-radius:6px;margin-bottom:12px">Applied Phase 4 champion (n=20 SL=1500 TP=2000) to 8 additional markets. Hypothesis: negative correlation between XAUUSD and USD-pairs compresses portfolio DD. Result: negative correlation confirmed (XAUUSD/USDJPY=<strong>−0.665</strong>) but strategy only profits on XAUUSD — other markets lose due to insufficient WR for RR=1.333. KPI NOT MET. Best portfolio (XAUUSD+USDJPY) +0.59%/mo is <em>worse</em> than XAUUSD alone (+1.34%/mo).</div>
+    <!-- Market Scan Table -->
+    <div style="font-weight:600;color:var(--navy);font-size:.8rem;margin-bottom:8px">Market Scan — D1 Swing n=20 SL=1500 TP=2000 (2% risk, real ticks)</div>
+    <div style="overflow-x:auto;margin-bottom:14px">
+      <table style="width:100%;border-collapse:collapse;font-size:.75rem">
+        <thead><tr style="background:var(--gray-50);color:var(--gray-500)">
+          <th style="text-align:left;padding:6px 10px;border-bottom:1px solid var(--gray-200)">Symbol</th>
+          <th style="text-align:right;padding:6px 10px;border-bottom:1px solid var(--gray-200)">PF (calc)</th>
+          <th style="text-align:right;padding:6px 10px;border-bottom:1px solid var(--gray-200)">Real PF</th>
+          <th style="text-align:right;padding:6px 10px;border-bottom:1px solid var(--gray-200)">WR%</th>
+          <th style="text-align:right;padding:6px 10px;border-bottom:1px solid var(--gray-200)">Trades</th>
+          <th style="text-align:right;padding:6px 10px;border-bottom:1px solid var(--gray-200)">Monthly</th>
+          <th style="text-align:right;padding:6px 10px;border-bottom:1px solid var(--gray-200)">Status</th>
+        </tr></thead>
+        <tbody>
+          <tr style="background:#F0FDF4"><td style="padding:6px 10px;font-weight:700">XAUUSD ★</td><td style="text-align:right;padding:6px 10px">2.4706</td><td style="text-align:right;padding:6px 10px;font-weight:700;color:var(--green-600)">1.647</td><td style="text-align:right;padding:6px 10px">55.3%</td><td style="text-align:right;padding:6px 10px">114</td><td style="text-align:right;padding:6px 10px;font-weight:700;color:var(--green-600)">+1.339%</td><td style="text-align:right;padding:6px 10px"><span style="background:#D1FAE5;color:#065F46;padding:1px 5px;border-radius:999px;font-size:.7rem">✅ ONLY</span></td></tr>
+          <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:6px 10px">USDJPY</td><td style="text-align:right;padding:6px 10px">1.4468</td><td style="text-align:right;padding:6px 10px;color:#DC2626">0.965</td><td style="text-align:right;padding:6px 10px">42.0%</td><td style="text-align:right;padding:6px 10px">81</td><td style="text-align:right;padding:6px 10px;color:#DC2626">−0.160%</td><td style="text-align:right;padding:6px 10px"><span style="background:#FEE2E2;color:#DC2626;padding:1px 5px;border-radius:999px;font-size:.7rem">❌ WR low</span></td></tr>
+          <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:6px 10px">USDCHF</td><td style="text-align:right;padding:6px 10px">2.0</td><td style="text-align:right;padding:6px 10px;color:var(--green-600)">1.333</td><td style="text-align:right;padding:6px 10px">50.0%</td><td style="text-align:right;padding:6px 10px">4</td><td style="text-align:right;padding:6px 10px">+0.019%</td><td style="text-align:right;padding:6px 10px"><span style="background:#FEF3C7;color:#92400E;padding:1px 5px;border-radius:999px;font-size:.7rem">⚠️ 4 trades</span></td></tr>
+          <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:6px 10px">EURUSD</td><td style="text-align:right;padding:6px 10px">1.1111</td><td style="text-align:right;padding:6px 10px;color:#DC2626">0.741</td><td style="text-align:right;padding:6px 10px">35.7%</td><td style="text-align:right;padding:6px 10px">56</td><td style="text-align:right;padding:6px 10px;color:#DC2626">−0.355%</td><td style="text-align:right;padding:6px 10px"><span style="background:#FEE2E2;color:#DC2626;padding:1px 5px;border-radius:999px;font-size:.7rem">❌ WR low</span></td></tr>
+          <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:6px 10px">GBPUSD</td><td style="text-align:right;padding:6px 10px">1.3846</td><td style="text-align:right;padding:6px 10px;color:#DC2626">0.923</td><td style="text-align:right;padding:6px 10px">40.9%</td><td style="text-align:right;padding:6px 10px">66</td><td style="text-align:right;padding:6px 10px;color:#DC2626">−0.175%</td><td style="text-align:right;padding:6px 10px"><span style="background:#FEE2E2;color:#DC2626;padding:1px 5px;border-radius:999px;font-size:.7rem">❌ WR low</span></td></tr>
+          <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:6px 10px">XAGUSD</td><td style="text-align:right;padding:6px 10px">1.5</td><td style="text-align:right;padding:6px 10px;color:var(--gray-400)">1.000</td><td style="text-align:right;padding:6px 10px">42.9%</td><td style="text-align:right;padding:6px 10px">56</td><td style="text-align:right;padding:6px 10px;color:#DC2626">−0.002%</td><td style="text-align:right;padding:6px 10px"><span style="background:#FEE2E2;color:#DC2626;padding:1px 5px;border-radius:999px;font-size:.7rem">❌ breakeven</span></td></tr>
+          <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:6px 10px">US30</td><td style="text-align:right;padding:6px 10px">1.4848</td><td style="text-align:right;padding:6px 10px;color:#DC2626">0.990</td><td style="text-align:right;padding:6px 10px">42.6%</td><td style="text-align:right;padding:6px 10px">115</td><td style="text-align:right;padding:6px 10px;color:#DC2626">−0.045%</td><td style="text-align:right;padding:6px 10px"><span style="background:#FEE2E2;color:#DC2626;padding:1px 5px;border-radius:999px;font-size:.7rem">❌ WR low</span></td></tr>
+          <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:6px 10px">GBPJPY</td><td style="text-align:right;padding:6px 10px">1.1864</td><td style="text-align:right;padding:6px 10px;color:#DC2626">0.791</td><td style="text-align:right;padding:6px 10px">37.2%</td><td style="text-align:right;padding:6px 10px">94</td><td style="text-align:right;padding:6px 10px;color:#DC2626">−0.457%</td><td style="text-align:right;padding:6px 10px"><span style="background:#FEE2E2;color:#DC2626;padding:1px 5px;border-radius:999px;font-size:.7rem">❌ WR low</span></td></tr>
+          <tr><td style="padding:6px 10px;color:var(--gray-400)">USOIL</td><td style="text-align:right;padding:6px 10px;color:var(--gray-400)">0.0</td><td style="text-align:right;padding:6px 10px;color:var(--gray-400)">—</td><td style="text-align:right;padding:6px 10px;color:var(--gray-400)">—</td><td style="text-align:right;padding:6px 10px;color:var(--gray-400)">0</td><td style="text-align:right;padding:6px 10px;color:var(--gray-400)">—</td><td style="text-align:right;padding:6px 10px"><span style="background:var(--gray-100);color:var(--gray-400);padding:1px 5px;border-radius:999px;font-size:.7rem">no trades</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- Correlation + Portfolio -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;font-size:.75rem">
+      <div>
+        <div style="font-weight:600;color:var(--navy);font-size:.8rem;margin-bottom:8px">Correlation Matrix (9 half-year periods)</div>
+        <div style="padding:8px;background:#EFF6FF;border-radius:6px;font-size:.72rem;font-family:monospace">
+          <div style="font-weight:700;margin-bottom:4px">Strongest negative pairs:</div>
+          <div>XAUUSD vs USDJPY: <strong style="color:var(--green-600)">−0.665</strong></div>
+          <div>EURUSD vs XAGUSD: −0.636</div>
+          <div>XAUUSD vs GBPJPY: −0.584</div>
+          <div>XAUUSD vs EURUSD: −0.516</div>
+          <div>US30 vs GBPJPY: −0.416</div>
+          <div style="margin-top:6px;color:#1D4ED8;font-family:sans-serif">No pairs with corr &gt; 0.7 (no redundant pairs)</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-weight:600;color:var(--navy);font-size:.8rem;margin-bottom:8px">Portfolio Optimization (119 combinations)</div>
+        <div style="padding:8px;background:#FEF2F2;border-radius:6px;font-size:.72rem">
+          <div style="font-weight:700;color:#DC2626;margin-bottom:4px">0 portfolios passed KPI (Mo≥21.5% AND DD≤15%)</div>
+          <div>Best by Sharpe: XAUUSD+USDJPY</div>
+          <div>Monthly: +0.590% · DD est: 6.2% · Sharpe: 0.094</div>
+          <div style="color:#DC2626;margin-top:4px">Problem: XAUUSD alone (+1.339%/mo) outperforms<br>every multi-market combination</div>
+          <div style="margin-top:6px;font-weight:700;color:#92400E">Root cause: WR breakeven for RR=1.333 is 43%.<br>Only XAUUSD achieves WR=55.3% &gt; 43%.</div>
+        </div>
+      </div>
+    </div>
+    <!-- WF + MC -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:.75rem">
+      <div style="padding:10px;background:#EFF6FF;border-radius:8px;border-left:3px solid var(--teal)">
+        <div style="font-weight:700;color:var(--navy);margin-bottom:6px">Walk-Forward (XAUUSD+USDJPY portfolio)</div>
+        <div>XAUUSD: Train PF=1.80 → Test PF=2.63 · <span style="background:#D1FAE5;color:#065F46;padding:1px 5px;border-radius:999px;font-size:.7rem">ROBUST ✅</span></div>
+        <div>USDJPY: Train PF=1.52 → Test PF=1.38 · <span style="background:#FEE2E2;color:#DC2626;padding:1px 5px;border-radius:999px;font-size:.7rem">NOT ROBUST ❌</span></div>
+        <div>Portfolio: Train Mo=−0.040% → Test Mo=+1.062%</div>
+        <div style="margin-top:4px;font-size:.72rem;color:#1D4ED8">XAUUSD carries entire portfolio — USDJPY adds noise, not return</div>
+      </div>
+      <div style="padding:10px;background:#FEF2F2;border-radius:8px;border-left:3px solid #EF4444">
+        <div style="font-weight:700;color:var(--navy);margin-bottom:6px">Monte Carlo (best portfolio, 10k paths)</div>
+        <div>P($30k in 12mo): <strong>0.0%</strong></div>
+        <div>Median final: $4,155 · Worst 5%: ~$3,000</div>
+        <div>95th pct max DD: 17.2%</div>
+        <div>Expected months to $30k: <strong>391.7</strong> (32.6 years)</div>
+        <div style="margin-top:4px;color:#DC2626;font-size:.72rem;font-weight:700">KPI NOT MET — portfolio worse than XAUUSD alone</div>
+      </div>
+    </div>
+  </div>
+
   <div id="opt-content-phase9"><div id="phase9-content"></div></div>
   <div id="opt-content-ddopt" style="display:none"><div id="ddopt-content"></div></div>
   <div id="opt-content-holygrail" style="display:none"><div id="holygrail-content"></div></div>
@@ -1850,10 +1926,10 @@ InpMaxSpread    = 15   // reject trade if spread > 15pt</pre>
     <span style="color:var(--gray-300)">|</span>
     <span style="background:#FEE2E2;color:#DC2626;padding:2px 10px;border-radius:999px;font-weight:700;font-size:.75rem">DEMO ONLY — Never Real Money</span>
     <span style="color:var(--gray-300)">|</span>
-    <span>Phase 4 Complete · Pepperstone Razor · XAUUSD · Real Tick model=4</span>
+    <span>Phase 5 Complete · Pepperstone Razor · XAUUSD · Real Tick model=4</span>
   </div>
   <div style="font-size:.75rem;color:var(--gray-400)">
-    Phase 4: D1 Swing Breakout PF=2.4706 · WF ROBUST · Test PF=2.6341 · Monthly=+5.715% at 5% risk · Intermediate target MET ✅ &nbsp;·&nbsp;
+    Phase 4: D1 Swing PF=2.4706 MET ✅ &nbsp;·&nbsp; Phase 5: Multi-pair KPI NOT MET — only XAUUSD profitable (real PF=1.647) · WR breakeven 43% not met on any other pair &nbsp;·&nbsp;
     Built by Claude Code &nbsp;·&nbsp; Last updated: 2026-05-24 &nbsp;·&nbsp;
     <a href="https://khemmanatpunch-design.github.io/punch-terminal/" target="_blank" style="color:var(--teal)">Live Dashboard</a>
   </div>
