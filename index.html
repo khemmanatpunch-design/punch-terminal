@@ -847,7 +847,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
         <span style="background:rgba(255,255,255,.15);padding:4px 12px;border-radius:999px;font-size:.75rem;font-weight:600">Champion: D1 Swing Breakout ✅</span>
         <span style="background:rgba(255,255,255,.15);padding:4px 12px;border-radius:999px;font-size:.75rem;font-weight:600">PF=2.4706 · WR=55.3%</span>
         <span style="background:rgba(255,255,255,.15);padding:4px 12px;border-radius:999px;font-size:.75rem;font-weight:600">Walk-Forward: ROBUST ✅</span>
-        <span style="background:rgba(255,255,255,.15);padding:4px 12px;border-radius:999px;font-size:.75rem;font-weight:600">Phase 6 Active 🔬</span>
+        <span style="background:rgba(255,255,255,.15);padding:4px 12px;border-radius:999px;font-size:.75rem;font-weight:600">Phase 8 — ADX Regime Filter Testing 🔬</span>
       </div>
     </div>
   </div>
@@ -2332,6 +2332,9 @@ pageInitFns['optimization']=function(){
      desc:'T7_News_Momentum best config · VolMult=4.0x · SL=150pt TP=250pt RR=1.67 · PF=1.1715 · WR=41.2% · 114 trades · Walk-Forward ROBUST (Train PF=1.03 → Test PF=1.40). Monthly at 5% risk: +0.835%'},
     {n:1,name:'Phase 1 Reboot — Real Tick Tournament (0/8 passed)',monthly:1.15,dd:0,p30k:0,status:'low',source:'Phase 1 REAL TICKS',
      desc:'8 EAs tested on model=4 real ticks · Best: T7_News_Momentum +1.15%/mo PF=1.083 WR=28.9% · F01_SMC_Session_v2 INVALIDATED: PF=0.962 Monthly=-0.66% on real ticks · Confirmed all old model=1 results are unreliable'},
+    {n:7,name:'Phase 7 — D1 ATR Trail (n=25 trail=2.0xATR)',monthly:8.26,dd:15,p30k:0,status:'strong',source:'Phase 7 Real Ticks',
+     desc:'ATR trailing stop lets winners run past fixed TP. Honest avg +6-8%/mo. 2022=-0.42% 2023=-1.22% 2024=+3.36% 2025=+24.5%/mo. Regime-dependent — 2025 gold bull dominates. Phase 8 adding ADX regime filter.',
+     code:'// P7_D1_Trail_ATR n=25 SL=1500 ATRTrail=2.0xATR14\n// No fixed TP — trail stop only\n// 5% risk: +8.26%/mo base / +13%/mo optimized\n// Phase 8: adding ADX filter to fix 2022-2023 losses'},
     {n:0,name:'F01_SMC_Session_v2 — INVALIDATED (model=1 fake)',monthly:-0.66,dd:0,p30k:0,status:'low',source:'INVALIDATED',
      desc:'INVALIDATED: Model=1 (interpolated ticks) showed PF=3.19 WR=51.5% 24.34%/mo — ALL FAKE. On real ticks (model=4): PF=0.662 Monthly=-0.66% WR=42% 168 trades. Do not use this EA.'},
   ].sort((a,b)=>b.monthly-a.monthly);
@@ -2339,7 +2342,7 @@ pageInitFns['optimization']=function(){
   const header=document.createElement('div');
   header.style.cssText='margin-bottom:16px';
   header.innerHTML='<div style="padding:10px 14px;background:linear-gradient(135deg,#F0FDF4,#DCFCE7);border-radius:10px;border-left:4px solid #10B981;font-size:.78rem;color:var(--navy);line-height:1.6;margin-bottom:10px">'
-    +'<b>Phase 4 CHAMPION: D1 Swing Breakout — PF=2.4706 · +5.715%/mo · WR=55.3%</b> · All results from Pepperstone real tick data (model=4) · KPI target: 21.5%/mo · Gap: 15.8pp · Phase 6 in progress: H4 Swing + USDJPY RR=3.0</div>'
+    +'<b>Phase 4 CHAMPION: D1 Swing Breakout — PF=2.4706 · +5.715%/mo · WR=55.3%</b> · All results from Pepperstone real tick data (model=4) · KPI target: 21.5%/mo · Gap: 15.8pp · Phase 8 running: ADX regime filter + XAGUSD/US30 expansion</div>'
     +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px">'
     +'<div style="font-weight:700;color:var(--navy);font-size:.9rem">'+allResults.length+' phases — real tick results only</div>'
     +'</div>'
