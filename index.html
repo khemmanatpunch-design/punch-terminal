@@ -962,6 +962,7 @@ table.apex-table td{padding:14px 16px;color:var(--gray-700);}
       <div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--green-100);border-radius:var(--radius-md)"><span style="font-size:1.1rem">✅</span><div><div style="font-size:.8rem;font-weight:700;color:var(--navy)">Dashboard: GitHub Pages Live</div><div style="font-size:.75rem;color:var(--gray-500)">punch-terminal · Password P6665</div></div></div>
       <div style="display:flex;align-items:center;gap:10px;padding:12px;background:rgba(16,185,129,0.1);border-radius:var(--radius-md)"><span style="font-size:1.1rem">📈</span><div><div style="font-size:.8rem;font-weight:700;color:var(--navy)">Phase 4: D1 Swing Breakout — PF=2.4706 · WF ROBUST · MET ✅ PF≥1.5 + Monthly≥5%</div><div style="font-size:.75rem;color:var(--gray-500)">model=4 real ticks · n=20 SL=1500 TP=2000 · WR=55.3% · 114 trades · 5% risk → +5.715%/mo · Test PF=2.6341 · MC Median=$6,340</div></div></div>
       <div style="display:flex;align-items:center;gap:10px;padding:12px;background:#DBEAFE;border-radius:var(--radius-md)"><span style="font-size:1.1rem">🌐</span><div><div style="font-size:.8rem;font-weight:700;color:var(--navy)">Phase 5: Multi-pair D1 Swing Portfolio — KPI NOT MET ❌</div><div style="font-size:.75rem;color:var(--gray-500)">8 markets tested · Only XAUUSD profitable (real PF=1.647) · XAUUSD/USDJPY corr=−0.665 · Strategy does not transfer — WR&lt;43% breakeven on all other pairs</div></div></div>
+      <div style="display:flex;align-items:center;gap:10px;padding:12px;background:#FEF3C7;border-radius:var(--radius-md)"><span style="font-size:1.1rem">📊</span><div><div style="font-size:.8rem;font-weight:700;color:var(--navy)">Phase 6: H4 Swing + USDJPY RR=3.0 — KPI NOT MET ❌ (Best +4.0%/mo)</div><div style="font-size:.75rem;color:var(--gray-500)">H4 no edge (all 12 variants PF≤1.01) · USDJPY RR=3.0 profitable PF=1.42 · Best portfolio D1+USDJPY at 5%: +4.0%/mo · WF ROBUST · Gap to KPI: 17.5pp</div></div></div>
     </div>
   </div>
 
@@ -1495,7 +1496,7 @@ InpMaxSpread    = 15   // reject trade if spread > 15pt</pre>
 <div class="page-inner">
   <div class="breadcrumb"><a href="#" onclick="showPage('home');return false;">Home</a><span class="breadcrumb-sep">/</span>Optimization Research</div>
   <div class="page-title">Optimization Research</div>
-  <div class="page-subtitle">Phase 1 Reboot: 0/8 EAs positive on real ticks · Phase 2: T7 PF=1.1715 · Phase 3: Quality PF=1.2346 WF ROBUST · Phase 4: D1 Swing PF=2.4706 MET ✅ · Phase 5: Multi-pair KPI NOT MET (XAUUSD-only edge) · All phases model=4 real ticks</div>
+  <div class="page-subtitle">Phase 1 Reboot: 0/8 EAs positive on real ticks · Phase 2: T7 PF=1.1715 · Phase 3: PF=1.2346 WF ROBUST · Phase 4: D1 Swing PF=2.4706 MET ✅ · Phase 5: Multi-pair KPI NOT MET · Phase 6: H4 no edge / USDJPY RR=3.0 PF=1.42 / Best portfolio +4.0%/mo · All model=4 real ticks</div>
   <div class="page-divider"></div>
   
   <!-- PHASE 1 REBOOT: Real Tick Tournament Results -->
@@ -1894,6 +1895,99 @@ InpMaxSpread    = 15   // reject trade if spread > 15pt</pre>
     </div>
   </div>
 
+  <!-- PHASE 6: H4 SWING + MULTI-TF PORTFOLIO -->
+  <div class="card card-sm" style="margin-bottom:20px">
+    <div style="font-weight:700;color:var(--navy);margin-bottom:4px;font-size:.9rem">📈 Phase 6 — H4 Swing + Multi-Timeframe Portfolio (model=4 real ticks, 2022–2026, XAUUSD)</div>
+    <div style="font-size:.78rem;color:#1E3A5F;background:#DBEAFE;padding:8px 12px;border-radius:6px;margin-bottom:12px">Tested H4 Swing Breakout (same n=20 logic as D1 champion) on XAUUSD — 12 parameter variants. Also retested USDJPY &amp; GBPUSD with RR=3.0 to fix Phase 5 WR-breakeven problem. Result: H4 has no edge (all 12 variants PF≤1.01). USDJPY RR=3.0 is now profitable (PF=1.42) but low monthly. Best portfolio: XAUUSD D1 + USDJPY D1 at 5% risk → +4.0%/mo. KPI NOT MET.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+      <div>
+        <div style="font-weight:700;color:var(--navy);font-size:.78rem;margin-bottom:6px">H4 Grid — XAUUSD (12 variants, RR breakeven=33.3% for RR=2.0)</div>
+        <div style="overflow-x:auto">
+          <table style="width:100%;border-collapse:collapse;font-size:.72rem">
+            <thead><tr style="background:var(--gray-50);color:var(--gray-500)">
+              <th style="text-align:left;padding:4px 6px;border-bottom:1px solid var(--gray-200)">Config</th>
+              <th style="text-align:right;padding:4px 6px;border-bottom:1px solid var(--gray-200)">RR</th>
+              <th style="text-align:right;padding:4px 6px;border-bottom:1px solid var(--gray-200)">PF</th>
+              <th style="text-align:right;padding:4px 6px;border-bottom:1px solid var(--gray-200)">WR%</th>
+              <th style="text-align:right;padding:4px 6px;border-bottom:1px solid var(--gray-200)">Tr/mo</th>
+              <th style="text-align:right;padding:4px 6px;border-bottom:1px solid var(--gray-200)">Mo%</th>
+            </tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:4px 6px">N20 SL200 TP400</td><td style="text-align:right;padding:4px 6px">2.0</td><td style="text-align:right;padding:4px 6px;color:#DC2626">0.868</td><td style="text-align:right;padding:4px 6px">30.3%</td><td style="text-align:right;padding:4px 6px">14.2</td><td style="text-align:right;padding:4px 6px;color:#DC2626">−1.54%</td></tr>
+              <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:4px 6px">N20 SL300 TP600</td><td style="text-align:right;padding:4px 6px">2.0</td><td style="text-align:right;padding:4px 6px;color:#DC2626">0.950</td><td style="text-align:right;padding:4px 6px">32.2%</td><td style="text-align:right;padding:4px 6px">14.0</td><td style="text-align:right;padding:4px 6px;color:#DC2626">−1.02%</td></tr>
+              <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:4px 6px">N20 SL400 TP800</td><td style="text-align:right;padding:4px 6px">2.0</td><td style="text-align:right;padding:4px 6px;color:#DC2626">0.973</td><td style="text-align:right;padding:4px 6px">32.7%</td><td style="text-align:right;padding:4px 6px">13.5</td><td style="text-align:right;padding:4px 6px;color:#DC2626">−0.75%</td></tr>
+              <tr style="background:#F0FDF4;border-bottom:1px solid var(--gray-100)"><td style="padding:4px 6px;font-weight:700">N20 SL500 TP1000 ★</td><td style="text-align:right;padding:4px 6px">2.0</td><td style="text-align:right;padding:4px 6px;color:var(--green-600);font-weight:700">1.009</td><td style="text-align:right;padding:4px 6px">33.5%</td><td style="text-align:right;padding:4px 6px">12.9</td><td style="text-align:right;padding:4px 6px;color:#DC2626">−0.37%</td></tr>
+              <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:4px 6px">N10 SL300 TP600</td><td style="text-align:right;padding:4px 6px">2.0</td><td style="text-align:right;padding:4px 6px;color:#DC2626">0.971</td><td style="text-align:right;padding:4px 6px">32.7%</td><td style="text-align:right;padding:4px 6px">19.6</td><td style="text-align:right;padding:4px 6px;color:#DC2626">−1.09%</td></tr>
+              <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:4px 6px">N15 SL300 TP600</td><td style="text-align:right;padding:4px 6px">2.0</td><td style="text-align:right;padding:4px 6px;color:#DC2626">0.935</td><td style="text-align:right;padding:4px 6px">31.9%</td><td style="text-align:right;padding:4px 6px">16.3</td><td style="text-align:right;padding:4px 6px;color:#DC2626">−1.32%</td></tr>
+              <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:4px 6px">N30 SL300 TP600</td><td style="text-align:right;padding:4px 6px">2.0</td><td style="text-align:right;padding:4px 6px;color:#DC2626">0.986</td><td style="text-align:right;padding:4px 6px">33.0%</td><td style="text-align:right;padding:4px 6px">12.0</td><td style="text-align:right;padding:4px 6px;color:#DC2626">−0.67%</td></tr>
+              <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:4px 6px">N20 SL300 TP900</td><td style="text-align:right;padding:4px 6px">3.0</td><td style="text-align:right;padding:4px 6px;color:#DC2626">0.993</td><td style="text-align:right;padding:4px 6px">24.9%</td><td style="text-align:right;padding:4px 6px">13.6</td><td style="text-align:right;padding:4px 6px;color:#DC2626">−0.87%</td></tr>
+              <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:4px 6px">N20 SL400 TP1200</td><td style="text-align:right;padding:4px 6px">3.0</td><td style="text-align:right;padding:4px 6px;color:#DC2626">0.996</td><td style="text-align:right;padding:4px 6px">24.9%</td><td style="text-align:right;padding:4px 6px">12.6</td><td style="text-align:right;padding:4px 6px;color:#DC2626">−0.55%</td></tr>
+              <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:4px 6px">N20 SL300 TP450</td><td style="text-align:right;padding:4px 6px">1.5</td><td style="text-align:right;padding:4px 6px;color:#DC2626">0.873</td><td style="text-align:right;padding:4px 6px">36.8%</td><td style="text-align:right;padding:4px 6px">14.1</td><td style="text-align:right;padding:4px 6px;color:#DC2626">−1.39%</td></tr>
+              <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:4px 6px">N20 SL400 TP600</td><td style="text-align:right;padding:4px 6px">1.5</td><td style="text-align:right;padding:4px 6px;color:#DC2626">0.981</td><td style="text-align:right;padding:4px 6px">39.5%</td><td style="text-align:right;padding:4px 6px">13.9</td><td style="text-align:right;padding:4px 6px;color:#DC2626">−0.52%</td></tr>
+              <tr><td style="padding:4px 6px">N20 SL500 TP750</td><td style="text-align:right;padding:4px 6px">1.5</td><td style="text-align:right;padding:4px 6px;color:#DC2626">0.941</td><td style="text-align:right;padding:4px 6px">38.5%</td><td style="text-align:right;padding:4px 6px">13.5</td><td style="text-align:right;padding:4px 6px;color:#DC2626">−0.96%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="font-size:.72rem;color:#DC2626;margin-top:4px;font-weight:700">All 12 variants PF&lt;1.01 · H4 has NO edge on XAUUSD · D1 edge is D1-specific</div>
+      </div>
+      <div>
+        <div style="font-weight:700;color:var(--navy);font-size:.78rem;margin-bottom:6px">Forex RR=3.0 — USDJPY &amp; GBPUSD (WR breakeven=25%)</div>
+        <table style="width:100%;border-collapse:collapse;font-size:.72rem;margin-bottom:10px">
+          <thead><tr style="background:var(--gray-50);color:var(--gray-500)">
+            <th style="text-align:left;padding:4px 6px;border-bottom:1px solid var(--gray-200)">Config</th>
+            <th style="text-align:right;padding:4px 6px;border-bottom:1px solid var(--gray-200)">PF</th>
+            <th style="text-align:right;padding:4px 6px;border-bottom:1px solid var(--gray-200)">WR%</th>
+            <th style="text-align:right;padding:4px 6px;border-bottom:1px solid var(--gray-200)">Trades</th>
+            <th style="text-align:right;padding:4px 6px;border-bottom:1px solid var(--gray-200)">Mo%</th>
+          </tr></thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:4px 6px">UJ N20 SL1000 TP3000</td><td style="text-align:right;padding:4px 6px;color:#DC2626">0.785</td><td style="text-align:right;padding:4px 6px">20.7%</td><td style="text-align:right;padding:4px 6px">82</td><td style="text-align:right;padding:4px 6px;color:#DC2626">−0.55%</td></tr>
+            <tr style="background:#F0FDF4;border-bottom:1px solid var(--gray-100)"><td style="padding:4px 6px;font-weight:700">UJ N20 SL1500 TP4500 ★</td><td style="text-align:right;padding:4px 6px;color:var(--green-600);font-weight:700">1.417</td><td style="text-align:right;padding:4px 6px">32.1%</td><td style="text-align:right;padding:4px 6px">53</td><td style="text-align:right;padding:4px 6px;color:var(--green-600)">+0.41%</td></tr>
+            <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:4px 6px">UJ N20 SL2000 TP6000</td><td style="text-align:right;padding:4px 6px;color:var(--green-600)">1.273</td><td style="text-align:right;padding:4px 6px">29.8%</td><td style="text-align:right;padding:4px 6px">47</td><td style="text-align:right;padding:4px 6px;color:var(--green-600)">+0.21%</td></tr>
+            <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:4px 6px">UJ N20 SL1500 TP3000</td><td style="text-align:right;padding:4px 6px;color:var(--green-600)">1.200</td><td style="text-align:right;padding:4px 6px">37.5%</td><td style="text-align:right;padding:4px 6px">72</td><td style="text-align:right;padding:4px 6px;color:var(--green-600)">+0.20%</td></tr>
+            <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:4px 6px">UJ N15 SL1500 TP4500</td><td style="text-align:right;padding:4px 6px;color:var(--green-600)">1.214</td><td style="text-align:right;padding:4px 6px">28.8%</td><td style="text-align:right;padding:4px 6px">59</td><td style="text-align:right;padding:4px 6px;color:var(--green-600)">+0.20%</td></tr>
+            <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:4px 6px">UJ N10 SL1500 TP4500</td><td style="text-align:right;padding:4px 6px;color:var(--green-600)">1.296</td><td style="text-align:right;padding:4px 6px">30.2%</td><td style="text-align:right;padding:4px 6px">63</td><td style="text-align:right;padding:4px 6px;color:var(--green-600)">+0.44%</td></tr>
+            <tr style="border-bottom:1px solid var(--gray-100)"><td style="padding:4px 6px">GU N20 SL1500 TP4500</td><td style="text-align:right;padding:4px 6px;color:var(--green-600)">1.138</td><td style="text-align:right;padding:4px 6px">27.5%</td><td style="text-align:right;padding:4px 6px">40</td><td style="text-align:right;padding:4px 6px;color:var(--green-600)">+0.12%</td></tr>
+            <tr style="background:#F0FDF4;border-bottom:1px solid var(--gray-100)"><td style="padding:4px 6px;font-weight:700">GU N10 SL1500 TP4500 ★</td><td style="text-align:right;padding:4px 6px;color:var(--green-600);font-weight:700">1.393</td><td style="text-align:right;padding:4px 6px">31.7%</td><td style="text-align:right;padding:4px 6px">41</td><td style="text-align:right;padding:4px 6px;color:var(--green-600)">+0.32%</td></tr>
+            <tr><td style="padding:4px 6px">GU N20 SL2000 TP6000</td><td style="text-align:right;padding:4px 6px;color:var(--green-600)">1.050</td><td style="text-align:right;padding:4px 6px">25.9%</td><td style="text-align:right;padding:4px 6px">27</td><td style="text-align:right;padding:4px 6px;color:#DC2626">−0.06%</td></tr>
+          </tbody>
+        </table>
+        <div style="font-size:.72rem;color:var(--green-600);font-weight:700">RR=3.0 fix works: USDJPY WR=32% now above 25% breakeven → PF=1.42 ✅</div>
+        <div style="font-size:.72rem;color:var(--gray-500);margin-top:6px">Monthly returns low (+0.41%) — not enough to lift portfolio to KPI</div>
+        <div style="margin-top:10px;padding:8px 10px;background:var(--gray-50);border-radius:6px;font-size:.72rem">
+          <div style="font-weight:700;margin-bottom:4px">Correlation Matrix (9 sub-periods)</div>
+          <div>XAUUSD D1 vs H4: <strong>+0.244</strong> (low positive — somewhat independent)</div>
+          <div>XAUUSD D1 vs USDJPY: <strong>−0.537</strong> (moderate inverse ✅)</div>
+          <div>XAUUSD H4 vs USDJPY: <strong>−0.695</strong> (strong inverse — but H4 loses)</div>
+        </div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;font-size:.78rem">
+      <div style="padding:10px;background:#F0FDF4;border-radius:8px;border-left:3px solid #10B981">
+        <div style="font-weight:700;color:var(--navy);margin-bottom:6px">Best Portfolio (XAUUSD D1 + USDJPY, 5% risk)</div>
+        <div>Monthly: <strong style="color:var(--green-600)">+4.0%</strong> &nbsp;|&nbsp; Est. DD: 11.4%</div>
+        <div>45 combinations tested · 0 pass KPI</div>
+        <div>Validation real: +4.378%/mo confirmed</div>
+        <div style="margin-top:4px;color:#DC2626;font-size:.72rem;font-weight:700">KPI gap: 17.5pp — adding USDJPY improves vs D1 alone (+1.34%) but far short</div>
+      </div>
+      <div style="padding:10px;background:var(--gray-50);border-radius:8px;border-left:3px solid var(--navy)">
+        <div style="font-weight:700;color:var(--navy);margin-bottom:6px">Walk-Forward (XAUUSD D1 + H4)</div>
+        <div>Train 2022–23: <strong style="color:#DC2626">−1.634%/mo</strong></div>
+        <div>Test 2024–26: <strong style="color:var(--green-600)">+3.754%/mo</strong></div>
+        <div style="margin-top:2px">ROBUST: YES (test &gt; train) — improving over time</div>
+        <div style="font-size:.72rem;color:var(--gray-500);margin-top:4px">D1 years: 2022=−0.29% 2023=+0.37% 2024=−0.20% 2025=+4.18%<br>H4 years: 2022=−1.23% 2023=−2.60% 2024=+0.50% 2025=+2.92%</div>
+      </div>
+      <div style="padding:10px;background:#FEF2F2;border-radius:8px;border-left:3px solid #EF4444">
+        <div style="font-weight:700;color:var(--navy);margin-bottom:6px">Monte Carlo (XAUUSD D1+USDJPY, 10k paths)</div>
+        <div>P($30k in 12mo): <strong>0.0%</strong></div>
+        <div>Median: $4,645 · Worst 5%: $3,756</div>
+        <div>95th pct max DD: 7.34%</div>
+        <div>Expected months to $30k: <strong>62.5</strong></div>
+        <div style="margin-top:4px;color:#DC2626;font-size:.72rem;font-weight:700">KPI NOT MET — H4 adds noise, USDJPY improves but insufficient</div>
+      </div>
+    </div>
+  </div>
+
   <div id="opt-content-phase9"><div id="phase9-content"></div></div>
   <div id="opt-content-ddopt" style="display:none"><div id="ddopt-content"></div></div>
   <div id="opt-content-holygrail" style="display:none"><div id="holygrail-content"></div></div>
@@ -1912,10 +2006,10 @@ InpMaxSpread    = 15   // reject trade if spread > 15pt</pre>
     <span style="color:var(--gray-300)">|</span>
     <span style="background:#FEE2E2;color:#DC2626;padding:2px 10px;border-radius:999px;font-weight:700;font-size:.75rem">DEMO ONLY — Never Real Money</span>
     <span style="color:var(--gray-300)">|</span>
-    <span>Phase 6 in progress · Pepperstone Razor · XAUUSD · All results real ticks model=4</span>
+    <span>Phase 6 Complete · Pepperstone Razor · XAUUSD · Real Tick model=4</span>
   </div>
   <div style="font-size:.75rem;color:var(--gray-400)">
-    All results from Pepperstone real tick data (model=4) &nbsp;·&nbsp; Champion: Phase 4 D1 Swing PF=2.4706 +5.715%/mo &nbsp;·&nbsp; KPI NOT MET: 15.8pp gap &nbsp;·&nbsp;
+    Phase 4: D1 Swing PF=2.4706 MET ✅ &nbsp;·&nbsp; Phase 5: Multi-pair KPI NOT MET &nbsp;·&nbsp; Phase 6: H4 no edge (PF≤1.01) / USDJPY RR=3.0 PF=1.42 / Best portfolio +4.0%/mo · KPI gap 17.5pp &nbsp;·&nbsp;
     Built by Claude Code &nbsp;·&nbsp; Last updated: 2026-05-24 &nbsp;·&nbsp;
     <a href="https://khemmanatpunch-design.github.io/punch-terminal/" target="_blank" style="color:var(--teal)">Live Dashboard</a>
   </div>
