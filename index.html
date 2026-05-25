@@ -4933,5 +4933,261 @@ document.addEventListener('DOMContentLoaded', function() {
   pageInited['home'] = true;
 });
 </script>
+<!--
+  APEX LOOP WIDGET — paste into /Users/p/punch-terminal/index.html
+  Place inside an existing page section. Self-contained: styles + script.
+  Reads ./apex_loop_data.json (encrypted), prompts for password on first view.
+  Password is the same as your dashboard gate (P6665 by default).
+-->
+
+<section id="apex-loop-widget" style="
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 24px;
+  margin: 24px 0;
+  max-width: 100%;
+">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+    <div>
+      <h2 style="margin:0;font-size:20px;font-weight:600;color:#111827;">APEX Loop</h2>
+      <div id="apex-status" style="font-size:13px;color:#6b7280;margin-top:4px;">Loading...</div>
+    </div>
+    <button id="apex-refresh" onclick="apexLoopRefresh()" style="
+      background:#f3f4f6;border:1px solid #d1d5db;border-radius:6px;
+      padding:6px 12px;font-size:13px;cursor:pointer;color:#374151;
+    ">Refresh</button>
+  </div>
+
+  <div id="apex-unlock" style="display:none;padding:16px 0;">
+    <input type="password" id="apex-password" placeholder="Dashboard password"
+           style="padding:8px 12px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;width:200px;"
+           onkeydown="if(event.key==='Enter')apexLoopUnlock()" />
+    <button onclick="apexLoopUnlock()" style="
+      background:#ec4899;color:white;border:none;border-radius:6px;
+      padding:9px 16px;font-size:14px;cursor:pointer;margin-left:8px;
+    ">Unlock</button>
+    <div id="apex-unlock-error" style="color:#dc2626;font-size:13px;margin-top:8px;display:none;"></div>
+  </div>
+
+  <div id="apex-content" style="display:none;">
+    <!-- KPI Progress -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+      <div style="padding:12px;background:#f9fafb;border-radius:8px;">
+        <div style="font-size:12px;color:#6b7280;margin-bottom:4px;">Annual Return</div>
+        <div id="apex-return" style="font-size:24px;font-weight:600;color:#111827;">—</div>
+        <div id="apex-return-bar" style="height:6px;background:#e5e7eb;border-radius:3px;margin-top:8px;overflow:hidden;">
+          <div id="apex-return-fill" style="height:100%;background:#10b981;width:0%;transition:width 0.5s;"></div>
+        </div>
+        <div style="font-size:11px;color:#9ca3af;margin-top:4px;">Target: ≥1000%</div>
+      </div>
+      <div style="padding:12px;background:#f9fafb;border-radius:8px;">
+        <div style="font-size:12px;color:#6b7280;margin-bottom:4px;">Max Drawdown</div>
+        <div id="apex-dd" style="font-size:24px;font-weight:600;color:#111827;">—</div>
+        <div id="apex-dd-bar" style="height:6px;background:#e5e7eb;border-radius:3px;margin-top:8px;overflow:hidden;">
+          <div id="apex-dd-fill" style="height:100%;background:#ec4899;width:0%;transition:width 0.5s;"></div>
+        </div>
+        <div style="font-size:11px;color:#9ca3af;margin-top:4px;">Target: ≤15%</div>
+      </div>
+    </div>
+
+    <!-- KPI gate indicator -->
+    <div id="apex-kpi-gate" style="
+      padding:10px 14px;border-radius:8px;font-size:14px;font-weight:500;
+      margin-bottom:16px;text-align:center;
+    ">—</div>
+
+    <!-- Iteration meta -->
+    <div style="display:flex;justify-content:space-between;font-size:13px;color:#6b7280;margin-bottom:16px;">
+      <span>Iteration <strong id="apex-iter" style="color:#111827;">—</strong> of 50</span>
+      <span>PF: <strong id="apex-pf" style="color:#111827;">—</strong></span>
+      <span>WR: <strong id="apex-wr" style="color:#111827;">—</strong></span>
+      <span>Trades: <strong id="apex-trades" style="color:#111827;">—</strong></span>
+    </div>
+
+    <!-- Sparkline of return over iterations -->
+    <div style="margin-bottom:8px;">
+      <div style="font-size:12px;color:#6b7280;margin-bottom:6px;">Return % by iteration</div>
+      <svg id="apex-sparkline" width="100%" height="60" viewBox="0 0 400 60" style="overflow:visible;"></svg>
+    </div>
+
+    <div id="apex-last-update" style="font-size:11px;color:#9ca3af;text-align:right;margin-top:12px;">—</div>
+  </div>
+</section>
+
+<script>
+(function() {
+  // Same KDF parameters as publish_to_dashboard.py
+  const PBKDF2_ITERATIONS = 100000;
+  const STORAGE_KEY = 'apex_loop_password';
+  let cachedPassword = sessionStorage.getItem(STORAGE_KEY) || null;
+
+  async function deriveKey(password, salt) {
+    const enc = new TextEncoder();
+    const baseKey = await crypto.subtle.importKey(
+      'raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']
+    );
+    return await crypto.subtle.deriveKey(
+      { name: 'PBKDF2', salt: salt, iterations: PBKDF2_ITERATIONS, hash: 'SHA-256' },
+      baseKey,
+      { name: 'AES-GCM', length: 256 },
+      false,
+      ['decrypt']
+    );
+  }
+
+  function b64decode(s) {
+    return Uint8Array.from(atob(s), c => c.charCodeAt(0));
+  }
+
+  async function fetchAndDecrypt(password) {
+    // Cache-bust so we always get latest
+    const resp = await fetch('./apex_loop_data.json?t=' + Date.now());
+    if (!resp.ok) throw new Error('Loop data not found');
+    const blob = await resp.json();
+
+    if (blob.alg !== 'AES-256-GCM') throw new Error('Unknown encryption');
+    const salt = b64decode(blob.salt);
+    const nonce = b64decode(blob.nonce);
+    const ct = b64decode(blob.ct);
+
+    const key = await deriveKey(password, salt);
+    const plaintext = await crypto.subtle.decrypt(
+      { name: 'AES-GCM', iv: nonce }, key, ct
+    );
+    return JSON.parse(new TextDecoder().decode(plaintext));
+  }
+
+  function setStatus(text) {
+    document.getElementById('apex-status').textContent = text;
+  }
+
+  function renderSparkline(history) {
+    const svg = document.getElementById('apex-sparkline');
+    svg.innerHTML = '';
+    if (!history || history.length === 0) return;
+    const returns = history.map(h => h.annual_return_pct || 0);
+    const maxR = Math.max(...returns, 1000);
+    const minR = 0;
+    const w = 400, h = 60;
+    const points = returns.map((r, i) => {
+      const x = (i / Math.max(history.length - 1, 1)) * w;
+      const y = h - ((r - minR) / (maxR - minR)) * h;
+      return `${x},${y}`;
+    }).join(' ');
+    svg.innerHTML = `
+      <polyline points="${points}" fill="none" stroke="#10b981" stroke-width="2" />
+      ${returns.map((r, i) => {
+        const x = (i / Math.max(history.length - 1, 1)) * w;
+        const y = h - ((r - minR) / (maxR - minR)) * h;
+        return `<circle cx="${x}" cy="${y}" r="3" fill="#10b981" />`;
+      }).join('')}
+      <line x1="0" y1="${h - (1000 / maxR) * h}" x2="${w}" y2="${h - (1000 / maxR) * h}"
+            stroke="#9ca3af" stroke-width="1" stroke-dasharray="4 2" />
+    `;
+  }
+
+  function render(state) {
+    document.getElementById('apex-unlock').style.display = 'none';
+    document.getElementById('apex-content').style.display = 'block';
+
+    const history = state.history || [];
+    const last = history[history.length - 1] || {};
+    const returnPct = last.annual_return_pct || 0;
+    const ddPct = last.max_drawdown_pct || 0;
+
+    document.getElementById('apex-iter').textContent = state.iteration || 0;
+    document.getElementById('apex-return').textContent = returnPct.toFixed(1) + '%';
+    document.getElementById('apex-dd').textContent = ddPct.toFixed(1) + '%';
+    document.getElementById('apex-pf').textContent = (last.profit_factor || 0).toFixed(2);
+    document.getElementById('apex-wr').textContent = (last.win_rate_pct || 0).toFixed(1) + '%';
+    document.getElementById('apex-trades').textContent = last.total_trades || 0;
+
+    // Bars: return is % of 1000 (cap at 100%), DD is % of 15 (cap at 100%, color shift if over)
+    document.getElementById('apex-return-fill').style.width = Math.min(returnPct / 10, 100) + '%';
+    const ddRatio = (ddPct / 15) * 100;
+    document.getElementById('apex-dd-fill').style.width = Math.min(ddRatio, 100) + '%';
+    document.getElementById('apex-dd-fill').style.background =
+      ddPct > 15 ? '#dc2626' : '#ec4899';
+
+    // Gate
+    const gate = document.getElementById('apex-kpi-gate');
+    if (state.kpi_hit) {
+      gate.textContent = '🎯 KPI ACHIEVED';
+      gate.style.background = '#d1fae5';
+      gate.style.color = '#065f46';
+    } else {
+      const passing = returnPct >= 1000 && ddPct <= 15;
+      gate.textContent = passing ? '✓ Metrics pass (awaiting Monte Carlo confirmation)' : '⏳ KPI not yet met';
+      gate.style.background = passing ? '#fef3c7' : '#f3f4f6';
+      gate.style.color = passing ? '#92400e' : '#374151';
+    }
+
+    renderSparkline(history);
+
+    const startedAt = state.started_at ? new Date(state.started_at).toLocaleString() : 'unknown';
+    document.getElementById('apex-last-update').textContent =
+      `Last update: ${new Date().toLocaleTimeString()} • Started: ${startedAt}`;
+
+    setStatus(state.kpi_hit ? 'Complete' : 'Running');
+  }
+
+  window.apexLoopUnlock = async function() {
+    const pw = document.getElementById('apex-password').value;
+    const err = document.getElementById('apex-unlock-error');
+    err.style.display = 'none';
+    if (!pw) return;
+    try {
+      const state = await fetchAndDecrypt(pw);
+      cachedPassword = pw;
+      sessionStorage.setItem(STORAGE_KEY, pw);
+      render(state);
+    } catch (e) {
+      err.textContent = 'Wrong password or corrupted data';
+      err.style.display = 'block';
+      console.error(e);
+    }
+  };
+
+  window.apexLoopRefresh = async function() {
+    if (!cachedPassword) {
+      document.getElementById('apex-unlock').style.display = 'block';
+      setStatus('Locked');
+      return;
+    }
+    setStatus('Refreshing...');
+    try {
+      const state = await fetchAndDecrypt(cachedPassword);
+      render(state);
+    } catch (e) {
+      setStatus('Error: ' + e.message);
+      console.error(e);
+    }
+  };
+
+  // Initial load
+  (async function init() {
+    if (cachedPassword) {
+      try {
+        const state = await fetchAndDecrypt(cachedPassword);
+        render(state);
+        return;
+      } catch (e) {
+        sessionStorage.removeItem(STORAGE_KEY);
+        cachedPassword = null;
+      }
+    }
+    document.getElementById('apex-unlock').style.display = 'block';
+    setStatus('Locked — enter password');
+  })();
+
+  // Auto-refresh every 60s if unlocked
+  setInterval(() => {
+    if (cachedPassword) apexLoopRefresh();
+  }, 60000);
+})();
+</script>
+
 </body>
 </html>
