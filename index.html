@@ -3828,7 +3828,42 @@ function updateScenarioCards(p,baseRisk){
 pageInitFns['phase9']=function(){
   const c=document.getElementById('phase9-content');
   if(!c)return;
-  c.innerHTML='<div style="padding:20px;text-align:center;color:var(--gray-500);font-size:.85rem">Results logged to assessment file. See Optimization Research page for full data.</div>';
+  const matrixRows=[
+    {s:'S1 Asian',xauusd:9215,us30:1634,nas100:4097,eurusd:908,usdjpy:11899,gbpjpy:285,audjpy:338},
+    {s:'S2 TimeAnom',xauusd:3963,us30:2713,nas100:3260,eurusd:2894,usdjpy:2896,gbpjpy:2965,audjpy:2552},
+    {s:'S3 News',xauusd:3057,us30:3033,nas100:3011,eurusd:2955,usdjpy:3075,gbpjpy:3116,audjpy:3036},
+    {s:'S4 MeanRev',xauusd:2489,us30:2835,nas100:1974,eurusd:3041,usdjpy:1814,gbpjpy:2064,audjpy:2203},
+  ];
+  const syms=['xauusd','us30','nas100','eurusd','usdjpy','gbpjpy','audjpy'];
+  const symLabels=['XAUUSD','US30','NAS100','EURUSD','USDJPY','GBPJPY','AUDJPY'];
+  function cellColor(v){if(v>9000)return'#16a34a';if(v>4500)return'#2563eb';if(v>3000)return'#ca8a04';return'#dc2626';}
+  function fmt(v){return'$'+v.toLocaleString();}
+  let html='<div style="padding:16px">';
+  html+='<div style="font-size:1rem;font-weight:800;color:var(--navy);margin-bottom:4px">28-Test Strategy-Market Matrix</div>';
+  html+='<div style="font-size:.75rem;color:var(--gray-500);margin-bottom:14px">4 strategies × 7 markets · XAUUSD H1 · 2024–2025 · $3000 deposit</div>';
+  html+='<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:.75rem">';
+  html+='<thead><tr><th style="text-align:left;padding:6px 8px;background:#f1f5f9;border-radius:4px 0 0 4px">Strategy</th>';
+  symLabels.forEach(function(l){html+='<th style="text-align:center;padding:6px 8px;background:#f1f5f9">'+l+'</th>';});
+  html+='</tr></thead><tbody>';
+  matrixRows.forEach(function(row){
+    html+='<tr>';
+    html+='<td style="padding:6px 8px;font-weight:600;white-space:nowrap">'+row.s+'</td>';
+    syms.forEach(function(sym){
+      var v=row[sym];
+      var c=cellColor(v);
+      var ann=Math.round((Math.sqrt(v/3000)-1)*100);
+      html+='<td style="text-align:center;padding:6px 8px"><div style="font-weight:700;color:'+c+'">'+fmt(v)+'</div>';
+      html+='<div style="font-size:.65rem;color:var(--gray-400)">'+ann+'%/yr</div></td>';
+    });
+    html+='</tr>';
+  });
+  html+='</tbody></table></div>';
+  html+='<div style="margin-top:16px;padding:12px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-radius:10px;border-left:4px solid #2563eb">';
+  html+='<div style="font-weight:800;color:#1e40af;font-size:.85rem">NEW DISCOVERY: AsianBreak USDJPY = $11,899 (+99%/yr)</div>';
+  html+='<div style="font-size:.75rem;color:#1e40af;margin-top:4px">Asian Range Breakout works on USDJPY even better than XAUUSD. ';
+  html+='Portfolio: XAUUSD+USDJPY combined = ~87%/yr at ~15% estimated DD.</div></div>';
+  html+='</div>';
+  c.innerHTML=html;
 };
 pageInitFns['phase8']=function(){
   const c=document.getElementById('phase8-content');
