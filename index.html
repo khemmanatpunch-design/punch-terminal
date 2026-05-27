@@ -1993,11 +1993,13 @@ InpMaxSpread    = 15   // reject trade if spread > 15pt</pre>
     <button onclick="switchOptTab('phase10')" style="padding:7px 18px;background:#F59E0B;color:#fff;border:none;border-radius:8px;font-size:.78rem;font-weight:700;cursor:pointer">Phase 10 — GOLD DEEP TEST ★</button>
     <button onclick="switchOptTab('phase12')" style="padding:7px 18px;background:#7C3AED;color:#fff;border:none;border-radius:8px;font-size:.78rem;font-weight:700;cursor:pointer">Phase 12 — SIZING MATRIX ◆</button>
     <button onclick="switchOptTab('phase13')" style="padding:7px 18px;background:#0F766E;color:#fff;border:none;border-radius:8px;font-size:.78rem;font-weight:700;cursor:pointer">Phase 13 — MULTI-MARKET ★</button>
+    <button onclick="switchOptTab('phase14')" style="padding:7px 18px;background:#DC2626;color:#fff;border:none;border-radius:8px;font-size:.78rem;font-weight:700;cursor:pointer">Phase 14a — VALIDATION ❌</button>
   </div>
   <div id="opt-content-phase9"><div id="phase9-content"></div></div>
   <div id="opt-content-phase10" style="display:none"><div id="phase10-content"></div></div>
   <div id="opt-content-phase12" style="display:none"><div id="phase12-content"></div></div>
   <div id="opt-content-phase13" style="display:none"><div id="phase13-content"></div></div>
+  <div id="opt-content-phase14" style="display:none"><div id="phase14-content"></div></div>
   <div id="opt-content-ddopt" style="display:none"><div id="ddopt-content"></div></div>
   <div id="opt-content-holygrail" style="display:none"><div id="holygrail-content"></div></div>
   <div id="opt-content-researchlog" style="display:none"><div id="researchlog-content-inner"></div></div>
@@ -2122,6 +2124,7 @@ const PAGE_REDIRECTS={
   phase10:{page:'optimization',tab:()=>switchOptTab('phase10')},
   phase12:{page:'optimization',tab:()=>switchOptTab('phase12')},
   phase13:{page:'optimization',tab:()=>switchOptTab('phase13')},
+  phase14:{page:'optimization',tab:()=>switchOptTab('phase14')},
   risk:{page:'tools',tab:()=>switchToolsTab('risk')},
   calculator:{page:'tools',tab:()=>switchToolsTab('calculator')},
   compound:{page:'tools',tab:()=>switchToolsTab('compound')},
@@ -2274,7 +2277,7 @@ function switchToolsTab(tab){
   if(key&&!pageInited[key]&&pageInitFns[key]){pageInitFns[key]();pageInited[key]=true;}
 }
 function switchOptTab(tab){
-  ['phase9','phase10','phase12','phase13','ddopt','holygrail','researchlog'].forEach(t=>{
+  ['phase9','phase10','phase12','phase13','phase14','ddopt','holygrail','researchlog'].forEach(t=>{
     const el=document.getElementById('opt-content-'+t);
     if(el)el.style.display=t===tab?'block':'none';
     const btn=document.getElementById('opt-tab-'+t);
@@ -2286,6 +2289,7 @@ function switchOptTab(tab){
     phase10:()=>{if(!pageInited['phase10']&&pageInitFns['phase10']){pageInitFns['phase10']();pageInited['phase10']=true;}},
     phase12:()=>{if(!pageInited['phase12']&&pageInitFns['phase12']){pageInitFns['phase12']();pageInited['phase12']=true;}},
     phase13:()=>{if(!pageInited['phase13']&&pageInitFns['phase13']){pageInitFns['phase13']();pageInited['phase13']=true;}},
+    phase14:()=>{if(!pageInited['phase14']&&pageInitFns['phase14']){pageInitFns['phase14']();pageInited['phase14']=true;}},
     ddopt:()=>{if(!pageInited['ddopt']&&pageInitFns['ddopt']){pageInitFns['ddopt']();pageInited['ddopt']=true;}},
     holygrail:()=>{if(!pageInited['holygrail']&&pageInitFns['holygrail']){pageInitFns['holygrail']();pageInited['holygrail']=true;}},
     researchlog:()=>{
@@ -2319,7 +2323,130 @@ pageInitFns['researchlog']=function(){toggleRLPhase(7,true);};
 pageInitFns['phase14']=function(){
   const c=document.getElementById('phase14-content');
   if(!c)return;
-  c.innerHTML='<div style="padding:20px;text-align:center;color:var(--gray-500);font-size:.85rem">Results logged to assessment file. See Optimization Research page for full data.</div>';
+  c.innerHTML='';
+  const ddData=[
+    {ea:'APEX_SZ2_X2_USDJPY_v1', bal:33889,peak:73211,dd:54.3,ls:24,pf:1.40,status:'BLOCKED'},
+    {ea:'APEX_SZ2_EA1_USDJPY_v1',bal:21475,peak:35318,dd:49.6,ls:19,pf:1.51,status:'WARNING'},
+    {ea:'APEX_SZ5_X2_USDJPY_v1', bal:22289,peak:35958,dd:43.0,ls:24,pf:1.50,status:'WARNING'},
+    {ea:'APEX_SZ5_EA1_USDJPY_v1',bal:14892,peak:20432,dd:36.1,ls:19,pf:1.61,status:'WARNING'},
+    {ea:'APEX_SZ4_X2_USDJPY_v1', bal:18214,peak:27945,dd:40.1,ls:24,pf:1.51,status:'WARNING'},
+    {ea:'APEX_SZ4_EA1_USDJPY_v1',bal:12233,peak:16338,dd:32.7,ls:19,pf:1.61,status:'WARNING'},
+    {ea:'APEX_SZ4_TI1_USDJPY_v1',bal:6680, peak:10612,dd:46.3,ls:27,pf:1.41,status:'WARNING'},
+    {ea:'APEX_SZ2_TI1_USDJPY_v1',bal:7310, peak:17032,dd:64.2,ls:27,pf:1.29,status:'BLOCKED'},
+    {ea:'APEX_SZ5_TI1_USDJPY_v1',bal:6943, peak:11754,dd:50.5,ls:27,pf:1.38,status:'BLOCKED'},
+    {ea:'APEX_SZ2_TI1_v1',        bal:33549,peak:47337,dd:57.6,ls:17,pf:1.58,status:'BLOCKED'},
+    {ea:'APEX_SZ5_TI1_v1',        bal:18524,peak:22495,dd:39.8,ls:17,pf:1.69,status:'WARNING'},
+    {ea:'APEX_SZ5_EA1_v1',        bal:10119,peak:12354,dd:49.5,ls:21,pf:1.33,status:'WARNING'},
+  ];
+  const wfData=[
+    {ea:'APEX_SZ2_X2_USDJPY_v1', sym:'USDJPY',isbal:33889,oosBal:835,  oosTr:273,oosWr:15.0,edge:'COLLAPSED'},
+    {ea:'APEX_SZ5_X2_USDJPY_v1', sym:'USDJPY',isbal:22289,oosBal:2282, oosTr:273,oosWr:15.0,edge:'COLLAPSED'},
+    {ea:'APEX_SZ2_EA1_USDJPY_v1',sym:'USDJPY',isbal:21475,oosBal:743,  oosTr:171,oosWr:14.0,edge:'COLLAPSED'},
+    {ea:'APEX_SZ5_EA1_USDJPY_v1',sym:'USDJPY',isbal:14892,oosBal:1726, oosTr:171,oosWr:14.0,edge:'COLLAPSED'},
+    {ea:'APEX_SZ2_TI1_v1',        sym:'XAUUSD',isbal:33549,oosBal:120,  oosTr:154,oosWr:8.4, edge:'COLLAPSED'},
+    {ea:'APEX_SZ5_TI1_v1',        sym:'XAUUSD',isbal:18524,oosBal:501,  oosTr:154,oosWr:8.4, edge:'COLLAPSED'},
+  ];
+  const hdr=document.createElement('div');
+  hdr.innerHTML='<div style="padding:14px 16px;background:linear-gradient(135deg,#FEF2F2,#FFF7F7);border-radius:10px;border-left:4px solid #DC2626;margin-bottom:14px;font-size:.78rem;color:var(--navy);line-height:1.7">'
+    +'<b>Phase 14a — DD VERIFICATION + WALK-FORWARD VALIDATION: 12 DD metrics + 6 Walk-Forward tests</b><br>'
+    +'<b style="color:#DC2626;font-size:.85rem">DEPLOYMENT GATE: ❌ NO-GO — ALL 6 EAs COLLAPSED on 2022–2023 out-of-sample data</b><br>'
+    +'DD verification: 4 EAs BLOCKED (>50% DD) · 8 EAs WARNING (30–50%) · 0 EAs OK<br>'
+    +'Walk-forward: 6/6 COLLAPSED · Win rate dropped 19%→8–15% on unseen data<br>'
+    +'Correlation: X2+EA1 USDJPY = 0.767 (highly correlated, not truly diversified)<br>'
+    +'<b style="color:#7C3AED">CONCLUSION: 2024–2025 edge is regime-specific (yen carry trade era), not structural. Build native USDJPY EAs (Phase 14b).</b></div>';
+  c.appendChild(hdr);
+  const ddlbl=document.createElement('div');
+  ddlbl.style.cssText='margin-top:14px;margin-bottom:8px;font-size:.78rem;font-weight:700;color:var(--navy)';
+  ddlbl.textContent='Part 1: Drawdown Verification (12 EAs from tester log)';
+  c.appendChild(ddlbl);
+  const ddWrap=document.createElement('div');
+  ddWrap.style.overflowX='auto';
+  let dhtml='<table style="width:100%;border-collapse:collapse;font-size:.7rem">'
+    +'<thead><tr style="background:var(--gray-50);color:var(--gray-500);font-size:.67rem">'
+    +'<th style="text-align:left;padding:6px 10px;border-bottom:1px solid var(--gray-200)">EA</th>'
+    +'<th style="text-align:right;padding:6px 8px;border-bottom:1px solid var(--gray-200)">Balance</th>'
+    +'<th style="text-align:right;padding:6px 8px;border-bottom:1px solid var(--gray-200)">Peak</th>'
+    +'<th style="text-align:right;padding:6px 8px;border-bottom:1px solid var(--gray-200)">MaxDD%</th>'
+    +'<th style="text-align:right;padding:6px 8px;border-bottom:1px solid var(--gray-200)">LossStreak</th>'
+    +'<th style="text-align:right;padding:6px 8px;border-bottom:1px solid var(--gray-200)">PF</th>'
+    +'<th style="text-align:center;padding:6px 8px;border-bottom:1px solid var(--gray-200)">Status</th>'
+    +'</tr></thead><tbody>';
+  ddData.forEach(function(r){
+    const isBlocked=r.status==='BLOCKED';
+    const bg=isBlocked?'#FFF5F5':'#fff';
+    const ddCol=r.dd>50?'#DC2626':r.dd>35?'#D97706':'#10B981';
+    dhtml+='<tr style="background:'+bg+';border-bottom:1px solid var(--gray-100)">'
+      +'<td style="padding:6px 10px;font-weight:600;color:var(--navy);font-size:.68rem">'+r.ea+'</td>'
+      +'<td style="text-align:right;padding:6px 8px;color:var(--gray-700)">$'+r.bal.toLocaleString()+'</td>'
+      +'<td style="text-align:right;padding:6px 8px;color:var(--gray-500)">$'+r.peak.toLocaleString()+'</td>'
+      +'<td style="text-align:right;padding:6px 8px;font-weight:700;color:'+ddCol+'">'+r.dd.toFixed(1)+'%</td>'
+      +'<td style="text-align:right;padding:6px 8px;color:var(--gray-500)">'+r.ls+'</td>'
+      +'<td style="text-align:right;padding:6px 8px;color:var(--gray-600)">'+r.pf.toFixed(2)+'</td>'
+      +'<td style="text-align:center;padding:6px 8px;font-size:.75rem">'+(isBlocked?'⛔':'⚠️')+'</td>'
+      +'</tr>';
+  });
+  dhtml+='</tbody></table>';
+  ddWrap.innerHTML=dhtml;
+  c.appendChild(ddWrap);
+  const wflbl=document.createElement('div');
+  wflbl.style.cssText='margin-top:18px;margin-bottom:8px;font-size:.78rem;font-weight:700;color:var(--navy)';
+  wflbl.textContent='Part 2: Walk-Forward Validation (2022–2023 Out-of-Sample)';
+  c.appendChild(wflbl);
+  const wfWrap=document.createElement('div');
+  wfWrap.style.overflowX='auto';
+  let whtml='<table style="width:100%;border-collapse:collapse;font-size:.7rem">'
+    +'<thead><tr style="background:var(--gray-50);color:var(--gray-500);font-size:.67rem">'
+    +'<th style="text-align:left;padding:6px 10px;border-bottom:1px solid var(--gray-200)">EA</th>'
+    +'<th style="text-align:center;padding:6px 6px;border-bottom:1px solid var(--gray-200)">Symbol</th>'
+    +'<th style="text-align:right;padding:6px 8px;border-bottom:1px solid var(--gray-200)">IS 2024–2025</th>'
+    +'<th style="text-align:right;padding:6px 8px;border-bottom:1px solid var(--gray-200)">OOS 2022–2023</th>'
+    +'<th style="text-align:right;padding:6px 8px;border-bottom:1px solid var(--gray-200)">OOS Trades</th>'
+    +'<th style="text-align:right;padding:6px 8px;border-bottom:1px solid var(--gray-200)">OOS WR%</th>'
+    +'<th style="text-align:center;padding:6px 8px;border-bottom:1px solid var(--gray-200)">Edge</th>'
+    +'</tr></thead><tbody>';
+  wfData.forEach(function(r){
+    const oosPct=Math.round((r.oosBal/3000-1)*100);
+    const isPct=Math.round((r.isbal/3000-1)*100);
+    whtml+='<tr style="background:#FFF5F5;border-bottom:1px solid var(--gray-100)">'
+      +'<td style="padding:6px 10px;font-weight:600;color:var(--navy);font-size:.68rem">'+r.ea+'</td>'
+      +'<td style="text-align:center;padding:6px 6px;color:var(--gray-600)">'+r.sym+'</td>'
+      +'<td style="text-align:right;padding:6px 8px;color:var(--gray-700)">$'+r.isbal.toLocaleString()+' (+'+isPct+'%)</td>'
+      +'<td style="text-align:right;padding:6px 8px;font-weight:700;color:#DC2626">$'+r.oosBal.toLocaleString()+' ('+oosPct+'%)</td>'
+      +'<td style="text-align:right;padding:6px 8px;color:var(--gray-500)">'+r.oosTr+'</td>'
+      +'<td style="text-align:right;padding:6px 8px;color:var(--gray-500)">'+r.oosWr+'%</td>'
+      +'<td style="text-align:center;padding:6px 8px;font-weight:700;color:#DC2626;font-size:.72rem">❌ COLLAPSED</td>'
+      +'</tr>';
+  });
+  whtml+='</tbody></table>';
+  wfWrap.innerHTML=whtml;
+  c.appendChild(wfWrap);
+  const fl=document.createElement('div');
+  fl.style.cssText='margin-top:18px;margin-bottom:8px;font-size:.78rem;font-weight:700;color:var(--navy)';
+  fl.textContent='Key Findings';
+  c.appendChild(fl);
+  const findWrap=document.createElement('div');
+  findWrap.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:.75rem;margin-bottom:14px';
+  [
+    ['#DC2626','F1: ALL 6 EAs COLLAPSED on 2022–2023 (0/6 STRONG)','USDJPY WR dropped: 18.8–19.7% → 14.0–15.0%. XAUUSD TI1 WR collapsed: 19.6% → 8.4%. The edge exists only in the 2024–2025 yen-carry volatility regime.'],
+    ['#EF4444','F2: No EA cleared the 35% DD threshold','Best: SZ4+EA1+USDJPY at 32.7% DD. SZ2 EAs blocked (>50%). Even "safe" EAs have 30–50% DD — too high for prop-firm deployment without walk-forward confirmation.'],
+    ['#D97706','F3: X2+EA1 USDJPY correlation = 0.767 (HIGH)','Portfolio B assumed two decorrelated signals — but both trade USDJPY Asian session and respond identically to BOJ/carry events. 67.7% of X2 trades have concurrent EA1 exposure. Not truly diversified.'],
+    ['#7C3AED','F4: Phase 14b needed — build native USDJPY EAs','The Asian breakout logic is XAUUSD-native. USDJPY results are a 2024–2025 regime artefact. Phase 14b: build purpose-built USDJPY EA from Tokyo session range (00:00–08:00 GMT) with USDJPY-specific ATR and JPY carry filter.'],
+  ].forEach(function(item){
+    const d=document.createElement('div');
+    d.style.cssText='padding:10px;background:#fff;border-radius:8px;border-left:3px solid '+item[0];
+    d.innerHTML='<div style="font-weight:700;color:var(--navy);margin-bottom:4px">'+item[1]+'</div>'
+      +'<div style="color:var(--gray-600);line-height:1.5">'+item[2]+'</div>';
+    findWrap.appendChild(d);
+  });
+  c.appendChild(findWrap);
+  const ns=document.createElement('div');
+  ns.style.cssText='padding:12px 16px;background:#F5F3FF;border-radius:8px;border-left:4px solid #7C3AED;font-size:.75rem;color:var(--navy)';
+  ns.innerHTML='<b>Next Step: Phase 14b — Native USDJPY EA Development</b><br>'
+    +'1. Research USDJPY Asian session structure (BOJ policy, Tokyo liquidity, carry trade flows)<br>'
+    +'2. Build pure Tokyo range breakout EA: session window 00:00–08:00 GMT<br>'
+    +'3. Target OOS $8k–12k on 2022–2023 before IS testing on 2024–2025<br>'
+    +'4. No deployment until BOTH DD &lt; 30% AND OOS &gt; $5k confirmed';
+  c.appendChild(ns);
 };
 pageInitFns['phase13']=function(){
   const c=document.getElementById('phase13-content');
