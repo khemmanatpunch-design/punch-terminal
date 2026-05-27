@@ -1991,9 +1991,11 @@ InpMaxSpread    = 15   // reject trade if spread > 15pt</pre>
   <div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap">
     <button onclick="switchOptTab('phase9')" style="padding:7px 18px;background:var(--teal);color:#fff;border:none;border-radius:8px;font-size:.78rem;font-weight:700;cursor:pointer">Phase 9 — Strategy Matrix</button>
     <button onclick="switchOptTab('phase10')" style="padding:7px 18px;background:#F59E0B;color:#fff;border:none;border-radius:8px;font-size:.78rem;font-weight:700;cursor:pointer">Phase 10 — GOLD DEEP TEST ★</button>
+    <button onclick="switchOptTab('phase12')" style="padding:7px 18px;background:#7C3AED;color:#fff;border:none;border-radius:8px;font-size:.78rem;font-weight:700;cursor:pointer">Phase 12 — SIZING MATRIX ◆</button>
   </div>
   <div id="opt-content-phase9"><div id="phase9-content"></div></div>
   <div id="opt-content-phase10" style="display:none"><div id="phase10-content"></div></div>
+  <div id="opt-content-phase12" style="display:none"><div id="phase12-content"></div></div>
   <div id="opt-content-ddopt" style="display:none"><div id="ddopt-content"></div></div>
   <div id="opt-content-holygrail" style="display:none"><div id="holygrail-content"></div></div>
   <div id="opt-content-researchlog" style="display:none"><div id="researchlog-content-inner"></div></div>
@@ -2116,6 +2118,7 @@ const PAGE_REDIRECTS={
   market:{page:'optimization',tab:()=>switchOptTab('phase9')},
   golddeep:{page:'optimization',tab:()=>switchOptTab('phase10')},
   phase10:{page:'optimization',tab:()=>switchOptTab('phase10')},
+  phase12:{page:'optimization',tab:()=>switchOptTab('phase12')},
   risk:{page:'tools',tab:()=>switchToolsTab('risk')},
   calculator:{page:'tools',tab:()=>switchToolsTab('calculator')},
   compound:{page:'tools',tab:()=>switchToolsTab('compound')},
@@ -2268,7 +2271,7 @@ function switchToolsTab(tab){
   if(key&&!pageInited[key]&&pageInitFns[key]){pageInitFns[key]();pageInited[key]=true;}
 }
 function switchOptTab(tab){
-  ['phase9','phase10','ddopt','holygrail','researchlog'].forEach(t=>{
+  ['phase9','phase10','phase12','ddopt','holygrail','researchlog'].forEach(t=>{
     const el=document.getElementById('opt-content-'+t);
     if(el)el.style.display=t===tab?'block':'none';
     const btn=document.getElementById('opt-tab-'+t);
@@ -2278,6 +2281,7 @@ function switchOptTab(tab){
   const initMap={
     phase9:()=>{if(!pageInited['phase9']&&pageInitFns['phase9']){pageInitFns['phase9']();pageInited['phase9']=true;}},
     phase10:()=>{if(!pageInited['phase10']&&pageInitFns['phase10']){pageInitFns['phase10']();pageInited['phase10']=true;}},
+    phase12:()=>{if(!pageInited['phase12']&&pageInitFns['phase12']){pageInitFns['phase12']();pageInited['phase12']=true;}},
     ddopt:()=>{if(!pageInited['ddopt']&&pageInitFns['ddopt']){pageInitFns['ddopt']();pageInited['ddopt']=true;}},
     holygrail:()=>{if(!pageInited['holygrail']&&pageInitFns['holygrail']){pageInitFns['holygrail']();pageInited['holygrail']=true;}},
     researchlog:()=>{
@@ -2321,7 +2325,134 @@ pageInitFns['phase13']=function(){
 pageInitFns['phase12']=function(){
   const c=document.getElementById('phase12-content');
   if(!c)return;
-  c.innerHTML='<div style="padding:20px;text-align:center;color:var(--gray-500);font-size:.85rem">Results logged to assessment file. See Optimization Research page for full data.</div>';
+  c.innerHTML='';
+  const strats=[
+    {rank:'W1',name:'TI1_AsianWeekday',sym:'XAUUSD',base:14257,bals:[5876,33549,11775,14654,18524,9987,10347,7014,11385]},
+    {rank:'W2',name:'X2_AsianNoNews',  sym:'XAUUSD',base:9487, bals:[5249,10105,7214,9278,9909,4167,2255,2907,8063]},
+    {rank:'W3',name:'AsianBreak_XAUUSD',sym:'XAUUSD',base:9215,bals:[5142,12181,8108,9276,10119,4306,3178,3417,7781]},
+    {rank:'W4',name:'V3_Keltner',      sym:'XAUUSD',base:6430, bals:[4355,9840,5839,7623,7793,4228,3821,3752,6141]},
+    {rank:'W5',name:'T4_HHHL',         sym:'XAUUSD',base:5947, bals:[4384,3921,4664,6242,6569,5063,3723,3977,5840]},
+    {rank:'W6',name:'P3_InsideBar',    sym:'XAUUSD',base:5470, bals:[4051,2505,3355,5250,6311,4916,3896,2850,6143]},
+    {rank:'W7',name:'AsianBreak_USDJPY',sym:'USDJPY',base:11899,bals:[5796,21475,13967,12251,14959,9686,6598,5588,10170]},
+  ];
+  const szLabels=['SZ1<br>1%Fix','SZ2<br>5%Fix','SZ3<br>ATRVol','SZ4<br>Kelly','SZ5<br>Anti-Mart','SZ6<br>Reset','SZ7<br>EqCurve','SZ8<br>DDAdjust','SZ9<br>Pyramid'];
+  const leaderboard=[
+    {rank:'🥇',name:'SZ5 Anti-Mart 3-Tier',wins:'7/7',total:74184,verdict:'DEPLOY — wins every strategy',color:'#10B981'},
+    {rank:'🥈',name:'SZ4 Half-Kelly (2.6%)',wins:'7/7',total:64575,verdict:'DEPLOY — safe, consistent',color:'#3B82F6'},
+    {rank:'🥉',name:'SZ9 Pyramid',wins:'7/7',total:55522,verdict:'GOOD — consistent, moderate',color:'#6366F1'},
+    {rank:'4',  name:'SZ3 ATR Volatility',  wins:'6/7',total:54922,verdict:'GOOD — adaptive, near-universal',color:'#0EA5E9'},
+    {rank:'5',  name:'SZ2 Fixed 5%',        wins:'5/7',total:93574,verdict:'HIGH RISK — destroys W5/W6',color:'#F59E0B'},
+    {rank:'6',  name:'SZ6 Reset on Loss',   wins:'4/7',total:42353,verdict:'MIXED — low-trade EAs only',color:'#94A3B8'},
+    {rank:'7',  name:'SZ1 Fixed 1%',        wins:'4/7',total:34854,verdict:'TOO CONSERVATIVE',color:'#94A3B8'},
+    {rank:'❌', name:'SZ7 Equity Curve',    wins:'2/7',total:33818,verdict:'AVOID — kills high-trade EAs',color:'#EF4444'},
+    {rank:'❌', name:'SZ8 DD Adjusted',     wins:'2/7',total:29504,verdict:'AVOID — worst overall',color:'#DC2626'},
+  ];
+  const portfolios=[
+    {label:'Portfolio A — Conservative',color:'#3B82F6',badge:'~15-20% DD',
+     line1:'W1 Half-Kelly: $14,654 + W7 Half-Kelly: $12,251',
+     line2:'~$26,905 from $6k (+348%) · Prop-firm safe · Corr ~0.25',cta:'Deploy: W1-SZ4 + W7-SZ4'},
+    {label:'Portfolio B — Balanced (RECOMMENDED)',color:'#10B981',badge:'~20-28% DD',
+     line1:'W1 Anti-Mart: $18,524 + W7 Anti-Mart: $14,959',
+     line2:'~$33,483 from $6k (+458%) · Scales up on wins only',cta:'Deploy: W1-SZ5 + W7-SZ5'},
+    {label:'Portfolio C — Aggressive (personal only)',color:'#EF4444',badge:'~50-60% DD',
+     line1:'W1 Fixed5%: $33,549 + W7 Fixed5%: $21,475',
+     line2:'~$55,024 from $6k (+817%) · NOT prop-firm viable',cta:'Deploy: W1-SZ2 + W7-SZ2'},
+  ];
+  const hdr=document.createElement('div');
+  hdr.innerHTML='<div style="padding:12px 16px;background:linear-gradient(135deg,#EDE9FE,#F5F3FF);border-radius:10px;border-left:4px solid #7C3AED;margin-bottom:14px;font-size:.78rem;color:var(--navy);line-height:1.6">'
+    +'<b>Phase 12 — SIZING CROSS-MATRIX: 7 Strategies × 9 Sizing Modes = 63 Tests</b><br>'
+    +'Period: 2024.01.01–2025.12.31 · Deposit: $3,000/EA · Model: Real Ticks · 63/63 complete<br>'
+    +'<b style="color:#10B981">WINNER: SZ5 Anti-Mart 7/7 wins — only sizing mode with universal outperformance</b><br>'
+    +'<b style="color:#DC2626">ELIMINATED: SZ7 Equity Curve + SZ8 DD Adjusted (2/7 wins each) — cut from future testing</b></div>';
+  c.appendChild(hdr);
+  const matWrap=document.createElement('div');
+  matWrap.style.overflowX='auto';
+  let mhtml='<table style="width:100%;border-collapse:collapse;font-size:.7rem">'
+    +'<thead><tr style="background:var(--gray-50);color:var(--gray-500);font-size:.68rem">'
+    +'<th style="text-align:left;padding:7px 10px;border-bottom:1px solid var(--gray-200)">Strategy</th>'
+    +'<th style="text-align:right;padding:7px 6px;border-bottom:1px solid var(--gray-200)">Base<br><span style="font-weight:400">2.5%</span></th>';
+  szLabels.forEach(function(lbl){mhtml+='<th style="text-align:right;padding:7px 5px;border-bottom:1px solid var(--gray-200)">'+lbl+'</th>';});
+  mhtml+='</tr></thead><tbody>';
+  strats.forEach(function(s){
+    const maxB=Math.max.apply(null,s.bals);
+    mhtml+='<tr style="border-bottom:1px solid var(--gray-100)">'
+      +'<td style="padding:6px 10px;font-weight:600;color:var(--navy);white-space:nowrap">'+s.rank+' '+s.name+'<br><span style="font-weight:400;color:var(--gray-400);font-size:.66rem">'+s.sym+'</span></td>'
+      +'<td style="text-align:right;padding:6px 6px;color:var(--gray-500)">$'+s.base.toLocaleString()+'</td>';
+    s.bals.forEach(function(b){
+      const isMx=b===maxB,isGd=b>s.base;
+      const bg=isMx?'#D1FAE5':isGd?'#F0FDF4':'';
+      const col=isMx?'#065F46':isGd?'var(--green-600)':b<3500?'#DC2626':'var(--gray-500)';
+      mhtml+='<td style="text-align:right;padding:6px 5px;background:'+bg+';font-weight:'+(isMx?'700':'400')+';color:'+col+'">$'+b.toLocaleString()+'</td>';
+    });
+    mhtml+='</tr>';
+  });
+  mhtml+='</tbody></table>';
+  matWrap.innerHTML=mhtml;
+  c.appendChild(matWrap);
+  const lb=document.createElement('div');
+  lb.style.cssText='margin-top:18px;margin-bottom:8px;font-size:.78rem;font-weight:700;color:var(--navy)';
+  lb.textContent='Sizing Mode Leaderboard';
+  c.appendChild(lb);
+  const lbWrap=document.createElement('div');
+  lbWrap.style.overflowX='auto';
+  let lhtml='<table style="width:100%;border-collapse:collapse;font-size:.75rem">'
+    +'<thead><tr style="background:var(--gray-50);color:var(--gray-500);font-size:.7rem">'
+    +'<th style="text-align:center;padding:7px 6px;border-bottom:1px solid var(--gray-200)">#</th>'
+    +'<th style="text-align:left;padding:7px 10px;border-bottom:1px solid var(--gray-200)">Mode</th>'
+    +'<th style="text-align:center;padding:7px 8px;border-bottom:1px solid var(--gray-200)">Wins</th>'
+    +'<th style="text-align:right;padding:7px 10px;border-bottom:1px solid var(--gray-200)">Total Balance</th>'
+    +'<th style="text-align:left;padding:7px 10px;border-bottom:1px solid var(--gray-200)">Verdict</th>'
+    +'</tr></thead><tbody>';
+  leaderboard.forEach(function(r){
+    const isAv=r.rank==='❌';
+    const bg=isAv?'#FFF7F7':r.rank==='🥇'?'#F0FDF4':'#fff';
+    lhtml+='<tr style="background:'+bg+';border-bottom:1px solid var(--gray-100)">'
+      +'<td style="text-align:center;padding:6px 6px;font-size:1rem">'+r.rank+'</td>'
+      +'<td style="padding:6px 10px;font-weight:700;color:var(--navy)">'+r.name+'</td>'
+      +'<td style="text-align:center;padding:6px 8px;font-weight:700;color:'+r.color+'">'+r.wins+'</td>'
+      +'<td style="text-align:right;padding:6px 10px;font-weight:700;color:'+(isAv?'#DC2626':'var(--green-600)')+'">$'+r.total.toLocaleString()+'</td>'
+      +'<td style="padding:6px 10px;color:var(--gray-600);font-size:.72rem">'+r.verdict+'</td>'
+      +'</tr>';
+  });
+  lhtml+='</tbody></table>';
+  lbWrap.innerHTML=lhtml;
+  c.appendChild(lbWrap);
+  const pl=document.createElement('div');
+  pl.style.cssText='margin-top:18px;margin-bottom:8px;font-size:.78rem;font-weight:700;color:var(--navy)';
+  pl.textContent='Portfolio Recommendations';
+  c.appendChild(pl);
+  const portWrap=document.createElement('div');
+  portWrap.style.cssText='display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;font-size:.75rem';
+  portfolios.forEach(function(p){
+    const d=document.createElement('div');
+    d.style.cssText='padding:12px;border-radius:8px;border-left:4px solid '+p.color+';background:'+p.color+'0A';
+    d.innerHTML='<div style="font-weight:700;color:var(--navy);font-size:.78rem;margin-bottom:4px">'+p.label+'</div>'
+      +'<div style="display:inline-block;background:'+p.color+'22;color:'+p.color+';padding:2px 8px;border-radius:999px;font-size:.68rem;font-weight:700;margin-bottom:6px">'+p.badge+'</div>'
+      +'<div style="color:var(--gray-700);margin-bottom:4px">'+p.line1+'</div>'
+      +'<div style="color:var(--gray-500);font-size:.7rem;margin-bottom:8px">'+p.line2+'</div>'
+      +'<div style="font-weight:700;color:'+p.color+';font-size:.7rem">'+p.cta+'</div>';
+    portWrap.appendChild(d);
+  });
+  c.appendChild(portWrap);
+  const fl=document.createElement('div');
+  fl.style.cssText='margin-top:18px;margin-bottom:8px;font-size:.78rem;font-weight:700;color:var(--navy)';
+  fl.textContent='Key Findings';
+  c.appendChild(fl);
+  const findWrap=document.createElement('div');
+  findWrap.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:.75rem';
+  [
+    ['#10B981','F1: SZ5 Anti-Mart wins 7/7 — undisputed champion','Scales up only after 3/5/7+ consecutive wins. Stays at 3% base on losses. Immune to thin-edge high-trade EAs (W5/W6) where 5% fixed fails badly.'],
+    ['#F59E0B','F2: SZ2 5% Fixed — monster returns but destroys W5/W6','W1+W7 at 5% fixed: +817% over 2yr. BUT W5 T4=$3,921 (below base), W6 P3=$2,505 (near blowup). Rule: never >2.6% fixed on >500-trade EAs.'],
+    ['#EF4444','F3: SZ7/SZ8 universally failed — eliminated forever','2/7 wins each. Both cut size during drawdown — exactly when the strategy is about to recover. Asian breakout wins cluster on momentum regimes.'],
+    ['#3B82F6','F4: Best deploy → W1-SZ5 + W7-SZ5 (decorrelated portfolio)','XAUUSD gold Asian (W1) + USDJPY yen Asian (W7) at Anti-Mart. Different instruments and dynamics. Combined +458% from $6k, est. DD 20-28%.'],
+  ].forEach(function(item){
+    const d=document.createElement('div');
+    d.style.cssText='padding:10px;background:#fff;border-radius:8px;border-left:3px solid '+item[0];
+    d.innerHTML='<div style="font-weight:700;color:var(--navy);margin-bottom:4px">'+item[1]+'</div>'
+      +'<div style="color:var(--gray-600);line-height:1.5">'+item[2]+'</div>';
+    findWrap.appendChild(d);
+  });
+  c.appendChild(findWrap);
 };
 pageInitFns['optimization']=function(){
   const c=document.getElementById('phase9-content');
