@@ -1988,7 +1988,12 @@ InpMaxSpread    = 15   // reject trade if spread > 15pt</pre>
     </div>
   </div>
 
+  <div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+    <button onclick="switchOptTab('phase9')" style="padding:7px 18px;background:var(--teal);color:#fff;border:none;border-radius:8px;font-size:.78rem;font-weight:700;cursor:pointer">Phase 9 — Strategy Matrix</button>
+    <button onclick="switchOptTab('phase10')" style="padding:7px 18px;background:#F59E0B;color:#fff;border:none;border-radius:8px;font-size:.78rem;font-weight:700;cursor:pointer">Phase 10 — GOLD DEEP TEST ★</button>
+  </div>
   <div id="opt-content-phase9"><div id="phase9-content"></div></div>
+  <div id="opt-content-phase10" style="display:none"><div id="phase10-content"></div></div>
   <div id="opt-content-ddopt" style="display:none"><div id="ddopt-content"></div></div>
   <div id="opt-content-holygrail" style="display:none"><div id="holygrail-content"></div></div>
   <div id="opt-content-researchlog" style="display:none"><div id="researchlog-content-inner"></div></div>
@@ -2109,6 +2114,8 @@ const PAGE_REDIRECTS={
   phase6:{page:'optimization',tab:()=>switchOptTab('researchlog')},
   phase7:{page:'optimization',tab:()=>switchOptTab('researchlog')},
   market:{page:'optimization',tab:()=>switchOptTab('phase9')},
+  golddeep:{page:'optimization',tab:()=>switchOptTab('phase10')},
+  phase10:{page:'optimization',tab:()=>switchOptTab('phase10')},
   risk:{page:'tools',tab:()=>switchToolsTab('risk')},
   calculator:{page:'tools',tab:()=>switchToolsTab('calculator')},
   compound:{page:'tools',tab:()=>switchToolsTab('compound')},
@@ -2261,7 +2268,7 @@ function switchToolsTab(tab){
   if(key&&!pageInited[key]&&pageInitFns[key]){pageInitFns[key]();pageInited[key]=true;}
 }
 function switchOptTab(tab){
-  ['phase9','ddopt','holygrail','researchlog'].forEach(t=>{
+  ['phase9','phase10','ddopt','holygrail','researchlog'].forEach(t=>{
     const el=document.getElementById('opt-content-'+t);
     if(el)el.style.display=t===tab?'block':'none';
     const btn=document.getElementById('opt-tab-'+t);
@@ -2270,6 +2277,7 @@ function switchOptTab(tab){
   // Lazy init content
   const initMap={
     phase9:()=>{if(!pageInited['phase9']&&pageInitFns['phase9']){pageInitFns['phase9']();pageInited['phase9']=true;}},
+    phase10:()=>{if(!pageInited['phase10']&&pageInitFns['phase10']){pageInitFns['phase10']();pageInited['phase10']=true;}},
     ddopt:()=>{if(!pageInited['ddopt']&&pageInitFns['ddopt']){pageInitFns['ddopt']();pageInited['ddopt']=true;}},
     holygrail:()=>{if(!pageInited['holygrail']&&pageInitFns['holygrail']){pageInitFns['holygrail']();pageInited['holygrail']=true;}},
     researchlog:()=>{
@@ -2424,6 +2432,116 @@ function optToggleCode(n){
   const el=document.getElementById('opt-code-'+n);
   if(el)el.style.display=el.style.display==='none'?'block':'none';
 }
+
+pageInitFns['phase10']=function(){
+  const c=document.getElementById('phase10-content');
+  if(!c)return;
+  c.innerHTML='';
+  const rows=[
+    {ea:'APEX_TI1_AsianWeekday_v1',cat:'Time/Instrument',bal:14257.67,pct:'+375%',ann:'~137%/yr',tr:143,wr:19.6,status:'mega'},
+    {ea:'APEX_X2_AsianNoNews_v1',  cat:'Confluence',     bal:9487.63, pct:'+216%',ann:'~77%/yr', tr:254,wr:16.1,status:'win'},
+    {ea:'APEX_V3_Keltner_v1',      cat:'Volatility',     bal:6430.22, pct:'+114%',ann:'~57%/yr', tr:560,wr:32.1,status:'win'},
+    {ea:'APEX_T4_HHHL_v1',         cat:'Trend',          bal:5947.76, pct:'+98%', ann:'~49%/yr', tr:722,wr:27.8,status:'win'},
+    {ea:'APEX_P3_InsideBar_v1',    cat:'Pattern',        bal:5470.12, pct:'+82%', ann:'~41%/yr', tr:804,wr:27.4,status:'win'},
+    {ea:'APEX_T1_Pullback_v1',     cat:'Trend',          bal:4475.68, pct:'+49%', ann:'~24%/yr', tr:721,wr:27.5,status:'near'},
+    {ea:'APEX_X3_BBsqzAsian_v1',   cat:'Confluence',     bal:3999.17, pct:'+33%', ann:'~16%/yr', tr:44, wr:18.2,status:'near'},
+    {ea:'APEX_X5_PullbackLon_v1',  cat:'Confluence',     bal:3614.07, pct:'+21%', ann:'~10%/yr', tr:381,wr:26.5,status:'edge'},
+    {ea:'APEX_C2_LiqGrab_v1',      cat:'Counter',        bal:3502.21, pct:'+17%', ann:'~8%/yr',  tr:568,wr:22.7,status:'edge'},
+    {ea:'APEX_V1_ATRspike_v1',     cat:'Volatility',     bal:3219.79, pct:'+7%',  ann:'~3%/yr',  tr:37, wr:32.4,status:'flat'},
+    {ea:'APEX_X8_TimeNoNews_v1',   cat:'Confluence',     bal:3211.57, pct:'+7%',  ann:'~3%/yr',  tr:4,  wr:0.0, status:'flat'},
+    {ea:'APEX_X6_EMAxATR_v1',      cat:'Confluence',     bal:3097.32, pct:'+3%',  ann:'~1%/yr',  tr:31, wr:38.7,status:'flat'},
+    {ea:'APEX_M3_VWAP_v1',         cat:'Mean Rev',       bal:3028.97, pct:'+1%',  ann:'<1%/yr',  tr:12, wr:41.7,status:'flat'},
+    {ea:'APEX_X9_BBmeanAsian_v1',  cat:'Confluence',     bal:3000.00, pct:'0%',   ann:'0%/yr',   tr:0,  wr:0.0, status:'flat'},
+    {ea:'APEX_T2_Donchian_v1',     cat:'Trend',          bal:2953.22, pct:'-2%',  ann:'',         tr:681,wr:26.3,status:'loss'},
+    {ea:'APEX_X10_MultiConf_v1',   cat:'Confluence',     bal:2345.20, pct:'-22%', ann:'',         tr:706,wr:34.6,status:'loss'},
+    {ea:'APEX_P1_Engulfing_v1',    cat:'Pattern',        bal:2393.04, pct:'-20%', ann:'',         tr:439,wr:28.9,status:'loss'},
+    {ea:'APEX_ST5_KillZone_v1',    cat:'Structure',      bal:2191.41, pct:'-27%', ann:'',         tr:394,wr:13.5,status:'loss'},
+    {ea:'APEX_P2_PinBar_v1',       cat:'Pattern',        bal:2026.22, pct:'-32%', ann:'',         tr:952,wr:29.4,status:'loss'},
+    {ea:'APEX_ST4_BOS_v1',         cat:'Structure',      bal:1828.75, pct:'-39%', ann:'',         tr:921,wr:25.5,status:'loss'},
+    {ea:'APEX_M2_Zscore_v1',       cat:'Mean Rev',       bal:1806.45, pct:'-40%', ann:'',         tr:580,wr:32.6,status:'loss'},
+    {ea:'APEX_X7_FVGh4trend_v1',   cat:'Confluence',     bal:1351.80, pct:'-55%', ann:'',         tr:693,wr:28.1,status:'loss'},
+    {ea:'APEX_M1_BBtouch_v1',      cat:'Mean Rev',       bal:1226.94, pct:'-59%', ann:'',         tr:686,wr:31.8,status:'loss'},
+    {ea:'APEX_ST3_FVG_v1',         cat:'Structure',      bal:1517.59, pct:'-49%', ann:'',         tr:884,wr:28.7,status:'loss'},
+    {ea:'APEX_ST1_OrderBlock_v1',  cat:'Structure',      bal:1468.55, pct:'-51%', ann:'',         tr:631,wr:22.2,status:'loss'},
+    {ea:'APEX_X4_OBhighRR_v1',     cat:'Confluence',     bal:1000.71, pct:'-67%', ann:'',         tr:959,wr:13.2,status:'loss'},
+    {ea:'APEX_T3_EMAcross_v1',     cat:'Trend',          bal:2659.61, pct:'-11%', ann:'',         tr:49, wr:30.6,status:'loss'},
+    {ea:'APEX_TI2_PreNY_v1',       cat:'Time',           bal:792.98,  pct:'-74%', ann:'',         tr:336,wr:14.6,status:'loss'},
+    {ea:'APEX_V2_BBsqueeze_v1',    cat:'Volatility',     bal:2306.44, pct:'-23%', ann:'',         tr:424,wr:25.2,status:'loss'},
+    {ea:'APEX_C1_FailBreak_v1',    cat:'Counter',        bal:295.29,  pct:'-90%', ann:'',         tr:523,wr:22.9,status:'blow'},
+    {ea:'APEX_ST2_LiqSweep_v1',    cat:'Structure',      bal:14.60,   pct:'-100%',ann:'',         tr:454,wr:15.2,status:'blow'},
+  ];
+  const sBg={mega:'linear-gradient(135deg,#FEF9C3,#FEF3C7)',win:'#F0FDF4',near:'#EFF6FF',edge:'#F9FAFB',flat:'#F9FAFB',loss:'#FFF7F7',blow:'#FEF2F2'};
+  const sBadge={mega:'#FBBF24',win:'#10B981',near:'#3B82F6',edge:'var(--gray-400)',flat:'var(--gray-300)',loss:'#EF4444',blow:'#DC2626'};
+  const sText={mega:'MEGA WIN',win:'WINNER',near:'NEAR MISS',edge:'Edge',flat:'Flat',loss:'Loss',blow:'BLOWUP'};
+  const sTxt={mega:'#78350F',win:'#065F46',near:'#1D4ED8',edge:'#374151',flat:'#6B7280',loss:'#B91C1C',blow:'#7F1D1D'};
+
+  const hdr=document.createElement('div');
+  hdr.innerHTML='<div style="padding:12px 16px;background:linear-gradient(135deg,#FEF9C3,#FFF7ED);border-radius:10px;border-left:4px solid #F59E0B;margin-bottom:14px;font-size:.78rem;color:var(--navy);line-height:1.6">'
+    +'<b>Phase 10 — APEX GOLD DEEP TEST: 32 Strategies on XAUUSD H1</b><br>'
+    +'Period: 2024.01.01–2025.12.31 · Deposit: $3,000 · Baseline EA_1: $9,217 (75%/yr)<br>'
+    +'<b style="color:#10B981">TI1 MEGA WIN: $14,257 (137%/yr) — Asian breakout Mon/Tue/Thu beats EA_1 by 55%</b><br>'
+    +'<b style="color:#059669">V3 Keltner: $6,430 (57%/yr) — best decorrelated new EA (corr ~0.30 vs EA_1)</b></div>';
+  c.appendChild(hdr);
+
+  const tbl=document.createElement('div');
+  tbl.style.overflowX='auto';
+  let html='<table style="width:100%;border-collapse:collapse;font-size:.75rem">';
+  html+='<thead><tr style="background:var(--gray-50);color:var(--gray-500);font-size:.72rem">'
+    +'<th style="text-align:left;padding:7px 10px;border-bottom:1px solid var(--gray-200)">EA</th>'
+    +'<th style="text-align:left;padding:7px 8px;border-bottom:1px solid var(--gray-200)">Category</th>'
+    +'<th style="text-align:right;padding:7px 10px;border-bottom:1px solid var(--gray-200)">Balance</th>'
+    +'<th style="text-align:right;padding:7px 8px;border-bottom:1px solid var(--gray-200)">Return</th>'
+    +'<th style="text-align:right;padding:7px 8px;border-bottom:1px solid var(--gray-200)">Ann%</th>'
+    +'<th style="text-align:right;padding:7px 8px;border-bottom:1px solid var(--gray-200)">Trades</th>'
+    +'<th style="text-align:right;padding:7px 8px;border-bottom:1px solid var(--gray-200)">WR%</th>'
+    +'<th style="text-align:center;padding:7px 10px;border-bottom:1px solid var(--gray-200)">Status</th>'
+    +'</tr></thead><tbody>';
+  rows.forEach(function(r){
+    const bg=sBg[r.status]||'#fff';
+    const balColor=r.bal>3000?'var(--green-600)':r.bal<2000?'#DC2626':'var(--gray-600)';
+    const badge=sBadge[r.status]||'var(--gray-300)';
+    const btxt=sTxt[r.status]||'#374151';
+    html+='<tr style="background:'+bg+';border-bottom:1px solid var(--gray-100)">'
+      +'<td style="padding:6px 10px;font-weight:'+(r.status==='mega'||r.status==='win'?'700':'400')+';color:var(--navy);font-size:.72rem">'+r.ea+'</td>'
+      +'<td style="padding:6px 8px;font-size:.7rem;color:var(--gray-500)">'+r.cat+'</td>'
+      +'<td style="text-align:right;padding:6px 10px;font-weight:700;color:'+balColor+'">$'+r.bal.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+'</td>'
+      +'<td style="text-align:right;padding:6px 8px;color:'+balColor+'">'+r.pct+'</td>'
+      +'<td style="text-align:right;padding:6px 8px;font-size:.7rem;color:'+(r.ann?'var(--green-600)':'var(--gray-300)')+'">'+r.ann+'</td>'
+      +'<td style="text-align:right;padding:6px 8px;color:var(--gray-600)">'+r.tr+'</td>'
+      +'<td style="text-align:right;padding:6px 8px;color:var(--gray-600)">'+r.wr+'%</td>'
+      +'<td style="text-align:center;padding:6px 10px"><span style="background:'+badge+';color:'+btxt+';padding:2px 8px;border-radius:999px;font-size:.68rem;font-weight:700">'+sText[r.status]+'</span></td>'
+      +'</tr>';
+  });
+  html+='</tbody></table>';
+  tbl.innerHTML=html;
+  c.appendChild(tbl);
+
+  const findings=document.createElement('div');
+  findings.style.cssText='margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:.75rem';
+  [
+    ['#F59E0B','Key Finding 1: Weekday filter = +55% over EA_1','Asian breakout Mon/Tue/Thu ($14,257) vs EA_1 all-days ($9,217). Removing Wed/Fri cuts noise significantly. UPGRADE ACTION: deploy TI1 alongside or replacing EA_1.'],
+    ['#10B981','Key Finding 2: Keltner channel = best decorrelated new EA','V3 Keltner ($6,430, 57%/yr). Different signal (channel break vs range break). Correlation with EA_1 ~0.30 — genuinely independent edge for portfolio.'],
+    ['#3B82F6','Key Finding 3: Structural momentum works','T4 HHHL ($5,947) and P3 InsideBar ($5,470) both capture gold bull trend via price structure, not session timing. Decorrelated from EA_1.'],
+    ['#DC2626','Key Finding 4: Mean reversion confirmed broken','M1 BB ($1,226), M2 Z-score ($1,806), ST2 LiqSweep ($14.60). Gold trended strongly 2024-2025 — mean reversion = systematic loss. Rule confirmed.'],
+  ].forEach(function(item){
+    const d=document.createElement('div');
+    d.style.cssText='padding:10px;background:#fff;border-radius:8px;border-left:3px solid '+item[0];
+    d.innerHTML='<div style="font-weight:700;color:var(--navy);margin-bottom:4px">'+item[1]+'</div>'
+      +'<div style="color:var(--gray-600);line-height:1.5">'+item[2]+'</div>';
+    findings.appendChild(d);
+  });
+  c.appendChild(findings);
+
+  const deploy=document.createElement('div');
+  deploy.style.cssText='margin-top:16px;padding:14px;background:linear-gradient(135deg,#F0FDF4,#ECFDF5);border-radius:10px;border:1.5px solid #10B981;font-size:.78rem';
+  deploy.innerHTML='<div style="font-weight:700;color:var(--navy);margin-bottom:10px">Deployment Recommendations</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">'
+    +'<div style="padding:10px;background:#fff;border-radius:8px;border-top:3px solid #F59E0B"><b>Deploy-1: TI1 AsianWeekday</b><br>$14,257 · 137%/yr · Magic 98018<br>Upgrade EA_1 with Mon/Tue/Thu filter</div>'
+    +'<div style="padding:10px;background:#fff;border-radius:8px;border-top:3px solid #10B981"><b>Deploy-2: V3 Keltner</b><br>$6,430 · 57%/yr · Magic 98009<br>Best new decorrelated EA (corr ~0.30)</div>'
+    +'<div style="padding:10px;background:#fff;border-radius:8px;border-top:3px solid #3B82F6"><b>Deploy-3: P3 InsideBar</b><br>$5,470 · 41%/yr · Magic 98017<br>Pattern-based, decorrelated (corr ~0.35)</div>'
+    +'</div>';
+  c.appendChild(deploy);
+};
 
 pageInitFns['market']=function(){};
 pageInitFns['tools']=function(){
