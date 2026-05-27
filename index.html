@@ -2326,44 +2326,46 @@ pageInitFns['phase12']=function(){
   const c=document.getElementById('phase12-content');
   if(!c)return;
   c.innerHTML='';
+  // Phase 12b: 6 strats × 9 modes (SizingWrapper.mqh, static ATR handle)
+  // SZ3 ATR improved over Phase 12 via static handle: T4 $4664→$6192, V3 $5839→$7957
   const strats=[
-    {rank:'W1',name:'TI1_AsianWeekday',sym:'XAUUSD',base:14257,bals:[5876,33549,11775,14654,18524,9987,10347,7014,11385]},
-    {rank:'W2',name:'X2_AsianNoNews',  sym:'XAUUSD',base:9487, bals:[5249,10105,7214,9278,9909,4167,2255,2907,8063]},
-    {rank:'W3',name:'AsianBreak_XAUUSD',sym:'XAUUSD',base:9215,bals:[5142,12181,8108,9276,10119,4306,3178,3417,7781]},
-    {rank:'W4',name:'V3_Keltner',      sym:'XAUUSD',base:6430, bals:[4355,9840,5839,7623,7793,4228,3821,3752,6141]},
-    {rank:'W5',name:'T4_HHHL',         sym:'XAUUSD',base:5947, bals:[4384,3921,4664,6242,6569,5063,3723,3977,5840]},
-    {rank:'W6',name:'P3_InsideBar',    sym:'XAUUSD',base:5470, bals:[4051,2505,3355,5250,6311,4916,3896,2850,6143]},
-    {rank:'W7',name:'AsianBreak_USDJPY',sym:'USDJPY',base:11899,bals:[5796,21475,13967,12251,14959,9686,6598,5588,10170]},
+    {rank:'TI1',name:'TI1_AsianWeekday', sym:'XAUUSD',base:14257,bals:[5876,33549,14257,14654,18524,9987,10347,7014,11385]},
+    {rank:'X2', name:'X2_AsianNoNews',   sym:'XAUUSD',base:9487, bals:[5249,10105,9488,9278,9909,4167,2255,2907,8063]},
+    {rank:'EA1',name:'AsianBreak_XAUUSD',sym:'XAUUSD',base:9215, bals:[5142,12181,8939,9276,10119,4306,3178,3417,7781]},
+    {rank:'V3', name:'V3_Keltner',       sym:'XAUUSD',base:6430, bals:[4355,9840,7957,7623,7793,4228,3821,3752,6141]},
+    {rank:'T4', name:'T4_HHHL',          sym:'XAUUSD',base:5947, bals:[4384,3921,6192,6242,6569,5218,3723,3977,5840]},
+    {rank:'P3', name:'P3_InsideBar',     sym:'XAUUSD',base:5470, bals:[4051,2505,5321,5250,6311,4916,3896,2850,6143]},
   ];
   const szLabels=['SZ1<br>1%Fix','SZ2<br>5%Fix','SZ3<br>ATRVol','SZ4<br>Kelly','SZ5<br>Anti-Mart','SZ6<br>Reset','SZ7<br>EqCurve','SZ8<br>DDAdjust','SZ9<br>Pyramid'];
   const leaderboard=[
-    {rank:'🥇',name:'SZ5 Anti-Mart 3-Tier',wins:'7/7',total:74184,verdict:'DEPLOY — wins every strategy',color:'#10B981'},
-    {rank:'🥈',name:'SZ4 Half-Kelly (2.6%)',wins:'7/7',total:64575,verdict:'DEPLOY — safe, consistent',color:'#3B82F6'},
-    {rank:'🥉',name:'SZ9 Pyramid',wins:'7/7',total:55522,verdict:'GOOD — consistent, moderate',color:'#6366F1'},
-    {rank:'4',  name:'SZ3 ATR Volatility',  wins:'6/7',total:54922,verdict:'GOOD — adaptive, near-universal',color:'#0EA5E9'},
-    {rank:'5',  name:'SZ2 Fixed 5%',        wins:'5/7',total:93574,verdict:'HIGH RISK — destroys W5/W6',color:'#F59E0B'},
-    {rank:'6',  name:'SZ6 Reset on Loss',   wins:'4/7',total:42353,verdict:'MIXED — low-trade EAs only',color:'#94A3B8'},
-    {rank:'7',  name:'SZ1 Fixed 1%',        wins:'4/7',total:34854,verdict:'TOO CONSERVATIVE',color:'#94A3B8'},
-    {rank:'❌', name:'SZ7 Equity Curve',    wins:'2/7',total:33818,verdict:'AVOID — kills high-trade EAs',color:'#EF4444'},
-    {rank:'❌', name:'SZ8 DD Adjusted',     wins:'2/7',total:29504,verdict:'AVOID — worst overall',color:'#DC2626'},
+    {rank:'🥇',name:'SZ5 Anti-Mart 3-Tier',wins:'6/6',total:59226,verdict:'DEPLOY — only mode to beat all 6 strategies',color:'#10B981'},
+    {rank:'🥈',name:'SZ4 Half-Kelly (2.6%)',wins:'4/6',total:52324,verdict:'DEPLOY — safe, consistent, prop-firm safe',color:'#3B82F6'},
+    {rank:'🥉',name:'SZ2 Fixed 5%',        wins:'4/6',total:72099,verdict:'HIGH RISK — destroys T4/P3 (thin-edge >500tr)',color:'#F59E0B'},
+    {rank:'4',  name:'SZ3 ATR Volatility',  wins:'2/6',total:52153,verdict:'USEFUL — improved via static handle (+$2k on T4/V3)',color:'#0EA5E9'},
+    {rank:'5',  name:'SZ9 Pyramid',         wins:'1/6',total:45352,verdict:'WEAK — only P3 benefits',color:'#94A3B8'},
+    {rank:'❌', name:'SZ1 Fixed 1%',        wins:'0/6',total:29058,verdict:'AVOID — too conservative, no win',color:'#EF4444'},
+    {rank:'❌', name:'SZ6 Reset on Loss',   wins:'0/6',total:32823,verdict:'AVOID — over-penalizes normal losses',color:'#EF4444'},
+    {rank:'❌', name:'SZ7 Equity Curve',    wins:'0/6',total:27220,verdict:'AVOID — kills all strategies',color:'#DC2626'},
+    {rank:'❌', name:'SZ8 DD Adjusted',     wins:'0/6',total:23916,verdict:'AVOID — worst overall',color:'#DC2626'},
   ];
   const portfolios=[
-    {label:'Portfolio A — Conservative',color:'#3B82F6',badge:'~15-20% DD',
-     line1:'W1 Half-Kelly: $14,654 + W7 Half-Kelly: $12,251',
-     line2:'~$26,905 from $6k (+348%) · Prop-firm safe · Corr ~0.25',cta:'Deploy: W1-SZ4 + W7-SZ4'},
-    {label:'Portfolio B — Balanced (RECOMMENDED)',color:'#10B981',badge:'~20-28% DD',
-     line1:'W1 Anti-Mart: $18,524 + W7 Anti-Mart: $14,959',
-     line2:'~$33,483 from $6k (+458%) · Scales up on wins only',cta:'Deploy: W1-SZ5 + W7-SZ5'},
-    {label:'Portfolio C — Aggressive (personal only)',color:'#EF4444',badge:'~50-60% DD',
-     line1:'W1 Fixed5%: $33,549 + W7 Fixed5%: $21,475',
-     line2:'~$55,024 from $6k (+817%) · NOT prop-firm viable',cta:'Deploy: W1-SZ2 + W7-SZ2'},
+    {label:'Portfolio A — Conservative (prop-firm)',color:'#3B82F6',badge:'~22-26% DD',
+     line1:'TI1 Half-Kelly: $14,654 · magic 99003',
+     line2:'XAUUSD H1 · 143 trades/2yr · 2.6% risk',cta:'Deploy: APEX_SZ4_TI1_v1'},
+    {label:'Portfolio B — Balanced RECOMMENDED',color:'#10B981',badge:'~24-28% DD',
+     line1:'TI1 Anti-Mart: $18,524 + EA1 Anti-Mart: $10,119',
+     line2:'~$28,643 from $6k (+378%) · decorrelated signals',cta:'Deploy: APEX_SZ5_TI1_v1 + APEX_SZ5_EA1_v1'},
+    {label:'Portfolio C — Max Return (personal only)',color:'#EF4444',badge:'~50-55% DD',
+     line1:'TI1 Fixed5%: $33,549 · magic 99001',
+     line2:'$3k → $33,549 (+1,018%) · NOT prop-firm viable',cta:'Deploy: APEX_SZ2_TI1_v1'},
   ];
   const hdr=document.createElement('div');
   hdr.innerHTML='<div style="padding:12px 16px;background:linear-gradient(135deg,#EDE9FE,#F5F3FF);border-radius:10px;border-left:4px solid #7C3AED;margin-bottom:14px;font-size:.78rem;color:var(--navy);line-height:1.6">'
-    +'<b>Phase 12 — SIZING CROSS-MATRIX: 7 Strategies × 9 Sizing Modes = 63 Tests</b><br>'
-    +'Period: 2024.01.01–2025.12.31 · Deposit: $3,000/EA · Model: Real Ticks · 63/63 complete<br>'
-    +'<b style="color:#10B981">WINNER: SZ5 Anti-Mart 7/7 wins — only sizing mode with universal outperformance</b><br>'
-    +'<b style="color:#DC2626">ELIMINATED: SZ7 Equity Curve + SZ8 DD Adjusted (2/7 wins each) — cut from future testing</b></div>';
+    +'<b>Phase 12b — SIZING CROSS-MATRIX: 6 Strategies × 9 Sizing Modes = 54 Tests (SizingWrapper.mqh)</b><br>'
+    +'Period: 2024.01.01–2025.12.31 · Deposit: $3,000/EA · Real Ticks · 54/54 complete · RAM stable 2,300-2,400MB<br>'
+    +'<b style="color:#10B981">WINNER: SZ5 Anti-Mart 6/6 wins — CONFIRMED universal champion across all strategies</b><br>'
+    +'<b style="color:#DC2626">ELIMINATED: SZ1/SZ6/SZ7/SZ8 all 0/6 wins — none beat baseline on any strategy</b><br>'
+    +'<span style="color:#0EA5E9">SZ3 ATR improved via static handle: T4 $4,664→$6,192 · V3 $5,839→$7,957</span></div>';
   c.appendChild(hdr);
   const matWrap=document.createElement('div');
   matWrap.style.overflowX='auto';
@@ -2441,10 +2443,10 @@ pageInitFns['phase12']=function(){
   const findWrap=document.createElement('div');
   findWrap.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:.75rem';
   [
-    ['#10B981','F1: SZ5 Anti-Mart wins 7/7 — undisputed champion','Scales up only after 3/5/7+ consecutive wins. Stays at 3% base on losses. Immune to thin-edge high-trade EAs (W5/W6) where 5% fixed fails badly.'],
-    ['#F59E0B','F2: SZ2 5% Fixed — monster returns but destroys W5/W6','W1+W7 at 5% fixed: +817% over 2yr. BUT W5 T4=$3,921 (below base), W6 P3=$2,505 (near blowup). Rule: never >2.6% fixed on >500-trade EAs.'],
-    ['#EF4444','F3: SZ7/SZ8 universally failed — eliminated forever','2/7 wins each. Both cut size during drawdown — exactly when the strategy is about to recover. Asian breakout wins cluster on momentum regimes.'],
-    ['#3B82F6','F4: Best deploy → W1-SZ5 + W7-SZ5 (decorrelated portfolio)','XAUUSD gold Asian (W1) + USDJPY yen Asian (W7) at Anti-Mart. Different instruments and dynamics. Combined +458% from $6k, est. DD 20-28%.'],
+    ['#10B981','F1: SZ5 Anti-Mart wins 6/6 — CONFIRMED universal champion','Scales to 4.5-8% only after 3/5/7+ wins. Stays at 3% base on losses. Only mode that beats baseline on ALL strategies including thin-edge T4/P3.'],
+    ['#0EA5E9','F2: Static ATR handle improves SZ3 by $1,500-2,000 per strategy','T4: $4,664→$6,192 (+$1,528), V3: $5,839→$7,957 (+$2,118). Per-call handle creation causes tick-level instability. Static handle fix is mandatory for ATR sizing.'],
+    ['#EF4444','F3: SZ1/SZ6/SZ7/SZ8 all 0/6 wins — eliminated','None beat 2.5% fixed on any of 6 strategies. SZ7 EqCurve ($27,220 total) and SZ8 DDAdjust ($23,916 total) are the worst. Cut from all future testing.'],
+    ['#3B82F6','F4: Best single-EA deploy → TI1+SZ5 ($18,524, magic 99004)','XAUUSD H1, 143 trades/2yr. Anti-Mart scales up during gold momentum regimes. Add EA1+SZ5 ($10,119) for a decorrelated two-EA portfolio at ~$28,643 from $6k.'],
   ].forEach(function(item){
     const d=document.createElement('div');
     d.style.cssText='padding:10px;background:#fff;border-radius:8px;border-left:3px solid '+item[0];
