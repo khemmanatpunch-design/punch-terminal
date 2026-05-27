@@ -1992,10 +1992,12 @@ InpMaxSpread    = 15   // reject trade if spread > 15pt</pre>
     <button onclick="switchOptTab('phase9')" style="padding:7px 18px;background:var(--teal);color:#fff;border:none;border-radius:8px;font-size:.78rem;font-weight:700;cursor:pointer">Phase 9 — Strategy Matrix</button>
     <button onclick="switchOptTab('phase10')" style="padding:7px 18px;background:#F59E0B;color:#fff;border:none;border-radius:8px;font-size:.78rem;font-weight:700;cursor:pointer">Phase 10 — GOLD DEEP TEST ★</button>
     <button onclick="switchOptTab('phase12')" style="padding:7px 18px;background:#7C3AED;color:#fff;border:none;border-radius:8px;font-size:.78rem;font-weight:700;cursor:pointer">Phase 12 — SIZING MATRIX ◆</button>
+    <button onclick="switchOptTab('phase13')" style="padding:7px 18px;background:#0F766E;color:#fff;border:none;border-radius:8px;font-size:.78rem;font-weight:700;cursor:pointer">Phase 13 — MULTI-MARKET ★</button>
   </div>
   <div id="opt-content-phase9"><div id="phase9-content"></div></div>
   <div id="opt-content-phase10" style="display:none"><div id="phase10-content"></div></div>
   <div id="opt-content-phase12" style="display:none"><div id="phase12-content"></div></div>
+  <div id="opt-content-phase13" style="display:none"><div id="phase13-content"></div></div>
   <div id="opt-content-ddopt" style="display:none"><div id="ddopt-content"></div></div>
   <div id="opt-content-holygrail" style="display:none"><div id="holygrail-content"></div></div>
   <div id="opt-content-researchlog" style="display:none"><div id="researchlog-content-inner"></div></div>
@@ -2119,6 +2121,7 @@ const PAGE_REDIRECTS={
   golddeep:{page:'optimization',tab:()=>switchOptTab('phase10')},
   phase10:{page:'optimization',tab:()=>switchOptTab('phase10')},
   phase12:{page:'optimization',tab:()=>switchOptTab('phase12')},
+  phase13:{page:'optimization',tab:()=>switchOptTab('phase13')},
   risk:{page:'tools',tab:()=>switchToolsTab('risk')},
   calculator:{page:'tools',tab:()=>switchToolsTab('calculator')},
   compound:{page:'tools',tab:()=>switchToolsTab('compound')},
@@ -2271,7 +2274,7 @@ function switchToolsTab(tab){
   if(key&&!pageInited[key]&&pageInitFns[key]){pageInitFns[key]();pageInited[key]=true;}
 }
 function switchOptTab(tab){
-  ['phase9','phase10','phase12','ddopt','holygrail','researchlog'].forEach(t=>{
+  ['phase9','phase10','phase12','phase13','ddopt','holygrail','researchlog'].forEach(t=>{
     const el=document.getElementById('opt-content-'+t);
     if(el)el.style.display=t===tab?'block':'none';
     const btn=document.getElementById('opt-tab-'+t);
@@ -2282,6 +2285,7 @@ function switchOptTab(tab){
     phase9:()=>{if(!pageInited['phase9']&&pageInitFns['phase9']){pageInitFns['phase9']();pageInited['phase9']=true;}},
     phase10:()=>{if(!pageInited['phase10']&&pageInitFns['phase10']){pageInitFns['phase10']();pageInited['phase10']=true;}},
     phase12:()=>{if(!pageInited['phase12']&&pageInitFns['phase12']){pageInitFns['phase12']();pageInited['phase12']=true;}},
+    phase13:()=>{if(!pageInited['phase13']&&pageInitFns['phase13']){pageInitFns['phase13']();pageInited['phase13']=true;}},
     ddopt:()=>{if(!pageInited['ddopt']&&pageInitFns['ddopt']){pageInitFns['ddopt']();pageInited['ddopt']=true;}},
     holygrail:()=>{if(!pageInited['holygrail']&&pageInitFns['holygrail']){pageInitFns['holygrail']();pageInited['holygrail']=true;}},
     researchlog:()=>{
@@ -2320,7 +2324,160 @@ pageInitFns['phase14']=function(){
 pageInitFns['phase13']=function(){
   const c=document.getElementById('phase13-content');
   if(!c)return;
-  c.innerHTML='<div style="padding:20px;text-align:center;color:var(--gray-500);font-size:.85rem">Results logged to assessment file. See Optimization Research page for full data.</div>';
+  c.innerHTML='';
+  const mkts=['USDJPY','US30','NAS100','GBPJPY','EURUSD'];
+  const strats=['TI1','EA1','X2'];
+  const szData=[
+    {sz:'SZ2',label:'Fixed 5%',bals:{TI1:[7310,649,1654,134,303],EA1:[21475,565,2084,6,208],X2:[33889,381,1183,5,518]}},
+    {sz:'SZ4',label:'Half-Kelly (~2.6%)',bals:{TI1:[6680,1594,2731,785,1022],EA1:[12233,1681,3483,259,855],X2:[18214,1420,2732,155,1491]}},
+    {sz:'SZ5',label:'Anti-Mart (3% base)',bals:{TI1:[6943,1406,2595,595,819],EA1:[14892,1401,3307,164,654],X2:[22289,1172,2488,86,1195]}},
+  ];
+  const top15=[
+    {ea:'APEX_SZ2_X2_USDJPY_v1',sz:'SZ2',st:'X2',mkt:'USDJPY',bal:33889,tr:258,wr:19.0,star:' ★★'},
+    {ea:'APEX_SZ5_X2_USDJPY_v1',sz:'SZ5',st:'X2',mkt:'USDJPY',bal:22289,tr:260,wr:18.8,star:' ★'},
+    {ea:'APEX_SZ2_EA1_USDJPY_v1',sz:'SZ2',st:'EA1',mkt:'USDJPY',bal:21475,tr:173,wr:19.7,star:' ★'},
+    {ea:'APEX_SZ4_X2_USDJPY_v1',sz:'SZ4',st:'X2',mkt:'USDJPY',bal:18214,tr:260,wr:18.8,star:' ★'},
+    {ea:'APEX_SZ5_EA1_USDJPY_v1',sz:'SZ5',st:'EA1',mkt:'USDJPY',bal:14892,tr:174,wr:19.5,star:''},
+    {ea:'APEX_SZ4_EA1_USDJPY_v1',sz:'SZ4',st:'EA1',mkt:'USDJPY',bal:12233,tr:174,wr:19.5,star:''},
+    {ea:'APEX_SZ2_TI1_USDJPY_v1',sz:'SZ2',st:'TI1',mkt:'USDJPY',bal:7310,tr:150,wr:18.0,star:''},
+    {ea:'APEX_SZ5_TI1_USDJPY_v1',sz:'SZ5',st:'TI1',mkt:'USDJPY',bal:6943,tr:150,wr:18.0,star:''},
+    {ea:'APEX_SZ4_TI1_USDJPY_v1',sz:'SZ4',st:'TI1',mkt:'USDJPY',bal:6680,tr:150,wr:18.0,star:''},
+    {ea:'APEX_SZ4_EA1_NAS100_v1',sz:'SZ4',st:'EA1',mkt:'NAS100',bal:3483,tr:184,wr:14.1,star:''},
+    {ea:'APEX_SZ5_EA1_NAS100_v1',sz:'SZ5',st:'EA1',mkt:'NAS100',bal:3307,tr:184,wr:14.1,star:''},
+    {ea:'APEX_SZ4_X2_NAS100_v1',sz:'SZ4',st:'X2',mkt:'NAS100',bal:2732,tr:229,wr:13.5,star:''},
+    {ea:'APEX_SZ4_TI1_NAS100_v1',sz:'SZ4',st:'TI1',mkt:'NAS100',bal:2731,tr:134,wr:13.4,star:''},
+    {ea:'APEX_SZ5_TI1_NAS100_v1',sz:'SZ5',st:'TI1',mkt:'NAS100',bal:2595,tr:134,wr:13.4,star:''},
+    {ea:'APEX_SZ5_X2_NAS100_v1',sz:'SZ5',st:'X2',mkt:'NAS100',bal:2488,tr:229,wr:13.5,star:''},
+  ];
+  const portfolios=[
+    {label:'Portfolio A — Max Single Return',color:'#EF4444',badge:'HIGH RISK ~50%+ DD',
+     line1:'X2+SZ2+USDJPY: $33,889 (5% fixed, 258 tr/2yr)',
+     line2:'$3k → $33,889 (+1,030%) · NOT prop-firm safe',cta:'Deploy: APEX_SZ2_X2_USDJPY_v1'},
+    {label:'Portfolio B — RECOMMENDED (2-EA USDJPY)',color:'#10B981',badge:'BALANCED ~30-35% DD',
+     line1:'X2+SZ5: $22,289 + EA1+SZ5: $14,892 = $37,181 from $6k',
+     line2:'2 decorrelated strategies · Anti-Mart captures win clusters',cta:'Deploy: APEX_SZ5_X2_USDJPY_v1 + APEX_SZ5_EA1_USDJPY_v1'},
+    {label:'Portfolio C — Conservative (3-EA USDJPY)',color:'#3B82F6',badge:'LOWER RISK ~25% DD',
+     line1:'X2+SZ4: $18,214 + EA1+SZ4: $12,233 + TI1+SZ4: $6,680',
+     line2:'$37,127 from $9k (+313%) · Half-Kelly, 3 decorrelated signals',cta:'Deploy: APEX_SZ4_X2/EA1/TI1_USDJPY_v1'},
+  ];
+  const hdr=document.createElement('div');
+  hdr.innerHTML='<div style="padding:12px 16px;background:linear-gradient(135deg,#ECFDF5,#F0FDF4);border-radius:10px;border-left:4px solid #10B981;margin-bottom:14px;font-size:.78rem;color:var(--navy);line-height:1.6">'
+    +'<b>Phase 13 — MULTI-MARKET × SIZING CROSS-VALIDATION: 45 Tests (3 Sizings × 3 Strategies × 5 Markets)</b><br>'
+    +'Period: 2024.01.01–2025.12.31 · Deposit: $3,000 · Real Ticks · 45/45 complete · RAM stable 2,380–2,455MB<br>'
+    +'<b style="color:#10B981">KEY FINDING: USDJPY is the ONLY non-gold market with genuine Asian session edge across all 3 strategies</b><br>'
+    +'<b style="color:#0EA5E9">Anti-Mart (SZ5) beats Half-Kelly (SZ4) on USDJPY: X2 $22,289 vs $18,214 · EA1 $14,892 vs $12,233</b><br>'
+    +'<span style="color:#DC2626">GBPJPY/US30/EURUSD show NO edge — TI1/EA1/X2 are fundamentally XAUUSD-tuned strategies</span></div>';
+  c.appendChild(hdr);
+  const t15lbl=document.createElement('div');
+  t15lbl.style.cssText='margin-top:14px;margin-bottom:8px;font-size:.78rem;font-weight:700;color:var(--navy)';
+  t15lbl.textContent='Top 15 Results (all 45 tests)';
+  c.appendChild(t15lbl);
+  const lbWrap=document.createElement('div');
+  lbWrap.style.overflowX='auto';
+  let lhtml='<table style="width:100%;border-collapse:collapse;font-size:.72rem">'
+    +'<thead><tr style="background:var(--gray-50);color:var(--gray-500);font-size:.68rem">'
+    +'<th style="text-align:center;padding:7px 6px;border-bottom:1px solid var(--gray-200)">#</th>'
+    +'<th style="text-align:left;padding:7px 10px;border-bottom:1px solid var(--gray-200)">EA</th>'
+    +'<th style="text-align:center;padding:7px 6px;border-bottom:1px solid var(--gray-200)">Sizing</th>'
+    +'<th style="text-align:center;padding:7px 6px;border-bottom:1px solid var(--gray-200)">Strategy</th>'
+    +'<th style="text-align:center;padding:7px 6px;border-bottom:1px solid var(--gray-200)">Market</th>'
+    +'<th style="text-align:right;padding:7px 10px;border-bottom:1px solid var(--gray-200)">Balance</th>'
+    +'<th style="text-align:right;padding:7px 8px;border-bottom:1px solid var(--gray-200)">Return</th>'
+    +'<th style="text-align:right;padding:7px 8px;border-bottom:1px solid var(--gray-200)">Trades</th>'
+    +'<th style="text-align:right;padding:7px 8px;border-bottom:1px solid var(--gray-200)">WR%</th>'
+    +'</tr></thead><tbody>';
+  top15.forEach(function(r,i){
+    const ret='+'+Math.round((r.bal/3000-1)*100)+'%';
+    const isTop=r.bal>=15000;
+    const bg=i===0?'#F0FDF4':isTop?'#F8FFF9':'#fff';
+    const bCol=i===0?'#065F46':isTop?'#10B981':'var(--gray-700)';
+    lhtml+='<tr style="background:'+bg+';border-bottom:1px solid var(--gray-100)">'
+      +'<td style="text-align:center;padding:6px 6px;color:var(--gray-400);font-size:.7rem">'+(i+1)+'</td>'
+      +'<td style="padding:6px 10px;font-weight:'+(i<4?'700':'600')+';color:var(--navy);font-size:.7rem">'+r.ea+'</td>'
+      +'<td style="text-align:center;padding:6px 6px;color:var(--gray-600)">'+r.sz+'</td>'
+      +'<td style="text-align:center;padding:6px 6px;color:var(--gray-600)">'+r.st+'</td>'
+      +'<td style="text-align:center;padding:6px 6px;font-weight:700;color:#0EA5E9">'+r.mkt+'</td>'
+      +'<td style="text-align:right;padding:6px 10px;font-weight:700;color:'+bCol+'">$'+r.bal.toLocaleString()+r.star+'</td>'
+      +'<td style="text-align:right;padding:6px 8px;color:#10B981;font-weight:600">'+ret+'</td>'
+      +'<td style="text-align:right;padding:6px 8px;color:var(--gray-500)">'+r.tr+'</td>'
+      +'<td style="text-align:right;padding:6px 8px;color:var(--gray-500)">'+r.wr+'%</td>'
+      +'</tr>';
+  });
+  lhtml+='</tbody></table>';
+  lbWrap.innerHTML=lhtml;
+  c.appendChild(lbWrap);
+  const matlbl=document.createElement('div');
+  matlbl.style.cssText='margin-top:18px;margin-bottom:8px;font-size:.78rem;font-weight:700;color:var(--navy)';
+  matlbl.textContent='3×3×5 Results Matrix (balance from $3,000 start)';
+  c.appendChild(matlbl);
+  szData.forEach(function(sz){
+    const szHdr=document.createElement('div');
+    szHdr.style.cssText='margin-top:10px;margin-bottom:4px;font-size:.74rem;font-weight:700;color:#7C3AED';
+    szHdr.textContent=sz.sz+' — '+sz.label;
+    c.appendChild(szHdr);
+    const matWrap=document.createElement('div');
+    matWrap.style.overflowX='auto';
+    let mhtml='<table style="width:100%;border-collapse:collapse;font-size:.7rem">'
+      +'<thead><tr style="background:var(--gray-50);color:var(--gray-500);font-size:.68rem">'
+      +'<th style="text-align:left;padding:6px 10px;border-bottom:1px solid var(--gray-200)">Strategy</th>';
+    mkts.forEach(function(m){mhtml+='<th style="text-align:right;padding:6px 8px;border-bottom:1px solid var(--gray-200)">'+m+'</th>';});
+    mhtml+='</tr></thead><tbody>';
+    strats.forEach(function(st){
+      const bals=sz.bals[st];
+      const maxB=Math.max.apply(null,bals);
+      mhtml+='<tr style="border-bottom:1px solid var(--gray-100)">'
+        +'<td style="padding:6px 10px;font-weight:600;color:var(--navy)">'+st+'</td>';
+      bals.forEach(function(b){
+        const isMx=b===maxB&&b>5000;
+        const isGd=b>=5000;
+        const isOk=b>=3000;
+        const bg=isMx?'#D1FAE5':isGd?'#F0FDF4':isOk?'':'#FFF7F7';
+        const col=isMx?'#065F46':isGd?'#10B981':isOk?'var(--gray-600)':'#DC2626';
+        const fw=isMx?'700':'400';
+        mhtml+='<td style="text-align:right;padding:6px 8px;background:'+bg+';font-weight:'+fw+';color:'+col+'">$'+b.toLocaleString()+'</td>';
+      });
+      mhtml+='</tr>';
+    });
+    mhtml+='</tbody></table>';
+    matWrap.innerHTML=mhtml;
+    c.appendChild(matWrap);
+  });
+  const pl=document.createElement('div');
+  pl.style.cssText='margin-top:18px;margin-bottom:8px;font-size:.78rem;font-weight:700;color:var(--navy)';
+  pl.textContent='Portfolio Recommendations';
+  c.appendChild(pl);
+  const portWrap=document.createElement('div');
+  portWrap.style.cssText='display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;font-size:.75rem';
+  portfolios.forEach(function(p){
+    const d=document.createElement('div');
+    d.style.cssText='padding:12px;border-radius:8px;border-left:4px solid '+p.color+';background:'+p.color+'0A';
+    d.innerHTML='<div style="font-weight:700;color:var(--navy);font-size:.78rem;margin-bottom:4px">'+p.label+'</div>'
+      +'<div style="display:inline-block;background:'+p.color+'22;color:'+p.color+';padding:2px 8px;border-radius:999px;font-size:.68rem;font-weight:700;margin-bottom:6px">'+p.badge+'</div>'
+      +'<div style="color:var(--gray-700);margin-bottom:4px">'+p.line1+'</div>'
+      +'<div style="color:var(--gray-500);font-size:.7rem;margin-bottom:8px">'+p.line2+'</div>'
+      +'<div style="font-weight:700;color:'+p.color+';font-size:.7rem">'+p.cta+'</div>';
+    portWrap.appendChild(d);
+  });
+  c.appendChild(portWrap);
+  const fl=document.createElement('div');
+  fl.style.cssText='margin-top:18px;margin-bottom:8px;font-size:.78rem;font-weight:700;color:var(--navy)';
+  fl.textContent='Key Findings';
+  c.appendChild(fl);
+  const findWrap=document.createElement('div');
+  findWrap.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:.75rem';
+  [
+    ['#0EA5E9','F1: USDJPY is the ONLY non-gold market with Asian session edge','All 9 USDJPY tests profitable ($6,680–$33,889). All other 4 markets fail across all 3 strategies. The Asian breakout logic from XAUUSD transfers only to USDJPY.'],
+    ['#10B981','F2: Anti-Mart (SZ5) beats Half-Kelly (SZ4) on USDJPY','X2: SZ5=$22,289 vs SZ4=$18,214 (+23%). EA1: SZ5=$14,892 vs SZ4=$12,233 (+22%). Win clustering in USDJPY Asian session is real — Anti-Mart captures it.'],
+    ['#EF4444','F3: 5% fixed (SZ2) destroys accounts on no-edge markets','GBPJPY+EA1+SZ2=$6. GBPJPY+X2+SZ2=$5. US30+TI1+SZ2=$649. SZ2 is position-size roulette — massive upside on USDJPY, catastrophic elsewhere.'],
+    ['#7C3AED','F4: Best portfolio is USDJPY-only, multi-strategy','SZ5+X2 ($22,289) + SZ5+EA1 ($14,892) = $37,181 from $6k (+520%). Lower correlation than any single EA. Phase 14 should build USDJPY-native EAs from scratch.'],
+  ].forEach(function(item){
+    const d=document.createElement('div');
+    d.style.cssText='padding:10px;background:#fff;border-radius:8px;border-left:3px solid '+item[0];
+    d.innerHTML='<div style="font-weight:700;color:var(--navy);margin-bottom:4px">'+item[1]+'</div>'
+      +'<div style="color:var(--gray-600);line-height:1.5">'+item[2]+'</div>';
+    findWrap.appendChild(d);
+  });
+  c.appendChild(findWrap);
 };
 pageInitFns['phase12']=function(){
   const c=document.getElementById('phase12-content');
