@@ -1994,12 +1994,14 @@ InpMaxSpread    = 15   // reject trade if spread > 15pt</pre>
     <button onclick="switchOptTab('phase12')" style="padding:7px 18px;background:#7C3AED;color:#fff;border:none;border-radius:8px;font-size:.78rem;font-weight:700;cursor:pointer">Phase 12 — SIZING MATRIX ◆</button>
     <button onclick="switchOptTab('phase13')" style="padding:7px 18px;background:#0F766E;color:#fff;border:none;border-radius:8px;font-size:.78rem;font-weight:700;cursor:pointer">Phase 13 — MULTI-MARKET ★</button>
     <button onclick="switchOptTab('phase14')" style="padding:7px 18px;background:#DC2626;color:#fff;border:none;border-radius:8px;font-size:.78rem;font-weight:700;cursor:pointer">Phase 14a — VALIDATION ❌</button>
+    <button onclick="switchOptTab('phase14b')" style="padding:7px 18px;background:#7F1D1D;color:#fff;border:none;border-radius:8px;font-size:.78rem;font-weight:700;cursor:pointer">Phase 14b — NATIVE JPY ❌</button>
   </div>
   <div id="opt-content-phase9"><div id="phase9-content"></div></div>
   <div id="opt-content-phase10" style="display:none"><div id="phase10-content"></div></div>
   <div id="opt-content-phase12" style="display:none"><div id="phase12-content"></div></div>
   <div id="opt-content-phase13" style="display:none"><div id="phase13-content"></div></div>
   <div id="opt-content-phase14" style="display:none"><div id="phase14-content"></div></div>
+  <div id="opt-content-phase14b" style="display:none"><div id="phase14b-content"></div></div>
   <div id="opt-content-ddopt" style="display:none"><div id="ddopt-content"></div></div>
   <div id="opt-content-holygrail" style="display:none"><div id="holygrail-content"></div></div>
   <div id="opt-content-researchlog" style="display:none"><div id="researchlog-content-inner"></div></div>
@@ -2125,6 +2127,7 @@ const PAGE_REDIRECTS={
   phase12:{page:'optimization',tab:()=>switchOptTab('phase12')},
   phase13:{page:'optimization',tab:()=>switchOptTab('phase13')},
   phase14:{page:'optimization',tab:()=>switchOptTab('phase14')},
+  phase14b:{page:'optimization',tab:()=>switchOptTab('phase14b')},
   risk:{page:'tools',tab:()=>switchToolsTab('risk')},
   calculator:{page:'tools',tab:()=>switchToolsTab('calculator')},
   compound:{page:'tools',tab:()=>switchToolsTab('compound')},
@@ -2277,7 +2280,7 @@ function switchToolsTab(tab){
   if(key&&!pageInited[key]&&pageInitFns[key]){pageInitFns[key]();pageInited[key]=true;}
 }
 function switchOptTab(tab){
-  ['phase9','phase10','phase12','phase13','phase14','ddopt','holygrail','researchlog'].forEach(t=>{
+  ['phase9','phase10','phase12','phase13','phase14','phase14b','ddopt','holygrail','researchlog'].forEach(t=>{
     const el=document.getElementById('opt-content-'+t);
     if(el)el.style.display=t===tab?'block':'none';
     const btn=document.getElementById('opt-tab-'+t);
@@ -2290,6 +2293,7 @@ function switchOptTab(tab){
     phase12:()=>{if(!pageInited['phase12']&&pageInitFns['phase12']){pageInitFns['phase12']();pageInited['phase12']=true;}},
     phase13:()=>{if(!pageInited['phase13']&&pageInitFns['phase13']){pageInitFns['phase13']();pageInited['phase13']=true;}},
     phase14:()=>{if(!pageInited['phase14']&&pageInitFns['phase14']){pageInitFns['phase14']();pageInited['phase14']=true;}},
+    phase14b:()=>{if(!pageInited['phase14b']&&pageInitFns['phase14b']){pageInitFns['phase14b']();pageInited['phase14b']=true;}},
     ddopt:()=>{if(!pageInited['ddopt']&&pageInitFns['ddopt']){pageInitFns['ddopt']();pageInited['ddopt']=true;}},
     holygrail:()=>{if(!pageInited['holygrail']&&pageInitFns['holygrail']){pageInitFns['holygrail']();pageInited['holygrail']=true;}},
     researchlog:()=>{
@@ -2446,6 +2450,96 @@ pageInitFns['phase14']=function(){
     +'2. Build pure Tokyo range breakout EA: session window 00:00–08:00 GMT<br>'
     +'3. Target OOS $8k–12k on 2022–2023 before IS testing on 2024–2025<br>'
     +'4. No deployment until BOTH DD &lt; 30% AND OOS &gt; $5k confirmed';
+  c.appendChild(ns);
+};
+pageInitFns['phase14b']=function(){
+  const c=document.getElementById('phase14b-content');
+  if(!c)return;
+  c.innerHTML='';
+  const wfData=[
+    {ea:'J1',strat:'Tokyo Range Breakout (pure)',     isBal:3037, oosBal:3000, oosTr:79,  oosWr:34.2,gate:'FAIL'},
+    {ea:'J2',strat:'Tokyo Range + D1 EMA filter',     isBal:3094, oosBal:3144, oosTr:69,  oosWr:40.6,gate:'FAIL'},
+    {ea:'J3',strat:'Tokyo Range + ATR expansion',     isBal:3037, oosBal:3000, oosTr:79,  oosWr:34.2,gate:'FAIL'},
+    {ea:'J4',strat:'Tokyo Range + session time stop', isBal:3026, oosBal:2993, oosTr:2,   oosWr:0.0, gate:'FAIL'},
+    {ea:'J5',strat:'London Open Breakout (pure)',     isBal:3030, oosBal:3041, oosTr:3,   oosWr:0.0, gate:'FAIL'},
+    {ea:'J6',strat:'London Open + overnight bias',    isBal:3084, oosBal:3054, oosTr:3,   oosWr:0.0, gate:'FAIL'},
+    {ea:'J7',strat:'London Open + RSI neutral',       isBal:3019, oosBal:2957, oosTr:1,   oosWr:0.0, gate:'FAIL'},
+    {ea:'J8',strat:'D1 Trend + H1 BB Pullback',       isBal:3027, oosBal:3181, oosTr:35,  oosWr:42.9,gate:'FAIL'},
+    {ea:'J9',strat:'H4 Multi-Day Range Breakout',     isBal:3000, oosBal:3000, oosTr:0,   oosWr:0.0, gate:'FAIL'},
+    {ea:'J10',strat:'Dual-Session Momentum',          isBal:2962, oosBal:3065, oosTr:8,   oosWr:50.0,gate:'FAIL'},
+    {ea:'J11',strat:'Asian Mid-Range Fade (MR)',      isBal:2946, oosBal:3006, oosTr:173, oosWr:59.5,gate:'FAIL'},
+    {ea:'J12',strat:'RSI Mean Reversion (Asian)',     isBal:3014, oosBal:2833, oosTr:93,  oosWr:32.3,gate:'FAIL'},
+  ];
+  const hdr=document.createElement('div');
+  hdr.style.cssText='padding:14px 16px;background:linear-gradient(135deg,#FEF2F2,#FFF7F7);border-radius:10px;border-left:4px solid #7F1D1D;margin-bottom:14px;font-size:.78rem;color:var(--navy);line-height:1.7';
+  hdr.innerHTML='<b>Phase 14b — NATIVE USDJPY WALK-FORWARD: 12 Purpose-Built EAs | IS 2024–2025 | OOS 2022–2023</b><br>'
+    +'<b style="color:#7F1D1D;font-size:.85rem">DEPLOYMENT GATE: ❌ NO-GO — 0/12 EAs passed · All failed OOS balance &lt; $5,000</b><br>'
+    +'Deposit: $3,000 · Symbol: USDJPY · Timeframe: H1 · Risk: 1% per trade<br>'
+    +'Families tested: Tokyo Range Breakout (J1–J4) · London Open Breakout (J5–J7) · Trend/Range Mixed (J8–J10) · Mean Reversion (J11–J12)<br>'
+    +'<b style="color:#059669">Best candidate: J11 (59.5% OOS WR, PF 2.21, 173 trades) — edge exists but too thin at 1% risk</b>';
+  c.appendChild(hdr);
+  const tblLbl=document.createElement('div');
+  tblLbl.style.cssText='margin-top:14px;margin-bottom:8px;font-size:.78rem;font-weight:700;color:var(--navy)';
+  tblLbl.textContent='Walk-Forward Results (IS 2024–2025 vs OOS 2022–2023)';
+  c.appendChild(tblLbl);
+  const wrap=document.createElement('div');
+  wrap.style.overflowX='auto';
+  let thtml='<table style="width:100%;border-collapse:collapse;font-size:.7rem">'
+    +'<thead><tr style="background:var(--gray-50);color:var(--gray-500);font-size:.67rem">'
+    +'<th style="text-align:left;padding:6px 10px;border-bottom:1px solid var(--gray-200)">EA</th>'
+    +'<th style="text-align:left;padding:6px 10px;border-bottom:1px solid var(--gray-200)">Strategy</th>'
+    +'<th style="text-align:right;padding:6px 8px;border-bottom:1px solid var(--gray-200)">IS Bal</th>'
+    +'<th style="text-align:right;padding:6px 8px;border-bottom:1px solid var(--gray-200)">OOS Bal</th>'
+    +'<th style="text-align:right;padding:6px 8px;border-bottom:1px solid var(--gray-200)">OOS Trades</th>'
+    +'<th style="text-align:right;padding:6px 8px;border-bottom:1px solid var(--gray-200)">OOS WR%</th>'
+    +'<th style="text-align:center;padding:6px 8px;border-bottom:1px solid var(--gray-200)">Gate</th>'
+    +'</tr></thead><tbody>';
+  wfData.forEach(function(r){
+    const isJ11=r.ea==='J11';
+    const bg=isJ11?'#F0FDF4':'#fff';
+    const oosBal=r.oosBal;
+    const oosCol=oosBal>=5000?'#10B981':oosBal>=3000?'#D97706':'#DC2626';
+    const oosPct=Math.round((oosBal/3000-1)*100);
+    const pctStr=(oosPct>=0?'+':'')+oosPct+'%';
+    thtml+='<tr style="background:'+bg+';border-bottom:1px solid var(--gray-100)">'
+      +'<td style="padding:6px 10px;font-weight:700;color:var(--navy);font-size:.68rem">'+r.ea+'</td>'
+      +'<td style="padding:6px 10px;color:var(--gray-600);font-size:.67rem">'+r.strat+'</td>'
+      +'<td style="text-align:right;padding:6px 8px;color:var(--gray-600)">$'+r.isBal.toLocaleString()+'</td>'
+      +'<td style="text-align:right;padding:6px 8px;font-weight:700;color:'+oosCol+'">$'+oosBal.toLocaleString()+' ('+pctStr+')</td>'
+      +'<td style="text-align:right;padding:6px 8px;color:var(--gray-500)">'+r.oosTr+'</td>'
+      +'<td style="text-align:right;padding:6px 8px;color:'+(r.oosWr>=50?'#059669':'var(--gray-500)')+'">'+r.oosWr+'%</td>'
+      +'<td style="text-align:center;padding:6px 8px;font-size:.75rem">❌</td>'
+      +'</tr>';
+  });
+  thtml+='</tbody></table>';
+  wrap.innerHTML=thtml;
+  c.appendChild(wrap);
+  const findLbl=document.createElement('div');
+  findLbl.style.cssText='margin-top:18px;margin-bottom:8px;font-size:.78rem;font-weight:700;color:var(--navy)';
+  findLbl.textContent='Key Findings';
+  c.appendChild(findLbl);
+  const findWrap=document.createElement('div');
+  findWrap.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:.75rem;margin-bottom:14px';
+  [
+    ['#7F1D1D','F1: All 12 EAs failed — no USDJPY strategy viable at 1% risk','OOS balances clustered at $2,833–$3,181. No catastrophic collapse (unlike Phase 14a), but no growth either. USDJPY spread (~1–1.5 pip) eats the margin.'],
+    ['#DC2626','F2: London Open Breakout is wrong for USDJPY (J5–J7)','Only 1–5 trades over 2 years. By London open, USDJPY direction is set by Asia. No breakout catalyst exists — this family should be abandoned for JPY pairs.'],
+    ['#059669','F3: J11 shows genuine statistical edge (59.5% WR, PF 2.21)','Asian Mid-Range Fade: 173 OOS trades, stable WR (56.5% IS → 59.5% OOS, only 3pp drift). Edge is real but thin at 1% risk/1.5:1 RR. Priority for Phase 15 optimization.'],
+    ['#D97706','F4: Phase 15 path — J11 optimization or EURUSD adaptation','J11 with 2.5:1 RR + 1.5% risk could reach $5k+ OOS. Alternatively, apply Tokyo Range approach to EURUSD (better liquidity, tighter spread). Both options viable.'],
+  ].forEach(function(item){
+    const d=document.createElement('div');
+    d.style.cssText='padding:10px;background:#fff;border-radius:8px;border-left:3px solid '+item[0];
+    d.innerHTML='<div style="font-weight:700;color:var(--navy);margin-bottom:4px">'+item[1]+'</div>'
+      +'<div style="color:var(--gray-600);line-height:1.5">'+item[2]+'</div>';
+    findWrap.appendChild(d);
+  });
+  c.appendChild(findWrap);
+  const ns=document.createElement('div');
+  ns.style.cssText='padding:12px 16px;background:#FFF7ED;border-radius:8px;border-left:4px solid #D97706;font-size:.75rem;color:var(--navy)';
+  ns.innerHTML='<b>Phase 15 Options (ranked by probability of success)</b><br>'
+    +'1. <b>J11 Optimization</b> — raise TP to 2.5:1, increase risk to 1.5–2%, test on raw ECN spread<br>'
+    +'2. <b>J2 Optimization</b> — Tokyo Range + D1 EMA, raise TP to 3:1, widen Tokyo session window<br>'
+    +'3. <b>EURUSD Adaptation</b> — apply J2 Tokyo Range approach to EURUSD (tighter spread, better liquidity)<br>'
+    +'4. <b>XAUUSD Return</b> — Phase 13 strategies with conservative SZ1 (0.5% risk), DD target &lt;20%';
   c.appendChild(ns);
 };
 pageInitFns['phase13']=function(){
