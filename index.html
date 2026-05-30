@@ -5,36 +5,37 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PUNCH TERMINAL // HUD</title>
 <style>
-:root{
-  --bg:#00070e;--panel:#03161b;--panel2:#04202a;--line:#0c3a40;
-  --teal:#11d6c8;--teal-dim:#0a7d8a;--blue:#4d94ff;--amber:#f5b942;--red:#ff6b6b;--green:#22d3a0;--violet:#c4b5fd;
-  --text:#dff6f4;--muted:#6fa3ab;--dim:#3d6670;--mono:ui-monospace,'SF Mono','JetBrains Mono',Menlo,monospace;
-}
+:root{--bg:#00070e;--panel:#03161b;--panel2:#04202a;--line:#0c3a40;--teal:#11d6c8;--teal-dim:#0a7d8a;--blue:#4d94ff;--amber:#f5b942;--red:#ff6b6b;--green:#22d3a0;--violet:#c4b5fd;--text:#dff6f4;--muted:#6fa3ab;--dim:#3d6670;--mono:ui-monospace,'SF Mono','JetBrains Mono',Menlo,monospace;}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:system-ui,-apple-system,'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;
-  background-image:radial-gradient(900px 500px at 88% -8%,rgba(17,214,200,.10),transparent 60%),radial-gradient(700px 600px at -5% 110%,rgba(77,148,255,.07),transparent 60%),linear-gradient(rgba(17,214,200,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(17,214,200,.035) 1px,transparent 1px);
-  background-size:auto,auto,34px 34px,34px 34px;}
+body{font-family:system-ui,-apple-system,'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;background-image:radial-gradient(900px 500px at 88% -8%,rgba(17,214,200,.10),transparent 60%),radial-gradient(700px 600px at -5% 110%,rgba(77,148,255,.07),transparent 60%),linear-gradient(rgba(17,214,200,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(17,214,200,.035) 1px,transparent 1px);background-size:auto,auto,34px 34px,34px 34px;}
 .app{display:grid;grid-template-columns:64px 1fr;grid-template-rows:54px 1fr;min-height:100vh;}
 .mono{font-family:var(--mono);}
 svg.ic{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
 .sidebar{grid-row:1/3;background:rgba(2,12,16,.7);border-right:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 0;}
 .sidebar .logo{width:36px;height:36px;border:1px solid var(--teal);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--teal);box-shadow:0 0 14px rgba(17,214,200,.45);margin-bottom:10px;}
 .navi{width:40px;height:40px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:var(--dim);cursor:pointer;position:relative;transition:.15s;}
-.navi:hover{color:var(--teal);background:rgba(17,214,200,.07);}
-.navi.on{color:var(--teal);background:rgba(17,214,200,.10);}
+.navi:hover{color:var(--teal);background:rgba(17,214,200,.07);}.navi.on{color:var(--teal);background:rgba(17,214,200,.10);}
 .navi.on::before{content:"";position:absolute;left:-11px;top:9px;bottom:9px;width:2px;background:var(--teal);box-shadow:0 0 8px var(--teal);}
-.navi .tip{position:absolute;left:50px;white-space:nowrap;background:#02141a;border:1px solid var(--line);color:var(--text);font-size:11px;padding:3px 8px;border-radius:5px;opacity:0;pointer-events:none;transition:.12s;z-index:5;}
+.navi .tip{position:absolute;left:50px;white-space:nowrap;background:#02141a;border:1px solid var(--line);color:var(--text);font-size:11px;padding:3px 8px;border-radius:5px;opacity:0;pointer-events:none;transition:.12s;z-index:50;}
 .navi:hover .tip{opacity:1;}
-.top{grid-column:2;display:flex;align-items:center;gap:14px;padding:0 18px;border-bottom:1px solid var(--line);background:rgba(2,12,16,.5);}
+.top{grid-column:2;display:flex;align-items:center;gap:14px;padding:0 18px;border-bottom:1px solid var(--line);background:rgba(2,12,16,.5);position:relative;z-index:20;}
 .brand{font-family:var(--mono);font-weight:600;letter-spacing:3px;font-size:14px;}.brand b{color:var(--teal);}
-.search{flex:1;max-width:380px;display:flex;align-items:center;gap:8px;background:#02141a;border:1px solid var(--line);border-radius:8px;padding:7px 12px;color:var(--muted);font-size:12px;}
+.search{flex:1;max-width:420px;position:relative;}
+.search input{width:100%;background:#02141a;border:1px solid var(--line);border-radius:8px;padding:8px 12px 8px 34px;color:var(--text);font-size:12px;outline:none;font-family:inherit;}
+.search input:focus{border-color:var(--teal);}
+.search svg{position:absolute;left:11px;top:9px;width:15px;height:15px;color:var(--muted);}
+.results{position:absolute;top:40px;left:0;right:0;background:#02141a;border:1px solid var(--line);border-radius:8px;overflow:hidden;display:none;z-index:60;max-height:320px;overflow-y:auto;}
+.results.on{display:block;}
+.results a{display:flex;justify-content:space-between;gap:10px;padding:8px 12px;cursor:pointer;border-bottom:1px solid rgba(12,58,64,.4);font-size:12px;color:var(--text);}
+.results a:hover{background:rgba(17,214,200,.08);color:var(--teal);}
+.results .k{font-family:var(--mono);font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;}
+.results .none{padding:10px 12px;color:var(--muted);font-size:12px;}
 .chip{font-family:var(--mono);font-size:10px;letter-spacing:1px;padding:4px 9px;border-radius:4px;border:1px solid var(--line);color:var(--muted);}
 .chip.live{color:var(--teal);border-color:rgba(17,214,200,.4);}.chip.live::before{content:"●";margin-right:5px;}
 .main-content{grid-column:2;overflow:auto;padding:16px 18px 40px;}
 .tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
 .tab{font-family:var(--mono);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);background:#02141a;border:1px solid var(--line);border-radius:6px;padding:7px 13px;cursor:grab;user-select:none;display:flex;align-items:center;gap:7px;transition:.12s;}
-.tab:hover{color:var(--teal);border-color:rgba(17,214,200,.35);}
-.tab.on{color:var(--bg);background:var(--teal);border-color:var(--teal);box-shadow:0 0 14px rgba(17,214,200,.4);}
+.tab:hover{color:var(--teal);border-color:rgba(17,214,200,.35);}.tab.on{color:var(--bg);background:var(--teal);border-color:var(--teal);box-shadow:0 0 14px rgba(17,214,200,.4);}
 .tab.drag{opacity:.4;}.tab .gr{color:var(--dim);}.tab.on .gr{color:rgba(0,0,0,.4);}
 .grid{display:grid;gap:14px;}
 .panel{position:relative;background:linear-gradient(180deg,rgba(4,32,42,.5),rgba(3,22,27,.3));border:1px solid var(--line);border-radius:10px;padding:16px 18px;}
@@ -49,22 +50,23 @@ svg.ic{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7;str
 .bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--teal-dim),var(--teal));box-shadow:0 0 10px var(--teal);}
 .kpis{grid-template-columns:repeat(3,1fr);}
 .kpi{background:#03161b;border:1px solid var(--line);border-top:2px solid var(--teal);border-radius:0 0 8px 8px;padding:13px 15px;}
-.kpi.b{border-top-color:var(--blue);}.kpi.r{border-top-color:var(--red);}
-.kpi .v{font-size:1.5rem;font-weight:700;font-family:var(--mono);}
+.kpi.b{border-top-color:var(--blue);}.kpi.r{border-top-color:var(--red);}.kpi .v{font-size:1.5rem;font-weight:700;font-family:var(--mono);}
 .t-teal{color:var(--teal);}.t-blue{color:var(--blue);}.t-red{color:var(--red);}.t-green{color:var(--green);}.t-amber{color:var(--amber);}
 table{width:100%;border-collapse:collapse;font-size:.84rem;}
 th{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);}
 td{padding:9px 10px;border-bottom:1px solid rgba(12,58,64,.5);}tr:last-child td{border-bottom:none;}tr:hover td{background:rgba(17,214,200,.04);}
 .gate{font-family:var(--mono);font-size:11px;padding:2px 8px;border-radius:4px;}
-.g3{background:rgba(17,214,200,.12);color:var(--teal);}.g4{background:rgba(34,211,160,.14);color:var(--green);}.g2{background:rgba(245,185,66,.12);color:var(--amber);}
+.g3{background:rgba(17,214,200,.12);color:var(--teal);}.g4{background:rgba(34,211,160,.14);color:var(--green);}.g2{background:rgba(245,185,66,.12);color:var(--amber);}.g1{background:rgba(255,107,107,.12);color:var(--red);}
 .two{grid-template-columns:1fr 1fr;}.three{grid-template-columns:repeat(3,1fr);}
 .page{display:none;}.page.on{display:block;}
+.chartbox{position:relative;height:230px;margin-top:8px;}
 .foot{font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:1px;text-align:center;margin-top:22px;}
 input[type=range]{width:100%;accent-color:var(--teal);}
-input,select{background:#02141a;color:var(--text);border:1px solid var(--line);border-radius:7px;padding:8px 11px;font-size:.85rem;font-family:inherit;outline:none;width:100%;}
+input:not([type=range]),select{background:#02141a;color:var(--text);border:1px solid var(--line);border-radius:7px;padding:8px 11px;font-size:.85rem;font-family:inherit;outline:none;width:100%;}
 input:focus,select:focus{border-color:var(--teal);}
 label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;font-family:var(--mono);}
 .val{font-family:var(--mono);font-size:1.3rem;font-weight:700;color:var(--teal);}
+.callout{border-left:3px solid var(--amber);background:rgba(245,185,66,.07);padding:13px 15px;border-radius:0 8px 8px 0;}
 @media(max-width:820px){.two,.three,.kpis{grid-template-columns:1fr;}.hero{grid-template-columns:1fr;}}
 </style>
 </head>
@@ -83,7 +85,11 @@ label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacin
 
 <header class="top">
   <span class="brand">PUNCH<b>//</b>TERMINAL</span>
-  <div class="search"><svg class="ic" viewBox="0 0 24 24" style="width:15px;height:15px"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4 -4"/></svg> search strategies, phases, metrics…</div>
+  <div class="search">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4 -4"/></svg>
+    <input id="q" type="text" placeholder="search phases, strategies, markets, metrics…" autocomplete="off">
+    <div class="results" id="qres"></div>
+  </div>
   <span class="chip live">DEMO MODE</span><span class="chip mono">v2.0</span>
 </header>
 
@@ -91,204 +97,389 @@ label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacin
 
   <!-- HOME -->
   <section class="page on" id="page-home">
-    <div class="tabs" id="tabs">
-      <div class="tab on" data-t="t-status"><span class="gr">⠿</span>Status</div>
-      <div class="tab" data-t="t-cards"><span class="gr">⠿</span>Metrics</div>
-    </div>
-    <div id="t-status" class="tpane">
-      <div class="panel hero" style="margin-bottom:14px;">
-        <div>
-          <span class="lab">KPI STATUS // REAL-TICK EDITION</span>
-          <div class="big">KPI not met — best <span class="glow">+5.715%</span><span class="muted" style="font-size:1.1rem">/mo</span></div>
-          <div style="display:flex;align-items:center;gap:10px;"><div class="bar" style="flex:1"><i style="width:26.6%"></i></div><span class="mono t-teal" style="font-size:12px">26.6%</span></div>
-          <div class="muted mono" style="margin-top:8px;font-size:11px;">REQUIRED 21.5%/mo · GAP −15.8pp · model=4 real ticks</div>
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:center;">
-          <svg width="130" height="130" viewBox="0 0 130 130"><circle cx="65" cy="65" r="54" fill="none" stroke="#0a2a30" stroke-width="9"/><circle cx="65" cy="65" r="54" fill="none" stroke="#11d6c8" stroke-width="9" stroke-linecap="round" stroke-dasharray="339" stroke-dashoffset="249" transform="rotate(-90 65 65)" style="filter:drop-shadow(0 0 5px #11d6c8)"/><text x="65" y="62" text-anchor="middle" font-size="26" font-weight="700" fill="#11d6c8" font-family="monospace">27%</text><text x="65" y="80" text-anchor="middle" font-size="9" fill="#6fa3ab" font-family="monospace">TO KPI</text></svg>
-          <span class="mono" style="font-size:9px;color:var(--dim);letter-spacing:1px;margin-top:4px;">PHASE 24 · HONEST STOP</span>
-        </div>
+    <div class="panel hero" style="margin-bottom:14px;">
+      <div>
+        <span class="lab" id="hd-status">KPI STATUS // REAL-TICK EDITION</span>
+        <div class="big">KPI not met — best <span class="glow" id="hd-best">+5.715%</span><span class="muted" style="font-size:1.1rem">/mo</span></div>
+        <div style="display:flex;align-items:center;gap:10px;"><div class="bar" style="flex:1"><i id="hd-bar" style="width:26.6%"></i></div><span class="mono t-teal" id="hd-pct" style="font-size:12px">26.6%</span></div>
+        <div class="muted mono" id="hd-sub" style="margin-top:8px;font-size:11px;">REQUIRED 21.5%/mo · GAP -15.8pp · model=4 real ticks</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;">
+        <svg width="130" height="130" viewBox="0 0 130 130"><circle cx="65" cy="65" r="54" fill="none" stroke="#0a2a30" stroke-width="9"/><circle id="gauge" cx="65" cy="65" r="54" fill="none" stroke="#11d6c8" stroke-width="9" stroke-linecap="round" stroke-dasharray="339" stroke-dashoffset="249" transform="rotate(-90 65 65)" style="filter:drop-shadow(0 0 5px #11d6c8)"/><text x="65" y="62" text-anchor="middle" font-size="26" font-weight="700" fill="#11d6c8" font-family="monospace">27%</text><text x="65" y="80" text-anchor="middle" font-size="9" fill="#6fa3ab" font-family="monospace">TO KPI</text></svg>
+        <span class="mono" id="hd-phase" style="font-size:9px;color:var(--dim);letter-spacing:1px;margin-top:4px;">PHASE 24 · HONEST STOP</span>
       </div>
     </div>
-    <div id="t-cards" class="tpane" style="display:none;">
-      <div class="grid kpis">
-        <div class="kpi"><span class="lab">Current Monthly · 5%R</span><div class="v t-teal">+5.715%</div><div class="muted mono" style="font-size:10px;margin-top:3px;">D1 SWING · PF 2.4706</div></div>
-        <div class="kpi b"><span class="lab">Champion PF</span><div class="v t-blue">2.4706</div><div class="muted mono" style="font-size:10px;margin-top:3px;">ROBUST · WR 55.3%</div></div>
-        <div class="kpi r"><span class="lab">KPI Gap</span><div class="v t-red">−15.8pp</div><div class="muted mono" style="font-size:10px;margin-top:3px;">NEED 21.5 · HAVE 5.7</div></div>
-      </div>
+    <div class="grid two" style="margin-bottom:14px;">
+      <div class="panel"><span class="lab">AUTONOMOUS LOOP // P2 RETURN BY PHASE</span><div class="chartbox"><canvas id="c-phases"></canvas></div></div>
+      <div class="panel"><span class="lab">CHAMPION PF EVOLUTION // PHASE 1→4</span><div class="chartbox"><canvas id="c-pf"></canvas></div></div>
     </div>
+    <div class="grid kpis" id="hd-kpis"></div>
   </section>
 
   <!-- CHAMPION -->
   <section class="page" id="page-champion">
-    <div class="panel" style="margin-bottom:14px;">
-      <span class="lab">CHAMPION // PHASE 4</span>
-      <div class="h">D1 Swing Breakout — APEX_Pepperstone_v1</div>
-      <div class="muted">P4_Swing_n20_sl1500_tp2000 · XAUUSD D1 · model=4 real ticks · Pepperstone Razor</div>
-    </div>
+    <div class="panel" style="margin-bottom:14px;"><span class="lab">CHAMPION // ERA 1 · PHASE 4</span><div class="h">D1 Swing Breakout — APEX_Pepperstone_v1</div><div class="muted">P4_Swing_n20_sl1500_tp2000 · XAUUSD D1 · model=4 real ticks · Pepperstone Razor</div></div>
     <div class="grid three">
       <div class="kpi"><span class="lab">Profit Factor</span><div class="v t-teal">2.4706</div><div class="muted mono" style="font-size:10px;margin-top:3px;">114 TRADES · 4YR</div></div>
       <div class="kpi b"><span class="lab">Win Rate</span><div class="v t-blue">55.3%</div><div class="muted mono" style="font-size:10px;margin-top:3px;">BREAKEVEN 43%</div></div>
       <div class="kpi"><span class="lab">Walk-Forward</span><div class="v t-green">ROBUST</div><div class="muted mono" style="font-size:10px;margin-top:3px;">TRAIN 1.80 → TEST 2.63</div></div>
     </div>
-    <div class="panel" style="margin-top:14px;">
-      <span class="lab">PF EVOLUTION // PHASE 1 → 4</span>
-      <table style="margin-top:8px;">
-        <thead><tr><th>Phase</th><th>Stage</th><th>PF</th><th>Note</th></tr></thead>
-        <tbody>
-          <tr><td>1</td><td>Reboot · T7</td><td class="t-red">1.083</td><td class="muted">0/8 passed KPI</td></tr>
-          <tr><td>2</td><td>T7 optimized</td><td class="t-amber">1.1715</td><td class="muted">+0.835%/mo</td></tr>
-          <tr><td>3</td><td>Quality filters</td><td class="t-blue">1.2346</td><td class="muted">test PF 1.67</td></tr>
-          <tr><td>4</td><td>D1 Swing ★</td><td class="t-teal">2.4706</td><td class="muted">+5.715%/mo</td></tr>
-        </tbody>
-      </table>
-    </div>
+    <div class="panel" style="margin-top:14px;"><span class="lab">PF EVOLUTION // STAGES</span><div class="chartbox"><canvas id="c-pf2"></canvas></div></div>
   </section>
 
   <!-- RESEARCH -->
   <section class="page" id="page-research">
-    <div class="panel">
+    <div class="panel" style="margin-bottom:14px;">
       <span class="lab">AUTONOMOUS LOOP // 14 PHASES</span>
-      <div class="h">Top phases by walk-forward P2 return</div>
-      <div class="muted" style="margin-bottom:12px;">Honest stop · 0 configs passed all 6 gates · structural G1+G2 conflict</div>
-      <table>
-        <thead><tr><th>Phase</th><th>Hypothesis</th><th>P2</th><th>P3</th><th>DD</th><th>Gates</th></tr></thead>
-        <tbody>
-          <tr><td>15</td><td class="mono muted">s1-usdjpy-nocovid-12pct</td><td class="t-teal">$7,549</td><td>$3,409</td><td>0%</td><td><span class="gate g3">3/6</span></td></tr>
-          <tr><td>24</td><td class="mono muted">s1-usdjpy-ema20-1pct</td><td class="t-teal">$6,844</td><td>$2,544</td><td>0%</td><td><span class="gate g3">3/6</span></td></tr>
-          <tr><td>14</td><td class="mono muted">s1-usdjpy-nocovid-1pct</td><td>$6,401</td><td>$3,454</td><td>0%</td><td><span class="gate g3">3/6</span></td></tr>
-          <tr><td>13</td><td class="mono muted">s1-eurjpy-trend-1pct</td><td>$3,256</td><td class="t-green">$3,555</td><td>0%</td><td><span class="gate g4">4/6</span></td></tr>
-          <tr><td>16</td><td class="mono muted">s1-cadjpy-trend-1pct</td><td>$2,954</td><td>$3,115</td><td>0%</td><td><span class="gate g3">3/6</span></td></tr>
-        </tbody>
-      </table>
+      <div class="h">Walk-forward search · honest stop at Phase 25</div>
+      <div class="muted">0 configs passed all 6 gates · best Phase 15 ($7,549, 3/6)</div>
+      <div class="chartbox" style="height:200px;"><canvas id="c-phases2"></canvas></div>
     </div>
-    <div class="panel" style="margin-top:14px;border-color:rgba(245,185,66,.3);">
+    <div class="panel"><span class="lab">ALL PHASES // P2 · P3 · GATES</span>
+      <table style="margin-top:8px;"><thead><tr><th>Phase</th><th>P2</th><th>P3</th><th>Gates</th></tr></thead><tbody id="tb-phases"></tbody></table>
+    </div>
+    <div class="panel callout" style="margin-top:14px;border:1px solid rgba(245,185,66,.3);">
       <span class="lab" style="color:var(--amber);">STRUCTURAL FINDING // G1 + G2 CONFLICT</span>
-      <div class="muted" style="margin-top:6px;color:var(--text);">No single-symbol F1_TREND config passes the high-return gate (G1) and the P3-stability gate (G2) <b>simultaneously</b>. USDJPY 2022-23 is the only G1 market (BoJ/Fed 500bp divergence); EURJPY/AUDJPY win P3 but miss G1. The 1000%/yr target is structurally unreachable on this strategy class — best path is staged risk + capital additions + diversification.</div>
+      <div class="muted" style="margin-top:6px;color:var(--text);">No single-symbol F1_TREND config passes the high-return gate (G1) and the P3-stability gate (G2) <b>simultaneously</b>. USDJPY 2022-23 is the only G1 market (BoJ/Fed 500bp divergence). The 1000%/yr target is structurally unreachable on this class — best path is staged risk + capital additions + diversification.</div>
     </div>
-    <div class="panel" style="margin-top:14px;">
-      <span class="lab">PHASE 21 // MARKET BREADTH (OOS avg R)</span>
-      <table style="margin-top:8px;">
-        <thead><tr><th>Market</th><th>P2 exp</th><th>P3 exp</th><th>OOS avg</th><th>Max DD</th></tr></thead>
-        <tbody>
-          <tr><td>USDJPY ★</td><td class="t-teal">0.286R</td><td>0.051R</td><td class="t-teal">0.168R</td><td>33.8%</td></tr>
-          <tr><td>EURJPY</td><td>0.064R</td><td class="t-teal">0.156R</td><td>0.110R</td><td>24.8%</td></tr>
-          <tr><td>NAS100</td><td class="t-red">−0.024R</td><td>0.160R</td><td>0.068R</td><td>44.2%</td></tr>
-          <tr><td>GBPUSD</td><td>0.117R</td><td class="t-red">−0.003R</td><td>0.057R</td><td>22.5%</td></tr>
-          <tr><td>CADJPY</td><td>0.014R</td><td>0.051R</td><td>0.033R</td><td class="t-red">47.0%</td></tr>
-        </tbody>
-      </table>
-    </div>
+    <div class="panel" style="margin-top:14px;"><span class="lab">PHASE 21 // MARKET BREADTH (OOS avg R)</span><div class="chartbox" style="height:200px;"><canvas id="c-breadth"></canvas></div></div>
   </section>
 
-  <!-- STRATEGY LIBRARY -->
+  <!-- LIBRARY -->
   <section class="page" id="page-library">
-    <div class="panel" style="margin-bottom:14px;">
-      <span class="lab">EX1A STRATEGY LIBRARY</span>
-      <div class="h">10 of 12 strategies built &amp; ready</div>
-      <div class="muted">Reusable edge components for ensemble composition. 2 failed build-logic (S3, S6).</div>
-    </div>
-    <div class="panel">
-      <table>
-        <thead><tr><th>Strategy</th><th>Status</th><th>Symbol</th><th>Trades</th></tr></thead>
-        <tbody>
-          <tr><td class="mono">S1_F1_TREND</td><td><span class="gate g4">PASS</span></td><td class="muted">—</td><td class="muted">Era 1</td></tr>
-          <tr><td class="mono">S2_J11_FADE</td><td><span class="gate g4">PASS</span></td><td class="muted">—</td><td class="muted">Era 1</td></tr>
-          <tr><td class="mono">S3_F2</td><td><span class="gate g2">FAIL-LOGIC</span></td><td>XAUUSD</td><td class="t-red">0</td></tr>
-          <tr><td class="mono">S4_F3</td><td><span class="gate g4">PASS</span></td><td>USDJPY</td><td>329</td></tr>
-          <tr><td class="mono">S5_F4</td><td><span class="gate g4">PASS</span></td><td>XAUUSD</td><td>34</td></tr>
-          <tr><td class="mono">S6_F5</td><td><span class="gate g2">FAIL-LOGIC</span></td><td>NAS100</td><td class="t-red">0</td></tr>
-          <tr><td class="mono">S7_MTF</td><td><span class="gate g4">PASS</span></td><td>USDJPY</td><td>223</td></tr>
-          <tr><td class="mono">S8_NEWS</td><td><span class="gate g4">PASS</span></td><td>GBPUSD</td><td>460</td></tr>
-          <tr><td class="mono">S9_CARRY</td><td><span class="gate g4">PASS</span></td><td>AUDJPY</td><td>9</td></tr>
-          <tr><td class="mono">S10_STATARB</td><td><span class="gate g4">PASS</span></td><td>EURUSD</td><td>597</td></tr>
-          <tr><td class="mono">S11a/b_SCALP</td><td><span class="gate g4">PASS</span></td><td class="muted">—</td><td class="muted">Part C</td></tr>
-        </tbody>
-      </table>
-    </div>
+    <div class="panel" style="margin-bottom:14px;"><span class="lab">EX1A STRATEGY LIBRARY</span><div class="h">10 of 12 strategies built & ready</div><div class="muted">Reusable edge components for ensemble composition. 2 failed build-logic (S3, S6).</div></div>
+    <div class="panel"><table><thead><tr><th>Strategy</th><th>Status</th><th>Symbol</th><th>Trades</th></tr></thead><tbody id="tb-lib"></tbody></table></div>
   </section>
 
   <!-- DEMO -->
   <section class="page" id="page-demo">
     <div class="grid two">
-      <div class="panel">
-        <span class="lab">PEPPERSTONE DEMO // UNTUNED 2024</span>
-        <div class="h">Per-market performance</div>
-        <table style="margin-top:6px;">
-          <thead><tr><th>Market</th><th>PF</th><th>WR</th><th>Monthly</th></tr></thead>
-          <tbody>
-            <tr><td>USDJPY</td><td class="t-teal">1.375</td><td>47.8%</td><td class="t-teal">+2.16%</td></tr>
-            <tr><td>XAUUSD</td><td class="t-teal">1.26</td><td>45.7%</td><td class="t-teal">+0.53%</td></tr>
-            <tr><td>GBPUSD</td><td>1.09</td><td>42.0%</td><td class="muted">−0.04%</td></tr>
-            <tr><td>EURUSD</td><td class="t-red">0.92</td><td>38.0%</td><td class="t-red">−0.96%</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="panel">
-        <span class="lab">SIGNAL // BEST EDGE</span>
-        <div class="h">USDJPY standout</div>
-        <div class="muted" style="margin-bottom:14px;">Strongest untuned market on Pepperstone.</div>
-        <div class="big t-teal glow">PF 1.375</div>
-        <div class="muted mono" style="margin-top:6px;font-size:11px;">92 TRADES · WR 47.8% · +2.16%/MO</div>
-      </div>
+      <div class="panel"><span class="lab">PEPPERSTONE DEMO // UNTUNED 2024</span><div class="h">Profit factor by market</div><div class="chartbox" style="height:200px;"><canvas id="c-mkt"></canvas></div></div>
+      <div class="panel"><span class="lab">PER-MARKET DETAIL</span><table style="margin-top:6px;"><thead><tr><th>Market</th><th>PF</th><th>WR</th><th>Monthly</th></tr></thead><tbody id="tb-mkt"></tbody></table></div>
     </div>
   </section>
 
   <!-- KPI BUILDER -->
   <section class="page" id="page-kpi">
     <div class="panel">
-      <span class="lab">INTERACTIVE KPI BUILDER</span>
-      <div class="h">Project monthly return by risk</div>
+      <span class="lab">INTERACTIVE KPI BUILDER</span><div class="h">Project monthly return by risk</div>
       <div class="muted" style="margin-bottom:16px;">Base edge: PF 3.19 · 0.95%/mo per 1% risk (Pepperstone XAUUSD).</div>
       <div class="grid two" style="align-items:end;">
         <div>
           <label>Risk % per trade — <span id="kb-risk-out" class="t-teal">2.0%</span></label>
           <input type="range" id="kb-risk" min="0.5" max="5" step="0.5" value="2">
-          <div style="margin-top:14px;"><label>Markets traded</label>
-            <select id="kb-mkts"><option value="1">1 — Gold only</option><option value="2">2 — Gold + USDJPY</option><option value="3" selected>3 — Gold + USDJPY + NAS100</option></select></div>
+          <div style="margin-top:14px;"><label>Markets traded</label><select id="kb-mkts"><option value="1">1 — Gold only</option><option value="2">2 — Gold + USDJPY</option><option value="3" selected>3 — Gold + USDJPY + NAS100</option></select></div>
         </div>
         <div class="grid three" style="gap:10px;">
           <div class="kpi"><span class="lab">Monthly</span><div class="v" id="kb-monthly">5.7%</div></div>
           <div class="kpi b"><span class="lab">12-Month</span><div class="v t-blue" id="kb-year">$8.8K</div></div>
-          <div class="kpi r"><span class="lab">Blowup risk</span><div class="v t-red" id="kb-blow">~8%</div></div>
+          <div class="kpi r"><span class="lab">Blowup</span><div class="v t-red" id="kb-blow">~8%</div></div>
         </div>
       </div>
+      <div class="chartbox" style="margin-top:16px;"><canvas id="c-proj"></canvas></div>
     </div>
   </section>
 
   <!-- TOOLS -->
   <section class="page" id="page-tools">
     <div class="grid two">
-      <div class="panel">
-        <span class="lab">COMPOUND PROJECTION</span>
-        <div class="h">Account growth</div>
-        <div class="grid three" style="gap:10px;margin:12px 0;">
-          <div><label>Start $</label><input type="number" id="cp-start" value="3000"></div>
-          <div><label>Monthly %</label><input type="number" id="cp-monthly" value="5.7" step="0.1"></div>
-          <div><label>Months</label><input type="number" id="cp-months" value="12"></div>
-        </div>
+      <div class="panel"><span class="lab">COMPOUND PROJECTION</span><div class="h">Account growth</div>
+        <div class="grid three" style="gap:10px;margin:12px 0;"><div><label>Start $</label><input type="number" id="cp-start" value="3000"></div><div><label>Monthly %</label><input type="number" id="cp-monthly" value="5.7" step="0.1"></div><div><label>Months</label><input type="number" id="cp-months" value="12"></div></div>
         <div style="display:flex;align-items:baseline;gap:10px;"><span class="muted mono" style="font-size:11px;">FINAL</span><span class="val" id="cp-final">$5,853</span></div>
       </div>
-      <div class="panel">
-        <span class="lab">POSITION RISK</span>
-        <div class="h">Risk per trade</div>
-        <div class="grid three" style="gap:10px;margin:12px 0;">
-          <div><label>Balance $</label><input type="number" id="lc-balance" value="3000"></div>
-          <div><label>Risk %</label><input type="number" id="lc-risk" value="1" step="0.1"></div>
-          <div><label>Stop (pts)</label><input type="number" id="lc-sl" value="80"></div>
-        </div>
+      <div class="panel"><span class="lab">POSITION RISK</span><div class="h">Risk per trade</div>
+        <div class="grid three" style="gap:10px;margin:12px 0;"><div><label>Balance $</label><input type="number" id="lc-balance" value="3000"></div><div><label>Risk %</label><input type="number" id="lc-risk" value="1" step="0.1"></div><div><label>Stop (pts)</label><input type="number" id="lc-sl" value="80"></div></div>
         <div style="display:flex;align-items:baseline;gap:10px;"><span class="muted mono" style="font-size:11px;">AT RISK</span><span class="val" id="lc-result">$30.00</span></div>
       </div>
     </div>
   </section>
 
-  <div class="foot">PUNCH TERMINAL // HUD · DEMO ONLY — NEVER REAL TRADES · 2026-05-30</div>
+  <div class="foot" id="foot">PUNCH TERMINAL // HUD · DEMO ONLY — NEVER REAL TRADES</div>
 </main>
 </div>
 
+<!-- ============ DATA (regenerated by refresh_hud_data.py) ============ -->
+<script id="apex-data">
+window.APEX = {
+  "updated": "2026-05-30",
+  "kpi": {
+    "best": 5.715,
+    "required": 21.5,
+    "gap": -15.8,
+    "progress": 26.6,
+    "phase": "PHASE 24 \u00b7 HONEST STOP"
+  },
+  "cards": [
+    {
+      "lab": "Current Monthly \u00b7 5%R",
+      "v": "+5.715%",
+      "cls": "t-teal",
+      "sub": "D1 SWING \u00b7 PF 2.4706"
+    },
+    {
+      "lab": "Champion PF",
+      "v": "2.4706",
+      "cls": "t-blue",
+      "sub": "ROBUST \u00b7 WR 55.3%",
+      "kpi": "b"
+    },
+    {
+      "lab": "KPI Gap",
+      "v": "-15.8pp",
+      "cls": "t-red",
+      "sub": "NEED 21.5 \u00b7 HAVE 5.7",
+      "kpi": "r"
+    }
+  ],
+  "pfEvolution": [
+    {
+      "stage": "P1 Reboot",
+      "pf": 1.083
+    },
+    {
+      "stage": "P2 T7-opt",
+      "pf": 1.1715
+    },
+    {
+      "stage": "P3 Filters",
+      "pf": 1.2346
+    },
+    {
+      "stage": "P4 Swing",
+      "pf": 2.4706
+    }
+  ],
+  "phases": [
+    {
+      "p": 11,
+      "p2": 2738,
+      "p3": 2238,
+      "g": 1
+    },
+    {
+      "p": 12,
+      "p2": 6401,
+      "p3": 2935,
+      "g": 2
+    },
+    {
+      "p": 13,
+      "p2": 3256,
+      "p3": 3555,
+      "g": 4
+    },
+    {
+      "p": 14,
+      "p2": 6401,
+      "p3": 3454,
+      "g": 3
+    },
+    {
+      "p": 15,
+      "p2": 7549,
+      "p3": 3409,
+      "g": 3
+    },
+    {
+      "p": 16,
+      "p2": 2954,
+      "p3": 3115,
+      "g": 3
+    },
+    {
+      "p": 17,
+      "p2": 3266,
+      "p3": 2814,
+      "g": 3
+    },
+    {
+      "p": 18,
+      "p2": 3284,
+      "p3": 2857,
+      "g": 3
+    },
+    {
+      "p": 19,
+      "p2": 2524,
+      "p3": 3138,
+      "g": 2
+    },
+    {
+      "p": 20,
+      "p2": 2217,
+      "p3": 4684,
+      "g": 3
+    },
+    {
+      "p": 21,
+      "p2": 1732,
+      "p3": 2700,
+      "g": 3
+    },
+    {
+      "p": 22,
+      "p2": 6401,
+      "p3": 2060,
+      "g": 3
+    },
+    {
+      "p": 23,
+      "p2": 3450,
+      "p3": 1410,
+      "g": 2
+    },
+    {
+      "p": 24,
+      "p2": 6844,
+      "p3": 2544,
+      "g": 3
+    }
+  ],
+  "breadth": [
+    {
+      "m": "USDJPY",
+      "oos": 0.168
+    },
+    {
+      "m": "EURJPY",
+      "oos": 0.11
+    },
+    {
+      "m": "NAS100",
+      "oos": 0.068
+    },
+    {
+      "m": "GBPUSD",
+      "oos": 0.057
+    },
+    {
+      "m": "CADJPY",
+      "oos": 0.033
+    }
+  ],
+  "library": [
+    [
+      "S1_F1_TREND",
+      "PASS",
+      "\u2014",
+      "Era 1"
+    ],
+    [
+      "S2_J11_FADE",
+      "PASS",
+      "\u2014",
+      "Era 1"
+    ],
+    [
+      "S3_F2",
+      "FAIL-LOGIC",
+      "XAUUSD",
+      "0"
+    ],
+    [
+      "S4_F3",
+      "PASS",
+      "USDJPY",
+      "329"
+    ],
+    [
+      "S5_F4",
+      "PASS",
+      "XAUUSD",
+      "34"
+    ],
+    [
+      "S6_F5",
+      "FAIL-LOGIC",
+      "NAS100",
+      "0"
+    ],
+    [
+      "S7_MTF",
+      "PASS",
+      "USDJPY",
+      "223"
+    ],
+    [
+      "S8_NEWS",
+      "PASS",
+      "GBPUSD",
+      "460"
+    ],
+    [
+      "S9_CARRY",
+      "PASS",
+      "AUDJPY",
+      "9"
+    ],
+    [
+      "S10_STATARB",
+      "PASS",
+      "EURUSD",
+      "597"
+    ],
+    [
+      "S11a/b_SCALP",
+      "PASS",
+      "\u2014",
+      "Part C"
+    ]
+  ],
+  "markets": [
+    {
+      "m": "USDJPY",
+      "pf": 1.375,
+      "wr": "47.8%",
+      "mo": "+2.16%",
+      "ok": 1
+    },
+    {
+      "m": "XAUUSD",
+      "pf": 1.26,
+      "wr": "45.7%",
+      "mo": "+0.53%",
+      "ok": 1
+    },
+    {
+      "m": "GBPUSD",
+      "pf": 1.09,
+      "wr": "42.0%",
+      "mo": "-0.04%",
+      "ok": 0
+    },
+    {
+      "m": "EURUSD",
+      "pf": 0.92,
+      "wr": "38.0%",
+      "mo": "-0.96%",
+      "ok": -1
+    }
+  ],
+  "projection": [
+    {
+      "r": 1.0,
+      "yr": 11.3
+    },
+    {
+      "r": 1.5,
+      "yr": 7.6
+    },
+    {
+      "r": 2.0,
+      "yr": 5.7
+    },
+    {
+      "r": 2.5,
+      "yr": 4.6
+    }
+  ]
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script>
 var PASS='P6665',KEY='apex_auth_v2';
 function gate(){
-  if(sessionStorage.getItem(KEY)===PASS)return;
+  if(sessionStorage.getItem(KEY)===PASS){boot();return;}
   var o=document.createElement('div');
   o.style.cssText='position:fixed;inset:0;background:#00070e;display:flex;align-items:center;justify-content:center;z-index:99999;background-image:linear-gradient(rgba(17,214,200,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(17,214,200,.04) 1px,transparent 1px);background-size:34px 34px;';
   o.innerHTML='<div style="background:#03161b;border:1px solid #0c3a40;border-radius:14px;padding:38px;width:330px;text-align:center;box-shadow:0 0 40px rgba(17,214,200,.15)">'
@@ -300,58 +491,88 @@ function gate(){
    +'<div id="pw-err" style="color:#ff6b6b;font-size:12px;margin-top:10px;min-height:16px;font-family:monospace"></div>'
    +'<div style="color:#3d6670;font-size:10px;margin-top:14px;font-family:monospace">DEMO ONLY — NO REAL TRADES</div></div>';
   document.body.appendChild(o);
-  function tryit(){var v=document.getElementById('pw-in').value;if(v===PASS){sessionStorage.setItem(KEY,PASS);o.remove();}else{document.getElementById('pw-err').textContent='ACCESS DENIED';document.getElementById('pw-in').value='';}}
+  function tryit(){var v=document.getElementById('pw-in').value;if(v===PASS){sessionStorage.setItem(KEY,PASS);o.remove();boot();}else{document.getElementById('pw-err').textContent='ACCESS DENIED';document.getElementById('pw-in').value='';}}
   document.getElementById('pw-btn').onclick=tryit;
   document.getElementById('pw-in').addEventListener('keydown',function(e){if(e.key==='Enter')tryit();});
   document.getElementById('pw-in').focus();
 }
-gate();
 
 function showPage(p){
   document.querySelectorAll('.page').forEach(function(s){s.classList.toggle('on',s.id==='page-'+p);});
   document.querySelectorAll('.navi').forEach(function(n){n.classList.toggle('on',n.dataset.p===p);});
 }
 
-// draggable + clickable sub-tabs (home)
-var tabs=document.getElementById('tabs');
-function showTab(t){
-  document.querySelectorAll('.tpane').forEach(function(x){x.style.display=x.id===t?'block':'none';});
-  tabs.querySelectorAll('.tab').forEach(function(x){x.classList.toggle('on',x.dataset.t===t);});
-}
-tabs.querySelectorAll('.tab').forEach(function(t){t.addEventListener('click',function(){showTab(t.dataset.t);});});
-var drag=null;
-tabs.addEventListener('pointerdown',function(e){var t=e.target.closest('.tab');if(t){drag=t;t.classList.add('drag');}});
-window.addEventListener('pointerup',function(){if(drag){drag.classList.remove('drag');drag=null;}});
-tabs.addEventListener('pointermove',function(e){if(!drag)return;var a=[].slice.call(tabs.querySelectorAll('.tab:not(.drag)')).find(function(t){var r=t.getBoundingClientRect();return e.clientX<r.left+r.width/2;});if(a)tabs.insertBefore(drag,a);else tabs.appendChild(drag);});
+var COL={teal:'#11d6c8',blue:'#4d94ff',red:'#ff6b6b',green:'#22d3a0',amber:'#f5b942',grid:'rgba(17,214,200,.08)',tick:'#6fa3ab'};
+function axes(extra){return Object.assign({plugins:{legend:{display:false}},scales:{x:{grid:{color:COL.grid},ticks:{color:COL.tick,font:{size:10}}},y:{grid:{color:COL.grid},ticks:{color:COL.tick,font:{size:10}}}},maintainAspectRatio:false,responsive:true},extra||{});}
+function gateColor(g){return g>=4?COL.green:g>=3?COL.teal:g>=2?COL.amber:COL.red;}
 
-// KPI builder
-function kpiCalc(){
-  var r=parseFloat(document.getElementById('kb-risk').value);
-  var m=parseInt(document.getElementById('kb-mkts').value);
-  var monthly=0.95*r*(1+(m-1)*0.5);
-  var year=3000*Math.pow(1+monthly/100,12);
-  var blow=Math.min(95,Math.round(r*r*2));
-  document.getElementById('kb-risk-out').textContent=r.toFixed(1)+'%';
-  document.getElementById('kb-monthly').textContent=monthly.toFixed(1)+'%';
-  document.getElementById('kb-year').textContent='$'+(year/1000).toFixed(1)+'K';
-  document.getElementById('kb-blow').textContent='~'+blow+'%';
+function boot(){
+  var A=window.APEX;
+  // headline
+  document.getElementById('hd-best').textContent='+'+A.kpi.best+'%';
+  document.getElementById('hd-pct').textContent=A.kpi.progress+'%';
+  document.getElementById('hd-bar').style.width=A.kpi.progress+'%';
+  document.getElementById('hd-sub').textContent='REQUIRED '+A.kpi.required+'%/mo · GAP '+A.kpi.gap+'pp · model=4 real ticks';
+  document.getElementById('hd-phase').textContent=A.kpi.phase;
+  document.getElementById('gauge').setAttribute('stroke-dashoffset',(339*(1-A.kpi.progress/100)).toFixed(0));
+  document.getElementById('foot').textContent='PUNCH TERMINAL // HUD · DEMO ONLY — NEVER REAL TRADES · '+A.updated;
+  // cards
+  document.getElementById('hd-kpis').innerHTML=A.cards.map(function(c){return '<div class="kpi '+(c.kpi||'')+'"><span class="lab">'+c.lab+'</span><div class="v '+c.cls+'">'+c.v+'</div><div class="muted mono" style="font-size:10px;margin-top:3px;">'+c.sub+'</div></div>';}).join('');
+  // tables
+  document.getElementById('tb-phases').innerHTML=A.phases.slice().sort(function(a,b){return b.p2-a.p2;}).map(function(x){var ret=Math.round((x.p2/3000-1)*100);return '<tr><td>'+x.p+'</td><td class="'+(x.p2>=5000?'t-teal':'')+'">$'+x.p2.toLocaleString()+' <span class="muted">('+(ret>=0?'+':'')+ret+'%)</span></td><td>$'+x.p3.toLocaleString()+'</td><td><span class="gate g'+Math.min(4,x.g)+'">'+x.g+'/6</span></td></tr>';}).join('');
+  document.getElementById('tb-lib').innerHTML=A.library.map(function(r){var g=r[1]==='PASS'?'g4':'g2';return '<tr><td class="mono">'+r[0]+'</td><td><span class="gate '+g+'">'+r[1]+'</span></td><td>'+r[2]+'</td><td class="'+(r[3]==='0'?'t-red':'muted')+'">'+r[3]+'</td></tr>';}).join('');
+  document.getElementById('tb-mkt').innerHTML=A.markets.map(function(m){var c=m.ok>0?'t-teal':m.ok<0?'t-red':'';return '<tr><td>'+m.m+'</td><td class="'+c+'">'+m.pf+'</td><td>'+m.wr+'</td><td class="'+c+'">'+m.mo+'</td></tr>';}).join('');
+  // charts
+  var ph=A.phases;
+  function phaseChart(id){new Chart(document.getElementById(id),{type:'bar',data:{labels:ph.map(function(x){return 'P'+x.p;}),datasets:[{data:ph.map(function(x){return x.p2;}),backgroundColor:ph.map(function(x){return gateColor(x.g);}),borderRadius:3}]},options:axes({plugins:{legend:{display:false}},scales:{y:{grid:{color:COL.grid},ticks:{color:COL.tick,font:{size:10},callback:function(v){return '$'+v/1000+'k';}}},x:{grid:{display:false},ticks:{color:COL.tick,font:{size:9}}}}})});}
+  phaseChart('c-phases');phaseChart('c-phases2');
+  function pfChart(id){new Chart(document.getElementById(id),{type:'line',data:{labels:A.pfEvolution.map(function(x){return x.stage;}),datasets:[{data:A.pfEvolution.map(function(x){return x.pf;}),borderColor:COL.teal,backgroundColor:'rgba(17,214,200,.12)',fill:true,tension:.3,pointBackgroundColor:COL.teal,pointRadius:4}]},options:axes()});}
+  pfChart('c-pf');pfChart('c-pf2');
+  new Chart(document.getElementById('c-breadth'),{type:'bar',data:{labels:A.breadth.map(function(x){return x.m;}),datasets:[{data:A.breadth.map(function(x){return x.oos;}),backgroundColor:COL.blue,borderRadius:3}]},options:axes({indexAxis:'y'})});
+  new Chart(document.getElementById('c-mkt'),{type:'bar',data:{labels:A.markets.map(function(x){return x.m;}),datasets:[{data:A.markets.map(function(x){return x.pf;}),backgroundColor:A.markets.map(function(x){return x.ok>0?COL.teal:x.ok<0?COL.red:COL.amber;}),borderRadius:3}]},options:axes()});
+  drawProj();
+  // KPI builder
+  function kpiCalc(){var r=parseFloat(kbR.value),m=parseInt(kbM.value),monthly=0.95*r*(1+(m-1)*0.5),year=3000*Math.pow(1+monthly/100,12),blow=Math.min(95,Math.round(r*r*2));document.getElementById('kb-risk-out').textContent=r.toFixed(1)+'%';document.getElementById('kb-monthly').textContent=monthly.toFixed(1)+'%';document.getElementById('kb-year').textContent='$'+(year/1000).toFixed(1)+'K';document.getElementById('kb-blow').textContent='~'+blow+'%';drawProj(monthly);}
+  var kbR=document.getElementById('kb-risk'),kbM=document.getElementById('kb-mkts');kbR.addEventListener('input',kpiCalc);kbM.addEventListener('change',kpiCalc);kpiCalc();
+  // calculators
+  function cpCalc(){var s=+document.getElementById('cp-start').value||0,m=+document.getElementById('cp-monthly').value||0,n=+document.getElementById('cp-months').value||0;document.getElementById('cp-final').textContent='$'+Math.round(s*Math.pow(1+m/100,n)).toLocaleString();}
+  ['cp-start','cp-monthly','cp-months'].forEach(function(id){document.getElementById(id).addEventListener('input',cpCalc);});cpCalc();
+  function lcCalc(){var b=+document.getElementById('lc-balance').value||0,r=+document.getElementById('lc-risk').value||0;document.getElementById('lc-result').textContent='$'+(b*r/100).toFixed(2);}
+  ['lc-balance','lc-risk','lc-sl'].forEach(function(id){document.getElementById(id).addEventListener('input',lcCalc);});lcCalc();
+  buildSearch();
 }
-document.getElementById('kb-risk').addEventListener('input',kpiCalc);
-document.getElementById('kb-mkts').addEventListener('change',kpiCalc);kpiCalc();
+var projChart=null;
+function drawProj(monthly){
+  monthly=monthly||5.7;var pts=[];for(var i=0;i<=24;i++){pts.push(Math.round(3000*Math.pow(1+monthly/100,i)));}
+  if(projChart)projChart.destroy();
+  projChart=new Chart(document.getElementById('c-proj'),{type:'line',data:{labels:pts.map(function(_,i){return 'M'+i;}),datasets:[{data:pts,borderColor:COL.teal,backgroundColor:'rgba(17,214,200,.10)',fill:true,tension:.25,pointRadius:0},{data:pts.map(function(){return 30000;}),borderColor:COL.amber,borderDash:[5,4],pointRadius:0}]},options:axes({scales:{y:{grid:{color:COL.grid},ticks:{color:COL.tick,font:{size:10},callback:function(v){return '$'+v/1000+'k';}}},x:{grid:{display:false},ticks:{color:COL.tick,font:{size:9},maxTicksLimit:7}}}})});
+}
 
-// compound
-function cpCalc(){
-  var s=parseFloat(document.getElementById('cp-start').value)||0,m=parseFloat(document.getElementById('cp-monthly').value)||0,n=parseInt(document.getElementById('cp-months').value)||0;
-  document.getElementById('cp-final').textContent='$'+Math.round(s*Math.pow(1+m/100,n)).toLocaleString();
+// ===== SEARCH =====
+var IDX=[];
+function buildSearch(){
+  var A=window.APEX;
+  IDX=[
+    {t:"Overview",k:"home kpi status",p:"home"},{t:"Champion — D1 Swing Breakout",k:"champion pf 2.4706 era 1 phase 4",p:"champion"},
+    {t:"Research — autonomous loop",k:"research phases gates structural",p:"research"},{t:"Strategy Library (EX1A)",k:"library strategies s1 s10",p:"library"},
+    {t:"Live Demo — Pepperstone",k:"demo usdjpy xauusd markets",p:"demo"},{t:"KPI Builder",k:"kpi risk slider projection",p:"kpi"},{t:"Tools — calculators",k:"tools compound risk",p:"tools"}
+  ];
+  A.phases.forEach(function(x){IDX.push({t:"Phase "+x.p+" — $"+x.p2.toLocaleString()+" P2 · "+x.g+"/6 gates",k:"phase "+x.p+" research",p:"research"});});
+  A.library.forEach(function(r){IDX.push({t:r[0]+" — "+r[1],k:"strategy "+r[0]+" library",p:"library"});});
+  A.markets.forEach(function(m){IDX.push({t:m.m+" — PF "+m.pf+" · "+m.mo+"/mo",k:"market "+m.m+" demo",p:"demo"});});
 }
-['cp-start','cp-monthly','cp-months'].forEach(function(id){document.getElementById(id).addEventListener('input',cpCalc);});cpCalc();
+var q=document.getElementById('q'),qres=document.getElementById('qres');
+q.addEventListener('input',function(){
+  var v=q.value.trim().toLowerCase();
+  if(!v){qres.classList.remove('on');return;}
+  var hits=IDX.filter(function(it){return (it.t+' '+it.k).toLowerCase().indexOf(v)>=0;}).slice(0,8);
+  qres.innerHTML=hits.length?hits.map(function(h){return '<a onclick="jump(\''+h.p+'\')"><span>'+h.t+'</span><span class="k">'+h.p+'</span></a>';}).join(''):'<div class="none">No matches</div>';
+  qres.classList.add('on');
+});
+q.addEventListener('blur',function(){setTimeout(function(){qres.classList.remove('on');},150);});
+function jump(p){showPage(p);q.value='';qres.classList.remove('on');}
 
-// position risk
-function lcCalc(){
-  var b=parseFloat(document.getElementById('lc-balance').value)||0,r=parseFloat(document.getElementById('lc-risk').value)||0;
-  document.getElementById('lc-result').textContent='$'+(b*r/100).toFixed(2);
-}
-['lc-balance','lc-risk','lc-sl'].forEach(function(id){document.getElementById(id).addEventListener('input',lcCalc);});lcCalc();
+gate();
 </script>
 </body>
 </html>
