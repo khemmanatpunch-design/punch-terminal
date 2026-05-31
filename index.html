@@ -112,12 +112,16 @@ label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacin
       <div class="mc-row"><span class="mc-k">NEXT</span><span class="mc-v" id="mc-next">—</span></div>
       <div class="mc-row"><span class="mc-k">UPDATED</span><span class="mc-v" id="mc-updated">—</span></div>
     </div>
+    <div class="panel" id="data-integrity" style="margin-bottom:14px;border:1px solid rgba(245,185,66,.4);background:rgba(245,185,66,.06);">
+      <span class="lab" style="color:var(--amber);">⚠ DATA INTEGRITY</span>
+      <div class="muted mono" id="di-text" style="margin-top:6px;font-size:11px;color:var(--text);line-height:1.5;">M1-bar-modeled — real-tick validation pending.</div>
+    </div>
     <div class="panel hero" style="margin-bottom:14px;">
       <div>
-        <span class="lab" id="hd-status">KPI STATUS // REAL-TICK EDITION</span>
-        <div class="big">KPI not met — best <span class="glow" id="hd-best">+5.715%</span><span class="muted" style="font-size:1.1rem">/mo</span></div>
+        <span class="lab" id="hd-status">KPI STATUS // BAR-MODELED (real-tick pending)</span>
+        <div class="big">KPI not met — best <span class="glow" id="hd-best">+0%</span><span class="muted" style="font-size:1.1rem">/mo</span></div>
         <div style="display:flex;align-items:center;gap:10px;"><div class="bar" style="flex:1"><i id="hd-bar" style="width:26.6%"></i></div><span class="mono t-teal" id="hd-pct" style="font-size:12px">26.6%</span></div>
-        <div class="muted mono" id="hd-sub" style="margin-top:8px;font-size:11px;">REQUIRED 21.5%/mo · GAP -15.8pp · model=4 real ticks</div>
+        <div class="muted mono" id="hd-sub" style="margin-top:8px;font-size:11px;">REQUIRED 21.5%/mo · BAR-MODELED (real-tick pending)</div>
       </div>
       <div style="display:flex;flex-direction:column;align-items:center;">
         <svg width="130" height="130" viewBox="0 0 130 130"><circle cx="65" cy="65" r="54" fill="none" stroke="#0a2a30" stroke-width="9"/><circle id="gauge" cx="65" cy="65" r="54" fill="none" stroke="#11d6c8" stroke-width="9" stroke-linecap="round" stroke-dasharray="339" stroke-dashoffset="249" transform="rotate(-90 65 65)" style="filter:drop-shadow(0 0 5px #11d6c8)"/><text x="65" y="62" text-anchor="middle" font-size="26" font-weight="700" fill="#11d6c8" font-family="monospace">27%</text><text x="65" y="80" text-anchor="middle" font-size="9" fill="#6fa3ab" font-family="monospace">TO KPI</text></svg>
@@ -133,11 +137,11 @@ label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacin
 
   <!-- CHAMPION -->
   <section class="page" id="page-champion">
-    <div class="panel" style="margin-bottom:14px;"><span class="lab">CHAMPION // ERA 1 · PHASE 4</span><div class="h">D1 Swing Breakout — APEX_Pepperstone_v1</div><div class="muted">P4_Swing_n20_sl1500_tp2000 · XAUUSD D1 · model=4 real ticks · Pepperstone Razor</div></div>
+    <div class="panel" style="margin-bottom:14px;"><span class="lab">CHAMPION // PORTFOLIO BOOK (BAR-MODELED)</span><div class="h" id="ch-title">—</div><div class="muted" id="ch-desc">Walk-forward 2016/2022/2023 · M1-bar-modeled (no broker real ticks) · real-tick validation pending</div></div>
     <div class="grid three">
-      <div class="kpi"><span class="lab">Profit Factor</span><div class="v t-teal">2.4706</div><div class="muted mono" style="font-size:10px;margin-top:3px;">114 TRADES · 4YR</div></div>
-      <div class="kpi b"><span class="lab">Win Rate</span><div class="v t-blue">55.3%</div><div class="muted mono" style="font-size:10px;margin-top:3px;">BREAKEVEN 43%</div></div>
-      <div class="kpi"><span class="lab">Walk-Forward</span><div class="v t-green">ROBUST</div><div class="muted mono" style="font-size:10px;margin-top:3px;">TRAIN 1.80 → TEST 2.63</div></div>
+      <div class="kpi"><span class="lab">Median Return /yr</span><div class="v t-teal" id="ch-ann">—</div><div class="muted mono" style="font-size:10px;margin-top:3px;" id="ch-mo">—</div></div>
+      <div class="kpi b"><span class="lab">Combined Max DD</span><div class="v t-blue" id="ch-dd">—</div><div class="muted mono" style="font-size:10px;margin-top:3px;">95th pct · limit 30%</div></div>
+      <div class="kpi"><span class="lab">Real-Tick Validation</span><div class="v t-amber" id="ch-val" style="font-size:1rem;">PENDING</div><div class="muted mono" style="font-size:10px;margin-top:3px;">2021-10 + 2025-26</div></div>
     </div>
     <div class="panel" style="margin-top:14px;"><span class="lab">PF EVOLUTION // STAGES</span><div class="chartbox"><canvas id="c-pf2"></canvas></div></div>
   </section>
@@ -145,9 +149,9 @@ label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacin
   <!-- RESEARCH -->
   <section class="page" id="page-research">
     <div class="panel" style="margin-bottom:14px;">
-      <span class="lab">AUTONOMOUS LOOP // 14 PHASES</span>
-      <div class="h">Walk-forward search · honest stop at Phase 25</div>
-      <div class="muted">0 configs passed all 6 gates · best Phase 15 ($7,549, 3/6)</div>
+      <span class="lab">AUTONOMOUS LOOP // WALK-FORWARD (BAR-MODELED)</span>
+      <div class="h">Per-instrument edge search · 2016/2022/2023 bar-modeled</div>
+      <div class="muted">Real-tick validation pending — see edge matrix for current keepers.</div>
       <div class="chartbox" style="height:200px;"><canvas id="c-phases2"></canvas></div>
     </div>
     <div class="panel"><span class="lab">ALL PHASES // P2 · P3 · GATES</span>
@@ -162,15 +166,15 @@ label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacin
 
   <!-- LIBRARY -->
   <section class="page" id="page-library">
-    <div class="panel" style="margin-bottom:14px;"><span class="lab">EX1A STRATEGY LIBRARY</span><div class="h">10 of 12 strategies built & ready</div><div class="muted">Reusable edge components for ensemble composition. 2 failed build-logic (S3, S6).</div></div>
+    <div class="panel" style="margin-bottom:14px;"><span class="lab">STRATEGY LIBRARY</span><div class="h">Edge components for the portfolio</div><div class="muted">See the Edge Matrix for current per-instrument keepers (bar-modeled, real-tick pending).</div></div>
     <div class="panel"><table><thead><tr><th>Strategy</th><th>Status</th><th>Symbol</th><th>Trades</th></tr></thead><tbody id="tb-lib"></tbody></table></div>
   </section>
 
   <!-- DEMO -->
   <section class="page" id="page-demo">
     <div class="grid two">
-      <div class="panel"><span class="lab">PEPPERSTONE DEMO // UNTUNED 2024</span><div class="h">Profit factor by market</div><div class="chartbox" style="height:200px;"><canvas id="c-mkt"></canvas></div></div>
-      <div class="panel"><span class="lab">PER-MARKET DETAIL</span><table style="margin-top:6px;"><thead><tr><th>Market</th><th>PF</th><th>WR</th><th>Monthly</th></tr></thead><tbody id="tb-mkt"></tbody></table></div>
+      <div class="panel"><span class="lab">EDGE MATRIX // ROBUST OOS EDGE (BAR-MODELED)</span><div class="h">Per-instrument edge (R)</div><div class="chartbox" style="height:200px;"><canvas id="c-mkt"></canvas></div></div>
+      <div class="panel"><span class="lab">PER-INSTRUMENT DETAIL</span><table style="margin-top:6px;"><thead><tr><th>Instrument</th><th>Edge (R)</th><th>OOS returns</th><th>Status</th></tr></thead><tbody id="tb-mkt"></tbody></table></div>
     </div>
   </section>
 
@@ -178,7 +182,7 @@ label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacin
   <section class="page" id="page-kpi">
     <div class="panel">
       <span class="lab">INTERACTIVE KPI BUILDER</span><div class="h">Project monthly return by risk</div>
-      <div class="muted" style="margin-bottom:16px;">Base edge: PF 3.19 · 0.95%/mo per 1% risk (Pepperstone XAUUSD).</div>
+      <div class="muted" style="margin-bottom:16px;">Illustrative projection only — assumes ~0.95%/mo per 1% risk. NOT a measured edge; bar-modeled results pending real-tick validation.</div>
       <div class="grid two" style="align-items:end;">
         <div>
           <label>Risk % per trade — <span id="kb-risk-out" class="t-teal">2.0%</span></label>
@@ -217,52 +221,78 @@ label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacin
 <script id="apex-data">
 window.APEX = {
   "updated": "2026-05-31",
-  "next": "Per-instrument edge search (new architecture)",
+  "next": "Real-tick validation gate (2021-10 + 2025-26), then deeper edge search",
+  "data_integrity": "M1-BAR-MODELED \u2014 broker real ticks exist only for 2021-10 + 2025-26; historical walk-forward (2016/2022/2023) is bar-approximated. NOT RUN YET \u2014 edges are bar-modeled only",
   "kpi": {
-    "best": 5.715,
+    "best": 9.6,
     "required": 21.5,
-    "gap": -15.8,
-    "progress": 26.6,
-    "phase": "PHASE 58 \u00b7 HONEST STOP"
+    "gap": -11.9,
+    "progress": 44.7,
+    "phase": "PHASE 60 \u00b7 DATA-INTEGRITY STOP"
+  },
+  "champion": {
+    "title": "EURJPY S2 + EURUSD BBMR + GBPUSD S1_GBP",
+    "ann": 200.4,
+    "mo": 9.6,
+    "dd95": 29.4,
+    "n": 3,
+    "clears": false,
+    "validation": "NOT RUN YET \u2014 edges are bar-modeled only"
   },
   "cards": [
     {
-      "lab": "Current Monthly \u00b7 5%R",
-      "v": "+5.715%",
+      "lab": "Portfolio Return (bar-modeled)",
+      "v": "+200.4%/yr",
       "cls": "t-teal",
-      "sub": "D1 SWING \u00b7 PF 2.4706"
+      "sub": "3 EDGES \u00b7 9.6%/mo \u00b7 REAL-TICK PENDING"
     },
     {
-      "lab": "Champion PF",
-      "v": "2.4706",
-      "cls": "t-blue",
-      "sub": "ROBUST \u00b7 WR 55.3%",
+      "lab": "Combined Max DD",
+      "v": "29.4%",
+      "cls": "t-teal",
+      "sub": "95th pct \u00b7 limit 30%",
       "kpi": "b"
     },
     {
       "lab": "KPI Gap",
-      "v": "-15.8pp",
+      "v": "-11.9 pp",
       "cls": "t-red",
-      "sub": "NEED 21.5 \u00b7 HAVE 5.7",
+      "sub": "NEED 21.5 \u00b7 HAVE 9.6 %/mo",
       "kpi": "r"
     }
   ],
   "pfEvolution": [
     {
-      "stage": "P1 Reboot",
-      "pf": 1.083
+      "stage": "P53",
+      "pf": 1.057
     },
     {
-      "stage": "P2 T7-opt",
-      "pf": 1.1715
+      "stage": "P54",
+      "pf": 1.023
     },
     {
-      "stage": "P3 Filters",
-      "pf": 1.2346
+      "stage": "P55",
+      "pf": 1.127
     },
     {
-      "stage": "P4 Swing",
-      "pf": 2.4706
+      "stage": "P56",
+      "pf": 0.524
+    },
+    {
+      "stage": "P57",
+      "pf": 0.969
+    },
+    {
+      "stage": "P58",
+      "pf": 0.788
+    },
+    {
+      "stage": "P59",
+      "pf": 0.0
+    },
+    {
+      "stage": "P60",
+      "pf": 0.0
     }
   ],
   "phases": [
@@ -541,144 +571,145 @@ window.APEX = {
       "p2": 2364,
       "p3": 3153,
       "g": 0
+    },
+    {
+      "p": 59,
+      "p2": 0,
+      "p3": 3024,
+      "g": 0
+    },
+    {
+      "p": 60,
+      "p2": 0,
+      "p3": 2695,
+      "g": 0
     }
   ],
   "breadth": [
     {
-      "m": "USDJPY",
-      "oos": 0.168
-    },
-    {
       "m": "EURJPY",
-      "oos": 0.11
-    },
-    {
-      "m": "NAS100",
-      "oos": 0.068
+      "oos": 0.529
     },
     {
       "m": "GBPUSD",
-      "oos": 0.057
+      "oos": 0.238
+    },
+    {
+      "m": "EURUSD",
+      "oos": 0.064
+    },
+    {
+      "m": "XAUUSD",
+      "oos": 0.0
+    },
+    {
+      "m": "NAS100",
+      "oos": -0.04
+    },
+    {
+      "m": "USDJPY",
+      "oos": -0.054
     },
     {
       "m": "CADJPY",
-      "oos": 0.033
+      "oos": -0.11
+    },
+    {
+      "m": "AUDJPY",
+      "oos": -0.139
     }
   ],
   "library": [
     [
-      "S1_F1_TREND",
-      "PASS",
+      "(see edge matrix)",
       "\u2014",
-      "Era 1"
-    ],
-    [
-      "S2_J11_FADE",
-      "PASS",
       "\u2014",
-      "Era 1"
-    ],
-    [
-      "S3_F2",
-      "FAIL-LOGIC",
-      "XAUUSD",
-      "0"
-    ],
-    [
-      "S4_F3",
-      "PASS",
-      "USDJPY",
-      "329"
-    ],
-    [
-      "S5_F4",
-      "PASS",
-      "XAUUSD",
-      "34"
-    ],
-    [
-      "S6_F5",
-      "FAIL-LOGIC",
-      "NAS100",
-      "0"
-    ],
-    [
-      "S7_MTF",
-      "PASS",
-      "USDJPY",
-      "223"
-    ],
-    [
-      "S8_NEWS",
-      "PASS",
-      "GBPUSD",
-      "460"
-    ],
-    [
-      "S9_CARRY",
-      "PASS",
-      "AUDJPY",
-      "9"
-    ],
-    [
-      "S10_STATARB",
-      "PASS",
-      "EURUSD",
-      "597"
-    ],
-    [
-      "S11a/b_SCALP",
-      "PASS",
-      "\u2014",
-      "Part C"
+      "\u2014"
     ]
   ],
   "markets": [
     {
-      "m": "USDJPY",
-      "pf": 1.375,
-      "wr": "47.8%",
-      "mo": "+2.16%",
-      "ok": 1
-    },
-    {
-      "m": "XAUUSD",
-      "pf": 1.26,
-      "wr": "45.7%",
-      "mo": "+0.53%",
+      "m": "EURJPY",
+      "pf": 0.529,
+      "wr": "P2 +13% / P3 +12%",
+      "mo": "KEEPER",
       "ok": 1
     },
     {
       "m": "GBPUSD",
-      "pf": 1.09,
-      "wr": "42.0%",
-      "mo": "-0.04%",
-      "ok": 0
+      "pf": 0.238,
+      "wr": "P2 +15% / P3 +15%",
+      "mo": "KEEPER",
+      "ok": 1
     },
     {
       "m": "EURUSD",
-      "pf": 0.92,
-      "wr": "38.0%",
-      "mo": "-0.96%",
+      "pf": 0.064,
+      "wr": "P2 +9% / P3 +4%",
+      "mo": "weak+",
+      "ok": 0
+    },
+    {
+      "m": "XAUUSD",
+      "pf": 0.0,
+      "wr": "P2 +0% / P3 +0%",
+      "mo": "no edge",
+      "ok": -1
+    },
+    {
+      "m": "NAS100",
+      "pf": -0.04,
+      "wr": "P2 -5% / P3 -3%",
+      "mo": "no edge",
+      "ok": -1
+    },
+    {
+      "m": "USDJPY",
+      "pf": -0.054,
+      "wr": "P2 +113% / P3 +15%",
+      "mo": "no edge",
+      "ok": -1
+    },
+    {
+      "m": "CADJPY",
+      "pf": -0.11,
+      "wr": "P2 -2% / P3 +4%",
+      "mo": "no edge",
+      "ok": -1
+    },
+    {
+      "m": "AUDJPY",
+      "pf": -0.139,
+      "wr": "P2 +6% / P3 -9%",
+      "mo": "no edge",
+      "ok": -1
+    },
+    {
+      "m": "GBPJPY",
+      "pf": -0.193,
+      "wr": "P2 -16% / P3 +5%",
+      "mo": "no edge",
+      "ok": -1
+    },
+    {
+      "m": "US30",
+      "pf": -0.217,
+      "wr": "P2 -3% / P3 -14%",
+      "mo": "no edge",
+      "ok": -1
+    },
+    {
+      "m": "NZDJPY",
+      "pf": -0.372,
+      "wr": "P2 -42% / P3 -10%",
+      "mo": "no edge",
       "ok": -1
     }
   ],
   "projection": [
     {
       "r": 1.0,
-      "yr": 11.3
-    },
-    {
-      "r": 1.5,
-      "yr": 7.6
-    },
-    {
-      "r": 2.0,
-      "yr": 5.7
-    },
-    {
-      "r": 2.5,
-      "yr": 4.6
+      "yr": 0
     }
   ]
 };
@@ -720,8 +751,16 @@ function boot(){
   document.getElementById('hd-best').textContent='+'+A.kpi.best+'%';
   document.getElementById('hd-pct').textContent=A.kpi.progress+'%';
   document.getElementById('hd-bar').style.width=A.kpi.progress+'%';
-  document.getElementById('hd-sub').textContent='REQUIRED '+A.kpi.required+'%/mo · GAP '+A.kpi.gap+'pp · model=4 real ticks';
+  document.getElementById('hd-sub').textContent='REQUIRED '+A.kpi.required+'%/mo · GAP '+A.kpi.gap+'pp · BAR-MODELED (real-tick pending)';
   document.getElementById('hd-phase').textContent=A.kpi.phase;
+  if(A.data_integrity){document.getElementById('di-text').textContent=A.data_integrity;}
+  if(A.champion){var ch=A.champion;
+    var t=document.getElementById('ch-title'); if(t)t.textContent=ch.title;
+    var an=document.getElementById('ch-ann'); if(an)an.textContent='+'+ch.ann+'%';
+    var mo=document.getElementById('ch-mo'); if(mo)mo.textContent=ch.mo+'%/mo · '+ch.n+' edges';
+    var dd=document.getElementById('ch-dd'); if(dd)dd.textContent=ch.dd95+'%';
+    var cv=document.getElementById('ch-val'); if(cv)cv.textContent=ch.validation&&ch.validation.indexOf('survived')>=0?ch.validation:'PENDING';
+  }
   document.getElementById('gauge').setAttribute('stroke-dashoffset',(339*(1-A.kpi.progress/100)).toFixed(0));
   // Mission Control — plain status, same 5 lines every session
   (function(){
@@ -774,13 +813,13 @@ var IDX=[];
 function buildSearch(){
   var A=window.APEX;
   IDX=[
-    {t:"Overview",k:"home kpi status",p:"home"},{t:"Champion — D1 Swing Breakout",k:"champion pf 2.4706 era 1 phase 4",p:"champion"},
-    {t:"Research — autonomous loop",k:"research phases gates structural",p:"research"},{t:"Strategy Library (EX1A)",k:"library strategies s1 s10",p:"library"},
-    {t:"Live Demo — Pepperstone",k:"demo usdjpy xauusd markets",p:"demo"},{t:"KPI Builder",k:"kpi risk slider projection",p:"kpi"},{t:"Tools — calculators",k:"tools compound risk",p:"tools"}
+    {t:"Overview",k:"home kpi status",p:"home"},{t:"Champion — Portfolio book (bar-modeled)",k:"champion portfolio edges bar-modeled",p:"champion"},
+    {t:"Research — autonomous loop",k:"research phases gates structural",p:"research"},{t:"Strategy Library",k:"library strategies edge matrix",p:"library"},
+    {t:"Edge Matrix — per instrument",k:"demo edge matrix instruments bar-modeled",p:"demo"},{t:"KPI Builder",k:"kpi risk slider projection",p:"kpi"},{t:"Tools — calculators",k:"tools compound risk",p:"tools"}
   ];
   A.phases.forEach(function(x){IDX.push({t:"Phase "+x.p+" — $"+x.p2.toLocaleString()+" P2 · "+x.g+"/6 gates",k:"phase "+x.p+" research",p:"research"});});
   A.library.forEach(function(r){IDX.push({t:r[0]+" — "+r[1],k:"strategy "+r[0]+" library",p:"library"});});
-  A.markets.forEach(function(m){IDX.push({t:m.m+" — PF "+m.pf+" · "+m.mo+"/mo",k:"market "+m.m+" demo",p:"demo"});});
+  A.markets.forEach(function(m){IDX.push({t:m.m+" — edge "+m.pf+"R · "+m.mo,k:"instrument "+m.m+" edge",p:"demo"});});
 }
 var q=document.getElementById('q'),qres=document.getElementById('qres');
 q.addEventListener('input',function(){
