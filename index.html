@@ -67,7 +67,14 @@ input:focus,select:focus{border-color:var(--teal);}
 label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;font-family:var(--mono);}
 .val{font-family:var(--mono);font-size:1.3rem;font-weight:700;color:var(--teal);}
 .callout{border-left:3px solid var(--amber);background:rgba(245,185,66,.07);padding:13px 15px;border-radius:0 8px 8px 0;}
-@media(max-width:820px){.two,.three,.kpis{grid-template-columns:1fr;}.hero{grid-template-columns:1fr;}}
+.mc{background:#04202a;border:1px solid var(--teal);border-radius:12px;padding:16px 20px;margin-bottom:16px;box-shadow:0 0 22px rgba(17,214,200,.13);}
+.mc h2{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--teal);margin-bottom:12px;}
+.mc-row{display:flex;gap:14px;padding:7px 0;border-bottom:1px solid rgba(17,214,200,.08);}
+.mc-row:last-child{border-bottom:none;}
+.mc-k{font-family:var(--mono);font-size:11px;color:var(--muted);min-width:120px;letter-spacing:1px;padding-top:3px;}
+.mc-v{color:var(--text);font-weight:500;flex:1;font-size:1rem;line-height:1.45;}
+.mc-v.bad{color:var(--red);}.mc-v.good{color:var(--green);}
+@media(max-width:820px){.two,.three,.kpis{grid-template-columns:1fr;}.hero{grid-template-columns:1fr;}.mc-row{flex-direction:column;gap:2px;}}
 </style>
 </head>
 <body>
@@ -97,6 +104,14 @@ label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacin
 
   <!-- HOME -->
   <section class="page on" id="page-home">
+    <div class="mc">
+      <h2>◢ MISSION CONTROL — WHERE WE ARE</h2>
+      <div class="mc-row"><span class="mc-k">STAGE</span><span class="mc-v" id="mc-stage">—</span></div>
+      <div class="mc-row"><span class="mc-k">BEST SO FAR</span><span class="mc-v" id="mc-best">—</span></div>
+      <div class="mc-row"><span class="mc-k">KPI</span><span class="mc-v" id="mc-kpi">—</span></div>
+      <div class="mc-row"><span class="mc-k">NEXT</span><span class="mc-v" id="mc-next">—</span></div>
+      <div class="mc-row"><span class="mc-k">UPDATED</span><span class="mc-v" id="mc-updated">—</span></div>
+    </div>
     <div class="panel hero" style="margin-bottom:14px;">
       <div>
         <span class="lab" id="hd-status">KPI STATUS // REAL-TICK EDITION</span>
@@ -202,6 +217,7 @@ label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacin
 <script id="apex-data">
 window.APEX = {
   "updated": "2026-05-31",
+  "next": "Per-instrument edge search (new architecture)",
   "kpi": {
     "best": 5.715,
     "required": 21.5,
@@ -569,6 +585,19 @@ function boot(){
   document.getElementById('hd-sub').textContent='REQUIRED '+A.kpi.required+'%/mo · GAP '+A.kpi.gap+'pp · model=4 real ticks';
   document.getElementById('hd-phase').textContent=A.kpi.phase;
   document.getElementById('gauge').setAttribute('stroke-dashoffset',(339*(1-A.kpi.progress/100)).toFixed(0));
+  // Mission Control — plain status, same 5 lines every session
+  (function(){
+    function rr(b){return Math.round((b/3000-1)*100);}
+    var lead=(A.phases||[]).slice().sort(function(a,b){return (b.g-a.g)||(Math.min(b.p2,b.p3)-Math.min(a.p2,a.p3));})[0];
+    var met=A.kpi.best>=A.kpi.required;
+    document.getElementById('mc-stage').textContent=A.kpi.phase;
+    document.getElementById('mc-best').textContent=lead?('Phase '+lead.p+' · '+lead.g+'/6 gates · P2 '+(rr(lead.p2)>=0?'+':'')+rr(lead.p2)+'% / P3 '+(rr(lead.p3)>=0?'+':'')+rr(lead.p3)+'%'):'none yet';
+    var k=document.getElementById('mc-kpi');
+    k.textContent=(met?'MET ':'NOT MET — ')+'need '+A.kpi.required+'%/mo · have '+A.kpi.best+'%/mo · gap '+A.kpi.gap+'pp';
+    k.className='mc-v '+(met?'good':'bad');
+    document.getElementById('mc-next').textContent=A.next||'—';
+    document.getElementById('mc-updated').textContent=A.updated;
+  })();
   document.getElementById('foot').textContent='PUNCH TERMINAL // HUD · DEMO ONLY — NEVER REAL TRADES · '+A.updated;
   // cards
   document.getElementById('hd-kpis').innerHTML=A.cards.map(function(c){return '<div class="kpi '+(c.kpi||'')+'"><span class="lab">'+c.lab+'</span><div class="v '+c.cls+'">'+c.v+'</div><div class="muted mono" style="font-size:10px;margin-top:3px;">'+c.sub+'</div></div>';}).join('');
