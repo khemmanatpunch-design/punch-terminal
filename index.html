@@ -222,42 +222,42 @@ label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacin
 window.APEX = {
   "updated": "2026-05-31",
   "next": "Real-tick validation gate (2021-10 + 2025-26), then deeper edge search",
-  "data_integrity": "M1-BAR-MODELED \u2014 broker real ticks exist only for 2021-10 + 2025-26; historical walk-forward (2016/2022/2023) is bar-approximated. NOT RUN YET \u2014 edges are bar-modeled only",
+  "data_integrity": "M1-BAR-MODELED \u2014 broker real ticks exist only for 2021-10 + 2025-26; historical walk-forward (2016/2022/2023) is bar-approximated. 0/0 survived real ticks: none",
   "kpi": {
-    "best": 9.6,
+    "best": 8.77,
     "required": 21.5,
-    "gap": -11.9,
-    "progress": 44.7,
+    "gap": -12.7,
+    "progress": 40.8,
     "phase": "PHASE 60 \u00b7 DATA-INTEGRITY STOP"
   },
   "champion": {
-    "title": "EURJPY S2 + EURUSD BBMR + GBPUSD S1_GBP",
-    "ann": 200.4,
-    "mo": 9.6,
-    "dd95": 29.4,
-    "n": 3,
+    "title": "EURJPY S2 + GBPUSD S1_GBP",
+    "ann": 174.2,
+    "mo": 8.77,
+    "dd95": 27.9,
+    "n": 2,
     "clears": false,
-    "validation": "NOT RUN YET \u2014 edges are bar-modeled only"
+    "validation": "0/0 survived real ticks: none"
   },
   "cards": [
     {
       "lab": "Portfolio Return (bar-modeled)",
-      "v": "+200.4%/yr",
+      "v": "+174.2%/yr",
       "cls": "t-teal",
-      "sub": "3 EDGES \u00b7 9.6%/mo \u00b7 REAL-TICK PENDING"
+      "sub": "2 EDGES \u00b7 8.77%/mo \u00b7 REAL-TICK PENDING"
     },
     {
       "lab": "Combined Max DD",
-      "v": "29.4%",
+      "v": "27.9%",
       "cls": "t-teal",
       "sub": "95th pct \u00b7 limit 30%",
       "kpi": "b"
     },
     {
       "lab": "KPI Gap",
-      "v": "-11.9 pp",
+      "v": "-12.7 pp",
       "cls": "t-red",
-      "sub": "NEED 21.5 \u00b7 HAVE 9.6 %/mo",
+      "sub": "NEED 21.5 \u00b7 HAVE 8.77 %/mo",
       "kpi": "r"
     }
   ],
