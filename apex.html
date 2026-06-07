@@ -21,14 +21,29 @@ td.num{text-align:right;font-variant-numeric:tabular-nums}
 .pos{color:#46e6c8} .neg{color:#ff8a8a}
 .warn{background:#1c1606;border:1px solid #6b5410;color:#e8c766;border-radius:10px;padding:10px 14px;font-size:12.5px;margin-top:14px}
 .mono{font-family:Consolas,monospace;color:#7fa6d6;font-size:12px}
+.bar{height:14px;background:#0c1426;border:1px solid #16263f;border-radius:8px;overflow:hidden;margin:4px 0 12px}
+.fill{height:100%;background:linear-gradient(90deg,#1c7a66,#46e6c8);box-shadow:0 0 14px #46e6c855}
+.stages{display:flex;flex-direction:column;gap:4px}
+.stage{font-size:13px;padding:3px 0}
+.stage.done{color:#46e6c8} .stage.active{color:#7fd7ff;font-weight:600} .stage.todo{color:#4d637f}
+.u{font-size:13px;color:#5d7799;font-weight:400}
 </style></head><body>
 <h1>◢◤ APEX HUNTER</h1>
-<div class="sub">autonomous strategy search · gated on 2025/26 unseen data · updated 2026-06-07 13:21:44 · auto-refresh 60s</div>
+<div class="sub">autonomous strategy search · gated on 2025/26 unseen data · updated 2026-06-07 17:13:54 · auto-refresh 60s</div>
 
-<div class="card"><div class="lbl">Engines running</div><span class='chip on'>Hunter (searching)</span><span class='chip on'>Supervisor (auto-restart)</span><span class='chip on'>Tick download</span></div>
+<div class="card"><div class="lbl">Build progress &nbsp;·&nbsp; 45% of pipeline</div>
+<div class="bar"><div class="fill" style="width:45%"></div></div>
+<div class="stages"><div class='stage done'>✅ Native Windows port (off Mac/Wine)</div><div class='stage done'>✅ Tier-1 fast engine (850x) + calibrated vs MT5</div><div class='stage done'>✅ Forward-leg gate 2025/26 (caught fake edges)</div><div class='stage active'>🔄 Data lake + 2025/26 real ticks</div><div class='stage active'>🔄 Hunter search: H1 x 8 assets x 4 strategies</div><div class='stage active'>🔄 Lower-timeframe expansion (M15 / M5)</div><div class='stage todo'>⬜ Tier-2 MT5 real-tick confirmation</div><div class='stage todo'>⬜ Correlation filter -&gt; independent edges</div><div class='stage todo'>⬜ Portfolio build + risk sizing</div><div class='stage todo'>⬜ Forward-demo on live demo account</div></div></div>
 
 <div class="card"><div class="grid">
-  <div><div class="lbl">Combos tested</div><div class="big">6,845</div></div>
+  <div><div class="lbl">Best edge — Tier-1 (fast, unconfirmed)</div><div class="big">1.831<span class="u"> calmar</span></div></div>
+  <div><div class="lbl">Best edge — Tier-2 CONFIRMED (real-tick)</div><div class="big" style="color:#46e6c8">—<span class="u"> calmar</span></div></div>
+</div><div class="sub" style="margin-top:8px">Tier-2 (real-tick) is the number that counts. It stays "—" until MT5 confirmation runs.</div></div>
+
+<div class="card"><div class="lbl">Engines running</div><span class='chip on'>Hunter (searching)</span><span class='chip on'>Supervisor (auto-restart)</span></div>
+
+<div class="card"><div class="grid">
+  <div><div class="lbl">Combos tested</div><div class="big">124,258</div></div>
   <div><div class="lbl">Forward-surviving keepers</div><div class="big">42</div></div>
   <div><div class="lbl">Best calmar</div><div class="big">1.831</div></div>
 </div></div>
@@ -42,7 +57,7 @@ Unconfirmed until MT5 real-tick + statistical-significance gate. 1000%/yr is the
 </div>
 
 <div class="card"><div class="lbl">Activity</div>
-<div class="mono">hunter: [13:21:39] phase1 done: 42 keepers, best calmar 1.831</div>
-<div class="mono">download: [13:20:46] download BTCUSD 2025-05</div>
+<div class="mono">hunter: [17:13:37] refine round 298: +0 new keepers | total 42 | best calmar 1.831 | best ret@25DD 45.8%</div>
+<div class="mono">download: [15:16:09] DONE: 8/8 symbols imported with ticks</div>
 </div>
 </body></html>
