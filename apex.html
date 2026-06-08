@@ -29,35 +29,35 @@ td.num{text-align:right;font-variant-numeric:tabular-nums}
 .u{font-size:13px;color:#5d7799;font-weight:400}
 </style></head><body>
 <h1>◢◤ APEX HUNTER</h1>
-<div class="sub">autonomous strategy search · gated on 2025/26 unseen data · updated 2026-06-08 12:14:57 · auto-refresh 60s</div>
+<div class="sub">autonomous strategy search · gated on 2025/26 unseen data · updated 2026-06-08 12:16:55 · auto-refresh 60s</div>
 
 <div class="card"><div class="lbl">Build progress &nbsp;·&nbsp; 55% of pipeline</div>
 <div class="bar"><div class="fill" style="width:55%"></div></div>
 <div class="stages"><div class='stage done'>✅ Native Windows port (off Mac/Wine)</div><div class='stage done'>✅ Tier-1 fast engine (850x) + calibrated vs MT5</div><div class='stage done'>✅ Forward-leg gate 2025/26 (caught fake edges)</div><div class='stage done'>✅ Data lake + 2025/26 real ticks</div><div class='stage active'>🔄 Hunter search: H1 x 8 assets x 4 strategies</div><div class='stage active'>🔄 Lower-timeframe expansion (M15 / M5)</div><div class='stage active'>🔄 Tier-2 MT5 real-tick confirmation</div><div class='stage todo'>⬜ Correlation filter -&gt; independent edges</div><div class='stage todo'>⬜ Portfolio build + risk sizing</div><div class='stage todo'>⬜ Forward-demo on live demo account</div></div></div>
 
 <div class="card"><div class="grid">
-  <div><div class="lbl">Best edge — Tier-1 (fast, unconfirmed)</div><div class="big">0<span class="u"> calmar</span></div></div>
+  <div><div class="lbl">Best edge — Tier-1 (fast, unconfirmed)</div><div class="big">1.301<span class="u"> calmar</span></div></div>
   <div><div class="lbl">Best edge — Tier-2 CONFIRMED (real-tick)</div><div class="big" style="color:#46e6c8">—<span class="u"> calmar</span></div></div>
 </div><div class="sub" style="margin-top:8px">Tier-2 (real-tick) is the number that counts. It stays "—" until MT5 confirmation runs.</div></div>
 
 <div class="card"><div class="lbl">Engines running</div><span class='chip on'>Hunter (searching)</span><span class='chip on'>Supervisor (auto-restart)</span></div>
 
 <div class="card"><div class="grid">
-  <div><div class="lbl">Combos tested</div><div class="big">516,926</div></div>
-  <div><div class="lbl">Forward-surviving keepers</div><div class="big">0</div></div>
-  <div><div class="lbl">Best calmar</div><div class="big">0</div></div>
+  <div><div class="lbl">Combos tested</div><div class="big">517,426</div></div>
+  <div><div class="lbl">Forward-surviving keepers</div><div class="big">2</div></div>
+  <div><div class="lbl">Best calmar</div><div class="big">1.301</div></div>
 </div></div>
 
 <div class="card"><div class="lbl">Top keepers &nbsp;·&nbsp; figures at a fixed 1% risk per trade</div>
 <table><tr><th>Asset</th><th>Strategy</th><th>Monthly</th><th>Annual</th><th>Max DD</th><th>Calmar</th><th>Worst leg (expR)</th><th>Trades</th></tr>
-<tr><td colspan=8>no keepers yet</td></tr></table>
+<tr><td>NAS100</td><td>ta_rsi</td><td class='num pos'>0.83%</td><td class='num pos'>10.0%</td><td class='num neg'>7.7%</td><td class='num'>1.301</td><td class='num pos'>+0.313</td><td class='num'>111</td></tr><tr><td>NAS100</td><td>ta_rsi</td><td class='num pos'>0.83%</td><td class='num pos'>10.0%</td><td class='num neg'>8.2%</td><td class='num'>1.213</td><td class='num pos'>+0.067</td><td class='num'>138</td></tr></table>
 <div class="warn">⚠ Honest status: these survive the 2025/26 forward leg but worst-leg numbers are THIN.
 Monthly/Annual/Max-DD shown at 1% risk/trade (non-compounded); scale with bet size. Max DD is full-period incl. 2025/26.
 Unconfirmed until MT5 real-tick + statistical-significance gate. 1000%/yr is the target, not a claim.</div>
 </div>
 
 <div class="card"><div class="lbl">Activity</div>
-<div class="mono">hunter: [12:12:58] NEW BEST keeper: NAS100 ta_rsi h1 calmar=1.301 ret@25DD=32.5% worstGate=0.313 {&#x27;RR&#x27;: 3.0, &#x27;atr_mult&#x27;: 2.5, &#x27;period&#x27;: 21, &#x27;lo&#x27;: 30, &#x27;hi&#x27;: 75}</div>
+<div class="mono">hunter: [12:15:41]   11500/37344 | keepers 2 | best calmar 1.301 | 6/s</div>
 <div class="mono">download: [15:16:09] DONE: 8/8 symbols imported with ticks</div>
 </div>
 </body></html>
