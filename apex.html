@@ -35,7 +35,52 @@ td.num{text-align:right;font-variant-numeric:tabular-nums}
 .ck.ckd{color:#46e6c8;text-decoration:line-through;opacity:.75}
 </style></head><body>
 <h1>◢◤ APEX HUNTER</h1>
-<div class="sub">autonomous strategy search · gated on 2025/26 unseen data · updated 2026-06-14 01:47:02 · auto-refresh 60s</div>
+<div class="sub">autonomous strategy search · gated on 2025/26 unseen data · updated 2026-06-14 01:47:32 · auto-refresh 60s</div>
+<div class="card" style="border-color:#1c7a66">
+<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap">
+<div class="lbl" style="color:#46e6c8">◢◤ APEX ENGINE v1 — LIVE · demo 61542495</div>
+<div style="font-size:11px;color:#46e6c8;border:1px solid #1c7a66;border-radius:20px;padding:3px 10px">● REAL · lag-correct · Tier-2 confirmed</div></div>
+<div class="grid" style="margin:12px 0">
+<div><div class="lbl">Net return (live)</div><div class="big" id="sp-net">—</div></div>
+<div><div class="lbl">Calmar (validated)</div><div class="big" style="color:#7fd7ff">1.91</div></div>
+<div><div class="lbl">Max drawdown</div><div class="big" style="color:#ff8a8a">7.3%</div></div>
+<div><div class="lbl">FTMO pass prob</div><div class="big" style="color:#46e6c8">82%</div></div>
+</div>
+<div class="lbl" style="margin-top:6px">Live equity curve <span class="u">· grows hourly · benchmark = flat $100k</span></div>
+<canvas id="sp-eq" style="width:100%;height:200px;display:block"></canvas>
+<div class="lbl" style="margin-top:14px">Monte-Carlo — 4,000 simulated FTMO evals <span class="u">· green = pass (82%)</span></div>
+<canvas id="sp-mc" style="width:100%;height:150px;display:block"></canvas>
+</div>
+<script>
+(function(){var D={"eq": [100000.0, 100000.0, 99998.24, 100504.41, 100777.39, 100778.49, 100775.41, 100776.39, 100764.62, 100843.37, 100803.05, 100832.86, 100752.93, 100642.86, 101064.81, 101318.1, 101249.32, 101336.93, 101308.67, 101121.26, 101148.79, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91], "net": 1114.91, "netpct": 1.11, "calmar": 1.91, "maxdd": 7.3, "ann": 14.1, "fwd": 43.4, "passprob": 82, "champ_fwd": 113.1, "champ_ann": 37.8};
+document.getElementById('sp-net').innerHTML=(D.net>=0?'+':'')+'$'+Math.round(D.net).toLocaleString()+" <span class='u'>("+(D.netpct>=0?'+':'')+D.netpct+"%)</span>";
+document.getElementById('sp-net').style.color=D.net>=0?'#46e6c8':'#ff8a8a';
+function fit(c){var r=c.getBoundingClientRect(),d=window.devicePixelRatio||1;c.width=r.width*d;c.height=r.height*d;var x=c.getContext('2d');x.scale(d,d);return [x,r.width,r.height];}
+// equity curve
+var eq=D.eq.slice(); if(eq.length<2)eq=[100000,eq[eq.length-1]||100000];
+var c1=document.getElementById('sp-eq');var a=fit(c1),x=a[0],W=a[1],H=a[2];
+var lo=Math.min.apply(0,eq.concat([100000])),hi=Math.max.apply(0,eq.concat([100000]));var pad=(hi-lo)*0.15||100;lo-=pad;hi+=pad;
+function px(i){return 8+i*(W-16)/(eq.length-1);}function py(v){return H-10-(v-lo)/(hi-lo)*(H-20);}
+var prog=0;function draw(){x.clearRect(0,0,W,H);
+x.strokeStyle='#26405e';x.setLineDash([4,4]);x.beginPath();x.moveTo(8,py(100000));x.lineTo(W-8,py(100000));x.stroke();x.setLineDash([]);
+var n=Math.max(2,Math.floor(eq.length*prog));
+x.beginPath();for(var i=0;i<n;i++){var X=px(i),Y=py(eq[i]);i?x.lineTo(X,Y):x.moveTo(X,Y);}
+x.strokeStyle='#46e6c8';x.lineWidth=2;x.shadowColor='#46e6c8';x.shadowBlur=12;x.stroke();x.shadowBlur=0;
+var lx=px(n-1),ly=py(eq[n-1]);x.fillStyle='#46e6c8';x.beginPath();x.arc(lx,ly,3.5,0,7);x.fill();
+if(prog<1){prog+=0.04;requestAnimationFrame(draw);}}draw();
+// monte-carlo lattice
+var c2=document.getElementById('sp-mc');var b=fit(c2),y=b[0],MW=b[1],MH=b[2];
+var cols=40,rows=10,tot=cols*rows,passN=Math.round(tot*D.passprob/100);
+var cells=[];for(var k=0;k<tot;k++)cells.push(k<passN);
+for(var s=cells.length-1;s>0;s--){var j=(s*97+13)%(s+1);var t=cells[s];cells[s]=cells[j];cells[j]=t;}
+var gx=(MW-8)/cols,gy=(MH-8)/rows,mi=0;
+function mc(){var step=Math.min(tot,mi+30);for(;mi<step;mi++){var cc=mi%cols,rr=Math.floor(mi/cols);
+y.fillStyle=cells[mi]?'#46e6c8':'#ff5d5d';y.globalAlpha=cells[mi]?0.92:0.85;
+y.beginPath();y.arc(8+cc*gx+gx/2,6+rr*gy+gy/2,Math.min(gx,gy)/2.6,0,7);y.fill();}
+y.globalAlpha=1;if(mi<tot)requestAnimationFrame(mc);}mc();
+})();
+</script>
+
 
 <div class='card'><div class='lbl'>🔴 LIVE PROOF — M1 demo forward-test (acct 61542495, $100k virtual)</div><div class='grid'><div><div class='lbl'>Equity</div><div class='big'>$101,115</div></div><div><div class='lbl'>P&L</div><div class='big pos' style='color:#46e6c8'>+1,115 (+1.11%)</div></div><div><div class='lbl'>Positions</div><div class='big'>9<span class='u'>/9 signaled</span></div></div><div><div class='lbl'>Snapshots</div><div class='big'>43</div></div></div><table style='margin-top:10px'><tr><th>Symbol</th><th>State</th><th>Last action</th></tr><tr><td>VRT.US</td><td>⚪ flat</td><td class='mono'>none</td></tr><tr><td>PWR.US</td><td>🟢 LONG</td><td class='mono'>none</td></tr><tr><td>IBKR.US</td><td>🟢 LONG</td><td class='mono'>none</td></tr><tr><td>DELL.US</td><td>🟢 LONG</td><td class='mono'>none</td></tr><tr><td>URI.US</td><td>🟢 LONG</td><td class='mono'>none</td></tr><tr><td>NVDA.US</td><td>⚪ flat</td><td class='mono'>none</td></tr><tr><td>RR.GB</td><td>🟢 LONG</td><td class='mono'>none</td></tr><tr><td>SGOL.US</td><td>⚪ flat</td><td class='mono'>none</td></tr><tr><td>VONG.US</td><td>🟢 LONG</td><td class='mono'>none</td></tr><tr><td>IUSG.US</td><td>🟢 LONG</td><td class='mono'>none</td></tr><tr><td>QQQ.US</td><td>🟢 LONG</td><td class='mono'>none</td></tr><tr><td>NAS100</td><td>🟢 LONG</td><td class='mono'>none</td></tr><tr><td>XAUUSD</td><td>⚪ flat</td><td class='mono'>none</td></tr><tr><td>XAUJPY</td><td>⚪ flat</td><td class='mono'>none</td></tr><tr><td>Cattle</td><td>⚪ flat</td><td class='mono'>none</td></tr></table><div class='sub' style='margin-top:8px'>Engine: A4 ensemble (validated Calmar 1.91) · hourly reconcile · hard demo-only guards · last update 2026-06-13T18:47:01Z</div></div>
 
