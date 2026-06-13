@@ -35,7 +35,7 @@ td.num{text-align:right;font-variant-numeric:tabular-nums}
 .ck.ckd{color:#46e6c8;text-decoration:line-through;opacity:.75}
 </style></head><body>
 <h1>◢◤ APEX HUNTER</h1>
-<div class="sub">autonomous strategy search · gated on 2025/26 unseen data · updated 2026-06-13 20:25:12 · auto-refresh 60s</div>
+<div class="sub">autonomous strategy search · gated on 2025/26 unseen data · updated 2026-06-13 20:32:26 · auto-refresh 60s</div>
 
 <div class='card'><div class='lbl'>🔴 LIVE PROOF — M1 demo forward-test (acct 61542495, $100k virtual)</div><div class='grid'><div><div class='lbl'>Equity</div><div class='big'>$101,115</div></div><div><div class='lbl'>P&L</div><div class='big pos' style='color:#46e6c8'>+1,115 (+1.11%)</div></div><div><div class='lbl'>Positions</div><div class='big'>9<span class='u'>/9 signaled</span></div></div><div><div class='lbl'>Snapshots</div><div class='big'>37</div></div></div><table style='margin-top:10px'><tr><th>Symbol</th><th>State</th><th>Last action</th></tr><tr><td>VRT.US</td><td>⚪ flat</td><td class='mono'>none</td></tr><tr><td>PWR.US</td><td>🟢 LONG</td><td class='mono'>none</td></tr><tr><td>IBKR.US</td><td>🟢 LONG</td><td class='mono'>none</td></tr><tr><td>DELL.US</td><td>🟢 LONG</td><td class='mono'>none</td></tr><tr><td>URI.US</td><td>🟢 LONG</td><td class='mono'>none</td></tr><tr><td>NVDA.US</td><td>⚪ flat</td><td class='mono'>none</td></tr><tr><td>RR.GB</td><td>🟢 LONG</td><td class='mono'>none</td></tr><tr><td>SGOL.US</td><td>⚪ flat</td><td class='mono'>none</td></tr><tr><td>VONG.US</td><td>🟢 LONG</td><td class='mono'>none</td></tr><tr><td>IUSG.US</td><td>🟢 LONG</td><td class='mono'>none</td></tr><tr><td>QQQ.US</td><td>🟢 LONG</td><td class='mono'>none</td></tr><tr><td>NAS100</td><td>🟢 LONG</td><td class='mono'>none</td></tr><tr><td>XAUUSD</td><td>⚪ flat</td><td class='mono'>none</td></tr><tr><td>XAUJPY</td><td>⚪ flat</td><td class='mono'>none</td></tr><tr><td>Cattle</td><td>⚪ flat</td><td class='mono'>none</td></tr></table><div class='sub' style='margin-top:8px'>Engine: A4 ensemble (validated Calmar 1.91) · hourly reconcile · hard demo-only guards · last update 2026-06-13T12:47:02Z</div></div>
 
@@ -85,4 +85,20 @@ Unconfirmed until MT5 real-tick + statistical-significance gate. 1000%/yr is the
 <div class="mono">hunter: [00:16:48]   39500/40800 | keepers 2 | best calmar 1.301 | 1/s</div>
 <div class="mono">download: [15:16:09] DONE: 8/8 symbols imported with ticks</div>
 </div>
-</body></html>
+<div id="apexgate" style="position:fixed;inset:0;z-index:99999;background:#070b14;display:flex;align-items:center;justify-content:center">
+<div style="background:linear-gradient(180deg,#0c1426,#0a1120);border:1px solid #16263f;border-radius:14px;padding:30px 34px;width:330px;text-align:center;box-shadow:0 0 40px #03081366">
+<div style="font:600 18px 'Segoe UI',sans-serif;color:#46e6c8;letter-spacing:2px;margin-bottom:4px">◢◤ APEX</div>
+<div style="color:#5d7799;font-size:12px;margin-bottom:16px">enter access key</div>
+<input id="pw-in" type="password" placeholder="Access key" style="width:100%;padding:11px 14px;background:#02141a;border:1px solid #0c3a40;border-radius:9px;color:#e8fbfa;font-size:14px;outline:none;box-sizing:border-box;text-align:center;letter-spacing:2px">
+<div id="pw-err" style="color:#ff8a8a;font-size:11px;height:14px;margin-top:8px"></div>
+<button id="pw-go" style="width:100%;margin-top:8px;padding:10px;background:#0d3d33;border:1px solid #1c7a66;border-radius:9px;color:#46e6c8;font-size:13px;cursor:pointer;letter-spacing:1px">UNLOCK</button>
+</div></div>
+<script>
+(function(){var PASS='P6665',KEY='apex_auth_v2';
+function boot(){var g=document.getElementById('apexgate');if(g)g.remove();}
+if(sessionStorage.getItem(KEY)===PASS){boot();return;}
+function tryit(){var v=document.getElementById('pw-in').value;if(v===PASS){sessionStorage.setItem(KEY,PASS);boot();}else{document.getElementById('pw-err').textContent='ACCESS DENIED';document.getElementById('pw-in').value='';}}
+document.getElementById('pw-go').addEventListener('click',tryit);
+document.getElementById('pw-in').addEventListener('keydown',function(e){if(e.key==='Enter')tryit();});
+document.getElementById('pw-in').focus();})();
+</script></body></html>
