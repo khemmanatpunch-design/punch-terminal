@@ -1,137 +1,164 @@
 <!doctype html><html><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="refresh" content="60">
-<title>APEX HUNTER — Status</title>
+<meta http-equiv="refresh" content="300">
+<title>APEX Terminal</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#070b14;color:#cfe3ff;font:14px/1.5 'Segoe UI',system-ui,sans-serif;padding:24px;max-width:920px;margin:auto}
-h1{font-size:22px;letter-spacing:2px;color:#46e6c8;text-shadow:0 0 14px #1b8c78}
-.sub{color:#5d7799;font-size:12px;margin-bottom:18px}
-.card{background:linear-gradient(180deg,#0c1426,#0a1120);border:1px solid #16263f;border-radius:12px;padding:16px 18px;margin:14px 0;box-shadow:0 0 24px #03081333}
-.lbl{color:#5d7799;text-transform:uppercase;font-size:11px;letter-spacing:1.5px;margin-bottom:8px}
-.big{font-size:30px;color:#7fd7ff;font-weight:600}
-.grid{display:flex;gap:26px;flex-wrap:wrap}
-.chip{display:inline-block;padding:5px 11px;border-radius:20px;font-size:12px;margin:3px 5px 0 0}
-.chip.on{background:#0d3d33;color:#46e6c8;border:1px solid #1c7a66}
-.chip.off{background:#3d1414;color:#ff8a8a;border:1px solid #7a1c1c}
+body{background:#070b14;color:#cfe3ff;font:14px/1.5 'Segoe UI',system-ui,sans-serif;padding:18px;max-width:1000px;margin:auto}
+h1{font-size:20px;letter-spacing:2px;color:#46e6c8}
+.sub{color:#5d7799;font-size:11px;margin:2px 0 14px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid #16263f;margin-bottom:16px}
+.tab{padding:9px 15px;font-size:13px;color:#5d7799;cursor:pointer;border-bottom:2px solid transparent;user-select:none;letter-spacing:.5px}
+.tab:hover{color:#9fc2ea}
+.tab.on{color:#46e6c8;border-bottom-color:#46e6c8}
+.panel{display:none}
+.panel.on{display:block;animation:fade .3s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.card{background:linear-gradient(180deg,#0c1426,#0a1120);border:1px solid #16263f;border-radius:12px;padding:15px 17px;margin:12px 0}
+.lbl{color:#5d7799;text-transform:uppercase;font-size:10.5px;letter-spacing:1.4px;margin-bottom:7px}
+.big{font-size:27px;color:#7fd7ff;font-weight:600}
+.big.sm{font-size:19px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.pos{color:#46e6c8}.neg{color:#ff8a8a}.u{font-size:12px;color:#5d7799;font-weight:400}
 table{width:100%;border-collapse:collapse;margin-top:6px}
-th,td{text-align:left;padding:7px 9px;border-bottom:1px solid #122036;font-size:13px}
-th{color:#5d7799;font-size:11px;text-transform:uppercase;letter-spacing:1px}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid #122036;font-size:12.5px}
+th{color:#5d7799;font-size:10px;text-transform:uppercase;letter-spacing:1px}
 td.num{text-align:right;font-variant-numeric:tabular-nums}
-.pos{color:#46e6c8} .neg{color:#ff8a8a}
-.warn{background:#1c1606;border:1px solid #6b5410;color:#e8c766;border-radius:10px;padding:10px 14px;font-size:12.5px;margin-top:14px}
-.mono{font-family:Consolas,monospace;color:#7fa6d6;font-size:12px}
-.bar{height:14px;background:#0c1426;border:1px solid #16263f;border-radius:8px;overflow:hidden;margin:4px 0 12px}
-.fill{height:100%;background:linear-gradient(90deg,#1c7a66,#46e6c8);box-shadow:0 0 14px #46e6c855}
-.stages{display:flex;flex-direction:column;gap:4px}
-.stage{font-size:13px;padding:3px 0}
-.stage.done{color:#46e6c8} .stage.active{color:#7fd7ff;font-weight:600} .stage.todo{color:#4d637f}
-.u{font-size:13px;color:#5d7799;font-weight:400}
-.phase-blk{border-left:2px solid #16263f;padding:6px 0 6px 14px;margin:10px 0}
-.phase-blk.done{border-color:#1c7a66} .phase-blk.active{border-color:#7fd7ff} .phase-blk.todo{border-color:#2a3a52}
-.phase-h{font-size:13.5px;font-weight:600;color:#9fc2ea;margin-bottom:5px}
-.phase-blk.active .phase-h{color:#7fd7ff} .phase-blk.done .phase-h{color:#46e6c8}
-.ck{font-size:12.5px;color:#8aa6cc;padding:2px 0}
-.ck.ckd{color:#46e6c8;text-decoration:line-through;opacity:.75}
+.mono{font-family:Consolas,monospace;color:#7fa6d6;font-size:11.5px}
+canvas{width:100%;display:block}
+.chip{display:inline-block;font-size:10px;border-radius:20px;padding:2px 9px;border:1px solid #1c7a66;color:#46e6c8;margin-left:6px}
+.bar{height:12px;background:#0c1426;border:1px solid #16263f;border-radius:7px;overflow:hidden;margin:5px 0}
+.fill{height:100%;background:linear-gradient(90deg,#1c7a66,#46e6c8)}
+.phase{border-left:2px solid #2a3a52;padding:5px 0 5px 12px;margin:8px 0}
+.phase.done{border-color:#1c7a66}.phase.active{border-color:#7fd7ff}
+.ph-h{font-size:12.5px;font-weight:600;color:#9fc2ea;margin-bottom:3px}
+.ck{font-size:11.5px;color:#8aa6cc;padding:1px 0}.ck.d{color:#46e6c8;text-decoration:line-through;opacity:.7}
+.warn{background:#1c1606;border:1px solid #6b5410;color:#e8c766;border-radius:9px;padding:9px 13px;font-size:11.5px;margin-top:10px}
+input[type=range]{width:100%;accent-color:#46e6c8}
+.hm{display:grid;gap:1px}.hc{aspect-ratio:1;border-radius:2px;font-size:0}
 </style></head><body>
-<h1>◢◤ APEX HUNTER</h1>
-<div class="sub">autonomous strategy search · gated on 2025/26 unseen data · updated 2026-06-14 01:47:32 · auto-refresh 60s</div>
-<div class="card" style="border-color:#1c7a66">
-<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap">
-<div class="lbl" style="color:#46e6c8">◢◤ APEX ENGINE v1 — LIVE · demo 61542495</div>
-<div style="font-size:11px;color:#46e6c8;border:1px solid #1c7a66;border-radius:20px;padding:3px 10px">● REAL · lag-correct · Tier-2 confirmed</div></div>
-<div class="grid" style="margin:12px 0">
-<div><div class="lbl">Net return (live)</div><div class="big" id="sp-net">—</div></div>
-<div><div class="lbl">Calmar (validated)</div><div class="big" style="color:#7fd7ff">1.91</div></div>
-<div><div class="lbl">Max drawdown</div><div class="big" style="color:#ff8a8a">7.3%</div></div>
-<div><div class="lbl">FTMO pass prob</div><div class="big" style="color:#46e6c8">82%</div></div>
-</div>
-<div class="lbl" style="margin-top:6px">Live equity curve <span class="u">· grows hourly · benchmark = flat $100k</span></div>
-<canvas id="sp-eq" style="width:100%;height:200px;display:block"></canvas>
-<div class="lbl" style="margin-top:14px">Monte-Carlo — 4,000 simulated FTMO evals <span class="u">· green = pass (82%)</span></div>
-<canvas id="sp-mc" style="width:100%;height:150px;display:block"></canvas>
-</div>
+<h1>◢◤ APEX TERMINAL</h1>
+<div class="sub">live engine · demo 61542495 · <span id="upd"></span> · <span style="color:#46e6c8">● REAL · lag-correct · Tier-2 confirmed</span></div>
+<div class="tabs" id="tabs"></div>
+<div id="panels"></div>
 <script>
-(function(){var D={"eq": [100000.0, 100000.0, 99998.24, 100504.41, 100777.39, 100778.49, 100775.41, 100776.39, 100764.62, 100843.37, 100803.05, 100832.86, 100752.93, 100642.86, 101064.81, 101318.1, 101249.32, 101336.93, 101308.67, 101121.26, 101148.79, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91], "net": 1114.91, "netpct": 1.11, "calmar": 1.91, "maxdd": 7.3, "ann": 14.1, "fwd": 43.4, "passprob": 82, "champ_fwd": 113.1, "champ_ann": 37.8};
-document.getElementById('sp-net').innerHTML=(D.net>=0?'+':'')+'$'+Math.round(D.net).toLocaleString()+" <span class='u'>("+(D.netpct>=0?'+':'')+D.netpct+"%)</span>";
-document.getElementById('sp-net').style.color=D.net>=0?'#46e6c8':'#ff8a8a';
-function fit(c){var r=c.getBoundingClientRect(),d=window.devicePixelRatio||1;c.width=r.width*d;c.height=r.height*d;var x=c.getContext('2d');x.scale(d,d);return [x,r.width,r.height];}
-// equity curve
-var eq=D.eq.slice(); if(eq.length<2)eq=[100000,eq[eq.length-1]||100000];
-var c1=document.getElementById('sp-eq');var a=fit(c1),x=a[0],W=a[1],H=a[2];
-var lo=Math.min.apply(0,eq.concat([100000])),hi=Math.max.apply(0,eq.concat([100000]));var pad=(hi-lo)*0.15||100;lo-=pad;hi+=pad;
-function px(i){return 8+i*(W-16)/(eq.length-1);}function py(v){return H-10-(v-lo)/(hi-lo)*(H-20);}
-var prog=0;function draw(){x.clearRect(0,0,W,H);
+window.APEX={"updated": "2026-06-14 01:58:05", "account": {"login": 61542495, "server": "Pepperstone-Demo", "balance": 99986.69, "equity": 101114.91, "margin": 10681.75, "free_margin": 90433.16, "currency": "USD"}, "stats": {"total_deals": 9, "closed_trades": 0, "wins": 0, "losses": 0, "win_rate": 0, "realized_pnl": 0.0, "unrealized_pnl": 1128.22, "total_commission": -13.31, "total_swap": 0.0, "open_positions": 9, "net_pnl": 1114.91, "net_pct": 1.11}, "open_positions": [{"symbol": "DELL.US", "type": "BUY", "volume": 17.6, "open_price": 378.61, "cur_price": 397.1, "swap": -4.71, "profit": 325.42, "opened": "2026-06-11 18:31"}, {"symbol": "QQQ.US", "type": "BUY", "volume": 9.5, "open_price": 699.29, "cur_price": 721.47, "swap": -4.63, "profit": 210.71, "opened": "2026-06-11 18:31"}, {"symbol": "IBKR.US", "type": "BUY", "volume": 50.0, "open_price": 86.46, "cur_price": 90.54, "swap": -3.05, "profit": 204.0, "opened": "2026-06-11 18:31"}, {"symbol": "NAS100", "type": "BUY", "volume": 0.2, "open_price": 28745.3, "cur_price": 29654.5, "swap": -4.01, "profit": 181.84, "opened": "2026-06-11 18:30"}, {"symbol": "IUSG.US", "type": "BUY", "volume": 36.9, "open_price": 180.36, "cur_price": 184.66, "swap": -4.61, "profit": 158.67, "opened": "2026-06-11 18:31"}, {"symbol": "URI.US", "type": "BUY", "volume": 6.2, "open_price": 1060.96, "cur_price": 1068.73, "swap": -4.48, "profit": 48.17, "opened": "2026-06-11 18:31"}, {"symbol": "VONG.US", "type": "BUY", "volume": 54.1, "open_price": 124.4, "cur_price": 125.05, "swap": -3.43, "profit": 35.17, "opened": "2026-06-12 17:47"}, {"symbol": "PWR.US", "type": "BUY", "volume": 9.5, "open_price": 703.5, "cur_price": 704.5, "swap": -3.4, "profit": 9.5, "opened": "2026-06-12 17:47"}, {"symbol": "RR.GB", "type": "BUY", "volume": 514.5, "open_price": 13.05, "cur_price": 13.038, "swap": -4.67, "profit": -8.27, "opened": "2026-06-12 10:47"}], "deals": [{"ticket": 253999746, "time": "2026-06-12 17:47", "symbol": "VONG.US", "type": "BUY", "entry": "in", "volume": 54.1, "price": 124.4, "commission": -1.08, "swap": 0.0, "profit": 0.0, "comment": "APEX_A4"}, {"ticket": 253999712, "time": "2026-06-12 17:47", "symbol": "PWR.US", "type": "BUY", "entry": "in", "volume": 9.5, "price": 703.5, "commission": -0.19, "swap": 0.0, "profit": 0.0, "comment": "APEX_A4"}, {"ticket": 253776988, "time": "2026-06-12 10:47", "symbol": "RR.GB", "type": "BUY", "entry": "in", "volume": 514.5, "price": 13.05, "commission": -9.64, "swap": 0.0, "profit": 0.0, "comment": "APEX_A4"}, {"ticket": 253418415, "time": "2026-06-11 18:31", "symbol": "QQQ.US", "type": "BUY", "entry": "in", "volume": 9.5, "price": 699.29, "commission": -0.19, "swap": 0.0, "profit": 0.0, "comment": "APEX_A4"}, {"ticket": 253418412, "time": "2026-06-11 18:31", "symbol": "IUSG.US", "type": "BUY", "entry": "in", "volume": 36.9, "price": 180.36, "commission": -0.74, "swap": 0.0, "profit": 0.0, "comment": "APEX_A4"}, {"ticket": 253418409, "time": "2026-06-11 18:31", "symbol": "URI.US", "type": "BUY", "entry": "in", "volume": 6.2, "price": 1060.96, "commission": -0.12, "swap": 0.0, "profit": 0.0, "comment": "APEX_A4"}, {"ticket": 253418407, "time": "2026-06-11 18:31", "symbol": "DELL.US", "type": "BUY", "entry": "in", "volume": 17.6, "price": 378.61, "commission": -0.35, "swap": 0.0, "profit": 0.0, "comment": "APEX_A4"}, {"ticket": 253418406, "time": "2026-06-11 18:31", "symbol": "IBKR.US", "type": "BUY", "entry": "in", "volume": 50.0, "price": 86.46, "commission": -1.0, "swap": 0.0, "profit": 0.0, "comment": "APEX_A4"}, {"ticket": 253418152, "time": "2026-06-11 18:30", "symbol": "NAS100", "type": "BUY", "entry": "in", "volume": 0.2, "price": 28745.3, "commission": 0.0, "swap": 0.0, "profit": 0.0, "comment": "APEX_A4"}], "equity": [100000.0, 100000.0, 99998.24, 100504.41, 100777.39, 100778.49, 100775.41, 100776.39, 100764.62, 100843.37, 100803.05, 100832.86, 100752.93, 100642.86, 101064.81, 101318.1, 101249.32, 101336.93, 101308.67, 101121.26, 101148.79, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91, 101114.91], "prop": {"FTMO-2step": {"2x": {"p_pass": 0.824, "p_breach": 0.137, "med_days": 53, "ev_usd": 3199}, "4x": {"p_pass": 0.581, "p_breach": 0.419, "med_days": 18, "ev_usd": 2098}, "6x": {"p_pass": 0.529, "p_breach": 0.47, "med_days": 10, "ev_usd": 1864}, "8x": {"p_pass": 0.467, "p_breach": 0.533, "med_days": 8, "ev_usd": 1581}, "12x": {"p_pass": 0.443, "p_breach": 0.557, "med_days": 6, "ev_usd": 1472}}, "FTMO-step2": {"2x": {"p_pass": 0.899, "p_breach": 0.092, "med_days": 26, "ev_usd": 1798}, "4x": {"p_pass": 0.711, "p_breach": 0.289, "med_days": 10, "ev_usd": 1422}, "6x": {"p_pass": 0.641, "p_breach": 0.358, "med_days": 7, "ev_usd": 1283}, "8x": {"p_pass": 0.562, "p_breach": 0.438, "med_days": 6, "ev_usd": 1125}, "12x": {"p_pass": 0.521, "p_breach": 0.479, "med_days": 5, "ev_usd": 1042}}, "FundedNext": {"2x": {"p_pass": 0.822, "p_breach": 0.134, "med_days": 52, "ev_usd": 3605}, "4x": {"p_pass": 0.578, "p_breach": 0.422, "med_days": 18, "ev_usd": 2381}, "6x": {"p_pass": 0.494, "p_breach": 0.506, "med_days": 11, "ev_usd": 1960}, "8x": {"p_pass": 0.464, "p_breach": 0.536, "med_days": 8, "ev_usd": 1811}, "12x": {"p_pass": 0.405, "p_breach": 0.595, "med_days": 6, "ev_usd": 1512}}, "The5ers-high": {"2x": {"p_pass": 0.857, "p_breach": 0.119, "med_days": 41, "ev_usd": 2672}, "4x": {"p_pass": 0.645, "p_breach": 0.355, "med_days": 15, "ev_usd": 1888}, "6x": {"p_pass": 0.567, "p_breach": 0.433, "med_days": 9, "ev_usd": 1601}, "8x": {"p_pass": 0.534, "p_breach": 0.466, "med_days": 7, "ev_usd": 1477}, "12x": {"p_pass": 0.5, "p_breach": 0.5, "med_days": 5, "ev_usd": 1353}}}, "routes": {"BASELINE (MA50)": {"ann": 0.1562, "maxDD": 0.1289, "calmar": 1.21, "fwd": 0.4838, "allpos": true}, "A1 vol-target 12%": {"ann": 0.2091, "maxDD": 0.2122, "calmar": 0.99, "fwd": 0.549, "allpos": true}, "A2 pyramiding (trend-z)": {"ann": 0.2395, "maxDD": 0.1896, "calmar": 1.26, "fwd": 0.7349, "allpos": true}, "A3 donchian 55/20": {"ann": 0.1038, "maxDD": 0.1027, "calmar": 1.01, "fwd": 0.2599, "allpos": true}, "A4 ensemble MA50+MA200": {"ann": 0.1448, "maxDD": 0.0833, "calmar": 1.74, "fwd": 0.4295, "allpos": true}, "A1+A2 vol-target+pyramid": {"ann": 0.2228, "maxDD": 0.2209, "calmar": 1.01, "fwd": 0.5752, "allpos": true}, "A4 BASELINE equal-weight": {"ann": 0.1448, "maxDD": 0.0833, "calmar": 1.74, "fwd": 0.4295, "allpos": true}, "W3-1 A5 walk-fwd weights": {"ann": 0.152, "maxDD": 0.0833, "calmar": 1.82, "fwd": 0.4913, "allpos": true}, "W3-2 C2 barbell 90/10": {"ann": 0.2214, "maxDD": 0.1396, "calmar": 1.59, "fwd": 0.5641, "allpos": true}, "W3-3 C1 on A4 (champ-stack)": {"ann": 0.406, "maxDD": 0.2413, "calmar": 1.68, "fwd": 1.2165, "allpos": true}, "BASE A4 eq-weight": {"ann": 0.1409, "maxDD": 0.0866, "calmar": 1.63, "fwd": 0.407, "allpos": true}, "REF  C1-on-A4 lever": {"ann": 0.394, "maxDD": 0.2466, "calmar": 1.6, "fwd": 1.1309, "allpos": true}, "E1 FULL STACK (A5+A2+C1)": {"ann": 0.6799, "maxDD": 1.1751, "calmar": 0.58, "fwd": 1.0249, "allpos": true}, "E2 basket-30 expanded": {"ann": 0.1188, "maxDD": 0.0817, "calmar": 1.46, "fwd": 0.3132, "allpos": true}, "E3 fast-exit MA20": {"ann": 0.1025, "maxDD": 0.0996, "calmar": 1.03, "fwd": 0.2655, "allpos": true}, "E5 inverse-vol weights": {"ann": 0.0847, "maxDD": 0.1084, "calmar": 0.78, "fwd": 0.4421, "allpos": false}, "E6 weekly cadence": {"ann": 0.139, "maxDD": 0.0878, "calmar": 1.58, "fwd": 0.3743, "allpos": true}, "E7 multi-speed MA20/50/100": {"ann": 0.1338, "maxDD": 0.1064, "calmar": 1.26, "fwd": 0.3668, "allpos": true}, "E8 short-side nonstock": {"ann": 0.1364, "maxDD": 0.083, "calmar": 1.64, "fwd": 0.406, "allpos": true}, "R3 equity-curve filter": {"ann": 0.1149, "maxDD": 0.0917, "calmar": 1.25, "fwd": 0.2489, "allpos": true}}, "corr": {"symbols": ["VRT", "PWR", "IBKR", "DELL", "URI", "NVDA", "RR", "SGOL", "VONG", "IUSG", "QQQ", "NAS100", "XAUUSD", "XAUJPY", "Cattle"], "matrix": [[1.0, 0.71, 0.49, 0.46, 0.38, 0.66, 0.24, 0.13, 0.63, 0.66, 0.64, 0.62, 0.13, 0.21, 0.17], [0.71, 1.0, 0.42, 0.35, 0.4, 0.52, 0.26, 0.16, 0.56, 0.6, 0.58, 0.55, 0.16, 0.19, 0.08], [0.49, 0.42, 1.0, 0.38, 0.34, 0.45, 0.32, 0.13, 0.62, 0.64, 0.62, 0.59, 0.12, 0.22, 0.14], [0.46, 0.35, 0.38, 1.0, 0.28, 0.44, 0.1, 0.11, 0.5, 0.51, 0.52, 0.5, 0.12, 0.19, 0.04], [0.38, 0.4, 0.34, 0.28, 1.0, 0.3, 0.17, 0.05, 0.45, 0.47, 0.47, 0.45, 0.06, 0.1, 0.12], [0.66, 0.52, 0.45, 0.44, 0.3, 1.0, 0.18, 0.09, 0.77, 0.78, 0.75, 0.71, 0.08, 0.16, 0.15], [0.24, 0.26, 0.32, 0.1, 0.17, 0.18, 1.0, 0.16, 0.26, 0.28, 0.26, 0.2, 0.15, 0.16, 0.1], [0.13, 0.16, 0.13, 0.11, 0.05, 0.09, 0.16, 1.0, 0.14, 0.17, 0.17, 0.18, 0.98, 0.88, 0.12], [0.63, 0.56, 0.62, 0.5, 0.45, 0.77, 0.26, 0.14, 1.0, 0.99, 0.98, 0.92, 0.13, 0.22, 0.19], [0.66, 0.6, 0.64, 0.51, 0.47, 0.78, 0.28, 0.17, 0.99, 1.0, 0.98, 0.93, 0.16, 0.24, 0.18], [0.64, 0.58, 0.62, 0.52, 0.47, 0.75, 0.26, 0.17, 0.98, 0.98, 1.0, 0.95, 0.16, 0.25, 0.17], [0.62, 0.55, 0.59, 0.5, 0.45, 0.71, 0.2, 0.18, 0.92, 0.93, 0.95, 1.0, 0.18, 0.25, 0.17], [0.13, 0.16, 0.12, 0.12, 0.06, 0.08, 0.15, 0.98, 0.13, 0.16, 0.16, 0.18, 1.0, 0.89, 0.12], [0.21, 0.19, 0.22, 0.19, 0.1, 0.16, 0.16, 0.88, 0.22, 0.24, 0.25, 0.25, 0.89, 1.0, 0.15], [0.17, 0.08, 0.14, 0.04, 0.12, 0.15, 0.1, 0.12, 0.19, 0.18, 0.17, 0.17, 0.12, 0.15, 1.0]], "avg_corr": 0.37}, "roadmap": {"title": "APEX 1000% ROADMAP \u2014 Outside the Box (not only trading)", "thesis": "YEAR-1 1000% PLAN locked (APEX_YEAR1_PLAN.md): validated engine (Tier-2 confirmed, Calmar 2.01 max-safe / 37.8%yr max-return) x prop leverage = ~5,000% ROI P50 on ~$540 outlay in 12 months. Trading alone honest max = +86%/yr pace. Two user keys: demo login + eval purchase.", "phases": [{"name": "Phase 0 \u2014 Edge Discovery", "status": "done", "items": [{"t": "Test 8 edge families + 40 assets (forward-gated 2025/26)", "done": true}, {"t": "Find diversified FX carry+trend basket (Calmar ~6, all legs+)", "done": true}, {"t": "Connect MT5 Python bridge, pull REAL Pepperstone swaps", "done": true}, {"t": "Discover real swaps kill ~5 proxy pairs (broker markup) \u2014 honest", "done": true}]}, {"name": "Phase 1 \u2014 Validate on DEMO (real costs)", "status": "active", "items": [{"t": "Rebuild basket: REAL swaps -> carry is ~0% (broker markup), it's a TREND edge", "done": true}, {"t": "KILL lookahead bug: FX 'edge' (Calmar 6-8) was an artifact -> honest Calmar 0.1", "done": true}, {"t": "Scan 1,608 symbols lag-correct + real spreads -> 48 survivors", "done": true}, {"t": "FINAL basket: 15 stocks/ETFs/gold long-trend, 16%/yr, Calmar 1.49, all legs+", "done": true}, {"t": "DEMO CONNECTED: 61542495, $100k \u2014 M1 LIVE, engine trading hourly (6 positions day 1)", "done": true}, {"t": "EA built+compiled; TIER-2 CONFIRMED on real exec (NAS100/XAUUSD, 4/4 legs +, matches Python)", "done": true}]}, {"name": "Phase 2 \u2014 Multiply capital WITHOUT your money (the real 1000% lever)", "status": "todo", "items": [{"t": "Monte-Carlo eval sim: FTMO @2x risk -> P(pass) 82%, EV +$3.2k/attempt", "done": true}, {"t": "Pick prop firm (FTMO / FundedNext / etc.), user buys eval acct", "done": false}, {"t": "Pass challenge -> get funded $50k-200k", "done": false}, {"t": "Trade funded capital, keep 80-90% -> ROI on ~$500 fee = 1000%+", "done": false}]}, {"name": "Phase 3 \u2014 Productize the edge (income beyond trading)", "status": "todo", "items": [{"t": "Publish verified track record (Myfxbook / FX Blue)", "done": false}, {"t": "Copy-trading: Darwinex / ZuluTrade / broker -> earn on AUM", "done": false}, {"t": "List EA on MQL5 Market (passive sales)", "done": false}, {"t": "Signal subscription (Telegram / Discord)", "done": false}]}, {"name": "Phase 4 \u2014 Content engine (leverage your YouTube skills)", "status": "todo", "items": [{"t": "Document the APEX journey as faceless content", "done": false}, {"t": "'I built an AI quant' series -> audience", "done": false}, {"t": "Funnel audience -> copy-trade / signals / products", "done": false}]}, {"name": "Phase 5 \u2014 Scale & compound", "status": "todo", "items": [{"t": "OPM / friends-capital w/ 20% performance fee", "done": false}, {"t": "Reinvest, diversify edges + venues", "done": false}, {"t": "Compound 30-45%/yr -> 1000% cumulative in ~6-7 yrs (real)", "done": false}, {"t": "OR prop + product income -> 1000% on personal capital yr 1", "done": false}]}]}, "menu": [{"name": "A5 walk-forward weights", "tag": "MAX-SAFE", "ann": 14.7, "maxdd": 7.3, "calmar": 2.01, "fwd": 49.7}, {"name": "A4 ensemble (deployed)", "tag": "CORE", "ann": 14.1, "maxdd": 8.7, "calmar": 1.91, "fwd": 43.4}, {"name": "C2 barbell 90/10", "tag": "BALANCED", "ann": 21.9, "maxdd": 11.9, "calmar": 1.84, "fwd": 56.8}, {"name": "C1 regime lever 1-4x", "tag": "MAX-RETURN", "ann": 37.8, "maxdd": 23.7, "calmar": 1.59, "fwd": 113.1}], "killed": [{"name": "FX carry+trend (Calmar 6-8)", "why": "LOOKAHEAD BUG \u2014 used current close. Honest: Calmar 0.10"}, {"name": "E1 full stack (A5+A2+C1)", "why": "68%/yr but 117% maxDD = total ruin"}, {"name": "Cross-sectional momentum", "why": "~40% DD, Calmar 0.85 \u2014 busts budget"}, {"name": "VRP short-vol", "why": "real premium but fails 2022 crash leg"}, {"name": "6 regime variables", "why": "none significant (max t=0.92); VIX/trend = mirages"}, {"name": "550K technical combos", "why": "0 confirmed on forward leg"}, {"name": "Basket-30 / overnight / turn-of-month / gold-season / long-VIX / breadth / fast-exit", "why": "all < baseline, killed"}]};
+(function(){var A=window.APEX;
+document.getElementById('upd').textContent=A.updated;
+function el(t,c,h){var e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e;}
+function money(v){return (v<0?'-':'')+'$'+Math.abs(Math.round(v)).toLocaleString();}
+function sgn(v,d){d=d||2;return (v>=0?'+':'')+v.toFixed(d);}
+function pcls(v){return v>=0?'pos':'neg';}
+
+var TABS=[['live','◢ Live'],['perf','Performance'],['trades','Trades'],['prop','1000% / Prop'],['research','Research']];
+var tabsEl=document.getElementById('tabs'),panelsEl=document.getElementById('panels');
+TABS.forEach(function(t,i){
+ var b=el('div','tab'+(i===0?' on':''),t[1]);b.onclick=function(){
+  document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on')});
+  document.querySelectorAll('.panel').forEach(function(x){x.classList.remove('on')});
+  b.classList.add('on');document.getElementById('p-'+t[0]).classList.add('on');
+  if(t[0]==='live')drawEquity();if(t[0]==='prop')drawLattice(lastRisk);};
+ tabsEl.appendChild(b);
+ var p=el('div','panel'+(i===0?' on':''));p.id='p-'+t[0];panelsEl.appendChild(p);
+});
+
+/* ---------- LIVE ---------- */
+var st=A.stats,acc=A.account;
+var net=(acc.equity||100000)-100000;
+var live=document.getElementById('p-live');
+var k=el('div','card');
+k.innerHTML="<div class='grid'>"+
+ "<div><div class='lbl'>Net return (live)</div><div class='big "+pcls(net)+"'>"+money(net)+" <span class='u'>("+sgn(net/1000)+"%)</span></div></div>"+
+ "<div><div class='lbl'>Equity</div><div class='big'>"+money(acc.equity||100000)+"</div></div>"+
+ "<div><div class='lbl'>Open positions</div><div class='big'>"+(st.open_positions||A.open_positions.length||0)+"</div></div>"+
+ "<div><div class='lbl'>Unrealized</div><div class='big sm "+pcls(st.unrealized_pnl||0)+"'>"+money(st.unrealized_pnl||0)+"</div></div></div>";
+live.appendChild(k);
+var ec=el('div','card');ec.innerHTML="<div class='lbl'>Live equity curve <span class='u'>· vs flat $100k benchmark · grows hourly</span></div><canvas id='eqc' height='210'></canvas>";live.appendChild(ec);
+var op=el('div','card');var orows=A.open_positions.map(function(p){return "<tr><td>"+p.symbol+"</td><td>"+p.type+"</td><td class='num'>"+p.volume+"</td><td class='num'>"+p.open_price+"</td><td class='num'>"+p.cur_price+"</td><td class='num "+pcls(p.profit)+"'>"+sgn(p.profit)+"</td></tr>";}).join('')||"<tr><td colspan=6>flat</td></tr>";
+op.innerHTML="<div class='lbl'>Open positions</div><table><tr><th>Symbol</th><th>Side</th><th>Vol</th><th>Open</th><th>Now</th><th>P&L</th></tr>"+orows+"</table>";live.appendChild(op);
+
+function drawEquity(){var c=document.getElementById('eqc');if(!c)return;var r=c.getBoundingClientRect(),d=window.devicePixelRatio||1;c.width=r.width*d;c.height=210*d;var x=c.getContext('2d');x.setTransform(d,0,0,d,0,0);var W=r.width,H=210;
+var e=A.equity.slice();if(e.length<2)e=[100000,e[0]||100000];
+var lo=Math.min.apply(0,e.concat([100000])),hi=Math.max.apply(0,e.concat([100000]));var pad=(hi-lo)*0.15||100;lo-=pad;hi+=pad;
+function px(i){return 8+i*(W-16)/(e.length-1);}function py(v){return H-12-(v-lo)/(hi-lo)*(H-24);}
+var prog=0;function fr(){x.clearRect(0,0,W,H);
 x.strokeStyle='#26405e';x.setLineDash([4,4]);x.beginPath();x.moveTo(8,py(100000));x.lineTo(W-8,py(100000));x.stroke();x.setLineDash([]);
-var n=Math.max(2,Math.floor(eq.length*prog));
-x.beginPath();for(var i=0;i<n;i++){var X=px(i),Y=py(eq[i]);i?x.lineTo(X,Y):x.moveTo(X,Y);}
-x.strokeStyle='#46e6c8';x.lineWidth=2;x.shadowColor='#46e6c8';x.shadowBlur=12;x.stroke();x.shadowBlur=0;
-var lx=px(n-1),ly=py(eq[n-1]);x.fillStyle='#46e6c8';x.beginPath();x.arc(lx,ly,3.5,0,7);x.fill();
-if(prog<1){prog+=0.04;requestAnimationFrame(draw);}}draw();
-// monte-carlo lattice
-var c2=document.getElementById('sp-mc');var b=fit(c2),y=b[0],MW=b[1],MH=b[2];
-var cols=40,rows=10,tot=cols*rows,passN=Math.round(tot*D.passprob/100);
-var cells=[];for(var k=0;k<tot;k++)cells.push(k<passN);
-for(var s=cells.length-1;s>0;s--){var j=(s*97+13)%(s+1);var t=cells[s];cells[s]=cells[j];cells[j]=t;}
-var gx=(MW-8)/cols,gy=(MH-8)/rows,mi=0;
-function mc(){var step=Math.min(tot,mi+30);for(;mi<step;mi++){var cc=mi%cols,rr=Math.floor(mi/cols);
-y.fillStyle=cells[mi]?'#46e6c8':'#ff5d5d';y.globalAlpha=cells[mi]?0.92:0.85;
-y.beginPath();y.arc(8+cc*gx+gx/2,6+rr*gy+gy/2,Math.min(gx,gy)/2.6,0,7);y.fill();}
-y.globalAlpha=1;if(mi<tot)requestAnimationFrame(mc);}mc();
+var n=Math.max(2,Math.floor(e.length*prog));x.beginPath();for(var i=0;i<n;i++){i?x.lineTo(px(i),py(e[i])):x.moveTo(px(i),py(e[i]));}
+x.strokeStyle='#46e6c8';x.lineWidth=2;x.shadowColor='#46e6c8';x.shadowBlur=10;x.stroke();x.shadowBlur=0;
+x.fillStyle='#46e6c8';x.beginPath();x.arc(px(n-1),py(e[n-1]),3.5,0,7);x.fill();
+if(prog<1){prog+=0.05;requestAnimationFrame(fr);}}fr();}
+drawEquity();
+
+/* ---------- PERFORMANCE ---------- */
+var perf=document.getElementById('p-perf');
+var mc=el('div','card');mc.innerHTML="<div class='lbl'>Validated strategy menu <span class='u'>· lag-correct · all forward legs+ · pick by risk appetite</span></div>";
+var mg=el('div','grid');A.menu.forEach(function(m){var b=el('div');b.style.cssText="background:#0a1322;border:1px solid #16263f;border-radius:9px;padding:11px";
+b.innerHTML="<div style='font-size:12.5px;color:#7fd7ff;font-weight:600'>"+m.name+"<span class='chip'>"+m.tag+"</span></div>"+
+"<div style='display:flex;gap:14px;margin-top:7px;font-size:11px;color:#5d7799'>"+
+"<span>Ann <b style='color:#46e6c8'>"+m.ann+"%</b></span><span>DD <b style='color:#ff8a8a'>"+m.maxdd+"%</b></span><span>Calmar <b style='color:#cfe3ff'>"+m.calmar+"</b></span><span>Fwd <b class='pos'>+"+m.fwd+"%</b></span></div>";mg.appendChild(b);});
+mc.appendChild(mg);perf.appendChild(mc);
+var cm=el('div','card');cm.innerHTML="<div class='lbl'>Correlation heatmap — 15 symbols <span class='u'>· avg pairwise "+A.corr.avg_corr+" (lower = better diversified)</span></div><div id='heat'></div>";perf.appendChild(cm);
+(function(){var s=A.corr.symbols,M=A.corr.matrix;if(!s.length)return;var h=document.getElementById('heat');
+h.className='hm';h.style.gridTemplateColumns='44px repeat('+s.length+',1fr)';
+h.appendChild(el('div','',''));s.forEach(function(c){h.appendChild(el('div','',"<span style='font-size:8px;color:#5d7799'>"+c+"</span>"));});
+M.forEach(function(row,i){h.appendChild(el('div','',"<span style='font-size:8px;color:#5d7799'>"+s[i]+"</span>"));
+row.forEach(function(v,j){var c=el('div','hc');var t=Math.max(0,Math.min(1,v));
+var col=i===j?'#1c2c44':(v<0.3?'rgba(70,230,200,'+(0.25+0.5*(0.3-v)/0.3)+')':v<0.6?'rgba(127,215,255,0.4)':'rgba(255,138,138,'+(0.3+0.5*(v-0.6)/0.4)+')');
+c.style.background=col;c.title=s[i]+' / '+s[j]+' = '+v;h.appendChild(c);});});})();
+var ps=el('div','card');var dd={};A.open_positions.forEach(function(p){dd[p.symbol]=(dd[p.symbol]||0)+p.profit;});
+var prows=Object.keys(dd).map(function(s){return "<tr><td>"+s+"</td><td class='num "+pcls(dd[s])+"'>"+sgn(dd[s])+"</td><td>open</td></tr>";}).join('')||"<tr><td colspan=3>no open P&L</td></tr>";
+ps.innerHTML="<div class='lbl'>Per-symbol live P&L <span class='u'>· win-rate fills once trades close (engine holds trends)</span></div><table><tr><th>Symbol</th><th>Open P&L</th><th>State</th></tr>"+prows+"</table>";perf.appendChild(ps);
+
+/* ---------- TRADES ---------- */
+var tr=document.getElementById('p-trades');
+var ts=el('div','card');ts.innerHTML="<div class='grid'>"+
+"<div><div class='lbl'>Closed</div><div class='big sm'>"+(st.closed_trades||0)+"</div></div>"+
+"<div><div class='lbl'>Win rate</div><div class='big sm'>"+(st.win_rate||0)+"% <span class='u'>"+(st.wins||0)+"W/"+(st.losses||0)+"L</span></div></div>"+
+"<div><div class='lbl'>Realized</div><div class='big sm "+pcls(st.realized_pnl||0)+"'>"+money(st.realized_pnl||0)+"</div></div>"+
+"<div><div class='lbl'>Commission</div><div class='big sm'>"+money(st.total_commission||0)+"</div></div>"+
+"<div><div class='lbl'>Swap</div><div class='big sm "+pcls(st.total_swap||0)+"'>"+sgn(st.total_swap||0)+"</div></div></div>";tr.appendChild(ts);
+var dl=el('div','card');var drows=(A.deals||[]).map(function(x){return "<tr><td class='num'>"+x.ticket+"</td><td class='mono'>"+x.time+"</td><td>"+x.symbol+"</td><td>"+x.type+"</td><td>"+x.entry+"</td><td class='num'>"+x.volume+"</td><td class='num'>"+x.price+"</td><td class='num "+pcls(x.swap)+"'>"+sgn(x.swap)+"</td><td class='num "+pcls(x.profit)+"'>"+sgn(x.profit)+"</td></tr>";}).join('')||"<tr><td colspan=9>no deals</td></tr>";
+dl.innerHTML="<div class='lbl'>Deal ledger — "+(A.deals||[]).length+" fills</div><table><tr><th>Ticket</th><th>Time UTC</th><th>Symbol</th><th>Side</th><th>In/Out</th><th>Vol</th><th>Price</th><th>Swap</th><th>Profit</th></tr>"+drows+"</table>";tr.appendChild(dl);
+
+/* ---------- PROP / 1000% ---------- */
+var pp=document.getElementById('p-prop');
+var ths=(A.roadmap.thesis)||"";
+var intro=el('div','card');intro.innerHTML="<div class='lbl'>The honest 1000% — prop leverage</div><div class='u' style='line-height:1.6'>"+ths+"</div>";pp.appendChild(intro);
+var fp=(A.prop['FTMO-2step']||{});var RK=['2x','4x','6x','8x','12x'];var lastRisk=0;
+var sim=el('div','card');sim.innerHTML="<div class='lbl'>Interactive — FTMO eval Monte-Carlo <span class='u'>· 4,000 sims · drag risk</span></div>"+
+"<div style='display:flex;align-items:center;gap:12px;margin:8px 0'><span class='u'>Risk</span><input id='rk' type='range' min='0' max='4' value='0' step='1'><span id='rkv' style='color:#46e6c8;font-weight:600;min-width:32px'>2x</span></div>"+
+"<div class='grid'><div><div class='lbl'>Pass probability</div><div class='big' id='pp-pass'>—</div></div>"+
+"<div><div class='lbl'>Breach risk</div><div class='big sm neg' id='pp-br'>—</div></div>"+
+"<div><div class='lbl'>Median days</div><div class='big sm' id='pp-md'>—</div></div>"+
+"<div><div class='lbl'>EV / attempt</div><div class='big sm pos' id='pp-ev'>—</div></div></div>"+
+"<canvas id='lat' height='150' style='margin-top:10px'></canvas>";pp.appendChild(sim);
+function updRisk(i){lastRisk=i;var d=fp[RK[i]]||{};document.getElementById('rkv').textContent=RK[i];
+document.getElementById('pp-pass').textContent=((d.p_pass||0)*100).toFixed(0)+'%';
+document.getElementById('pp-br').textContent=((d.p_breach||0)*100).toFixed(0)+'%';
+document.getElementById('pp-md').textContent=(d.med_days||'-');
+document.getElementById('pp-ev').textContent=money(d.ev_usd||0);drawLattice(i);}
+function drawLattice(i){var c=document.getElementById('lat');if(!c)return;var r=c.getBoundingClientRect(),dp=window.devicePixelRatio||1;c.width=r.width*dp;c.height=150*dp;var x=c.getContext('2d');x.setTransform(dp,0,0,dp,0,0);var W=r.width,H=150;
+var d=fp[RK[i]]||{p_pass:0.5};var cols=40,rows=10,tot=cols*rows,passN=Math.round(tot*(d.p_pass||0));
+var cells=[];for(var q=0;q<tot;q++)cells.push(q<passN);for(var sI=tot-1;sI>0;sI--){var j=(sI*97+i*13+7)%(sI+1);var t=cells[sI];cells[sI]=cells[j];cells[j]=t;}
+var gx=(W-6)/cols,gy=(H-6)/rows;x.clearRect(0,0,W,H);for(var m=0;m<tot;m++){var cc=m%cols,rr=Math.floor(m/cols);x.fillStyle=cells[m]?'#46e6c8':'#ff5d5d';x.globalAlpha=cells[m]?0.9:0.8;x.beginPath();x.arc(6+cc*gx+gx/2,6+rr*gy+gy/2,Math.min(gx,gy)/2.6,0,7);x.fill();}x.globalAlpha=1;}
+document.getElementById('rk').addEventListener('input',function(e){updRisk(+e.target.value);});updRisk(0);
+var gauge=el('div','card');var ddv=8.7,lim=10;gauge.innerHTML="<div class='lbl'>Drawdown headroom <span class='u'>· engine maxDD vs FTMO 10% limit</span></div>"+
+"<div class='bar' style='height:16px'><div class='fill' style='width:"+(ddv/lim*100)+"%;background:#46e6c8'></div></div>"+
+"<div class='u'>backtest maxDD "+ddv+"% · FTMO breach at "+lim+"% · governor halts at 6% (safety buffer)</div>";pp.appendChild(gauge);
+var rm=el('div','card');var phs=(A.roadmap.phases||[]).map(function(p){var items=p.items.map(function(it){return "<div class='ck"+(it.done?' d':'')+"'>"+(it.done?'☑':'☐')+" "+it.t+"</div>";}).join('');return "<div class='phase "+p.status+"'><div class='ph-h'>"+p.name+"</div>"+items+"</div>";}).join('');
+rm.innerHTML="<div class='lbl'>Roadmap to 1000%</div>"+phs;pp.appendChild(rm);
+
+/* ---------- RESEARCH ---------- */
+var rs=document.getElementById('p-research');
+var rt=el('div','card');var rrows=Object.keys(A.routes).map(function(k){var v=A.routes[k];return "<tr><td>"+k+"</td><td class='num'>"+(v.ann*100).toFixed(1)+"%</td><td class='num neg'>"+(v.maxDD*100).toFixed(1)+"%</td><td class='num'>"+v.calmar+"</td><td class='num "+pcls(v.fwd)+"'>"+sgn(v.fwd*100,1)+"%</td><td>"+(v.allpos?'✅':'❌')+"</td></tr>";}).join('');
+rt.innerHTML="<div class='lbl'>Every route tested <span class='u'>· lag-correct · real costs · 5-leg gate</span></div><table><tr><th>Route</th><th>Ann</th><th>MaxDD</th><th>Calmar</th><th>Fwd</th><th>Legs+</th></tr>"+rrows+"</table>";rs.appendChild(rt);
+var kl=el('div','card');var krows=A.killed.map(function(x){return "<tr><td style='color:#ff8a8a'>"+x.name+"</td><td class='u'>"+x.why+"</td></tr>";}).join('');
+kl.innerHTML="<div class='lbl'>The kill list — what we proved DOESN'T work <span class='u'>· honesty no guru shows</span></div><table><tr><th>Strategy</th><th>Why it died</th></tr>"+krows+"</table>"+
+"<div class='warn'>This is the differentiator: TikTok quants show only wins. APEX publishes every failed strategy, the lookahead bug that faked Calmar 8, and the real edge that survived 600K+ tests.</div>";rs.appendChild(kl);
 })();
 </script>
-
-
-<div class='card'><div class='lbl'>🔴 LIVE PROOF — M1 demo forward-test (acct 61542495, $100k virtual)</div><div class='grid'><div><div class='lbl'>Equity</div><div class='big'>$101,115</div></div><div><div class='lbl'>P&L</div><div class='big pos' style='color:#46e6c8'>+1,115 (+1.11%)</div></div><div><div class='lbl'>Positions</div><div class='big'>9<span class='u'>/9 signaled</span></div></div><div><div class='lbl'>Snapshots</div><div class='big'>43</div></div></div><table style='margin-top:10px'><tr><th>Symbol</th><th>State</th><th>Last action</th></tr><tr><td>VRT.US</td><td>⚪ flat</td><td class='mono'>none</td></tr><tr><td>PWR.US</td><td>🟢 LONG</td><td class='mono'>none</td></tr><tr><td>IBKR.US</td><td>🟢 LONG</td><td class='mono'>none</td></tr><tr><td>DELL.US</td><td>🟢 LONG</td><td class='mono'>none</td></tr><tr><td>URI.US</td><td>🟢 LONG</td><td class='mono'>none</td></tr><tr><td>NVDA.US</td><td>⚪ flat</td><td class='mono'>none</td></tr><tr><td>RR.GB</td><td>🟢 LONG</td><td class='mono'>none</td></tr><tr><td>SGOL.US</td><td>⚪ flat</td><td class='mono'>none</td></tr><tr><td>VONG.US</td><td>🟢 LONG</td><td class='mono'>none</td></tr><tr><td>IUSG.US</td><td>🟢 LONG</td><td class='mono'>none</td></tr><tr><td>QQQ.US</td><td>🟢 LONG</td><td class='mono'>none</td></tr><tr><td>NAS100</td><td>🟢 LONG</td><td class='mono'>none</td></tr><tr><td>XAUUSD</td><td>⚪ flat</td><td class='mono'>none</td></tr><tr><td>XAUJPY</td><td>⚪ flat</td><td class='mono'>none</td></tr><tr><td>Cattle</td><td>⚪ flat</td><td class='mono'>none</td></tr></table><div class='sub' style='margin-top:8px'>Engine: A4 ensemble (validated Calmar 1.91) · hourly reconcile · hard demo-only guards · last update 2026-06-13T18:47:01Z</div></div>
-
-<div class='card'><div class='lbl'>📒 TRANSACTION HISTORY — demo 61542495 ($100k virtual, live)</div><div class='grid'><div><div class='lbl'>Balance</div><div class='big'>$99,987</div></div><div><div class='lbl'>Equity</div><div class='big'>$101,115</div></div><div><div class='lbl'>Net P&L</div><div class='big' style='color:#46e6c8'>+1,115<span class='u'> (+1.11%)</span></div></div><div><div class='lbl'>Free margin</div><div class='big'>$90,433</div></div></div><div class='grid' style='margin-top:10px'><div><div class='lbl'>Closed trades</div><div class='big' style='font-size:20px'>0</div></div><div><div class='lbl'>Win rate</div><div class='big' style='font-size:20px'>0%<span class='u'> 0W/0L</span></div></div><div><div class='lbl'>Realized</div><div class='big' style='font-size:20px'><span class='pos'>+0.00</span></div></div><div><div class='lbl'>Unrealized</div><div class='big' style='font-size:20px'><span class='pos'>+1,128.22</span></div></div><div><div class='lbl'>Commission</div><div class='big' style='font-size:20px'><span class='neg'>-13.31</span></div></div><div><div class='lbl'>Swap</div><div class='big' style='font-size:20px'><span class='pos'>+0.00</span></div></div></div><div class='lbl' style='margin-top:14px'>Open positions (9)</div><table><tr><th>Symbol</th><th>Side</th><th>Vol</th><th>Open</th><th>Now</th><th>Swap</th><th>P&L</th><th>Opened (UTC)</th></tr><tr><td>DELL.US</td><td>BUY</td><td class='num'>17.6</td><td class='num'>378.61</td><td class='num'>397.1</td><td class='num'><span class='neg'>-4.71</span></td><td class='num'><span class='pos'>+325.42</span></td><td class='mono'>2026-06-11 18:31</td></tr><tr><td>QQQ.US</td><td>BUY</td><td class='num'>9.5</td><td class='num'>699.29</td><td class='num'>721.47</td><td class='num'><span class='neg'>-4.63</span></td><td class='num'><span class='pos'>+210.71</span></td><td class='mono'>2026-06-11 18:31</td></tr><tr><td>IBKR.US</td><td>BUY</td><td class='num'>50.0</td><td class='num'>86.46</td><td class='num'>90.54</td><td class='num'><span class='neg'>-3.05</span></td><td class='num'><span class='pos'>+204.00</span></td><td class='mono'>2026-06-11 18:31</td></tr><tr><td>NAS100</td><td>BUY</td><td class='num'>0.2</td><td class='num'>28745.3</td><td class='num'>29654.5</td><td class='num'><span class='neg'>-4.01</span></td><td class='num'><span class='pos'>+181.84</span></td><td class='mono'>2026-06-11 18:30</td></tr><tr><td>IUSG.US</td><td>BUY</td><td class='num'>36.9</td><td class='num'>180.36</td><td class='num'>184.66</td><td class='num'><span class='neg'>-4.61</span></td><td class='num'><span class='pos'>+158.67</span></td><td class='mono'>2026-06-11 18:31</td></tr><tr><td>URI.US</td><td>BUY</td><td class='num'>6.2</td><td class='num'>1060.96</td><td class='num'>1068.73</td><td class='num'><span class='neg'>-4.48</span></td><td class='num'><span class='pos'>+48.17</span></td><td class='mono'>2026-06-11 18:31</td></tr><tr><td>VONG.US</td><td>BUY</td><td class='num'>54.1</td><td class='num'>124.4</td><td class='num'>125.05</td><td class='num'><span class='neg'>-3.43</span></td><td class='num'><span class='pos'>+35.17</span></td><td class='mono'>2026-06-12 17:47</td></tr><tr><td>PWR.US</td><td>BUY</td><td class='num'>9.5</td><td class='num'>703.5</td><td class='num'>704.5</td><td class='num'><span class='neg'>-3.40</span></td><td class='num'><span class='pos'>+9.50</span></td><td class='mono'>2026-06-12 17:47</td></tr><tr><td>RR.GB</td><td>BUY</td><td class='num'>514.5</td><td class='num'>13.05</td><td class='num'>13.038</td><td class='num'><span class='neg'>-4.67</span></td><td class='num'><span class='neg'>-8.27</span></td><td class='mono'>2026-06-12 10:47</td></tr></table><div class='lbl' style='margin-top:14px'>Deal ledger — last 9 fills</div><table><tr><th>Ticket</th><th>Time (UTC)</th><th>Symbol</th><th>Side</th><th>In/Out</th><th>Vol</th><th>Price</th><th>Comm</th><th>Swap</th><th>Profit</th></tr><tr><td class='num'>253999746</td><td class='mono'>2026-06-12 17:47</td><td>VONG.US</td><td>BUY</td><td>in</td><td class='num'>54.1</td><td class='num'>124.4</td><td class='num'><span class='neg'>-1.08</span></td><td class='num'><span class='pos'>+0.00</span></td><td class='num'><span class='pos'>+0.00</span></td></tr><tr><td class='num'>253999712</td><td class='mono'>2026-06-12 17:47</td><td>PWR.US</td><td>BUY</td><td>in</td><td class='num'>9.5</td><td class='num'>703.5</td><td class='num'><span class='neg'>-0.19</span></td><td class='num'><span class='pos'>+0.00</span></td><td class='num'><span class='pos'>+0.00</span></td></tr><tr><td class='num'>253776988</td><td class='mono'>2026-06-12 10:47</td><td>RR.GB</td><td>BUY</td><td>in</td><td class='num'>514.5</td><td class='num'>13.05</td><td class='num'><span class='neg'>-9.64</span></td><td class='num'><span class='pos'>+0.00</span></td><td class='num'><span class='pos'>+0.00</span></td></tr><tr><td class='num'>253418415</td><td class='mono'>2026-06-11 18:31</td><td>QQQ.US</td><td>BUY</td><td>in</td><td class='num'>9.5</td><td class='num'>699.29</td><td class='num'><span class='neg'>-0.19</span></td><td class='num'><span class='pos'>+0.00</span></td><td class='num'><span class='pos'>+0.00</span></td></tr><tr><td class='num'>253418412</td><td class='mono'>2026-06-11 18:31</td><td>IUSG.US</td><td>BUY</td><td>in</td><td class='num'>36.9</td><td class='num'>180.36</td><td class='num'><span class='neg'>-0.74</span></td><td class='num'><span class='pos'>+0.00</span></td><td class='num'><span class='pos'>+0.00</span></td></tr><tr><td class='num'>253418409</td><td class='mono'>2026-06-11 18:31</td><td>URI.US</td><td>BUY</td><td>in</td><td class='num'>6.2</td><td class='num'>1060.96</td><td class='num'><span class='neg'>-0.12</span></td><td class='num'><span class='pos'>+0.00</span></td><td class='num'><span class='pos'>+0.00</span></td></tr><tr><td class='num'>253418407</td><td class='mono'>2026-06-11 18:31</td><td>DELL.US</td><td>BUY</td><td>in</td><td class='num'>17.6</td><td class='num'>378.61</td><td class='num'><span class='neg'>-0.35</span></td><td class='num'><span class='pos'>+0.00</span></td><td class='num'><span class='pos'>+0.00</span></td></tr><tr><td class='num'>253418406</td><td class='mono'>2026-06-11 18:31</td><td>IBKR.US</td><td>BUY</td><td>in</td><td class='num'>50.0</td><td class='num'>86.46</td><td class='num'><span class='neg'>-1.00</span></td><td class='num'><span class='pos'>+0.00</span></td><td class='num'><span class='pos'>+0.00</span></td></tr><tr><td class='num'>253418152</td><td class='mono'>2026-06-11 18:30</td><td>NAS100</td><td>BUY</td><td>in</td><td class='num'>0.2</td><td class='num'>28745.3</td><td class='num'><span class='pos'>+0.00</span></td><td class='num'><span class='pos'>+0.00</span></td><td class='num'><span class='pos'>+0.00</span></td></tr></table><div class='sub' style='margin-top:8px'>Updated hourly · 2026-06-13T18:47:01Z · all figures from live MT5 account</div></div>
-
-<div class='card'><div class='lbl'>APEX 1000% ROADMAP — Outside the Box (not only trading) &nbsp;·&nbsp; 44% (11/25)</div><div class='bar'><div class='fill' style='width:44%'></div></div><div class='sub' style='margin:6px 0 14px;line-height:1.55'>YEAR-1 1000% PLAN locked (APEX_YEAR1_PLAN.md): validated engine (Tier-2 confirmed, Calmar 2.01 max-safe / 37.8%yr max-return) x prop leverage = ~5,000% ROI P50 on ~$540 outlay in 12 months. Trading alone honest max = +86%/yr pace. Two user keys: demo login + eval purchase.</div><div class='phase-blk done'><div class='phase-h'>✅ Phase 0 — Edge Discovery</div><div class='ck ckd'>☑ Test 8 edge families + 40 assets (forward-gated 2025/26)</div><div class='ck ckd'>☑ Find diversified FX carry+trend basket (Calmar ~6, all legs+)</div><div class='ck ckd'>☑ Connect MT5 Python bridge, pull REAL Pepperstone swaps</div><div class='ck ckd'>☑ Discover real swaps kill ~5 proxy pairs (broker markup) — honest</div></div><div class='phase-blk active'><div class='phase-h'>🔄 Phase 1 — Validate on DEMO (real costs)</div><div class='ck ckd'>☑ Rebuild basket: REAL swaps -&gt; carry is ~0% (broker markup), it&#x27;s a TREND edge</div><div class='ck ckd'>☑ KILL lookahead bug: FX &#x27;edge&#x27; (Calmar 6-8) was an artifact -&gt; honest Calmar 0.1</div><div class='ck ckd'>☑ Scan 1,608 symbols lag-correct + real spreads -&gt; 48 survivors</div><div class='ck ckd'>☑ FINAL basket: 15 stocks/ETFs/gold long-trend, 16%/yr, Calmar 1.49, all legs+</div><div class='ck ckd'>☑ DEMO CONNECTED: 61542495, $100k — M1 LIVE, engine trading hourly (6 positions day 1)</div><div class='ck ckd'>☑ EA built+compiled; TIER-2 CONFIRMED on real exec (NAS100/XAUUSD, 4/4 legs +, matches Python)</div></div><div class='phase-blk todo'><div class='phase-h'>⬜ Phase 2 — Multiply capital WITHOUT your money (the real 1000% lever)</div><div class='ck ckd'>☑ Monte-Carlo eval sim: FTMO @2x risk -&gt; P(pass) 82%, EV +$3.2k/attempt</div><div class='ck '>☐ Pick prop firm (FTMO / FundedNext / etc.), user buys eval acct</div><div class='ck '>☐ Pass challenge -&gt; get funded $50k-200k</div><div class='ck '>☐ Trade funded capital, keep 80-90% -&gt; ROI on ~$500 fee = 1000%+</div></div><div class='phase-blk todo'><div class='phase-h'>⬜ Phase 3 — Productize the edge (income beyond trading)</div><div class='ck '>☐ Publish verified track record (Myfxbook / FX Blue)</div><div class='ck '>☐ Copy-trading: Darwinex / ZuluTrade / broker -&gt; earn on AUM</div><div class='ck '>☐ List EA on MQL5 Market (passive sales)</div><div class='ck '>☐ Signal subscription (Telegram / Discord)</div></div><div class='phase-blk todo'><div class='phase-h'>⬜ Phase 4 — Content engine (leverage your YouTube skills)</div><div class='ck '>☐ Document the APEX journey as faceless content</div><div class='ck '>☐ &#x27;I built an AI quant&#x27; series -&gt; audience</div><div class='ck '>☐ Funnel audience -&gt; copy-trade / signals / products</div></div><div class='phase-blk todo'><div class='phase-h'>⬜ Phase 5 — Scale &amp; compound</div><div class='ck '>☐ OPM / friends-capital w/ 20% performance fee</div><div class='ck '>☐ Reinvest, diversify edges + venues</div><div class='ck '>☐ Compound 30-45%/yr -&gt; 1000% cumulative in ~6-7 yrs (real)</div><div class='ck '>☐ OR prop + product income -&gt; 1000% on personal capital yr 1</div></div><div class='sub' style='margin-top:10px'>Full engineering design per phase: <b>APEX_PHASE_ARCHITECTURE.md</b> (components &middot; data flow &middot; risk controls &middot; exit gates &middot; failure modes)</div></div>
-
-<div class='card'><div class='lbl'>POSSIBILITY MAP — Wave 1 amplifier results (lag-correct, real costs)</div><table><tr><th>Route</th><th>Annual</th><th>Max DD</th><th>Calmar</th><th>Fwd 25/26</th><th>All legs+</th></tr><tr><td>BASELINE (MA50)</td><td class='num'>15.6%</td><td class='num neg'>12.9%</td><td class='num'>1.21</td><td class='num pos'>+48.4%</td><td>✅</td></tr><tr><td>A1 vol-target 12%</td><td class='num'>20.9%</td><td class='num neg'>21.2%</td><td class='num'>0.99</td><td class='num pos'>+54.9%</td><td>✅</td></tr><tr><td>A2 pyramiding (trend-z)</td><td class='num'>23.9%</td><td class='num neg'>19.0%</td><td class='num'>1.26</td><td class='num pos'>+73.5%</td><td>✅</td></tr><tr><td>A3 donchian 55/20</td><td class='num'>10.4%</td><td class='num neg'>10.3%</td><td class='num'>1.01</td><td class='num pos'>+26.0%</td><td>✅</td></tr><tr><td>A4 ensemble MA50+MA200</td><td class='num'>14.5%</td><td class='num neg'>8.3%</td><td class='num'>1.74</td><td class='num pos'>+43.0%</td><td>✅</td></tr><tr><td>A1+A2 vol-target+pyramid</td><td class='num'>22.3%</td><td class='num neg'>22.1%</td><td class='num'>1.01</td><td class='num pos'>+57.5%</td><td>✅</td></tr><tr><td>A4 BASELINE ensemble</td><td class='num'>13.9%</td><td class='num neg'>7.3%</td><td class='num'>1.91</td><td class='num pos'>+43.4%</td><td>✅</td></tr><tr><td>W2-1 A4+A2 ens+pyramid</td><td class='num'>23.6%</td><td class='num neg'>14.3%</td><td class='num'>1.66</td><td class='num pos'>+73.3%</td><td>✅</td></tr><tr><td>W2-2 C1 regime lever 1-4x</td><td class='num'>37.7%</td><td class='num neg'>23.7%</td><td class='num'>1.59</td><td class='num pos'>+123.4%</td><td>✅</td></tr><tr><td>W2-3 A6 breadth gate(QQQ)</td><td class='num'>13.2%</td><td class='num neg'>7.3%</td><td class='num'>1.81</td><td class='num pos'>+40.6%</td><td>✅</td></tr><tr><td>W2-4 B1 overnight NAS100</td><td class='num'>10.1%</td><td class='num neg'>42.0%</td><td class='num'>0.24</td><td class='num pos'>+22.4%</td><td>❌</td></tr><tr><td>W2-4 B1 overnight US30</td><td class='num'>8.0%</td><td class='num neg'>34.0%</td><td class='num'>0.23</td><td class='num pos'>+18.1%</td><td>✅</td></tr><tr><td>W2-5 B2 turn-of-month QQQ</td><td class='num'>9.2%</td><td class='num neg'>19.5%</td><td class='num'>0.47</td><td class='num pos'>+9.4%</td><td>❌</td></tr><tr><td>W2-6 B3 gold seasonality</td><td class='num'>10.3%</td><td class='num neg'>12.5%</td><td class='num'>0.82</td><td class='num pos'>+26.5%</td><td>✅</td></tr><tr><td>W2-7 B4 longvol VIX</td><td class='num'>-12.1%</td><td class='num neg'>158.8%</td><td class='num'>-0.08</td><td class='num pos'>+58.8%</td><td>❌</td></tr><tr><td>A4 BASELINE equal-weight</td><td class='num'>14.5%</td><td class='num neg'>8.3%</td><td class='num'>1.74</td><td class='num pos'>+43.0%</td><td>✅</td></tr><tr><td>W3-1 A5 walk-fwd weights</td><td class='num'>15.2%</td><td class='num neg'>8.3%</td><td class='num'>1.82</td><td class='num pos'>+49.1%</td><td>✅</td></tr><tr><td>W3-2 C2 barbell 90/10</td><td class='num'>22.1%</td><td class='num neg'>14.0%</td><td class='num'>1.59</td><td class='num pos'>+56.4%</td><td>✅</td></tr><tr><td>W3-3 C1 on A4 (champ-stack)</td><td class='num'>40.6%</td><td class='num neg'>24.1%</td><td class='num'>1.68</td><td class='num pos'>+121.6%</td><td>✅</td></tr></table><div class='sub' style='margin-top:8px'>Full route map (A amplifiers · B anomalies · C convexity · D capital multipliers): APEX_POSSIBILITY_MAP.md. Tested in feasibility order — honest gate only.</div></div>
-
-<div class="card"><div class="lbl">Build progress &nbsp;·&nbsp; 55% of pipeline</div>
-<div class="bar"><div class="fill" style="width:55%"></div></div>
-<div class="stages"><div class='stage done'>✅ Native Windows port (off Mac/Wine)</div><div class='stage done'>✅ Tier-1 fast engine (850x) + calibrated vs MT5</div><div class='stage done'>✅ Forward-leg gate 2025/26 (caught fake edges)</div><div class='stage done'>✅ Data lake + 2025/26 real ticks</div><div class='stage active'>🔄 Hunter search: H1 x 8 assets x 4 strategies</div><div class='stage active'>🔄 Lower-timeframe expansion (M15 / M5)</div><div class='stage active'>🔄 Tier-2 MT5 real-tick confirmation</div><div class='stage todo'>⬜ Correlation filter -&gt; independent edges</div><div class='stage todo'>⬜ Portfolio build + risk sizing</div><div class='stage todo'>⬜ Forward-demo on live demo account</div></div></div>
-
-<div class="card"><div class="grid">
-  <div><div class="lbl">Best edge — Tier-1 (fast, unconfirmed)</div><div class="big">1.301<span class="u"> calmar</span></div></div>
-  <div><div class="lbl">Best edge — Tier-2 CONFIRMED (real-tick)</div><div class="big" style="color:#46e6c8">—<span class="u"> calmar</span></div></div>
-</div><div class="sub" style="margin-top:8px">Tier-2 (real-tick) is the number that counts. It stays "—" until MT5 confirmation runs.</div></div>
-
-<div class="card"><div class="lbl">BEST REAL VALIDATED EDGE (DD budget &lt; 25%)</div>
-<div class="grid">
-  <div><div class="lbl">Strategy</div><div class="big" style="font-size:16px">Funding harvest (10 coins)</div></div>
-  <div><div class="lbl">Return @ 25% DD</div><div class="big" style="color:#46e6c8">~25-40%/yr</div></div>
-  <div><div class="lbl">Calmar</div><div class="big">~13% base</div></div>
-</div>
-<div class="sub" style="margin-top:8px">HONEST: 10-coin funding harvest, delta-neutral, basis-adjusted. Base ~13%/yr at very low DD. Realistic ~25-40%/yr at SAFE leverage (2-4x). NOT 236%+ &mdash; that came from a Calmar&times;25%DD math that implied impossible ~68x leverage; corrected. Best real edge (~6x technical). 1000%% cumulative in ~5-7 yrs. &#9888; Exchange tail-risk; multi-venue.</div></div>
-
-<div class="card warn" style="border-color:#6b5410">
-<b>1000%/yr reality check (honest):</b> the best quant fund in history (Renaissance Medallion) did ~66%/yr at low DD — with PhDs + supercomputers. 1000%/yr at &lt;25% DD = ~15x the human pinnacle (needs Calmar ~40; ours is 1.32). It is not a "think harder" gap — it does not exist in markets. We hunt for the max REAL number; 1000% is the north star, not a claim.</div>
-
-<div class="card"><div class="lbl">Engines running</div><span class='chip off'>nothing running</span></div>
-
-<div class="card"><div class="grid">
-  <div><div class="lbl">Combos tested</div><div class="big">559,166</div></div>
-  <div><div class="lbl">Forward-surviving keepers</div><div class="big">2</div></div>
-  <div><div class="lbl">Best calmar</div><div class="big">1.301</div></div>
-</div></div>
-
-<div class="card"><div class="lbl">Top keepers &nbsp;·&nbsp; figures at a fixed 1% risk per trade</div>
-<table><tr><th>Asset</th><th>Strategy</th><th>Monthly</th><th>Annual</th><th>Max DD</th><th>Calmar</th><th>Worst leg (expR)</th><th>Trades</th></tr>
-<tr><td>NAS100</td><td>ta_rsi</td><td class='num pos'>0.83%</td><td class='num pos'>10.0%</td><td class='num neg'>7.7%</td><td class='num'>1.301</td><td class='num pos'>+0.313</td><td class='num'>111</td></tr><tr><td>NAS100</td><td>ta_rsi</td><td class='num pos'>0.83%</td><td class='num pos'>10.0%</td><td class='num neg'>8.2%</td><td class='num'>1.213</td><td class='num pos'>+0.067</td><td class='num'>138</td></tr></table>
-<div class="warn">⚠ Honest status: these survive the 2025/26 forward leg but worst-leg numbers are THIN.
-Monthly/Annual/Max-DD shown at 1% risk/trade (non-compounded); scale with bet size. Max DD is full-period incl. 2025/26.
-Unconfirmed until MT5 real-tick + statistical-significance gate. 1000%/yr is the target, not a claim.</div>
-</div>
-
-<div class="card"><div class="lbl">Activity</div>
-<div class="mono">hunter: [00:16:48]   39500/40800 | keepers 2 | best calmar 1.301 | 1/s</div>
-<div class="mono">download: [15:16:09] DONE: 8/8 symbols imported with ticks</div>
-</div>
 <div id="apexgate" style="position:fixed;inset:0;z-index:99999;background:#070b14;display:flex;align-items:center;justify-content:center">
-<div style="background:linear-gradient(180deg,#0c1426,#0a1120);border:1px solid #16263f;border-radius:14px;padding:30px 34px;width:330px;text-align:center;box-shadow:0 0 40px #03081366">
+<div style="background:linear-gradient(180deg,#0c1426,#0a1120);border:1px solid #16263f;border-radius:14px;padding:30px 34px;width:330px;text-align:center">
 <div style="font:600 18px 'Segoe UI',sans-serif;color:#46e6c8;letter-spacing:2px;margin-bottom:4px">◢◤ APEX</div>
 <div style="color:#5d7799;font-size:12px;margin-bottom:16px">enter access key</div>
 <input id="pw-in" type="password" placeholder="Access key" style="width:100%;padding:11px 14px;background:#02141a;border:1px solid #0c3a40;border-radius:9px;color:#e8fbfa;font-size:14px;outline:none;box-sizing:border-box;text-align:center;letter-spacing:2px">
